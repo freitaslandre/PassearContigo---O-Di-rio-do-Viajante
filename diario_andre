@@ -21,3 +21,25 @@ Decisões:
 
 Usar Firebase em vez de SQLite para suportar a edição colaborativa em tempo real exigida pela T02;
 Organizar a navegação em 3 tabs principais para cobrir as 3 tarefas obrigatórias de forma clara.
+
+
+Sessão 1 — 20 de maio de 2026
+Objetivo:
+Configuração inicial da estrutura base do projeto.
+Atividades realizadas:
+
+Configurei as 3 tabs da aplicação: Viagens, Descobrir e Perfil, com os respetivos nomes e ícones personalizados;
+Organizei a estrutura de pastas do projeto (pages, services, models, assets);
+Instalei e configurei o Ionic Storage no projeto.
+
+Problemas:
+
+Nenhum.
+
+Solução:
+
+Não aplicável.
+
+Decisões:
+
+Nenhuma de momento.
