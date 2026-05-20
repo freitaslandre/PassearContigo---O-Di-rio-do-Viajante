@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+/**
+ * AppComponent
+ * Componente raiz da aplicação
+ * Responsável pela estrutura principal da app e roteamento
+ */
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -7,5 +12,8 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {}
+  
+  constructor() {
+    // Inicialização da app
+  }
 }

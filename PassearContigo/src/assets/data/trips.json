@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1",
+    "title": "Passeio pela Costa",
+    "description": "Exploração da costa com vistas espetaculares",
+    "location": "Costa Litoral",
+    "startDate": "2026-06-01",
+    "endDate": "2026-06-03",
+    "activities": [
+      {
+        "id": "1-1",
+        "name": "Praia",
+        "description": "Dia na praia",
+        "date": "2026-06-01",
+        "location": "Praia da Costa"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Montanha e Natureza",
+    "description": "Trekking e exploração da natureza",
+    "location": "Serra da Montanha",
+    "startDate": "2026-07-10",
+    "endDate": "2026-07-12",
+    "activities": []
+  }
+]
