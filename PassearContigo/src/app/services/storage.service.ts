@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 /**
  * StorageService
@@ -9,28 +10,34 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StorageService {
+  private storageReady: Promise<Storage>;
 
-  constructor() { }
+  constructor(private storage: Storage) {
+    this.storageReady = this.storage.create();
+  }
+
+  private async getStorage(): Promise<Storage> {
+    return this.storageReady;
+  }
 
   /**
-   * Armazena um item no localStorage
+   * Armazena um item no Ionic Storage
    * @param key - Chave do item
    * @param value - Valor a armazenar
    */
   async setItem(key: string, value: any): Promise<void> {
-    // TODO: Implementar com Ionic Storage
-    localStorage.setItem(key, JSON.stringify(value));
+    const storage = await this.getStorage();
+    await storage.set(key, value);
   }
 
   /**
-   * Recupera um item do localStorage
+   * Recupera um item do Ionic Storage
    * @param key - Chave do item
    * @returns Valor armazenado ou null
    */
   async getItem(key: string): Promise<any> {
-    // TODO: Implementar com Ionic Storage
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
+    const storage = await this.getStorage();
+    return storage.get(key);
   }
 
   /**
@@ -38,15 +45,15 @@ export class StorageService {
    * @param key - Chave do item
    */
   async removeItem(key: string): Promise<void> {
-    // TODO: Implementar com Ionic Storage
-    localStorage.removeItem(key);
+    const storage = await this.getStorage();
+    await storage.remove(key);
   }
 
   /**
-   * Limpa todo o localStorage
+   * Limpa todo o Ionic Storage
    */
   async clear(): Promise<void> {
-    // TODO: Implementar com Ionic Storage
-    localStorage.clear();
+    const storage = await this.getStorage();
+    await storage.clear();
   }
 }
