@@ -13,6 +13,9 @@ const config: CapacitorConfig = {
     },
     CapacitorHttp: {
       enabled: true
+    },
+    ScreenOrientation: {
+      // Plugin será gerenciado via código (veja screen-orientation.service.ts)
     }
   }
 };

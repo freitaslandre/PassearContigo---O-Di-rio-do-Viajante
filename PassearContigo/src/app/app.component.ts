@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ScreenOrientationService } from './services/screen-orientation.service';
 
 /**
  * AppComponent
@@ -13,7 +14,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   
-  constructor() {
-    // Inicialização da app
+  constructor(private screenOrientationService: ScreenOrientationService) {
+    // Bloqueia a orientação em portrait ao inicializar a app (req. 12)
+    this.initializeScreenOrientation();
+  }
+
+  /**
+   * Inicializa o bloqueio de orientação landscape
+   */
+  private async initializeScreenOrientation(): Promise<void> {
+    await this.screenOrientationService.lockPortraitOrientation();
   }
 }
