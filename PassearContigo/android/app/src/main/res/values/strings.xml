@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PassearContigo</string>
+    <string name="title_activity_main">PassearContigo</string>
+    <string name="package_name">com.passearcontigo.app</string>
+    <string name="custom_url_scheme">com.passearcontigo.app</string>
+</resources>
