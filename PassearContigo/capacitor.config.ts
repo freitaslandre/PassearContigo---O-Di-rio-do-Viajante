@@ -16,6 +16,14 @@ const config: CapacitorConfig = {
     },
     ScreenOrientation: {
       // Plugin será gerenciado via código (veja screen-orientation.service.ts)
+    },
+    Camera: {
+      // Plugin Camera para captura de fotos/vídeos
+      permissions: ['camera', 'photos']
+    },
+    Geolocation: {
+      // Plugin Geolocation para obter localização do dispositivo
+      permissions: ['location']
     }
   }
 };
