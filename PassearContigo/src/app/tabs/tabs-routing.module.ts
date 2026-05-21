@@ -8,20 +8,20 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'home',
-        loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
+        path: 'viagens',
+        loadChildren: () => import('../pages/viagens/viagens.module').then(m => m.ViagensPageModule)
       },
       {
-        path: 'trips',
-        loadChildren: () => import('../pages/trips/trips.module').then(m => m.TripsPageModule)
+        path: 'descobrir',
+        loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescubrirPageModule)
       },
       {
-        path: 'settings',
-        loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsPageModule)
+        path: 'perfil',
+        loadChildren: () => import('../pages/perfil/perfil.module').then(m => m.PerfilPageModule)
       },
       {
         path: '',
-        redirectTo: '/tabs/trips',
+        redirectTo: '/tabs/viagens',
         pathMatch: 'full'
       }
     ]

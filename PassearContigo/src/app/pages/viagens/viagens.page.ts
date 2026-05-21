@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
 /**
- * TripsPage - Página de Viagens
+ * ViagensPage - Página de Viagens
  * Exibe a lista de viagens/itinerários do utilizador
  */
 @Component({
-  selector: 'app-trips',
-  templateUrl: 'trips.page.html',
-  styleUrls: ['trips.page.scss'],
+  selector: 'app-viagens',
+  templateUrl: 'viagens.page.html',
+  styleUrls: ['viagens.page.scss'],
   standalone: false,
 })
-export class TripsPage {
+export class ViagensPage {
 
   constructor() {}
 
