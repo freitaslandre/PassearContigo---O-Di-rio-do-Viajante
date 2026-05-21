@@ -23,7 +23,8 @@ Usar Firebase em vez de SQLite para suportar a edição colaborativa em tempo re
 Organizar a navegação em 3 tabs principais para cobrir as 3 tarefas obrigatórias de forma clara.
 
 
-Sessão 1 — 20 de maio de 2026
+
+Sessão 2 — 20 de maio de 2026
 Objetivo:
 Configuração inicial da estrutura base do projeto.
 Atividades realizadas:
@@ -43,3 +44,35 @@ Não aplicável.
 Decisões:
 
 Nenhuma de momento.
+
+
+
+Sessão 3 — 21 de maio de 2026
+Objetivo:
+Definição da identidade visual da aplicação e resolução de problemas críticos de navegação e routing após a reestruturação das páginas.
+Atividades realizadas:
+
+Definição da identidade visual: paleta de cores com laranja terra (#E8823A) como cor primária, verde azulado (#2C7A6E) como secundária, creme suave (#FAF7F2) de fundo, quase preto (#1C1C1E) para texto e amarelo mostarda (#F2C94C) como destaque;
+Auditoria de ficheiros e pastas: investigação de erros e ficheiros antigos não renomeados corretamente durante a transição do starter;
+Limpeza estrutural: eliminação de pastas e referências antigas, nomeadamente a pasta home;
+Correção de dependências: atualização de módulos, nomes de classes de routing e componentes com as novas nomenclaturas;
+Sincronização de rotas: correção do ficheiro tabs-routing.module.ts e do redirecionamento principal da aplicação;
+Manutenção do ambiente: limpeza do cache de compilação do Angular e recarregamento do VS Code.
+
+Problemas:
+
+A aplicação compilava sem erros no terminal mas apresentava um ecrã preto em tempo de execução no navegador;
+Existência de ficheiros e pastas duplicadas ou com nomes antigos que geravam conflito silencioso na inicialização do Angular;
+Desfasamento no redirecionamento inicial: a aplicação tentava aceder à rota tabs/trips enquanto as rotas internas já tinham sido traduzidas para português.
+
+Solução:
+
+Identificação do erro através da análise cruzada do URL do navegador com os ficheiros de configuração de rotas;
+Alteração do redirectTo no ficheiro app-routing.module.ts de tabs/trips para tabs/viagens;
+Pastas renomeadas: home para descobrir, settings para perfil, trips para viagens;
+Ficheiros, módulos, componentes e classes atualizados em conformidade;
+Cache de compilação limpo e VS Code reiniciado via Reload Window.
+
+Decisões:
+
+Corrigir o fluxo de rotas em vez de recriar as páginas do zero, garantindo que a árvore de navegação por abas respeita o idioma do projeto.
