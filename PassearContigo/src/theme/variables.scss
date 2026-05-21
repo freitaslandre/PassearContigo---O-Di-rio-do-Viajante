@@ -1,2 +1,75 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+:root {
+  /* Brand colors inspired by PassearContigo — Diário do Viajante */
+  --ion-color-primary: #E8823A;
+  --ion-color-primary-rgb: 232, 130, 58;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #cd7533;
+  --ion-color-primary-tint: #ef9f5e;
+
+  --ion-color-secondary: #2C7A6E;
+  --ion-color-secondary-rgb: 44, 122, 110;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #25695e;
+  --ion-color-secondary-tint: #4c9388;
+
+  --ion-color-tertiary: #F2C94C;
+  --ion-color-tertiary-rgb: 242, 201, 76;
+  --ion-color-tertiary-contrast: #1C1C1E;
+  --ion-color-tertiary-contrast-rgb: 28, 28, 30;
+  --ion-color-tertiary-shade: #d9b242;
+  --ion-color-tertiary-tint: #f5d26d;
+
+  /* Semantic colors */
+  --ion-color-success: #2C7A6E;
+  --ion-color-success-rgb: 44, 122, 110;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #24635a;
+  --ion-color-success-tint: #4c9388;
+
+  --ion-color-warning: #F2C94C;
+  --ion-color-warning-rgb: 242, 201, 76;
+  --ion-color-warning-contrast: #1C1C1E;
+  --ion-color-warning-contrast-rgb: 28, 28, 30;
+  --ion-color-warning-shade: #d9b242;
+  --ion-color-warning-tint: #f5d26d;
+
+  --ion-color-danger: #C74A0E;
+  --ion-color-danger-rgb: 199, 74, 14;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #b23f0d;
+  --ion-color-danger-tint: #d7682a;
+
+  --ion-color-dark: #1C1C1E;
+  --ion-color-dark-rgb: 28, 28, 30;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #171718;
+  --ion-color-dark-tint: #3d3d40;
+
+  --ion-color-medium: #7A6C5A;
+  --ion-color-medium-rgb: 122, 108, 90;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #695b4b;
+  --ion-color-medium-tint: #8d7f6f;
+
+  --ion-color-light: #FAF7F2;
+  --ion-color-light-rgb: 250, 247, 242;
+  --ion-color-light-contrast: #1C1C1E;
+  --ion-color-light-contrast-rgb: 28, 28, 30;
+  --ion-color-light-shade: #e1d9cd;
+  --ion-color-light-tint: #fbf8f4;
+
+  /* Custom app tokens */
+  --app-color-background: #FAF7F2;
+  --app-color-surface: #F4E6D5;
+  --app-color-text: #1C1C1E;
+  --app-color-muted: #7A6C5A;
+}
