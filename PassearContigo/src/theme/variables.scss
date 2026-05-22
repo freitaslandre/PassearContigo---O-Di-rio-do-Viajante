@@ -1,6 +1,10 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
 
+// ============================================
+// SCSS COLOR PALETTE — PassearContigo
+// ============================================
+
 :root {
   /* Brand colors inspired by PassearContigo — Diário do Viajante */
   --ion-color-primary: #E8823A;
@@ -72,4 +76,170 @@
   --app-color-surface: #F4E6D5;
   --app-color-text: #1C1C1E;
   --app-color-muted: #7A6C5A;
+}
+
+// ============================================
+// IONIC COMPONENT CUSTOM PROPERTIES
+// ============================================
+
+// Button styles
+ion-button {
+  --background: #E8823A;
+  --color: #ffffff;
+  --border-radius: 8px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+
+  &:hover,
+  &:focus {
+    --background: #cd7533;
+  }
+
+  &.secondary {
+    --background: #2C7A6E;
+
+    &:hover,
+    &:focus {
+      --background: #1d4d47;
+    }
+  }
+
+  &.tertiary {
+    --background: #F2C94C;
+    --color: #1C1C1E;
+
+    &:hover,
+    &:focus {
+      --background: #d9b242;
+    }
+  }
+
+  &.danger {
+    --background: #C74A0E;
+
+    &:hover,
+    &:focus {
+      --background: #b23f0d;
+    }
+  }
+}
+
+// Card styles
+ion-card {
+  --background: #ffffff;
+  --color: #1C1C1E;
+  --border-radius: 12px;
+  --box-shadow: 0 2px 8px rgba(28, 28, 30, 0.1);
+  margin: 16px 0;
+}
+
+// Input styles
+ion-input,
+ion-textarea {
+  --background: #F4E6D5;
+  --color: #1C1C1E;
+  --placeholder-color: #7A6C5A;
+  --padding-bottom: 12px;
+  --padding-top: 12px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --border-radius: 8px;
+
+  &:focus {
+    --background: #FAF7F2;
+    --border-color: #E8823A;
+  }
+}
+
+// Toolbar styles
+ion-toolbar {
+  --background: #E8823A;
+  --color: #ffffff;
+  --ion-toolbar-text-color: #ffffff;
+  --border-bottom: 1px solid rgba(232, 130, 58, 0.2);
+}
+
+// Header styles
+ion-header {
+  --background: #E8823A;
+  --color: #ffffff;
+}
+
+// Footer styles
+ion-footer {
+  --background: #F4E6D5;
+  --color: #1C1C1E;
+  --border-top: 1px solid #e5dcd0;
+}
+
+// Tab styles
+ion-tab-bar {
+  --background: #F4E6D5;
+  --color: #7A6C5A;
+  --color-selected: #E8823A;
+  --border-top: 1px solid #e5dcd0;
+}
+
+// List styles
+ion-list {
+  --background: transparent;
+  --padding-bottom: 16px;
+  --padding-top: 16px;
+}
+
+ion-list-header {
+  --color: #E8823A;
+  --background: transparent;
+}
+
+// Badge styles
+ion-badge {
+  --background: #E8823A;
+  --color: #ffffff;
+  --padding-bottom: 6px;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  --padding-top: 6px;
+  --border-radius: 6px;
+}
+
+// Modal styles
+ion-modal {
+  --background: #FAF7F2;
+  --color: #1C1C1E;
+  --border-radius: 16px;
+}
+
+// Alert styles
+ion-alert {
+  --background: #ffffff;
+  --color: #1C1C1E;
+  --button-color: #E8823A;
+}
+
+// Spinner styles
+ion-spinner {
+  --color: #E8823A;
+}
+
+// Segment styles
+ion-segment {
+  --background: #F4E6D5;
+  --color: #7A6C5A;
+  --indicator-color: #E8823A;
+  --indicator-box-shadow: none;
+}
+
+ion-segment-button {
+  --background: transparent;
+  --color: #7A6C5A;
+  --color-checked: #E8823A;
+  --border-bottom: 2px solid transparent;
+
+  &.segment-button-checked {
+    --color: #E8823A;
+    --border-bottom: 2px solid #E8823A;
+  }
 }
