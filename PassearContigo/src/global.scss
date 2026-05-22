@@ -25,6 +25,173 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+// ============================================
+// TYPOGRAPHY — Google Fonts Configuration
+// ============================================
+
+:root {
+  /* Font stacks */
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Inter', sans-serif;
+  --font-mono: 'Courier New', monospace;
+
+  /* Font sizes */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+
+  /* Line heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+
+  /* Letter spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.05em;
+}
+
+/* Apply fonts globally */
+html,
+body {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+  color: #1C1C1E;
+  background-color: #FAF7F2;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+h5 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+h6 {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+/* Paragraph */
+p {
+  font-family: var(--font-secondary);
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+/* Small text */
+small,
+.text-sm {
+  font-size: var(--text-sm);
+  line-height: var(--line-height-normal);
+}
+
+/* Large text */
+large,
+.text-lg {
+  font-size: var(--text-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Strong / Bold */
+strong,
+b {
+  font-weight: 600;
+}
+
+/* Emphasis */
+em,
+i {
+  font-style: italic;
+}
+
+/* Links */
+a {
+  color: #E8823A;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #cd7533;
+    text-decoration: underline;
+  }
+}
+
+/* Code / Pre-formatted */
+code,
+pre {
+  font-family: var(--font-mono);
+  background-color: #F4E6D5;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: var(--text-sm);
+}
+
+pre {
+  padding: 12px;
+  overflow-x: auto;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Ionic typography overrides */
+ion-header h1,
+ion-header h2,
+ion-header h3 {
+  margin: 0;
+}
+
+ion-card-title {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: var(--text-lg);
+}
+
+ion-card-subtitle {
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);
+  color: #7A6C5A;
+}
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------

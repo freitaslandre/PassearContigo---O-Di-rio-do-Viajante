@@ -243,3 +243,83 @@ ion-segment-button {
     --border-bottom: 2px solid #E8823A;
   }
 }
+
+// ============================================
+// TYPOGRAPHY VARIABLES — Google Fonts
+// ============================================
+
+// Font families
+$font-primary: 'Poppins', sans-serif;
+$font-secondary: 'Inter', sans-serif;
+$font-mono: 'Courier New', monospace;
+
+// Font sizes
+$text-xs: 12px;
+$text-sm: 14px;
+$text-base: 16px;
+$text-lg: 18px;
+$text-xl: 20px;
+$text-2xl: 24px;
+$text-3xl: 30px;
+$text-4xl: 36px;
+
+// Font weights
+$font-light: 300;
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+$font-extrabold: 800;
+
+// Line heights
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+$line-height-loose: 2;
+
+// Letter spacing
+$letter-spacing-tight: -0.02em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.02em;
+$letter-spacing-wider: 0.05em;
+
+// Mixins for typography
+@mixin heading-1 {
+  font-family: $font-primary;
+  font-size: $text-4xl;
+  font-weight: $font-bold;
+  line-height: $line-height-tight;
+  letter-spacing: $letter-spacing-tight;
+}
+
+@mixin heading-2 {
+  font-family: $font-primary;
+  font-size: $text-3xl;
+  font-weight: $font-bold;
+  line-height: $line-height-tight;
+  letter-spacing: $letter-spacing-tight;
+}
+
+@mixin heading-3 {
+  font-family: $font-primary;
+  font-size: $text-2xl;
+  font-weight: $font-semibold;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-normal;
+}
+
+@mixin body-text {
+  font-family: $font-secondary;
+  font-size: $text-base;
+  font-weight: $font-normal;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-normal;
+}
+
+@mixin small-text {
+  font-family: $font-secondary;
+  font-size: $text-sm;
+  font-weight: $font-normal;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-normal;
+}
