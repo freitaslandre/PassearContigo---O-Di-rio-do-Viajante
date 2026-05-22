@@ -1,0 +1,38 @@
+Sessão 1 — 22 de maio de 2026
+Objetivo:
+Configurar o Capacitor no projeto e preparar algumas funcionalidades nativas necessárias para a aplicação Android.
+
+Atividades realizadas:
+
+Instalei e configurei o Capacitor no projeto Ionic/Angular;
+Adicionei e configurei a plataforma Android;
+Configurei o ficheiro capacitor.config.ts com o nome da aplicação, appId e webDir;
+Instalei o plugin Screen Orientation;
+Bloqueei a orientação landscape, deixando a aplicação em modo portrait, para cumprir o requisito 12;
+Criei um serviço para gerir o bloqueio da orientação;
+Instalei os plugins Camera e Geolocation;
+Configurei as permissões de câmara e geolocalização no AndroidManifest.xml;
+Criei serviços base para usar câmara e localização no futuro.
+
+Atividades não realizadas:
+
+Não criei nem configurei ainda o ícone da app e a splash screen personalizados (req. 4 adicional), porque é melhor fazer isso quando o logo final da aplicação estiver decidido;
+Não testei ainda a build num dispositivo físico Android (req. 2), porque esse teste faz mais sentido no fim, quando a aplicação estiver mais completa e estável.
+
+Problemas:
+
+Foi necessário garantir que o Capacitor ficava corretamente ligado ao projeto Ionic;
+Após instalar plugins nativos, foi necessário atualizar a configuração Android;
+As permissões tinham de ser configuradas manualmente no AndroidManifest.xml para evitar problemas futuros em dispositivo real.
+
+Solução:
+
+Configurei o Capacitor e sincronizei a estrutura Android;
+Criei serviços separados para orientação, câmara e geolocalização;
+Adicionei as permissões necessárias no AndroidManifest.xml.
+
+Decisões:
+
+Usar Capacitor para aceder às funcionalidades nativas do dispositivo;
+Bloquear a orientação em portrait logo no arranque da aplicação;
+Deixar o ícone, splash screen e teste em dispositivo físico para uma fase mais avançada do projeto.
