@@ -1,0 +1,52 @@
+Sessão 1 — 22 de maio de 2026
+Objetivo:
+Corrigir erros de compilação do Ionic, configurar paleta de cores global e criar estrutura base de tipografia e strings.
+
+Atividades realizadas:
+
+Diagnóstico de erros: identifiquei que faltavam 2 dependências instaladas (@ionic/storage-angular e @capacitor/screen-orientation) e que havia problemas com reconhecimento de elementos Ionic;
+Correção de módulos: adicionei CUSTOM_ELEMENTS_SCHEMA ao app.module.ts para resolver erros NG8001 de elementos desconhecidos;
+Paleta de cores global: criei um sistema completo de cores em variables.scss com:
+  - Poppins para headings (laranja #E8823A, teal #2C7A6E, amarelo #F2C94C)
+  - Variáveis SCSS reutilizáveis ($color-orange-*, $color-teal-*, $color-amber-*)
+  - CSS Custom Properties (--ion-color-*, --app-color-*)
+Configuração de componentes Ionic: defini estilos personalizados para todos os componentes principais (buttons, cards, inputs, toolbars, tabs, badges, modals, etc.);
+Importação de Google Fonts: adicionei Poppins (para títulos) e Inter (para corpo de texto) no index.html;
+Tipografia global em global.scss:
+  - Hierarquia de headings (h1-h6) com espaçamento automático
+  - Estilos de parágrafos, links, code e elementos textuais
+  - Variáveis CSS de fontes, tamanhos, pesos e line-heights
+Espaçamentos globais: criei utilidades completas de spacing em global.scss:
+  - Margin utilities: .m-*, .mt-*, .mb-*, .mx-*
+  - Padding utilities: .p-*, .pt-*, .pb-*, .px-*
+  - Border radius: .rounded-sm até .rounded-full
+  - Shadow utilities: .shadow-sm até .shadow-xl
+  - Flex utilities: .flex, .flex-center, .flex-between, etc.
+  - Grid utilities: .grid-2, .grid-3, .grid-4
+  - Container classes: .container, .container-sm, .container-lg
+StringsService: criei serviço completo para gerenciar todas as strings da aplicação com:
+  - Carregamento assincrónico de strings.json
+  - Suporte a notação de ponto: 'app.title'
+  - Interpolação de variáveis
+  - Reatividade com RxJS Observables
+  - Suporte para múltiplos idiomas (preparado)
+Ficheiro strings.json: criei com todas as strings organizadas em 16 seções:
+  - app, common, tabs, viagens, descobrir, perfil, auth, validation, errors, camera, geolocation, storage, messages, placeholders
+  - ~140 strings em português
+
+Problemas:
+
+Erro inicial de dependências: npm ci falhou com erro ENOTEMPTY no diretório .gradle\nb-cache;
+Elementos Ionic não eram reconhecidos pelo compilador Angular.
+
+Solução:
+
+Instrui o utilizador para limpar completamente o node_modules e fazer reinstalação (rm -r node_modules && npm install);
+Adicionei CUSTOM_ELEMENTS_SCHEMA ao módulo principal da app.
+
+Decisões:
+
+Usar Poppins (geo-humanist) para headings e Inter (humanist sans-serif) para corpo de texto para melhor legibilidade e identidade visual moderna;
+Organizar strings em 16 seções semânticas para facilitar manutenção e escalabilidade;
+Criar utilidades de spacing reutilizáveis em vez de hardcode de valores para consistência;
+Preparar StringsService para suportar múltiplos idiomas desde o início (PT, EN, ES possível no futuro).
