@@ -36,3 +36,7 @@ Decisões:
 Usar Capacitor para aceder às funcionalidades nativas do dispositivo;
 Bloquear a orientação em portrait logo no arranque da aplicação;
 Deixar o ícone, splash screen e teste em dispositivo físico para uma fase mais avançada do projeto.
+
+
+
+Criação do logo e alteração de caminhos e do favicon
