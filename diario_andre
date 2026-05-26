@@ -76,3 +76,38 @@ Cache de compilação limpo e VS Code reiniciado via Reload Window.
 Decisões:
 
 Corrigir o fluxo de rotas em vez de recriar as páginas do zero, garantindo que a árvore de navegação por abas respeita o idioma do projeto.
+
+
+
+Sessão 4 — 26 de maio de 2026
+Objetivo:
+Resolução de problemas de dependências, migração de componentes para o modelo standalone e validação da compilação e execução da aplicação.
+Atividades realizadas:
+
+Diagnóstico do erro de compilação inicial: identificação da causa raiz do erro no ionic serve que indicava a impossibilidade de encontrar o módulo @capacitor/screen-orientation;
+Verificação do ficheiro app.component.spec.ts e confirmação de que não era a fonte do erro;
+Auditoria de dependências: confirmação de que o pacote @capacitor/screen-orientation estava em falta na pasta node_modules;
+Instalação da dependência em falta via npm install @capacitor/screen-orientation;
+Criação do AuthService (auth.ts) para comunicação com o Firebase;
+Migração da página de perfil (PerfilPage) de NgModule para componente standalone;
+Eliminação do ficheiro perfil.module.ts para alinhar o projeto com as boas práticas do Angular moderno;
+Correção dos erros NG8001, NG8103 e NG8116 através da importação explícita dos componentes do Ionic a partir de @ionic/angular/standalone e do CommonModule;
+Importação e configuração do ReactiveFormsModule no componente standalone para suportar os atributos formGroup e formControlName no HTML;
+Validação final: projeto a compilar sem erros e a renderizar o ecrã de autenticação corretamente no navegador.
+
+Problemas:
+
+O módulo @capacitor/screen-orientation não estava instalado, causando o erro TS2307 e impedindo o arranque da app;
+Falha de compilação no ecrã de perfil após a migração para standalone, uma vez que o template HTML não reconhecia as tags do Ionic nem as diretivas estruturais ngIf, disabled e formGroup;
+Conflito na árvore de módulos devido à permanência da PerfilPage no perfil.module.ts após esta ter sido definida como standalone.
+
+Solução:
+
+Instalação do pacote em falta via npm para restaurar o ecossistema do Capacitor;
+Configuração manual do array imports no decorador @Component da PerfilPage, mapeando individualmente todos os componentes do Ionic utilizados;
+Inicialização dos objetos FormGroup (loginForm e registoForm) e remoção do módulo antigo para limpar o fluxo de compilação.
+
+Decisões:
+
+Adotar o padrão de Standalone Components do Angular e Ionic para as novas páginas, garantindo um código mais modular e de fácil manutenção;
+Manter a abordagem de resolver dependências e erros de forma incremental, validando a integridade do ecrã diretamente nas ferramentas de desenvolvimento do navegador.
