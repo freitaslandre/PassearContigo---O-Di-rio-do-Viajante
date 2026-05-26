@@ -1,1 +1,9 @@
-/* SettingsPage - Perfil */
+ion-content {
+  --pointer-events: auto !important;
+  pointer-events: auto !important;
+}
+
+ion-input, ion-button {
+  position: relative;
+  z-index: 9999 !important;
+}/* SettingsPage - Perfil */

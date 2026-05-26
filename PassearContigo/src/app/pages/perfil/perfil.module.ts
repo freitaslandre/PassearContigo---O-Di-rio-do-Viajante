@@ -1,17 +1,20 @@
-import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { PerfilPage } from './perfil.page';
+
+import { PerfilPage } from './perfil.page'; // Mantém o import no topo
 
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: PerfilPage }])
+    IonicModule,
+    ReactiveFormsModule,
+    RouterModule.forChild([{ path: '', component: PerfilPage }]),
+    PerfilPage // <-- ADICIONA AQUI (Como ela é standalone, entra nos imports!)
   ],
-  declarations: [PerfilPage]
+  declarations: [] // <-- DEIXA ESTE ARRAY TOTALMENTE VAZIO (Remove o PerfilPage daqui)
 })
 export class PerfilPageModule {}

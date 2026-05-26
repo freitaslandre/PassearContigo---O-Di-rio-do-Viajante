@@ -5,5 +5,75 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p>Configurações do perfil e preferências.</p>
+
+  <div *ngIf="authService.user$ | async as user; else anonimoTemplate">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Bem-vindo à sua conta!</ion-card-title>
+        <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>A sua aplicação está conectada ao Firebase Authentication e à base de dados Cloud Firestore.</p>
+        <ion-button expand="block" color="danger" class="ion-margin-top" (click)="realizarLogout()">
+          Terminar Sessão (Logout)
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #anonimoTemplate>
+    
+    <div *ngIf="!modoRegisto">
+      <h2 class="ion-padding-start">Iniciar Sessão</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()">
+        <ion-item lines="floating">
+          <ion-label position="floating">E-mail</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+        
+        <ion-item lines="floating">
+          <ion-label position="floating">Palavra-passe</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" type="submit" [disabled]="loginForm.invalid" class="ion-margin-top">
+          Entrar
+        </ion-button>
+      </form>
+
+      <p class="ion-text-center ion-margin-top">
+        Não tem uma conta? <a (click)="modoRegisto = true">Registe-se aqui</a>
+      </p>
+    </div>
+
+    <div *ngIf="modoRegisto">
+      <h2 class="ion-padding-start">Criar Nova Conta</h2>
+      <form [formGroup]="registoForm" (ngSubmit)="realizarRegisto()">
+        <ion-item lines="floating">
+          <ion-label position="floating">Nome Completo</ion-label>
+          <ion-input type="text" formControlName="nome"></ion-input>
+        </ion-item>
+
+        <ion-item lines="floating">
+          <ion-label position="floating">E-mail</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+        
+        <ion-item lines="floating">
+          <ion-label position="floating">Palavra-passe (mín. 6 carateres)</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" type="submit" [disabled]="registoForm.invalid" class="ion-margin-top">
+          Registar e Gravar no Firestore
+        </ion-button>
+      </form>
+
+      <p class="ion-text-center ion-margin-top">
+        Já tem uma conta? <a (click)="modoRegisto = false">Inicie sessão aqui</a>
+      </p>
+    </div>
+
+  </ng-template>
+
 </ion-content>
