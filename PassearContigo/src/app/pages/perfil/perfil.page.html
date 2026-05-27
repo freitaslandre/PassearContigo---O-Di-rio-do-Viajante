@@ -22,58 +22,88 @@
   </div>
 
   <ng-template #anonimoTemplate>
-    
     <div *ngIf="!modoRegisto">
       <h2 class="ion-padding-start">Iniciar Sessão</h2>
-      <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()">
-        <ion-item lines="floating">
-          <ion-label position="floating">E-mail</ion-label>
-          <ion-input type="email" formControlName="email"></ion-input>
-        </ion-item>
+      <form (ngSubmit)="realizarLogin()">
+        <ion-input
+          class="form-input"
+          label="E-mail"
+          labelPlacement="floating"
+          fill="outline"
+          type="email"
+          name="loginEmail"
+          autocomplete="email"
+          [(ngModel)]="login.email">
+        </ion-input>
         
-        <ion-item lines="floating">
-          <ion-label position="floating">Palavra-passe</ion-label>
-          <ion-input type="password" formControlName="password"></ion-input>
-        </ion-item>
+        <ion-input
+          class="form-input"
+          label="Palavra-passe"
+          labelPlacement="floating"
+          fill="outline"
+          type="password"
+          name="loginPassword"
+          autocomplete="current-password"
+          [(ngModel)]="login.password">
+        </ion-input>
 
-        <ion-button expand="block" type="submit" [disabled]="loginForm.invalid" class="ion-margin-top">
+        <ion-button expand="block" type="submit" [disabled]="!loginValido()" class="ion-margin-top">
           Entrar
         </ion-button>
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Não tem uma conta? <a (click)="modoRegisto = true">Registe-se aqui</a>
+        Não tem uma conta?
+        <button type="button" class="link-button" (click)="modoRegisto = true">Registe-se aqui</button>
       </p>
     </div>
 
     <div *ngIf="modoRegisto">
       <h2 class="ion-padding-start">Criar Nova Conta</h2>
-      <form [formGroup]="registoForm" (ngSubmit)="realizarRegisto()">
-        <ion-item lines="floating">
-          <ion-label position="floating">Nome Completo</ion-label>
-          <ion-input type="text" formControlName="nome"></ion-input>
-        </ion-item>
+      <form (ngSubmit)="realizarRegisto()">
+        <ion-input
+          class="form-input"
+          label="Nome Completo"
+          labelPlacement="floating"
+          fill="outline"
+          type="text"
+          name="registoNome"
+          autocomplete="name"
+          [(ngModel)]="registo.nome">
+        </ion-input>
 
-        <ion-item lines="floating">
-          <ion-label position="floating">E-mail</ion-label>
-          <ion-input type="email" formControlName="email"></ion-input>
-        </ion-item>
+        <ion-input
+          class="form-input"
+          label="E-mail"
+          labelPlacement="floating"
+          fill="outline"
+          type="email"
+          name="registoEmail"
+          autocomplete="email"
+          [(ngModel)]="registo.email">
+        </ion-input>
         
-        <ion-item lines="floating">
-          <ion-label position="floating">Palavra-passe (mín. 6 carateres)</ion-label>
-          <ion-input type="password" formControlName="password"></ion-input>
-        </ion-item>
+        <ion-input
+          class="form-input"
+          label="Palavra-passe (mín. 6 carateres)"
+          labelPlacement="floating"
+          fill="outline"
+          type="password"
+          name="registoPassword"
+          autocomplete="new-password"
+          [(ngModel)]="registo.password">
+        </ion-input>
 
-        <ion-button expand="block" color="success" type="submit" [disabled]="registoForm.invalid" class="ion-margin-top">
+        <ion-button expand="block" color="success" type="submit" [disabled]="!registoValido()" class="ion-margin-top">
           Registar e Gravar no Firestore
         </ion-button>
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Já tem uma conta? <a (click)="modoRegisto = false">Inicie sessão aqui</a>
+        Já tem uma conta?
+        <button type="button" class="link-button" (click)="modoRegisto = false">Inicie sessão aqui</button>
       </p>
     </div>
-
   </ng-template>
 
 </ion-content>

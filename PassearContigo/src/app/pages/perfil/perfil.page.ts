@@ -1,7 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonItem, IonLabel, IonInput } from '@ionic/angular/standalone';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonTitle,
+  IonToolbar
+} from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -11,53 +23,55 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
-    IonContent, 
-    IonCard, 
-    IonCardHeader, 
-    IonCardTitle, 
-    IonCardSubtitle, 
-    IonCardContent, 
-    IonButton, 
-    IonItem, 
-    IonLabel, 
-    IonInput
+    FormsModule,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonContent,
+    IonHeader,
+    IonInput,
+    IonTitle,
+    IonToolbar
   ]
 })
-export class PerfilPage implements OnInit {
-  loginForm!: FormGroup;
-  registoForm!: FormGroup;
+export class PerfilPage {
+  login = {
+    email: '',
+    password: ''
+  };
+
+  registo = {
+    nome: '',
+    email: '',
+    password: ''
+  };
   
-  // Alterna o ecrã entre o formulário de Login e o de Registo
   modoRegisto: boolean = false;
 
-  constructor(
-    private fb: FormBuilder,
-    public authService: AuthService // Colocamos 'public' para aceder ao user$ diretamente no HTML
-  ) {}
+  constructor(public authService: AuthService) {}
 
-  ngOnInit() {
-    // Requisito: Reactive Forms para o Login
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-
-    // Requisito: Reactive Forms para o Registo
-    this.registoForm = this.fb.group({
-      nome: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+  loginValido(): boolean {
+    return this.emailValido(this.login.email) && this.login.password.length >= 6;
   }
 
-  // Chamar o método login do AuthService
+  registoValido(): boolean {
+    return (
+      this.registo.nome.trim().length > 0 &&
+      this.emailValido(this.registo.email) &&
+      this.registo.password.length >= 6
+    );
+  }
+
+  private emailValido(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   async realizarLogin() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+    if (this.loginValido()) {
+      const { email, password } = this.login;
       try {
         await this.authService.login(email, password);
         alert('Sessão iniciada com sucesso!');
@@ -67,10 +81,9 @@ export class PerfilPage implements OnInit {
     }
   }
 
-  // Chamar o método registo do AuthService (Guarda no Auth + Firestore)
   async realizarRegisto() {
-    if (this.registoForm.valid) {
-      const { email, password, nome } = this.registoForm.value;
+    if (this.registoValido()) {
+      const { email, password, nome } = this.registo;
       try {
         await this.authService.registo(email, password, nome);
         alert('Utilizador registado e salvo no Firestore!');
@@ -81,7 +94,6 @@ export class PerfilPage implements OnInit {
     }
   }
 
-  // Chamar o método logout do AuthService
   async realizarLogout() {
     await this.authService.logout();
     alert('Sessão terminada.');

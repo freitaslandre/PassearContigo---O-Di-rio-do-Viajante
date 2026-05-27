@@ -1,9 +1,37 @@
-ion-content {
-  --pointer-events: auto !important;
-  pointer-events: auto !important;
+form {
+  display: grid;
+  gap: 14px;
 }
 
-ion-input, ion-button {
-  position: relative;
-  z-index: 9999 !important;
-}/* SettingsPage - Perfil */
+.form-input {
+  --background: #ffffff;
+  --border-color: #d9c9b7;
+  --border-radius: 8px;
+  --border-width: 1px;
+  --color: #1c1c1e;
+  --highlight-color-focused: #e8823a;
+  --padding-bottom: 12px;
+  --padding-end: 12px;
+  --padding-start: 12px;
+  --padding-top: 12px;
+  min-height: 56px;
+}
+
+.form-input.input-fill-outline {
+  --border-color: #d9c9b7;
+}
+
+.form-input.ion-focused {
+  --border-color: #e8823a;
+  --background: #faf7f2;
+}
+
+.link-button {
+  border: 0;
+  background: transparent;
+  color: #e8823a;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+}
