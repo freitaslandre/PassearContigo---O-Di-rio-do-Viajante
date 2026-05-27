@@ -5,25 +5,29 @@ form {
 
 .form-input {
   --background: #ffffff;
-  --border-color: #d9c9b7;
-  --border-radius: 8px;
-  --border-width: 1px;
   --color: #1c1c1e;
   --highlight-color-focused: #e8823a;
-  --padding-bottom: 12px;
+  --padding-bottom: 0;
   --padding-end: 12px;
   --padding-start: 12px;
-  --padding-top: 12px;
-  min-height: 56px;
+  --padding-top: 0;
+  display: block;
+  height: 58px;
+  border: 1px solid #d9c9b7;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
 }
 
-.form-input.input-fill-outline {
-  --border-color: #d9c9b7;
+.form-input::part(native) {
+  min-height: 56px;
+  line-height: 56px;
 }
 
 .form-input.ion-focused {
-  --border-color: #e8823a;
   --background: #faf7f2;
+  border-color: #e8823a;
+  box-shadow: 0 0 0 3px rgba(232, 130, 58, 0.16);
 }
 
 .link-button {
