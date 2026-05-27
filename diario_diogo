@@ -128,3 +128,36 @@ Criar um ViagensService separado do TripsService antigo para usar o modelo Viage
 Usar a colecao viagens no Firestore;
 Ordenar a listagem por dataInicio de forma ascendente;
 Deixar a correcao do environment.prod.ts para uma etapa posterior, por ser um problema de configuracao de producao e nao do servico criado.
+
+
+
+Sessao 5 - 27 de maio de 2026
+Objetivo:
+Criar um metodo para gerar automaticamente os dias de uma viagem a partir da data de inicio e da data de fim.
+
+Atividades realizadas:
+Adicionei o metodo gerarDiasDaViagem no ficheiro src/app/services/viagens.service.ts;
+Configurei o metodo para receber datas em formato Date ou string YYYY-MM-DD;
+Implementei a geracao automatica de um Dia por cada data entre dataInicio e dataFim;
+Defini ids automaticos para os dias no formato dia-YYYY-MM-DD;
+Defini titulos automaticos como Dia 1, Dia 2 e seguintes;
+Inicializei pontosInteresse e custos como arrays vazios em cada dia criado;
+Liguei a geracao automatica ao metodo createViagem, para criar dias quando a viagem ainda nao tem roteiro definido;
+Validei a compilacao em modo development com npx.cmd ng build --configuration development.
+
+Problemas:
+Foi necessario evitar problemas de fuso horario ao interpretar strings de datas;
+Foi necessario garantir que a data de fim nao podia ser anterior a data de inicio;
+Foi necessario manter compatibilidade com o modelo Dia ja existente.
+
+Solucao:
+Criei um metodo auxiliar para normalizar datas;
+Criei um metodo auxiliar para formatar a data usada no id de cada dia;
+Adicionei validacao para impedir intervalos de datas invalidos;
+Mantive a geracao dos dias dentro do ViagensService, por ser o servico responsavel pela criacao das viagens.
+
+Decisoes:
+Gerar os dias de forma inclusiva, contando tambem o primeiro e o ultimo dia da viagem;
+Criar dias automaticamente apenas quando a viagem ainda nao tiver dias definidos;
+Usar ids previsiveis baseados na data para facilitar leitura e depuracao;
+Deixar a edicao detalhada de atividades, pontos de interesse e custos para funcionalidades futuras.
