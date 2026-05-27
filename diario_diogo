@@ -93,3 +93,38 @@ Usar strings ISO para datas, por exemplo 2026-08-05;
 Separar dados simples e dados completos em ficheiros diferentes para evitar conflitos entre modelos;
 Usar nomes e locais de exemplo relacionados com viagens em Portugal e Espanha;
 Deixar a futura ligacao destes ficheiros aos servicos da app para uma etapa posterior.
+
+
+
+Sessao 4 - 27 de maio de 2026
+Objetivo:
+Criar um servico de viagens com operacoes CRUD ligadas ao Firestore, de acordo com o requisito 15.
+
+Atividades realizadas:
+Criei o ficheiro src/app/services/viagens.service.ts;
+Importei AngularFirestore para comunicar com a base de dados Firestore;
+Liguei o servico a colecao viagens;
+Implementei o metodo getViagens para listar viagens em tempo real;
+Implementei o metodo getViagemById para obter uma viagem especifica em tempo real;
+Implementei o metodo getViagemByIdOnce para obter uma viagem apenas uma vez;
+Implementei o metodo createViagem para criar novas viagens no Firestore;
+Implementei o metodo updateViagem para atualizar viagens existentes;
+Implementei o metodo deleteViagem para remover viagens;
+Validei a compilacao em modo development com npx.cmd ng build --configuration development.
+
+Problemas:
+O projeto usa a versao compat do AngularFire, por isso foi necessario seguir o mesmo padrao usado no AuthService;
+A build normal em modo producao falhou porque o ficheiro environment.prod.ts nao tem firebaseConfig;
+Foi necessario confirmar que o novo servico compilava corretamente usando a configuracao de desenvolvimento.
+
+Solucao:
+Usei @angular/fire/compat/firestore para manter coerencia com o resto do projeto;
+Guardei o id da viagem como id do documento no Firestore, evitando duplicar esse campo dentro dos dados;
+Usei Observables para os metodos de leitura em tempo real;
+Usei Promises para os metodos de criacao, atualizacao e eliminacao.
+
+Decisoes:
+Criar um ViagensService separado do TripsService antigo para usar o modelo Viagem mais completo;
+Usar a colecao viagens no Firestore;
+Ordenar a listagem por dataInicio de forma ascendente;
+Deixar a correcao do environment.prod.ts para uma etapa posterior, por ser um problema de configuracao de producao e nao do servico criado.
