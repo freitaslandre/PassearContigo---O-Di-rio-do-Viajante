@@ -1,28 +1,88 @@
 [
   {
-    "id": "1",
-    "title": "Passeio pela Costa",
-    "description": "Exploração da costa com vistas espetaculares",
-    "location": "Costa Litoral",
-    "startDate": "2026-06-01",
-    "endDate": "2026-06-03",
+    "id": "trip-001",
+    "title": "Fim de semana no Porto",
+    "description": "Roteiro curto para descobrir miradouros, livrarias, ribeira e gastronomia local.",
+    "location": "Porto, Portugal",
+    "startDate": "2026-06-12",
+    "endDate": "2026-06-14",
     "activities": [
       {
-        "id": "1-1",
-        "name": "Praia",
-        "description": "Dia na praia",
-        "date": "2026-06-01",
-        "location": "Praia da Costa"
+        "id": "act-001",
+        "name": "Passeio pela Ribeira",
+        "description": "Caminhada ao final da tarde junto ao Douro, com paragem para fotografias.",
+        "date": "2026-06-12",
+        "location": "Cais da Ribeira"
+      },
+      {
+        "id": "act-002",
+        "name": "Livraria Lello e Torre dos Clerigos",
+        "description": "Manha dedicada a dois pontos classicos do centro historico.",
+        "date": "2026-06-13",
+        "location": "Centro Historico do Porto"
+      },
+      {
+        "id": "act-003",
+        "name": "Jardins do Palacio de Cristal",
+        "description": "Passeio tranquilo com vista sobre o rio antes do regresso.",
+        "date": "2026-06-14",
+        "location": "Jardins do Palacio de Cristal"
       }
     ]
   },
   {
-    "id": "2",
-    "title": "Montanha e Natureza",
-    "description": "Trekking e exploração da natureza",
-    "location": "Serra da Montanha",
-    "startDate": "2026-07-10",
-    "endDate": "2026-07-12",
-    "activities": []
+    "id": "trip-002",
+    "title": "Serra da Estrela no Verao",
+    "description": "Viagem de natureza com trilhos, lagoas e aldeias de montanha.",
+    "location": "Serra da Estrela, Portugal",
+    "startDate": "2026-07-18",
+    "endDate": "2026-07-21",
+    "activities": [
+      {
+        "id": "act-004",
+        "name": "Trilho da Lagoa Comprida",
+        "description": "Caminhada panoramica com paragem para piquenique.",
+        "date": "2026-07-19",
+        "location": "Lagoa Comprida"
+      },
+      {
+        "id": "act-005",
+        "name": "Visita a Linhares da Beira",
+        "description": "Exploracao da aldeia historica e do castelo.",
+        "date": "2026-07-20",
+        "location": "Linhares da Beira"
+      }
+    ]
+  },
+  {
+    "id": "trip-003",
+    "title": "Escapadinha em Barcelona",
+    "description": "Cidade, arquitetura modernista, praia e tapas em quatro dias.",
+    "location": "Barcelona, Espanha",
+    "startDate": "2026-09-03",
+    "endDate": "2026-09-06",
+    "activities": [
+      {
+        "id": "act-006",
+        "name": "Sagrada Familia",
+        "description": "Entrada reservada para visitar a basilica e subir a torre.",
+        "date": "2026-09-04",
+        "location": "Sagrada Familia"
+      },
+      {
+        "id": "act-007",
+        "name": "Parc Guell",
+        "description": "Percurso pela zona monumental e miradouros.",
+        "date": "2026-09-05",
+        "location": "Parc Guell"
+      },
+      {
+        "id": "act-008",
+        "name": "Manha em Barceloneta",
+        "description": "Tempo livre na praia antes do voo de regresso.",
+        "date": "2026-09-06",
+        "location": "Barceloneta"
+      }
+    ]
   }
 ]

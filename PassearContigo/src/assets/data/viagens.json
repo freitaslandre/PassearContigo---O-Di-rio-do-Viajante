@@ -1,0 +1,311 @@
+[
+  {
+    "id": "viagem-001",
+    "titulo": "Roteiro cultural em Lisboa",
+    "descricao": "Plano de tres dias para visitar bairros historicos, museus, miradouros e restaurantes locais.",
+    "local": "Lisboa, Portugal",
+    "dataInicio": "2026-08-05",
+    "dataFim": "2026-08-07",
+    "status": "planejada",
+    "colaboradores": [
+      {
+        "id": "col-001",
+        "nome": "Ines Martins",
+        "email": "ines.martins@example.com",
+        "telefone": "+351 912 345 678",
+        "papel": "Organizadora",
+        "avatarUrl": "assets/images/avatar-ines.jpg"
+      },
+      {
+        "id": "col-002",
+        "nome": "Miguel Costa",
+        "email": "miguel.costa@example.com",
+        "telefone": "+351 923 456 789",
+        "papel": "Participante",
+        "avatarUrl": "assets/images/avatar-miguel.jpg"
+      }
+    ],
+    "pontosInteresse": [
+      {
+        "id": "poi-001",
+        "nome": "Castelo de Sao Jorge",
+        "descricao": "Monumento historico com vista ampla sobre a cidade.",
+        "tipo": "monumento",
+        "endereco": "Rua de Santa Cruz do Castelo, Lisboa",
+        "latitude": 38.7139,
+        "longitude": -9.1335,
+        "horario": "09:00-21:00",
+        "url": "https://castelodesaojorge.pt"
+      },
+      {
+        "id": "poi-002",
+        "nome": "Museu Nacional do Azulejo",
+        "descricao": "Museu dedicado a historia do azulejo em Portugal.",
+        "tipo": "museu",
+        "endereco": "Rua da Madre de Deus 4, Lisboa",
+        "latitude": 38.7241,
+        "longitude": -9.1137,
+        "telefone": "+351 218 100 340",
+        "horario": "10:00-18:00"
+      }
+    ],
+    "dias": [
+      {
+        "id": "dia-001",
+        "titulo": "Alfama e Baixa",
+        "descricao": "Primeiro dia dedicado ao centro historico.",
+        "data": "2026-08-05",
+        "local": "Lisboa",
+        "pontosInteresse": [
+          {
+            "id": "poi-003",
+            "nome": "Miradouro de Santa Luzia",
+            "descricao": "Paragem para fotografar Alfama e o Tejo.",
+            "tipo": "miradouro",
+            "endereco": "Largo de Santa Luzia, Lisboa",
+            "latitude": 38.7117,
+            "longitude": -9.1300
+          }
+        ],
+        "custos": [
+          {
+            "id": "custo-001",
+            "descricao": "Bilhetes Castelo de Sao Jorge",
+            "valor": 30,
+            "moeda": "EUR",
+            "data": "2026-08-05",
+            "categoria": "entradas",
+            "pagoPor": {
+              "id": "col-001",
+              "nome": "Ines Martins",
+              "email": "ines.martins@example.com",
+              "papel": "Organizadora"
+            },
+            "reembolsavel": true
+          }
+        ],
+        "observacoes": "Comprar bilhetes online para evitar filas."
+      },
+      {
+        "id": "dia-002",
+        "titulo": "Belem e museus",
+        "descricao": "Dia mais calmo para monumentos, jardim e pastelaria.",
+        "data": "2026-08-06",
+        "local": "Belem",
+        "pontosInteresse": [
+          {
+            "id": "poi-004",
+            "nome": "Mosteiro dos Jeronimos",
+            "descricao": "Visita ao claustro e igreja.",
+            "tipo": "monumento",
+            "endereco": "Praca do Imperio, Lisboa",
+            "latitude": 38.6979,
+            "longitude": -9.2068,
+            "horario": "10:00-17:30"
+          }
+        ],
+        "custos": [
+          {
+            "id": "custo-002",
+            "descricao": "Almoco em Belem",
+            "valor": 42.5,
+            "moeda": "EUR",
+            "data": "2026-08-06",
+            "categoria": "alimentacao",
+            "pagoPor": {
+              "id": "col-002",
+              "nome": "Miguel Costa",
+              "email": "miguel.costa@example.com",
+              "papel": "Participante"
+            },
+            "reembolsavel": false
+          }
+        ],
+        "observacoes": "Reservar algum tempo para caminhar junto ao rio."
+      }
+    ],
+    "custos": [
+      {
+        "id": "custo-003",
+        "descricao": "Alojamento 2 noites",
+        "valor": 220,
+        "moeda": "EUR",
+        "data": "2026-07-20",
+        "categoria": "alojamento",
+        "pagoPor": {
+          "id": "col-001",
+          "nome": "Ines Martins",
+          "email": "ines.martins@example.com",
+          "papel": "Organizadora"
+        },
+        "reembolsavel": true
+      }
+    ]
+  },
+  {
+    "id": "viagem-002",
+    "titulo": "Roadtrip pelo Alentejo",
+    "descricao": "Viagem de carro com foco em patrimonio, gastronomia e paisagens rurais.",
+    "local": "Alentejo, Portugal",
+    "dataInicio": "2026-10-10",
+    "dataFim": "2026-10-14",
+    "status": "planejada",
+    "colaboradores": [
+      {
+        "id": "col-003",
+        "nome": "Sara Almeida",
+        "email": "sara.almeida@example.com",
+        "telefone": "+351 934 567 890",
+        "papel": "Condutora"
+      },
+      {
+        "id": "col-004",
+        "nome": "Joao Ferreira",
+        "email": "joao.ferreira@example.com",
+        "papel": "Fotografia"
+      }
+    ],
+    "pontosInteresse": [
+      {
+        "id": "poi-005",
+        "nome": "Templo Romano de Evora",
+        "descricao": "Ponto central para iniciar a visita a Evora.",
+        "tipo": "monumento",
+        "endereco": "Largo do Conde de Vila Flor, Evora",
+        "latitude": 38.5728,
+        "longitude": -7.9077
+      },
+      {
+        "id": "poi-006",
+        "nome": "Monsaraz",
+        "descricao": "Aldeia muralhada com vista para o Alqueva.",
+        "tipo": "aldeia historica",
+        "endereco": "Monsaraz, Reguengos de Monsaraz",
+        "latitude": 38.4436,
+        "longitude": -7.3815
+      }
+    ],
+    "dias": [
+      {
+        "id": "dia-003",
+        "titulo": "Evora",
+        "descricao": "Chegada, centro historico e jantar regional.",
+        "data": "2026-10-10",
+        "local": "Evora",
+        "observacoes": "Confirmar horario de check-in do alojamento."
+      },
+      {
+        "id": "dia-004",
+        "titulo": "Monsaraz e Alqueva",
+        "descricao": "Dia para miradouros, passeio junto ao lago e fotografia ao por do sol.",
+        "data": "2026-10-12",
+        "local": "Monsaraz",
+        "observacoes": "Levar agua e bateria extra para a camara."
+      }
+    ],
+    "custos": [
+      {
+        "id": "custo-004",
+        "descricao": "Combustivel estimado",
+        "valor": 85,
+        "moeda": "EUR",
+        "data": "2026-10-10",
+        "categoria": "transporte",
+        "pagoPor": {
+          "id": "col-003",
+          "nome": "Sara Almeida",
+          "email": "sara.almeida@example.com",
+          "papel": "Condutora"
+        },
+        "reembolsavel": true
+      },
+      {
+        "id": "custo-005",
+        "descricao": "Prova de vinhos",
+        "valor": 56,
+        "moeda": "EUR",
+        "data": "2026-10-11",
+        "categoria": "experiencia",
+        "pagoPor": {
+          "id": "col-004",
+          "nome": "Joao Ferreira",
+          "email": "joao.ferreira@example.com",
+          "papel": "Fotografia"
+        },
+        "reembolsavel": false
+      }
+    ]
+  },
+  {
+    "id": "viagem-003",
+    "titulo": "Madeira aventura",
+    "descricao": "Plano ativo com levadas, miradouros e passeio costeiro.",
+    "local": "Madeira, Portugal",
+    "dataInicio": "2026-11-02",
+    "dataFim": "2026-11-07",
+    "status": "planejada",
+    "colaboradores": [
+      {
+        "id": "col-005",
+        "nome": "Rita Sousa",
+        "email": "rita.sousa@example.com",
+        "papel": "Organizadora"
+      }
+    ],
+    "pontosInteresse": [
+      {
+        "id": "poi-007",
+        "nome": "Pico do Arieiro",
+        "descricao": "Miradouro de montanha para nascer do sol.",
+        "tipo": "miradouro",
+        "endereco": "Pico do Arieiro, Madeira",
+        "latitude": 32.7356,
+        "longitude": -16.9287
+      },
+      {
+        "id": "poi-008",
+        "nome": "Levada das 25 Fontes",
+        "descricao": "Trilho popular com cascatas e vegetacao densa.",
+        "tipo": "trilho",
+        "endereco": "Rabacal, Madeira",
+        "latitude": 32.7549,
+        "longitude": -17.1344
+      }
+    ],
+    "dias": [
+      {
+        "id": "dia-005",
+        "titulo": "Chegada ao Funchal",
+        "descricao": "Check-in, mercado e passeio pela zona velha.",
+        "data": "2026-11-02",
+        "local": "Funchal",
+        "observacoes": "Guardar recibos para dividir despesas no fim da viagem."
+      },
+      {
+        "id": "dia-006",
+        "titulo": "Trilho das 25 Fontes",
+        "descricao": "Saida cedo para evitar horas de maior movimento.",
+        "data": "2026-11-04",
+        "local": "Rabacal",
+        "observacoes": "Verificar meteorologia no dia anterior."
+      }
+    ],
+    "custos": [
+      {
+        "id": "custo-006",
+        "descricao": "Aluguer de carro",
+        "valor": 180,
+        "moeda": "EUR",
+        "data": "2026-10-15",
+        "categoria": "transporte",
+        "pagoPor": {
+          "id": "col-005",
+          "nome": "Rita Sousa",
+          "email": "rita.sousa@example.com",
+          "papel": "Organizadora"
+        },
+        "reembolsavel": true
+      }
+    ]
+  }
+]

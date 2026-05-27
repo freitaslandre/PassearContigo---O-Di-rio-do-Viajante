@@ -40,3 +40,56 @@ Deixar o ícone, splash screen e teste em dispositivo físico para uma fase mais
 
 
 Criação do logo e alteração de caminhos e do favicon
+
+Sessão 2 — 27 de maio de 2026
+
+Sessão 2 — 27 de maio de 2026
+Objetivo:
+Criar o modelo principal de dados da aplicação para representar as viagens e a respetiva informação associada.
+Atividades realizadas:
+Criei o ficheiro viagem.model.ts;
+Defini a interface Viagem para guardar os dados gerais de cada viagem;
+Defini a interface Dia para organizar o roteiro por dias;
+Defini a interface POI para representar os pontos de interesse associados à viagem;
+Defini a interface Custo para registar despesas e valores relacionados com a viagem;
+Defini a interface Colaborador para suportar a participação de vários utilizadores numa viagem;
+Confirmei a estrutura e a nomenclatura das interfaces criadas.
+Problemas:
+Foi necessário garantir que os nomes das interfaces eram claros e coerentes com o domínio da aplicação;
+Foi necessário preparar o modelo para suportar funcionalidades futuras, como roteiros, custos e colaboração.
+Solução:
+Organizei as entidades principais num único ficheiro de modelo;
+Separei a informação por interfaces específicas para facilitar a manutenção e reutilização no projeto.
+Decisões:
+Usar interfaces TypeScript para tipar os dados principais da aplicação;
+Manter o ficheiro viagem.model.ts como base para futuras ligações a serviços, páginas e base de dados;
+Deixar a criação de um possível ficheiro models/index.ts para uma fase posterior, caso seja necessário centralizar as exportações.
+
+Sessao 3 - 27 de maio de 2026
+Objetivo:
+Criar ficheiros JSON com dados de exemplo para popular a aplicacao, de acordo com o requisito 10.
+
+Atividades realizadas:
+Atualizei o ficheiro src/assets/data/trips.json com 3 viagens de exemplo no formato do modelo Trip;
+Criei o ficheiro src/assets/data/viagens.json com 3 viagens completas no formato do modelo Viagem;
+Adicionei em viagens.json informacao detalhada como dias, pontos de interesse, custos e colaboradores;
+Criei o ficheiro src/assets/data/users.json com 3 utilizadores de exemplo no formato do modelo User;
+Validei os tres ficheiros JSON com ConvertFrom-Json para confirmar que estavam corretos;
+Confirmei que cada ficheiro tinha 3 registos de exemplo.
+
+Problemas:
+O ficheiro trips.json existente tinha poucos dados e apenas um exemplo simples;
+Era necessario criar dados que servissem tanto para o modelo antigo Trip como para o modelo novo Viagem;
+Foi necessario representar datas como strings no JSON, porque o formato JSON nao guarda objetos Date diretamente.
+
+Solucao:
+Mantive trips.json compativel com o servico atual que usa o modelo Trip;
+Criei viagens.json para suportar o modelo mais completo da aplicacao;
+Criei users.json para permitir popular dados de perfil e utilizadores;
+Organizei os dados de forma realista para facilitar testes das paginas de viagens, descoberta e perfil.
+
+Decisoes:
+Usar strings ISO para datas, por exemplo 2026-08-05;
+Separar dados simples e dados completos em ficheiros diferentes para evitar conflitos entre modelos;
+Usar nomes e locais de exemplo relacionados com viagens em Portugal e Espanha;
+Deixar a futura ligacao destes ficheiros aos servicos da app para uma etapa posterior.
