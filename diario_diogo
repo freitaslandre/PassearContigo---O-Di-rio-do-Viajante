@@ -161,3 +161,38 @@ Gerar os dias de forma inclusiva, contando tambem o primeiro e o ultimo dia da v
 Criar dias automaticamente apenas quando a viagem ainda nao tiver dias definidos;
 Usar ids previsiveis baseados na data para facilitar leitura e depuracao;
 Deixar a edicao detalhada de atividades, pontos de interesse e custos para funcionalidades futuras.
+
+
+
+Sessao 6 - 27 de maio de 2026
+Objetivo:
+Guardar viagens no Firestore associadas ao uid do utilizador autenticado.
+
+Atividades realizadas:
+Atualizei o modelo Viagem em src/app/models/viagem.model.ts;
+Adicionei ao modelo os campos uidUtilizador, criadoEm e atualizadoEm;
+Atualizei o ficheiro src/app/services/viagens.service.ts para usar AngularFireAuth;
+Configurei o metodo createViagem para obter o uid do utilizador autenticado;
+Configurei o metodo createViagem para guardar uidUtilizador em cada viagem criada;
+Configurei a listagem getViagens para devolver apenas viagens do utilizador autenticado;
+Configurei getViagemById para devolver a viagem apenas se pertencer ao utilizador atual;
+Adicionei o metodo getViagensByUid para listar viagens de um utilizador especifico;
+Adicionei validacao em updateViagem e deleteViagem para impedir alteracoes em viagens de outro utilizador;
+Validei a compilacao em modo development com npx.cmd ng build --configuration development.
+
+Problemas:
+Era necessario associar cada viagem ao utilizador certo para evitar misturar dados entre contas;
+Foi necessario garantir que utilizadores nao autenticados nao conseguiam criar, editar ou apagar viagens;
+Foi necessario manter a separacao correta entre o modelo de dados e a logica do servico.
+
+Solucao:
+Guardei o uid do utilizador no campo uidUtilizador da viagem;
+Usei o estado de autenticacao do AngularFireAuth para identificar o utilizador atual;
+Filtrei as leituras no Firestore pelo campo uidUtilizador;
+Adicionei validacoes antes de atualizar ou eliminar viagens.
+
+Decisoes:
+Manter os campos novos no model Viagem, porque fazem parte da estrutura dos dados;
+Manter a logica de autenticacao e Firestore no ViagensService, porque pertence a camada de servicos;
+Usar criadoEm e atualizadoEm para facilitar historico e ordenacao futura;
+Continuar a usar @angular/fire/compat para manter coerencia com o resto do projeto.

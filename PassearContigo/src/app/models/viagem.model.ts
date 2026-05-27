@@ -4,6 +4,7 @@
  */
 export interface Viagem {
   id: string;
+  uidUtilizador?: string;
   titulo: string;
   descricao?: string;
   local?: string;
@@ -14,6 +15,8 @@ export interface Viagem {
   custos?: Custo[];
   colaboradores?: Colaborador[];
   status?: 'planejada' | 'em-andamento' | 'concluida' | 'cancelada';
+  criadoEm?: Date;
+  atualizadoEm?: Date;
 }
 
 /**
