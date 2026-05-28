@@ -61,6 +61,24 @@
     display: flex;
     align-items: center;
   }
+
+  &.destaque {
+    border: 2px solid var(--ion-color-primary);
+    background: rgba(33, 150, 243, 0.06);
+  }
+}
+
+.viagem-destaque-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .viagem-info {

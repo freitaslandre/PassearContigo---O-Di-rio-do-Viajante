@@ -68,41 +68,46 @@ export class ViagensService {
    * Retorna um callback de unsubscribe para cleanup.
    */
   subscribeToViagens(onData: (viagens: Viagem[]) => void, onError?: (error: any) => void): Unsubscribe | null {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    let unsubscribeSnapshot: Unsubscribe | null = null;
 
-    if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
-      return null;
-    }
+    const authUnsubscribe = this.afAuth.authState.subscribe(user => {
+      if (!user) {
+        onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+        return;
+      }
 
-    try {
-      const db = getFirestore();
-      const viagensRef = collection(db, this.collectionName);
-      const q = query(viagensRef, where('uidUtilizador', '==', user.uid));
+      try {
+        const db = getFirestore();
+        const viagensRef = collection(db, this.collectionName);
+        const q = query(viagensRef, where('uidUtilizador', '==', user.uid));
 
-      return onSnapshot(
-        q,
-        (snapshot) => {
-          const viagens: Viagem[] = snapshot.docs
-            .map(doc => ({
-              id: doc.id,
-              ...doc.data() as ViagemPayload
-            }))
-            .sort((a, b) => this.compararDatas(a.dataInicio, b.dataInicio));
+        unsubscribeSnapshot = onSnapshot(
+          q,
+          (snapshot) => {
+            const viagens: Viagem[] = snapshot.docs
+              .map(doc => ({
+                id: doc.id,
+                ...doc.data() as ViagemPayload
+              }))
+              .sort((a, b) => this.compararDatas(a.dataInicio, b.dataInicio));
 
-          onData(viagens);
-        },
-        (error) => {
-          console.error('Erro ao subscrever viagens:', error);
-          onError?.(error);
-        }
-      );
-    } catch (error) {
-      console.error('Erro ao configurar subscrição:', error);
-      onError?.(error);
-      return null;
-    }
+            onData(viagens);
+          },
+          (error) => {
+            console.error('Erro ao subscrever viagens:', error);
+            onError?.(error);
+          }
+        );
+      } catch (error) {
+        console.error('Erro ao configurar subscrição:', error);
+        onError?.(error);
+      }
+    });
+
+    return () => {
+      authUnsubscribe.unsubscribe();
+      unsubscribeSnapshot?.();
+    };
   }
 
   /**

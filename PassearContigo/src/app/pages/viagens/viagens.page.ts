@@ -15,6 +15,7 @@ import { Unsubscribe } from 'firebase/firestore';
 })
 export class ViagensPage implements OnInit, OnDestroy {
   viagens: Viagem[] = [];
+  viagemEmCurso: Viagem | null = null;
   carregando = true;
   private unsubscribe: Unsubscribe | null = null;
   constructor(
@@ -34,6 +35,7 @@ export class ViagensPage implements OnInit, OnDestroy {
     this.unsubscribe = this.viagensService.subscribeToViagens(
       (viagens) => {
         this.viagens = viagens;
+        this.viagemEmCurso = this.encontrarViagemEmCurso(viagens);
         this.carregando = false;
       },
       (error) => {
@@ -89,5 +91,27 @@ export class ViagensPage implements OnInit, OnDestroy {
       default:
         return 'Sem Status';
     }
+  }
+
+  get viagensRestantes(): Viagem[] {
+    return this.viagemEmCurso
+      ? this.viagens.filter((viagem) => viagem.id !== this.viagemEmCurso?.id)
+      : this.viagens;
+  }
+
+  private encontrarViagemEmCurso(viagens: Viagem[]): Viagem | null {
+    const viagemAtiva = viagens.find((viagem) => viagem.status === 'em-andamento');
+    if (viagemAtiva) {
+      return viagemAtiva;
+    }
+
+    const agora = new Date();
+    return (
+      viagens.find((viagem) => {
+        const inicio = typeof viagem.dataInicio === 'string' ? new Date(viagem.dataInicio) : viagem.dataInicio;
+        const fim = typeof viagem.dataFim === 'string' ? new Date(viagem.dataFim) : viagem.dataFim;
+        return inicio <= agora && agora <= fim;
+      }) ?? null
+    );
   }
 }
