@@ -9,8 +9,10 @@
 
   <div *ngIf="!carregando && viagens.length === 0" class="empty-state">
     <div class="empty-icon">📭</div>
-    <h2>Sem viagens registadas</h2>
-    <p>Crie uma viagem para começar a ver os seus planos aqui.</p>
+    <ion-text class="empty-text" color="medium">
+      <h2>Sem viagens registadas</h2>
+      <p>Crie uma viagem para começar a ver os seus planos aqui.</p>
+    </ion-text>
   </div>
 
   <!-- Destaque: viagem em curso -->
