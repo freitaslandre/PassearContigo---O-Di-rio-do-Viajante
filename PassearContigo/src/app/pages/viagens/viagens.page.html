@@ -5,7 +5,27 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+<<<<<<< HEAD
   <p>Gerir viagens e itinerários.</p>
+=======
+  <!-- Loading skeleton -->
+  <div *ngIf="carregando" class="loading-container">
+    <ion-spinner color="primary"></ion-spinner>
+    <p class="ion-text-center ion-margin-top">Carregando viagens...</p>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!carregando && viagens.length === 0" class="empty-state">
+    <ion-icon name="airplane-outline" class="empty-icon"></ion-icon>
+    <h2>Nenhuma viagem registada</h2>
+    <p>Comece a explorar! Crie sua primeira viagem.</p>
+    <ion-button expand="block" color="primary">
+      <ion-icon slot="start" name="add-circle"></ion-icon>
+      Nova Viagem
+    </ion-button>
+  </div>
+
+>>>>>>> b1206c1d295543df54967ef2baaca0a9434fe6f6
   <!-- Viagens list -->
   <div *ngIf="!carregando && viagens.length > 0">
     <ion-card *ngFor="let viagem of viagens" class="viagem-card" (click)="irParaDetalhes(viagem.id)">
