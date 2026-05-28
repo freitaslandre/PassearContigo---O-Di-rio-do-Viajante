@@ -9,9 +9,9 @@ import { Unsubscribe } from 'firebase/firestore';
  */
 @Component({
   selector: 'app-viagens',
-  templateUrl: 'viagens.page.html',
-  styleUrls: ['viagens.page.scss'],
   standalone: false,
+  templateUrl: 'viagens.page.html',
+  styleUrls: ['viagens.page.scss']
 })
 export class ViagensPage implements OnInit, OnDestroy {
   viagens: Viagem[] = [];
@@ -46,7 +46,7 @@ export class ViagensPage implements OnInit, OnDestroy {
   }
 
   irParaDetalhes(id: string) {
-    this.router.navigate(['/viagens', id]);
+    this.router.navigate(['/tabs', 'viagens', id]);
   }
 
   formatarData(data: Date | string): string {
