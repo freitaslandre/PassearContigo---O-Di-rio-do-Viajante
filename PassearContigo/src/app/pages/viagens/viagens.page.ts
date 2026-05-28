@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViagensService } from '../../services/viagens.service';
 import { Viagem } from '../../models/viagem.model';
 import { Router } from '@angular/router';
+import { Unsubscribe } from 'firebase/firestore';
 
 /**
  * ViagensPage - Página de Viagens
@@ -13,9 +14,10 @@ import { Router } from '@angular/router';
   styleUrls: ['viagens.page.scss'],
   standalone: false,
 })
-export class ViagensPage implements OnInit {
+export class ViagensPage implements OnInit, OnDestroy {
   viagens: Viagem[] = [];
   carregando = true;
+  private unsubscribe: Unsubscribe | null = null;
 
   constructor(
     private viagensService: ViagensService,
@@ -23,21 +25,25 @@ export class ViagensPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.carregarViagens();
+    this.subscribeToViagens();
   }
 
-  carregarViagens() {
+  ngOnDestroy() {
+    this.unsubscribe?.();
+  }
+
+  private subscribeToViagens() {
     this.carregando = true;
-    this.viagensService.getViagens().subscribe({
-      next: (viagens) => {
+    this.unsubscribe = this.viagensService.subscribeToViagens(
+      (viagens) => {
         this.viagens = viagens;
         this.carregando = false;
       },
-      error: (error) => {
+      (error) => {
         console.error('Erro ao carregar viagens:', error);
         this.carregando = false;
       }
-    });
+    );
   }
 
   irParaDetalhes(id: string) {
