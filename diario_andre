@@ -139,3 +139,41 @@ Decisões:
 
 Manter o uso de @angular/fire/compat com AngularFirestore injetado via NgModules, garantindo consistência com a arquitetura do projeto;
 Focar esta sessão na estabilidade da configuração Firebase e na persistência de utilizadores antes de avançar para as funcionalidades das tarefas obrigatórias.
+
+
+
+Sessão 6 — 28 de maio de 2026 (tarde)
+Objetivo:
+Diagnosticar e implementar melhorias de experiência de utilizador e navegação nas viagens, corrigir subscrições ao Firestore e à autenticação, e garantir que a app constrói corretamente após as alterações.
+Atividades realizadas:
+
+Exploração do repositório e identificação das páginas e serviços relevantes (src/app/pages/viagens e src/app/services/viagens.service.ts);
+Implementação da lógica de destaque com viagemEmCurso e viagensRestantes em viagens.page.ts;
+Adição de um cartão de destaque com ion-card no template viagens.page.html;
+Substituição do empty state por ion-text para consistência com os componentes Ionic;
+Adição de ícones Ionicons nas entradas de lista e no detalhe com ion-icon;
+Correção do fluxo de subscrição a viagens no viagens.service.ts para aguardar afAuth.authState antes de criar o onSnapshot;
+Criação da página de detalhe viagem-detalhe com roteamento, módulo, rota filha :id e respetivos ficheiros viagem-detalhe.page.ts e viagem-detalhe.page.html;
+Resolução de incompatibilidades entre componentes standalone e NgModules, definindo standalone: false e declarando os componentes nos módulos apropriados;
+Validação das alterações com npm run build.
+
+Problemas:
+
+O onSnapshot do Firestore era criado antes do estado de autenticação estar disponível, causando listas de viagens inesperadamente vazias;
+Erros NG6008 por mistura de componentes standalone com declarações em NgModule;
+Dúvidas sobre onde registar a rota de detalhe — no módulo de tabs ou no módulo de viagens;
+O empty state utilizava markup genérico em vez do componente ion-text do Ionic.
+
+Solução:
+
+Aguardar afAuth.authState antes de criar o onSnapshot, garantindo que o uid do utilizador existe no momento da subscrição;
+Definição de standalone: false nos decoradores @Component necessários e declaração das páginas nos respetivos módulos NgModule;
+Rota :id mantida como rota filha dentro do viagens.module.ts, preservando a coesão da funcionalidade;
+Substituição do empty state por ion-text e atualização do template viagens.page.html;
+Validação final com npm run build — build concluído com sucesso, apenas com avisos não bloqueantes.
+
+Decisões:
+
+Manter a arquitetura baseada em NgModules em todo o projeto, não migrando para componentes standalone;
+Continuar a usar @angular/fire/compat com onSnapshot para atualizações em tempo real, aguardando sempre o estado de autenticação via afAuth.authState;
+Registar as rotas de detalhe como rotas filhas do módulo de viagens para manter a coesão das funcionalidades.
