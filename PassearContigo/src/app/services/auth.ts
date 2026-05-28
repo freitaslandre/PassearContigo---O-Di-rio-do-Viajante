@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,6 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afs: AngularFirestore
   ) {
     this.user$ = this.afAuth.authState;
   }
@@ -35,17 +34,22 @@ export class AuthService {
       const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
       const user = credential.user;
 
-      if (user) {
-        // Guarda o nome e o email associados ao UID único do utilizador
-        await this.afs.collection('users').doc(user.uid).set({
-          uid: user.uid,
-          nome: nome,
-          email: email,
-          criadoEm: new Date()
-        });
+      if (!user) {
+        throw new Error('Erro interno: não foi possível obter o utilizador após o registo.');
       }
+
+      const userDoc = firebase.firestore().doc(`users/${user.uid}`);
+
+      await userDoc.set({
+        uid: user.uid,
+        nome,
+        email,
+        criadoEm: new Date()
+      }, { merge: true });
+
       return user;
     } catch (error) {
+      console.error('AuthService.registo falhou ao criar utilizador no Firestore:', error);
       throw error;
     }
   }
