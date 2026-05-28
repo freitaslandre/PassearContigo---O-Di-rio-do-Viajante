@@ -1,41 +1,11 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonTitle,
-  IonToolbar
-} from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-perfil',
+  standalone: false,
   templateUrl: './perfil.page.html',
-  styleUrls: ['./perfil.page.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonTitle,
-    IonToolbar
-  ]
+  styleUrls: ['./perfil.page.scss']
 })
 export class PerfilPage {
   login = {

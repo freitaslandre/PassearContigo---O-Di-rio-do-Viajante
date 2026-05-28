@@ -10,7 +10,13 @@ import { ViagensPage } from './viagens.page';
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: ViagensPage }])
+    RouterModule.forChild([
+      { path: '', component: ViagensPage },
+      {
+        path: ':id',
+        loadChildren: () => import('../viagem-detalhe/viagem-detalhe.module').then(m => m.ViagemDetalhePageModule)
+      }
+    ])
   ],
   declarations: [ViagensPage]
 })

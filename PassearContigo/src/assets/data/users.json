@@ -1,0 +1,38 @@
+[
+  {
+    "id": "user-001",
+    "name": "Diogo Viana",
+    "email": "diogo.viana@example.com",
+    "profilePicture": "assets/images/avatar-diogo.jpg",
+    "bio": "Gosta de viagens culturais, museus e bons miradouros.",
+    "preferences": {
+      "language": "pt",
+      "theme": "light",
+      "notifications": true
+    }
+  },
+  {
+    "id": "user-002",
+    "name": "André Freitas",
+    "email": "andre.freitas@example.com",
+    "profilePicture": "assets/images/avatar-andre.jpg",
+    "bio": "Prefere escapadinhas curtas, fotografia urbana e restaurantes locais.",
+    "preferences": {
+      "language": "pt",
+      "theme": "dark",
+      "notifications": true
+    }
+  },
+  {
+    "id": "user-003",
+    "name": "Afonso Neiva",
+    "email": "afonso.neiva@example.com",
+    "profilePicture": "assets/images/avatar-afonso.jpg",
+    "bio": "Planeia roadtrips e roteiros de natureza com detalhes praticos.",
+    "preferences": {
+      "language": "pt",
+      "theme": "light",
+      "notifications": false
+    }
+  }
+]
