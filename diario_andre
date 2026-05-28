@@ -81,7 +81,7 @@ Corrigir o fluxo de rotas em vez de recriar as páginas do zero, garantindo que 
 
 Sessão 4 — 26 de maio de 2026
 Objetivo:
-Resolução de problemas de dependências, migração de componentes para o modelo standalone e validação da compilação e execução da aplicação.
+Resolução de problemas de dependências e validação da compilação e execução da aplicação mantendo a arquitetura NgModules.
 Atividades realizadas:
 
 Diagnóstico do erro de compilação inicial: identificação da causa raiz do erro no ionic serve que indicava a impossibilidade de encontrar o módulo @capacitor/screen-orientation;
@@ -89,25 +89,53 @@ Verificação do ficheiro app.component.spec.ts e confirmação de que não era 
 Auditoria de dependências: confirmação de que o pacote @capacitor/screen-orientation estava em falta na pasta node_modules;
 Instalação da dependência em falta via npm install @capacitor/screen-orientation;
 Criação do AuthService (auth.ts) para comunicação com o Firebase;
-Migração da página de perfil (PerfilPage) de NgModule para componente standalone;
-Eliminação do ficheiro perfil.module.ts para alinhar o projeto com as boas práticas do Angular moderno;
-Correção dos erros NG8001, NG8103 e NG8116 através da importação explícita dos componentes do Ionic a partir de @ionic/angular/standalone e do CommonModule;
-Importação e configuração do ReactiveFormsModule no componente standalone para suportar os atributos formGroup e formControlName no HTML;
+Criação do perfil.module.ts com a declaração da PerfilPage e importação dos módulos necessários do Ionic e do ReactiveFormsModule;
+Importação dos componentes do Ionic e do CommonModule no perfil.module.ts para que o template HTML reconhecesse corretamente as tags do Ionic e as diretivas estruturais ngIf, disabled e formGroup;
+Configuração do ReactiveFormsModule no perfil.module.ts para suportar os atributos formGroup e formControlName no HTML;
 Validação final: projeto a compilar sem erros e a renderizar o ecrã de autenticação corretamente no navegador.
 
 Problemas:
 
 O módulo @capacitor/screen-orientation não estava instalado, causando o erro TS2307 e impedindo o arranque da app;
-Falha de compilação no ecrã de perfil após a migração para standalone, uma vez que o template HTML não reconhecia as tags do Ionic nem as diretivas estruturais ngIf, disabled e formGroup;
-Conflito na árvore de módulos devido à permanência da PerfilPage no perfil.module.ts após esta ter sido definida como standalone.
+O template HTML da página de perfil não reconhecia as tags do Ionic nem as diretivas estruturais ngIf, disabled e formGroup por falta de importações no módulo;
+Os objetos FormGroup (loginForm e registoForm) não estavam corretamente inicializados, causando erros em tempo de compilação.
 
 Solução:
 
 Instalação do pacote em falta via npm para restaurar o ecossistema do Capacitor;
-Configuração manual do array imports no decorador @Component da PerfilPage, mapeando individualmente todos os componentes do Ionic utilizados;
-Inicialização dos objetos FormGroup (loginForm e registoForm) e remoção do módulo antigo para limpar o fluxo de compilação.
+Adição das importações necessárias no perfil.module.ts, incluindo IonicModule, CommonModule e ReactiveFormsModule;
+Inicialização correta dos objetos FormGroup no construtor da PerfilPage.
 
 Decisões:
 
-Adotar o padrão de Standalone Components do Angular e Ionic para as novas páginas, garantindo um código mais modular e de fácil manutenção;
-Manter a abordagem de resolver dependências e erros de forma incremental, validando a integridade do ecrã diretamente nas ferramentas de desenvolvimento do navegador.
+Manter a arquitetura NgModules em todas as páginas, garantindo consistência com a estrutura definida no início do projeto;
+Continuar a resolver dependências e erros de forma incremental, validando o resultado diretamente nas ferramentas de desenvolvimento do navegador.
+
+
+
+Sessão 5 — 28 de maio de 2026(manhã)
+Objetivo:
+Diagnosticar e corrigir o bloqueio de gravação de utilizadores no Firestore após registo, garantindo que a app autentica e persiste dados de utilizador corretamente.
+Atividades realizadas:
+
+Verificação dos ficheiros de modelo e serviço para confirmar a existência dos modelos TypeScript (Viagem, Dia, POI, Custo, Colaborador) e ausência de duplicação entre trip.model.ts e viagem.model.ts;
+Análise do serviço de autenticação (src/app/services/auth.ts) e do fluxo de registo para identificar o erro de persistência no Firestore;
+Correção do AuthService mantendo a arquitetura NgModules, com uso do AngularFirestore injetado via construtor no módulo correto;
+Correção do ficheiro src/environments/environment.prod.ts para incluir o firebaseConfig, resolvendo o erro de build property 'firebaseConfig' does not exist;
+Compilação do projeto com npm run build e validação de que a app constrói com sucesso após as correções.
+
+Problemas:
+
+A conta de utilizador era criada no Firebase Authentication mas o documento users/{uid} não aparecia no Firestore, devido à forma como o AuthService estava a tentar gravar os dados;
+O ambiente de produção não tinha o firebaseConfig, causando um erro de compilação ao inicializar o Firebase com AngularFireModule.initializeApp(...).
+
+Solução:
+
+Correção do AuthService para injetar e usar corretamente o AngularFirestore na gravação do documento users/{uid} após o registo;
+Adição do firebaseConfig ao environment.prod.ts para manter a mesma configuração Firebase em desenvolvimento e produção;
+Validação final com npm run build, confirmando que a aplicação compila sem erros.
+
+Decisões:
+
+Manter o uso de @angular/fire/compat com AngularFirestore injetado via NgModules, garantindo consistência com a arquitetura do projeto;
+Focar esta sessão na estabilidade da configuração Firebase e na persistência de utilizadores antes de avançar para as funcionalidades das tarefas obrigatórias.
