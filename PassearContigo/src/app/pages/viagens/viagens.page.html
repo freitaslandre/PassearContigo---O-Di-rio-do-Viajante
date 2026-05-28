@@ -1,9 +1,75 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Viagens</ion-title>
+    <ion-title>Minhas Viagens</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <p>Gerir viagens e itinerários.</p>
+  <!-- Viagens list -->
+  <div *ngIf="!carregando && viagens.length > 0">
+    <ion-card *ngFor="let viagem of viagens" class="viagem-card" (click)="irParaDetalhes(viagem.id)">
+      <ion-card-header>
+        <ion-card-title>{{ viagem.titulo }}</ion-card-title>
+        <ion-card-subtitle *ngIf="viagem.status">
+          <ion-badge [color]="obterCorStatus(viagem.status)">
+            {{ obterTextoStatus(viagem.status) }}
+          </ion-badge>
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="viagem-info">
+          <!-- Location -->
+          <div class="info-row" *ngIf="viagem.local">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ viagem.local }}</span>
+          </div>
+
+          <!-- Description -->
+          <div class="info-row" *ngIf="viagem.descricao">
+            <p class="viagem-description">{{ viagem.descricao }}</p>
+          </div>
+
+          <!-- Dates and duration -->
+          <div class="dates-container">
+            <div class="date-info">
+              <div class="date-label">Início</div>
+              <div class="date-value">{{ formatarData(viagem.dataInicio) }}</div>
+            </div>
+            <div class="duration-info">
+              <div class="duration-label">Duração</div>
+              <div class="duration-value">
+                {{ obterNumDias(viagem.dataInicio, viagem.dataFim) }} dias
+              </div>
+            </div>
+            <div class="date-info">
+              <div class="date-label">Fim</div>
+              <div class="date-value">{{ formatarData(viagem.dataFim) }}</div>
+            </div>
+          </div>
+
+          <!-- Extra info -->
+          <div class="extra-info">
+            <div class="info-badge" *ngIf="viagem.dias && viagem.dias.length > 0">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ viagem.dias.length }} dias</span>
+            </div>
+            <div class="info-badge" *ngIf="viagem.colaboradores && viagem.colaboradores.length > 0">
+              <ion-icon name="people-outline"></ion-icon>
+              <span>{{ viagem.colaboradores.length }} pessoas</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- New trip button (floating action button style) -->
+  <div class="fab-container" *ngIf="!carregando && viagens.length > 0">
+    <ion-button expand="block" color="primary">
+      <ion-icon slot="start" name="add-circle"></ion-icon>
+      Nova Viagem
+    </ion-button>
+  </div>
 </ion-content>

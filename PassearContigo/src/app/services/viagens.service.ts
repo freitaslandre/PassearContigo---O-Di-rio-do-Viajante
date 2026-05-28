@@ -7,6 +7,8 @@ import {
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { Dia, Viagem } from '../models/viagem.model';
 
 type ViagemPayload = Omit<Viagem, 'id'>;
@@ -59,6 +61,94 @@ export class ViagensService {
         );
       })
     );
+  }
+
+  /**
+   * Subscreve às viagens do utilizador autenticado usando onSnapshot do Firestore.
+   * Retorna um callback de unsubscribe para cleanup.
+   */
+  subscribeToViagens(onData: (viagens: Viagem[]) => void, onError?: (error: any) => void): Unsubscribe | null {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+      return null;
+    }
+
+    try {
+      const db = getFirestore();
+      const viagensRef = collection(db, this.collectionName);
+      const q = query(viagensRef, where('uidUtilizador', '==', user.uid));
+
+      return onSnapshot(
+        q,
+        (snapshot) => {
+          const viagens: Viagem[] = snapshot.docs
+            .map(doc => ({
+              id: doc.id,
+              ...doc.data() as ViagemPayload
+            }))
+            .sort((a, b) => this.compararDatas(a.dataInicio, b.dataInicio));
+
+          onData(viagens);
+        },
+        (error) => {
+          console.error('Erro ao subscrever viagens:', error);
+          onError?.(error);
+        }
+      );
+    } catch (error) {
+      console.error('Erro ao configurar subscrição:', error);
+      onError?.(error);
+      return null;
+    }
+  }
+
+  /**
+   * Subscreve a uma viagem especifica usando onSnapshot do Firestore.
+   * Retorna um callback de unsubscribe para cleanup.
+   */
+  subscribeToViagemById(id: string, onData: (viagem: Viagem | null) => void, onError?: (error: any) => void): Unsubscribe | null {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+      return null;
+    }
+
+    try {
+      const db = getFirestore();
+      const docRef = doc(db, this.collectionName, id);
+
+      return onSnapshot(
+        docRef,
+        (snapshot) => {
+          if (!snapshot.exists()) {
+            onData(null);
+            return;
+          }
+
+          const data = snapshot.data() as ViagemPayload;
+
+          if (data.uidUtilizador !== user.uid) {
+            onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
+            return;
+          }
+
+          onData({ id: snapshot.id, ...data });
+        },
+        (error) => {
+          console.error('Erro ao subscrever viagem:', error);
+          onError?.(error);
+        }
+      );
+    } catch (error) {
+      console.error('Erro ao configurar subscrição:', error);
+      onError?.(error);
+      return null;
+    }
   }
 
   /**
