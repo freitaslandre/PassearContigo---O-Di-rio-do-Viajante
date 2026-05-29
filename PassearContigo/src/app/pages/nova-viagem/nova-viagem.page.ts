@@ -15,6 +15,7 @@ export class NovaViagemPage implements OnInit {
   carregando = false;
   fotoCapaPreview: string | null = null;
   fotoCapaFile: File | null = null;
+  numeroDias = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -26,6 +27,33 @@ export class NovaViagemPage implements OnInit {
 
   ngOnInit() {
     this.inicializarFormulario();
+    this.setupListenersParaDatas();
+  }
+
+  private setupListenersParaDatas() {
+    this.form.get('dataInicio')?.valueChanges.subscribe(() => this.calcularDias());
+    this.form.get('dataFim')?.valueChanges.subscribe(() => this.calcularDias());
+  }
+
+  private calcularDias() {
+    const dataInicio = this.form.get('dataInicio')?.value;
+    const dataFim = this.form.get('dataFim')?.value;
+
+    if (!dataInicio || !dataFim) {
+      this.numeroDias = 0;
+      return;
+    }
+
+    const inicio = new Date(dataInicio);
+    const fim = new Date(dataFim);
+
+    if (fim < inicio) {
+      this.numeroDias = 0;
+      return;
+    }
+
+    const differenceMs = fim.getTime() - inicio.getTime();
+    this.numeroDias = Math.floor(differenceMs / (1000 * 60 * 60 * 24)) + 1;
   }
 
   private inicializarFormulario() {
@@ -74,9 +102,15 @@ export class NovaViagemPage implements OnInit {
 
   async criarViagem() {
     if (this.form.invalid) {
+      let mensagem = 'Por favor, preencha todos os campos obrigatórios.';
+
+      if (this.form.hasError('datasInvalidas')) {
+        mensagem = 'A data de fim não pode ser anterior à data de início.';
+      }
+
       const alert = await this.alertCtrl.create({
         header: 'Formulário Inválido',
-        message: 'Por favor, preencha todos os campos obrigatórios.',
+        message: mensagem,
         buttons: ['OK']
       });
       await alert.present();
@@ -91,10 +125,6 @@ export class NovaViagemPage implements OnInit {
     try {
       const dataInicio = new Date(this.form.get('dataInicio')?.value);
       const dataFim = new Date(this.form.get('dataFim')?.value);
-
-      if (dataFim < dataInicio) {
-        throw new Error('A data de fim não pode ser anterior à data de início.');
-      }
 
       const novaViagem = {
         titulo: this.form.get('titulo')?.value,
