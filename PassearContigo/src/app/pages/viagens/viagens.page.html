@@ -13,6 +13,10 @@
       <h2>Sem viagens registadas</h2>
       <p>Crie uma viagem para começar a ver os seus planos aqui.</p>
     </ion-text>
+    <ion-button color="primary" routerLink="/tabs/viagens/nova">
+      <ion-icon slot="start" name="add-circle"></ion-icon>
+      Criar Primeira Viagem
+    </ion-button>
   </div>
 
   <!-- Destaque: viagem em curso -->
@@ -138,7 +142,7 @@
 
   <!-- New trip button (floating action button style) -->
   <div class="fab-container" *ngIf="!carregando && viagens.length > 0">
-    <ion-button expand="block" color="primary">
+    <ion-button expand="block" color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
       Nova Viagem
     </ion-button>

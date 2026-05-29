@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/viagens"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nova Viagem</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="criarViagem()">
+    <!-- Título -->
+    <ion-item>
+      <ion-label position="floating">Título da Viagem *</ion-label>
+      <ion-input
+        formControlName="titulo"
+        type="text"
+        placeholder="Ex: Lisboa 2024"
+      ></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="titulo?.invalid && titulo?.touched">
+      <small *ngIf="titulo?.hasError('required')">Título é obrigatório</small>
+      <small *ngIf="titulo?.hasError('minlength')">
+        Mínimo 3 caracteres
+      </small>
+    </ion-text>
+
+    <!-- Local -->
+    <ion-item>
+      <ion-label position="floating">Local *</ion-label>
+      <ion-input
+        formControlName="local"
+        type="text"
+        placeholder="Ex: Portugal"
+      ></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="local?.invalid && local?.touched">
+      <small *ngIf="local?.hasError('required')">Local é obrigatório</small>
+    </ion-text>
+
+    <!-- Descrição -->
+    <ion-item>
+      <ion-label position="floating">Descrição</ion-label>
+      <ion-textarea
+        formControlName="descricao"
+        placeholder="Descreva sua viagem..."
+        rows="4"
+      ></ion-textarea>
+    </ion-item>
+
+    <!-- Data de Início -->
+    <ion-item>
+      <ion-label position="floating">Data de Início *</ion-label>
+      <ion-input
+        formControlName="dataInicio"
+        type="date"
+      ></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="dataInicio?.invalid && dataInicio?.touched">
+      <small *ngIf="dataInicio?.hasError('required')">
+        Data de início é obrigatória
+      </small>
+    </ion-text>
+
+    <!-- Data de Fim -->
+    <ion-item>
+      <ion-label position="floating">Data de Fim *</ion-label>
+      <ion-input
+        formControlName="dataFim"
+        type="date"
+      ></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="dataFim?.invalid && dataFim?.touched">
+      <small *ngIf="dataFim?.hasError('required')">
+        Data de fim é obrigatória
+      </small>
+    </ion-text>
+
+    <!-- Status -->
+    <ion-item>
+      <ion-label position="floating">Status</ion-label>
+      <ion-select formControlName="status">
+        <ion-select-option value="planejada">Planeada</ion-select-option>
+        <ion-select-option value="em-andamento">Em Andamento</ion-select-option>
+        <ion-select-option value="concluida">Concluída</ion-select-option>
+        <ion-select-option value="cancelada">Cancelada</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Botões -->
+    <div class="button-group">
+      <ion-button
+        expand="block"
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+        Criar Viagem
+      </ion-button>
+      <ion-button
+        expand="block"
+        color="medium"
+        type="button"
+        (click)="cancelar()"
+      >
+        <ion-icon slot="start" name="close-circle"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

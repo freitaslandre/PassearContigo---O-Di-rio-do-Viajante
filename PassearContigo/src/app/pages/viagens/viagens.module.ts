@@ -13,6 +13,10 @@ import { ViagensPage } from './viagens.page';
     RouterModule.forChild([
       { path: '', component: ViagensPage },
       {
+        path: 'nova',
+        loadChildren: () => import('../nova-viagem/nova-viagem.module').then(m => m.NovaViagemPageModule)
+      },
+      {
         path: ':id',
         loadChildren: () => import('../viagem-detalhe/viagem-detalhe.module').then(m => m.ViagemDetalhePageModule)
       }
