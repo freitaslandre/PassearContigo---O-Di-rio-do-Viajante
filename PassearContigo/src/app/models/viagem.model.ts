@@ -8,6 +8,7 @@ export interface Viagem {
   titulo: string;
   descricao?: string;
   local?: string;
+  fotoCapaUrl?: string;
   dataInicio: Date;
   dataFim: Date;
   dias?: Dia[];

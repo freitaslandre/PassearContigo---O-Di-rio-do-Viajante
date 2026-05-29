@@ -13,6 +13,8 @@ import { AlertController, LoadingController } from '@ionic/angular';
 export class NovaViagemPage implements OnInit {
   form!: FormGroup;
   carregando = false;
+  fotoCapaPreview: string | null = null;
+  fotoCapaFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -29,12 +31,45 @@ export class NovaViagemPage implements OnInit {
   private inicializarFormulario() {
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
-      descricao: [''],
-      local: ['', Validators.required],
+      destino: ['', Validators.required],
       dataInicio: ['', Validators.required],
-      dataFim: ['', Validators.required],
-      status: ['planejada', Validators.required]
-    });
+      dataFim: ['', Validators.required]
+    }, { validators: this.validarDatas.bind(this) });
+  }
+
+  private validarDatas(group: FormGroup): { [key: string]: any } | null {
+    const dataInicio = group.get('dataInicio')?.value;
+    const dataFim = group.get('dataFim')?.value;
+
+    if (!dataInicio || !dataFim) {
+      return null;
+    }
+
+    const inicio = new Date(dataInicio);
+    const fim = new Date(dataFim);
+
+    if (fim < inicio) {
+      return { datasInvalidas: true };
+    }
+
+    return null;
+  }
+
+  onFotoCapaSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoCapaFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoCapaPreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removerFotoCapa() {
+    this.fotoCapaFile = null;
+    this.fotoCapaPreview = null;
   }
 
   async criarViagem() {
@@ -63,11 +98,11 @@ export class NovaViagemPage implements OnInit {
 
       const novaViagem = {
         titulo: this.form.get('titulo')?.value,
-        descricao: this.form.get('descricao')?.value || '',
-        local: this.form.get('local')?.value,
+        local: this.form.get('destino')?.value,
         dataInicio,
         dataFim,
-        status: this.form.get('status')?.value
+        fotoCapaUrl: this.fotoCapaPreview || undefined,
+        status: 'planejada' as const
       };
 
       const id = await this.viagensService.createViagem(novaViagem);
@@ -107,12 +142,8 @@ export class NovaViagemPage implements OnInit {
     return this.form.get('titulo');
   }
 
-  get descricao() {
-    return this.form.get('descricao');
-  }
-
-  get local() {
-    return this.form.get('local');
+  get destino() {
+    return this.form.get('destino');
   }
 
   get dataInicio() {
@@ -121,9 +152,5 @@ export class NovaViagemPage implements OnInit {
 
   get dataFim() {
     return this.form.get('dataFim');
-  }
-
-  get status() {
-    return this.form.get('status');
   }
 }

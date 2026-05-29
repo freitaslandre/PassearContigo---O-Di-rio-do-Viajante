@@ -9,6 +9,41 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="form" (ngSubmit)="criarViagem()">
+    <!-- Foto de Capa -->
+    <div class="foto-capa-section">
+      <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
+        <img [src]="fotoCapaPreview" alt="Foto de Capa" />
+        <ion-button
+          color="danger"
+          size="small"
+          (click)="removerFotoCapa()"
+          type="button"
+        >
+          <ion-icon slot="start" name="trash"></ion-icon>
+          Remover
+        </ion-button>
+      </div>
+
+      <div class="foto-capa-upload" *ngIf="!fotoCapaPreview">
+        <input
+          type="file"
+          #fileInput
+          accept="image/*"
+          (change)="onFotoCapaSelected($event)"
+          style="display: none"
+        />
+        <ion-button
+          expand="block"
+          color="primary"
+          (click)="fileInput.click()"
+          type="button"
+        >
+          <ion-icon slot="start" name="image"></ion-icon>
+          Adicionar Foto de Capa
+        </ion-button>
+      </div>
+    </div>
+
     <!-- Título -->
     <ion-item>
       <ion-label position="floating">Título da Viagem *</ion-label>
@@ -25,28 +60,18 @@
       </small>
     </ion-text>
 
-    <!-- Local -->
+    <!-- Destino -->
     <ion-item>
-      <ion-label position="floating">Local *</ion-label>
+      <ion-label position="floating">Destino *</ion-label>
       <ion-input
-        formControlName="local"
+        formControlName="destino"
         type="text"
         placeholder="Ex: Portugal"
       ></ion-input>
     </ion-item>
-    <ion-text color="danger" *ngIf="local?.invalid && local?.touched">
-      <small *ngIf="local?.hasError('required')">Local é obrigatório</small>
+    <ion-text color="danger" *ngIf="destino?.invalid && destino?.touched">
+      <small *ngIf="destino?.hasError('required')">Destino é obrigatório</small>
     </ion-text>
-
-    <!-- Descrição -->
-    <ion-item>
-      <ion-label position="floating">Descrição</ion-label>
-      <ion-textarea
-        formControlName="descricao"
-        placeholder="Descreva sua viagem..."
-        rows="4"
-      ></ion-textarea>
-    </ion-item>
 
     <!-- Data de Início -->
     <ion-item>
@@ -75,17 +100,6 @@
         Data de fim é obrigatória
       </small>
     </ion-text>
-
-    <!-- Status -->
-    <ion-item>
-      <ion-label position="floating">Status</ion-label>
-      <ion-select formControlName="status">
-        <ion-select-option value="planejada">Planeada</ion-select-option>
-        <ion-select-option value="em-andamento">Em Andamento</ion-select-option>
-        <ion-select-option value="concluida">Concluída</ion-select-option>
-        <ion-select-option value="cancelada">Cancelada</ion-select-option>
-      </ion-select>
-    </ion-item>
 
     <!-- Botões -->
     <div class="button-group">
