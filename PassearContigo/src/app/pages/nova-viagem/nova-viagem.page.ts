@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ViagensService } from '../../services/viagens.service';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-nova-viagem',
@@ -22,7 +22,8 @@ export class NovaViagemPage implements OnInit {
     private viagensService: ViagensService,
     private router: Router,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -139,28 +140,24 @@ export class NovaViagemPage implements OnInit {
 
       await loader.dismiss();
 
-      const successAlert = await this.alertCtrl.create({
-        header: 'Sucesso',
+      const toast = await this.toastCtrl.create({
         message: 'Viagem criada com sucesso!',
-        buttons: [
-          {
-            text: 'Ver Detalhes',
-            handler: () => {
-              this.router.navigate(['/tabs', 'viagens', id]);
-            }
-          }
-        ]
+        duration: 1500,
+        color: 'success'
       });
-      await successAlert.present();
+      await toast.present();
+      await toast.onDidDismiss();
+
+      this.router.navigate(['/tabs', 'viagens', id]);
     } catch (error: any) {
       await loader.dismiss();
 
-      const errorAlert = await this.alertCtrl.create({
-        header: 'Erro',
+      const toast = await this.toastCtrl.create({
         message: error.message || 'Erro ao criar viagem',
-        buttons: ['OK']
+        duration: 2500,
+        color: 'danger'
       });
-      await errorAlert.present();
+      await toast.present();
     }
   }
 
