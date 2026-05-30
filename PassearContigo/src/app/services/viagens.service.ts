@@ -160,25 +160,41 @@ export class ViagensService {
    * Obtem uma viagem pelo ID em tempo real, apenas se pertencer ao utilizador autenticado.
    */
   getViagemById(id: string): Observable<Viagem | undefined> {
-    return this.afAuth.authState.pipe(
-      switchMap(user => {
-        if (!user) {
-          return of(undefined);
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      return of(undefined);
+    }
+
+    const db = getFirestore();
+    const docRef = doc(db, this.collectionName, id);
+
+    return new Observable(observer => {
+      const unsubscribe = onSnapshot(
+        docRef,
+        (snapshot) => {
+          if (!snapshot.exists()) {
+            observer.next(undefined);
+            return;
+          }
+
+          const data = snapshot.data() as ViagemPayload;
+
+          if (data.uidUtilizador !== user.uid) {
+            observer.error(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
+            return;
+          }
+
+          observer.next({ id: snapshot.id, ...data });
+        },
+        (error) => {
+          observer.error(error);
         }
+      );
 
-        return this.afs.doc<ViagemPayload>(`${this.collectionName}/${id}`)
-          .valueChanges()
-          .pipe(
-            map(data => {
-              if (!data || data.uidUtilizador !== user.uid) {
-                return undefined;
-              }
-
-              return { id, ...data };
-            })
-          );
-      })
-    );
+      return () => unsubscribe();
+    });
   }
 
   /**
