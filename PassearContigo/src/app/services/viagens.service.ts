@@ -304,14 +304,27 @@ export class ViagensService {
       return new Date(data.getFullYear(), data.getMonth(), data.getDate());
     }
 
-    const partesData = data.split('-').map(Number);
+    if (typeof data === 'string') {
+      if (data.includes('T')) {
+        const date = new Date(data);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      }
+      const partesData = data.split('-').map(Number);
 
-    if (partesData.length !== 3 || partesData.some(parte => Number.isNaN(parte))) {
-      throw new Error('Data invalida. Use o formato YYYY-MM-DD.');
+      if (partesData.length !== 3 || partesData.some(parte => Number.isNaN(parte))) {
+        throw new Error('Data invalida. Use o formato YYYY-MM-DD.');
+      }
+
+      const [ano, mes, dia] = partesData;
+      return new Date(ano, mes - 1, dia);
     }
 
-    const [ano, mes, dia] = partesData;
-    return new Date(ano, mes - 1, dia);
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      const date = (data as any).toDate();
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    throw new Error('Data invalida. Use o formato YYYY-MM-DD.');
   }
 
   private formatarDataId(data: Date): string {

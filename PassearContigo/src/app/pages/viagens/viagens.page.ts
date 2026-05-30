@@ -49,18 +49,37 @@ export class ViagensPage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', id]);
   }
 
-  formatarData(data: Date | string): string {
+  formatarData(data: Date | string | any): string {
     if (typeof data === 'string') {
       return new Date(data).toLocaleDateString('pt-PT');
     }
-    return data.toLocaleDateString('pt-PT');
+    if (data instanceof Date) {
+      return data.toLocaleDateString('pt-PT');
+    }
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      return (data as any).toDate().toLocaleDateString('pt-PT');
+    }
+    return String(data);
   }
 
-  obterNumDias(dataInicio: Date | string, dataFim: Date | string): number {
-    const inicio = typeof dataInicio === 'string' ? new Date(dataInicio) : dataInicio;
-    const fim = typeof dataFim === 'string' ? new Date(dataFim) : dataFim;
+  obterNumDias(dataInicio: Date | string | any, dataFim: Date | string | any): number {
+    const inicio = this.converterParaDate(dataInicio);
+    const fim = this.converterParaDate(dataFim);
     const differenceMs = fim.getTime() - inicio.getTime();
     return Math.floor(differenceMs / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  private converterParaDate(data: Date | string | any): Date {
+    if (data instanceof Date) {
+      return data;
+    }
+    if (typeof data === 'string') {
+      return new Date(data);
+    }
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      return (data as any).toDate();
+    }
+    return new Date(data);
   }
 
   obterCorStatus(status?: string): string {
@@ -108,8 +127,8 @@ export class ViagensPage implements OnInit, OnDestroy {
     const agora = new Date();
     return (
       viagens.find((viagem) => {
-        const inicio = typeof viagem.dataInicio === 'string' ? new Date(viagem.dataInicio) : viagem.dataInicio;
-        const fim = typeof viagem.dataFim === 'string' ? new Date(viagem.dataFim) : viagem.dataFim;
+        const inicio = this.converterParaDate(viagem.dataInicio);
+        const fim = this.converterParaDate(viagem.dataFim);
         return inicio <= agora && agora <= fim;
       }) ?? null
     );

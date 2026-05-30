@@ -25,8 +25,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.routeSub = this.route.paramMap.subscribe((paramMap) => {
-      const id = paramMap.get('id');
+    this.routeSub = this.route.paramMap.subscribe(() => {
+      const id = this.findRouteId(this.route);
       if (!id) {
         this.erro = 'ID de viagem inválido.';
         this.carregando = false;
@@ -38,11 +38,18 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       this.viagem = null;
 
       this.viagemSub?.unsubscribe();
-      this.viagemSub = this.viagensService.getViagemById(id).subscribe((viagem) => {
-        this.viagem = viagem ?? null;
-        this.carregando = false;
-        if (!viagem) {
-          this.erro = 'Viagem não encontrada ou não pertence ao utilizador.';
+      this.viagemSub = this.viagensService.getViagemById(id).subscribe({
+        next: (viagem) => {
+          this.viagem = viagem ?? null;
+          this.carregando = false;
+          if (!viagem) {
+            this.erro = 'Viagem não encontrada ou não pertence ao utilizador.';
+          }
+        },
+        error: (err) => {
+          this.carregando = false;
+          this.erro = err?.message || 'Erro ao carregar viagem.';
+          console.error('Erro ao carregar viagem:', err);
         }
       });
     });
@@ -57,18 +64,37 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens']);
   }
 
-  formatarData(data: Date | string): string {
+  formatarData(data: Date | string | any): string {
     if (typeof data === 'string') {
       return new Date(data).toLocaleDateString('pt-PT');
     }
-    return data.toLocaleDateString('pt-PT');
+    if (data instanceof Date) {
+      return data.toLocaleDateString('pt-PT');
+    }
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      return (data as any).toDate().toLocaleDateString('pt-PT');
+    }
+    return String(data);
   }
 
-  obterNumDias(dataInicio: Date | string, dataFim: Date | string): number {
-    const inicio = typeof dataInicio === 'string' ? new Date(dataInicio) : dataInicio;
-    const fim = typeof dataFim === 'string' ? new Date(dataFim) : dataFim;
+  obterNumDias(dataInicio: Date | string | any, dataFim: Date | string | any): number {
+    const inicio = this.converterParaDate(dataInicio);
+    const fim = this.converterParaDate(dataFim);
     const differenceMs = fim.getTime() - inicio.getTime();
     return Math.floor(differenceMs / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  private converterParaDate(data: Date | string | any): Date {
+    if (data instanceof Date) {
+      return data;
+    }
+    if (typeof data === 'string') {
+      return new Date(data);
+    }
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      return (data as any).toDate();
+    }
+    return new Date(data);
   }
 
   obterCorStatus(status?: string): string {
@@ -100,4 +126,33 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         return 'Sem Status';
     }
   }
+
+  irParaDia(diaId: string) {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'dias', diaId]);
+  }
+
+  adicionarDia() {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'dias', 'nova']);
+  }
+
+  obterResumoCustos(dia: any): string {
+    if (!dia || !dia.custos || dia.custos.length === 0) return '';
+    const total = dia.custos.reduce((s: number, c: any) => s + (c.valor || 0), 0);
+    return `${total.toFixed(2)} ${dia.custos[0].moeda || 'EUR'}`;
+  }
+
+  private findRouteId(route: ActivatedRoute): string | null {
+    let current: ActivatedRoute | null = route;
+    while (current) {
+      const id = current.snapshot.paramMap.get('id');
+      if (id) {
+        return id;
+      }
+      current = current.parent;
+    }
+    return null;
+  }
 }
+

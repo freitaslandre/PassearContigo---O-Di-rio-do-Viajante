@@ -20,6 +20,31 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Lista de dias -->
+  <ion-list *ngIf="!carregando && viagem && viagem.dias && viagem.dias.length > 0">
+    <ion-list-header>
+      <ion-label>Itinerário / Dias</ion-label>
+      <ion-button slot="end" fill="clear" color="primary" (click)="adicionarDia()">
+        <ion-icon name="add-circle" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-list-header>
+
+    <ion-item *ngFor="let dia of viagem.dias; let i = index" (click)="irParaDia(dia.id)">
+      <ion-label>
+        <h3>{{ dia.titulo || ('Dia ' + (i + 1)) }}</h3>
+        <p>{{ formatarData(dia.data) }} <span *ngIf="dia.local">· {{ dia.local }}</span></p>
+      </ion-label>
+      <ion-note slot="end" color="medium">{{ obterResumoCustos(dia) }}</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngIf="!carregando && viagem && (!viagem.dias || viagem.dias.length === 0)" class="empty-days">
+    <ion-card-content>
+      <p>Sem dias definidos para esta viagem.</p>
+      <ion-button expand="block" color="primary" (click)="adicionarDia()">Adicionar Primeiro Dia</ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <ion-card *ngIf="!carregando && viagem" class="viagem-card destaque">
     <ion-card-header>
       <ion-card-title>{{ viagem.titulo }}</ion-card-title>
