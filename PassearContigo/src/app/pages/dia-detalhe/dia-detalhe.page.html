@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="voltar()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ dia?.titulo || 'Detalhes do Dia' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="carregando" class="loading-card">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando dia...</p>
+  </div>
+
+  <ion-card *ngIf="!carregando && erro">
+    <ion-card-content>
+      <p>{{ erro }}</p>
+      <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="!carregando && dia">
+    <!-- Informações do dia -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ dia.titulo }}</ion-card-title>
+        <ion-card-subtitle>{{ formatarData(dia.data) }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content *ngIf="dia.descricao">
+        <p>{{ dia.descricao }}</p>
+      </ion-card-content>
+      <ion-card-content *ngIf="dia.local">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>{{ dia.local }}</span>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Custos do dia -->
+    <ion-card *ngIf="dia.custos && dia.custos.length > 0">
+      <ion-card-header>
+        <ion-card-title>Custos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let custo of dia.custos">
+            <ion-label>
+              <h3>{{ custo.descricao }}</h3>
+              <p *ngIf="custo.categoria">{{ custo.categoria }}</p>
+            </ion-label>
+            <ion-note slot="end">{{ custo.valor?.toFixed(2) }} {{ custo.moeda || 'EUR' }}</ion-note>
+          </ion-item>
+        </ion-list>
+        <ion-text color="primary">
+          <h3>Total: {{ obterResumoCustos(dia.custos) }}</h3>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Pontos de Interesse (POIs) -->
+    <ion-card *ngIf="dia.pontosInteresse && dia.pontosInteresse.length > 0">
+      <ion-card-header>
+        <ion-card-title>Pontos de Interesse</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="poi-grid">
+          <div class="poi-item" *ngFor="let poi of dia.pontosInteresse">
+            <div class="poi-image-container">
+              <img
+                *ngIf="poi.fotoUrl"
+                [src]="poi.fotoUrl"
+                alt="{{ poi.nome }}"
+                class="poi-thumbnail"
+              >
+              <div *ngIf="!poi.fotoUrl" class="poi-no-image">
+                <ion-icon name="image-outline"></ion-icon>
+              </div>
+            </div>
+            <div class="poi-info">
+              <h3>{{ poi.nome }}</h3>
+              <p *ngIf="poi.tipo" class="poi-tipo">{{ poi.tipo }}</p>
+              <p *ngIf="poi.descricao" class="poi-descricao">{{ poi.descricao }}</p>
+              <ion-text color="medium" *ngIf="poi.endereco" class="poi-endereco">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ poi.endereco }}
+              </ion-text>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Mensagem se não houver POIs -->
+    <ion-card *ngIf="(!dia.pontosInteresse || dia.pontosInteresse.length === 0)" class="empty-pois">
+      <ion-card-content>
+        <p>Nenhum ponto de interesse adicionado para este dia.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -25,8 +25,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.routeSub = this.route.paramMap.subscribe(() => {
-      const id = this.findRouteId(this.route);
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
       if (!id) {
         this.erro = 'ID de viagem inválido.';
         this.carregando = false;
@@ -141,18 +141,6 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     if (!dia || !dia.custos || dia.custos.length === 0) return '';
     const total = dia.custos.reduce((s: number, c: any) => s + (c.valor || 0), 0);
     return `${total.toFixed(2)} ${dia.custos[0].moeda || 'EUR'}`;
-  }
-
-  private findRouteId(route: ActivatedRoute): string | null {
-    let current: ActivatedRoute | null = route;
-    while (current) {
-      const id = current.snapshot.paramMap.get('id');
-      if (id) {
-        return id;
-      }
-      current = current.parent;
-    }
-    return null;
   }
 }
 

@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     component: ViagemDetalhePage
+  },
+  {
+    path: 'dias/:diaId',
+    loadChildren: () => import('./../../pages/dia-detalhe/dia-detalhe.module').then(m => m.DiaDetalhePageModule)
   }
 ];
 

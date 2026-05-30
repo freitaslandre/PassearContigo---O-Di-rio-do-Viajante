@@ -50,6 +50,7 @@ export interface POI {
   telefone?: string;
   horario?: string;
   url?: string;
+  fotoUrl?: string;
 }
 
 /**
