@@ -177,3 +177,37 @@ Decisões:
 Manter a arquitetura baseada em NgModules em todo o projeto, não migrando para componentes standalone;
 Continuar a usar @angular/fire/compat com onSnapshot para atualizações em tempo real, aguardando sempre o estado de autenticação via afAuth.authState;
 Registar as rotas de detalhe como rotas filhas do módulo de viagens para manter a coesão das funcionalidades.
+
+
+
+Sessão 7 — 29 de maio de 2026
+Objetivo:
+Integrar as capacidades nativas do Capacitor para captação de imagem, permitindo ao utilizador enriquecer os Pontos de Interesse e detalhes da viagem através da captura direta com a câmara ou seleção a partir da galeria do dispositivo, com persistência no Firebase Storage.
+Atividades realizadas:
+
+Instalação e sincronização nativa dos pacotes @capacitor/camera e @ionic-native através do comando npx cap sync;
+Desenvolvimento do serviço camera.ts para encapsular a lógica do Capacitor e disponibilizar globalmente o método assíncrono tirarFoto();
+Configuração do serviço para abrir o menu nativo de escolha do sistema operativo (CameraSource.Prompt), unificando a captura por câmara e a seleção pela galeria num único fluxo;
+Injeção do CameraService e atualização do controlador viagem-detalhe.page.ts e do template viagem-detalhe.page.html com o botão "Alterar Foto de Capa";
+Adição de uma tag img reativa no topo do cartão de detalhe para renderizar instantaneamente a foto escolhida via data binding do Angular;
+Integração do AngularFireStorage no ViagensService através do método fazerUploadEAtualizarFoto, convertendo o webPath do Capacitor num objeto Blob para armazenamento na diretoria capas_viagens/ e atualização do URL definitivo no Firestore;
+Inclusão do LoadingController do Ionic para exibir um indicador de carregamento enquanto o upload para o Firebase Storage é processado.
+
+Problemas:
+
+Erro de compilação devido à tipagem incorreta da variável cameraService no construtor, em vez de referenciar diretamente a classe CameraService exportada;
+Ocorrência do erro TS2339 provocado pela importação de ficheiros incorretos, gerada pelo facto de o serviço ter sido nomeado camera.ts sem a extensão intermédia .service;
+Risco de exibição do caminho temporário local (blob:http...) na interface como se fosse a descrição do destino da viagem.
+
+Solução:
+
+Correção da injeção de dependência no construtor da página de detalhe, garantindo a correspondência correta com o tipo da classe CameraService;
+Atualização do cabeçalho do ficheiro viagem-detalhe.page.ts para importar o serviço a partir do caminho relativo correto ../../services/camera;
+Adição de uma diretiva estrutural ngIf com validação de prefixo para ocultar strings técnicas de ficheiros locais temporários do ecrã;
+Substituição do armazenamento local estático por uma subscrição em tempo real via valueChanges() que atualiza o ecrã assim que o Firebase Storage devolve o URL público de download.
+
+Decisões:
+
+Manter toda a lógica do Capacitor isolada em serviços dedicados, impedindo que as páginas consumam plugins nativos diretamente;
+Adotar a conversão imediata de caminhos locais (webPath) em objetos Blob via API fetch nativa, garantindo compatibilidade com o SDK de upload do Firebase Storage;
+Utilizar sempre o LoadingController em operações que envolvam tráfego de rede assíncrono para dar feedback visual ao utilizador.
