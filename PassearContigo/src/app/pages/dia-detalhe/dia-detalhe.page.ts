@@ -12,6 +12,8 @@ import { Dia, POI } from '../../models/viagem.model';
 })
 export class DiaDetalhePage implements OnInit, OnDestroy {
   dia: Dia | null = null;
+  dias: Dia[] = [];
+  diaAtualIndex = -1;
   viagemId: string | null = null;
   carregando = true;
   erro = '';
@@ -40,6 +42,8 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
       this.carregando = true;
       this.erro = '';
       this.dia = null;
+      this.dias = [];
+      this.diaAtualIndex = -1;
 
       this.viagemSub?.unsubscribe();
       this.viagemSub = this.viagensService.getViagemById(viagemId).subscribe({
@@ -50,7 +54,12 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
             return;
           }
 
-          const diaEncontrado = viagem.dias?.find(d => d.id === diaId);
+          this.dias = [...(viagem.dias || [])].sort((a, b) => {
+            return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);
+          });
+          this.diaAtualIndex = this.dias.findIndex(d => d.id === diaId);
+          const diaEncontrado = this.dias[this.diaAtualIndex];
+
           if (diaEncontrado) {
             this.dia = diaEncontrado;
           } else {
@@ -78,6 +87,32 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/tabs', 'viagens']);
     }
+  }
+
+  get temDiaAnterior(): boolean {
+    return this.diaAtualIndex > 0;
+  }
+
+  get temDiaProximo(): boolean {
+    return this.diaAtualIndex >= 0 && this.diaAtualIndex < this.dias.length - 1;
+  }
+
+  get textoPosicaoDia(): string {
+    if (this.diaAtualIndex < 0 || this.dias.length === 0) {
+      return '';
+    }
+
+    return `${this.diaAtualIndex + 1} de ${this.dias.length}`;
+  }
+
+  irParaDiaAnterior() {
+    if (!this.temDiaAnterior || !this.viagemId) return;
+    this.irParaDia(this.dias[this.diaAtualIndex - 1].id);
+  }
+
+  irParaDiaProximo() {
+    if (!this.temDiaProximo || !this.viagemId) return;
+    this.irParaDia(this.dias[this.diaAtualIndex + 1].id);
   }
 
   get pontosInteresseOrdenados(): POI[] {
@@ -118,6 +153,26 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     if (!custos || custos.length === 0) return 'Sem custos';
     const total = custos.reduce((s: number, c: any) => s + (c.valor || 0), 0);
     return `${total.toFixed(2)} ${custos[0].moeda || 'EUR'}`;
+  }
+
+  private irParaDia(diaId: string) {
+    this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', diaId]);
+  }
+
+  private obterTimestampData(data: Date | string | any): number {
+    if (data instanceof Date) {
+      return data.getTime();
+    }
+
+    if (typeof data === 'string') {
+      return new Date(data).getTime();
+    }
+
+    if (data && typeof data === 'object' && 'toDate' in data) {
+      return (data as any).toDate().getTime();
+    }
+
+    return 0;
   }
 
   private obterParametroDaRota(nome: string): string | null {

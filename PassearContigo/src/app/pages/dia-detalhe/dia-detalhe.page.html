@@ -21,6 +21,29 @@
   </ion-card>
 
   <div *ngIf="!carregando && dia">
+    <div class="day-navigation">
+      <ion-button
+        fill="outline"
+        color="medium"
+        (click)="irParaDiaAnterior()"
+        [disabled]="!temDiaAnterior"
+      >
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+
+      <span>{{ textoPosicaoDia }}</span>
+
+      <ion-button
+        fill="outline"
+        color="medium"
+        (click)="irParaDiaProximo()"
+        [disabled]="!temDiaProximo"
+      >
+        Proximo
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
     <!-- Informações do dia -->
     <ion-card>
       <ion-card-header>
