@@ -3,14 +3,19 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/viagens"></ion-back-button>
     </ion-buttons>
-    <ion-title>Detalhes da Viagem</ion-title>
+    <ion-title>Detalhe Viagem</ion-title>
+    <ion-buttons slot="end" *ngIf="!carregando && viagem">
+      <ion-button (click)="guardar()" [disabled]="guardando">
+        <ion-icon slot="icon-only" name="save-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
-    <p>Carregando viagem...</p>
+    <p>A carregar viagem...</p>
   </div>
 
   <ion-card *ngIf="!carregando && erro">
@@ -20,83 +25,201 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Lista de dias -->
-  <ion-list *ngIf="!carregando && viagem && viagem.dias && viagem.dias.length > 0">
-    <ion-list-header>
-      <ion-label>Itinerário / Dias</ion-label>
-      <ion-button slot="end" fill="clear" color="primary" (click)="adicionarDia()">
-        <ion-icon name="add-circle" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-list-header>
-
-    <ion-item *ngFor="let dia of viagem.dias; let i = index" (click)="irParaDia(dia.id)">
-      <ion-label>
-        <h3>{{ dia.titulo || ('Dia ' + (i + 1)) }}</h3>
-        <p>{{ formatarData(dia.data) }} <span *ngIf="dia.local">· {{ dia.local }}</span></p>
-      </ion-label>
-      <ion-note slot="end" color="medium">{{ obterResumoCustos(dia) }}</ion-note>
-    </ion-item>
-  </ion-list>
-
-  <ion-card *ngIf="!carregando && viagem && (!viagem.dias || viagem.dias.length === 0)" class="empty-days">
-    <ion-card-content>
-      <p>Sem dias definidos para esta viagem.</p>
-      <ion-button expand="block" color="primary" (click)="adicionarDia()">Adicionar Primeiro Dia</ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="!carregando && viagem" class="viagem-card destaque">
-    <ion-card-header>
-      <ion-card-title>{{ viagem.titulo }}</ion-card-title>
-      <ion-card-subtitle *ngIf="viagem.status">
-        <ion-badge [color]="obterCorStatus(viagem.status)">
-          {{ obterTextoStatus(viagem.status) }}
-        </ion-badge>
-      </ion-card-subtitle>
-    </ion-card-header>
-
-    <ion-card-content>
-      <div class="viagem-info">
-        <div class="info-row" *ngIf="viagem.local">
-          <ion-icon name="location-outline"></ion-icon>
-          <span>{{ viagem.local }}</span>
+  <div *ngIf="!carregando && viagem" class="detalhe-layout">
+    <section class="resumo-section">
+      <div class="resumo-heading">
+        <div>
+          <ion-badge [color]="obterCorStatus(status)">
+            {{ obterTextoStatus(status) }}
+          </ion-badge>
+          <h1>{{ titulo || 'Viagem sem titulo' }}</h1>
+          <p *ngIf="local">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ local }}
+          </p>
         </div>
-
-        <div class="info-row" *ngIf="viagem.descricao">
-          <p class="viagem-description">{{ viagem.descricao }}</p>
-        </div>
-
-        <div class="dates-container">
-          <div class="date-info">
-            <ion-icon name="calendar-outline"></ion-icon>
-            <div class="date-label">Início</div>
-            <div class="date-value">{{ formatarData(viagem.dataInicio) }}</div>
-          </div>
-          <div class="duration-info">
-            <ion-icon name="time-outline"></ion-icon>
-            <div class="duration-label">Duração</div>
-            <div class="duration-value">
-              {{ obterNumDias(viagem.dataInicio, viagem.dataFim) }} dias
-            </div>
-          </div>
-          <div class="date-info">
-            <ion-icon name="flag-outline"></ion-icon>
-            <div class="date-label">Fim</div>
-            <div class="date-value">{{ formatarData(viagem.dataFim) }}</div>
-          </div>
-        </div>
-
-        <div class="extra-info">
-          <div class="info-badge" *ngIf="viagem.dias && viagem.dias.length > 0">
-            <ion-icon name="calendar-outline"></ion-icon>
-            <span>{{ viagem.dias.length }} dias</span>
-          </div>
-          <div class="info-badge" *ngIf="viagem.colaboradores && viagem.colaboradores.length > 0">
-            <ion-icon name="people-outline"></ion-icon>
-            <span>{{ viagem.colaboradores.length }} pessoas</span>
-          </div>
+        <div class="dias-count">
+          <strong>{{ totalDias }}</strong>
+          <span>dias</span>
         </div>
       </div>
-    </ion-card-content>
-  </ion-card>
+
+      <div class="dates-container">
+        <div class="date-info">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <div class="date-label">Inicio</div>
+          <div class="date-value">{{ formatarData(dataInicio) }}</div>
+        </div>
+        <div class="duration-info">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="duration-label">Duracao</div>
+          <div class="duration-value">
+            {{ obterNumDias(dataInicio, dataFim) }} dias
+          </div>
+        </div>
+        <div class="date-info">
+          <ion-icon name="flag-outline"></ion-icon>
+          <div class="date-label">Fim</div>
+          <div class="date-value">{{ formatarData(dataFim) }}</div>
+        </div>
+      </div>
+    </section>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Dados da viagem</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item>
+            <ion-label position="stacked">Titulo</ion-label>
+            <ion-input
+              name="titulo"
+              type="text"
+              [(ngModel)]="titulo"
+              placeholder="Ex: Lisboa 2026"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Destino</ion-label>
+            <ion-input
+              name="local"
+              type="text"
+              [(ngModel)]="local"
+              placeholder="Ex: Lisboa"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Descricao</ion-label>
+            <ion-textarea
+              name="descricao"
+              autoGrow="true"
+              [(ngModel)]="descricao"
+              placeholder="Notas gerais da viagem"
+            ></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Estado</ion-label>
+            <ion-select name="status" [(ngModel)]="status" interface="popover">
+              <ion-select-option value="planejada">Planejada</ion-select-option>
+              <ion-select-option value="em-andamento">Em andamento</ion-select-option>
+              <ion-select-option value="concluida">Concluida</ion-select-option>
+              <ion-select-option value="cancelada">Cancelada</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Data de inicio</ion-label>
+            <ion-input name="dataInicio" type="date" [(ngModel)]="dataInicio"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Data de fim</ion-label>
+            <ion-input name="dataFim" type="date" [(ngModel)]="dataFim"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <section class="dias-section">
+      <div class="section-header">
+        <div>
+          <h2>Lista de dias</h2>
+          <p>Organize o itinerario dia a dia.</p>
+        </div>
+        <ion-button fill="clear" color="primary" (click)="adicionarDia()">
+          <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+          Adicionar
+        </ion-button>
+      </div>
+
+      <ion-card *ngIf="dias.length === 0" class="empty-days">
+        <ion-card-content>
+          <p>Esta viagem ainda nao tem dias.</p>
+          <ion-button expand="block" color="primary" (click)="adicionarDia()">
+            Criar primeiro dia
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngFor="let dia of dias; let i = index" class="dia-card">
+        <ion-card-header>
+          <div class="dia-card-title">
+            <ion-badge color="medium">Dia {{ i + 1 }}</ion-badge>
+            <ion-button fill="clear" color="danger" (click)="removerDia(i)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list lines="full">
+            <ion-item>
+              <ion-label position="stacked">Titulo do dia</ion-label>
+              <ion-input
+                name="diaTitulo{{ i }}"
+                type="text"
+                [(ngModel)]="dia.titulo"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Data</ion-label>
+              <ion-input
+                name="diaData{{ i }}"
+                type="date"
+                [(ngModel)]="dia.data"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Local</ion-label>
+              <ion-input
+                name="diaLocal{{ i }}"
+                type="text"
+                [(ngModel)]="dia.local"
+                placeholder="Ex: Alfama"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Descricao</ion-label>
+              <ion-textarea
+                name="diaDescricao{{ i }}"
+                autoGrow="true"
+                [(ngModel)]="dia.descricao"
+              ></ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Observacoes</ion-label>
+              <ion-textarea
+                name="diaObservacoes{{ i }}"
+                autoGrow="true"
+                [(ngModel)]="dia.observacoes"
+              ></ion-textarea>
+            </ion-item>
+          </ion-list>
+
+          <div class="dia-footer">
+            <span>{{ formatarData(dia.data) }}</span>
+            <span>{{ obterResumoCustos(dia) }}</span>
+            <ion-button fill="clear" size="small" (click)="irParaDia(dia.id)">
+              Ver detalhe
+              <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+    <ion-button expand="block" color="primary" (click)="guardar()" [disabled]="guardando">
+      <ion-spinner *ngIf="guardando" name="crescent" slot="start"></ion-spinner>
+      <ion-icon *ngIf="!guardando" slot="start" name="save-outline"></ion-icon>
+      Guardar viagem
+    </ion-button>
+  </div>
 </ion-content>
