@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
-import { Dia } from '../../models/viagem.model';
+import { Dia, POI } from '../../models/viagem.model';
 
 @Component({
   selector: 'app-dia-detalhe',
@@ -78,6 +78,27 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/tabs', 'viagens']);
     }
+  }
+
+  get pontosInteresseOrdenados(): POI[] {
+    return [...(this.dia?.pontosInteresse || [])].sort((a, b) => {
+      const nomeA = (a.nome || '').trim();
+      const nomeB = (b.nome || '').trim();
+
+      if (nomeA || nomeB) {
+        return nomeA.localeCompare(nomeB, 'pt-PT', { sensitivity: 'base' });
+      }
+
+      return (a.tipo || '').localeCompare(b.tipo || '', 'pt-PT', { sensitivity: 'base' });
+    });
+  }
+
+  obterFotoPoi(poi: POI): string {
+    return poi.fotoUrl || 'assets/icon/favicon.png';
+  }
+
+  trackByPoiId(index: number, poi: POI): string {
+    return poi.id || String(index);
   }
 
   formatarData(data: Date | string | any): string {

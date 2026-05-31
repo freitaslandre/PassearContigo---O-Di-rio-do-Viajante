@@ -48,7 +48,7 @@
               <h3>{{ custo.descricao }}</h3>
               <p *ngIf="custo.categoria">{{ custo.categoria }}</p>
             </ion-label>
-            <ion-note slot="end">{{ custo.valor?.toFixed(2) }} {{ custo.moeda || 'EUR' }}</ion-note>
+            <ion-note slot="end">{{ custo.valor.toFixed(2) }} {{ custo.moeda || 'EUR' }}</ion-note>
           </ion-item>
         </ion-list>
         <ion-text color="primary">
@@ -58,26 +58,27 @@
     </ion-card>
 
     <!-- Pontos de Interesse (POIs) -->
-    <ion-card *ngIf="dia.pontosInteresse && dia.pontosInteresse.length > 0">
+    <ion-card *ngIf="pontosInteresseOrdenados.length > 0">
       <ion-card-header>
         <ion-card-title>Pontos de Interesse</ion-card-title>
+        <ion-card-subtitle>Ordenados por nome</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <div class="poi-grid">
-          <div class="poi-item" *ngFor="let poi of dia.pontosInteresse">
+        <div class="poi-list">
+          <div
+            class="poi-item"
+            *ngFor="let poi of pontosInteresseOrdenados; let i = index; trackBy: trackByPoiId"
+          >
+            <div class="poi-order">{{ i + 1 }}</div>
             <div class="poi-image-container">
               <img
-                *ngIf="poi.fotoUrl"
-                [src]="poi.fotoUrl"
-                alt="{{ poi.nome }}"
+                [src]="obterFotoPoi(poi)"
+                [alt]="poi.nome || 'Ponto de interesse'"
                 class="poi-thumbnail"
               >
-              <div *ngIf="!poi.fotoUrl" class="poi-no-image">
-                <ion-icon name="image-outline"></ion-icon>
-              </div>
             </div>
             <div class="poi-info">
-              <h3>{{ poi.nome }}</h3>
+              <h3>{{ poi.nome || 'Ponto de interesse sem nome' }}</h3>
               <p *ngIf="poi.tipo" class="poi-tipo">{{ poi.tipo }}</p>
               <p *ngIf="poi.descricao" class="poi-descricao">{{ poi.descricao }}</p>
               <ion-text color="medium" *ngIf="poi.endereco" class="poi-endereco">

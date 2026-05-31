@@ -1,16 +1,31 @@
-.poi-grid {
+.poi-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .poi-item {
   display: flex;
+  align-items: flex-start;
   gap: 12px;
   padding: 12px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   overflow: hidden;
+}
+
+.poi-order {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .poi-image-container {
@@ -92,4 +107,16 @@
   justify-content: center;
   padding: 48px 16px;
   gap: 16px;
+}
+
+@media (max-width: 420px) {
+  .poi-item {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .poi-image-container {
+    width: 64px;
+    height: 64px;
+  }
 }
