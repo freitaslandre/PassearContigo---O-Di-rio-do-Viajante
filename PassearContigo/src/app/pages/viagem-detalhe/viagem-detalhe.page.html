@@ -5,6 +5,9 @@
     </ion-buttons>
     <ion-title>Detalhe Viagem</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && viagem">
+      <ion-button (click)="editarViagem()">
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="guardar()" [disabled]="guardando">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>

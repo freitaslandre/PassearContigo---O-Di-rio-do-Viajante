@@ -17,6 +17,10 @@ import { ViagensPage } from './viagens.page';
         loadChildren: () => import('../nova-viagem/nova-viagem.module').then(m => m.NovaViagemPageModule)
       },
       {
+        path: ':id/editar',
+        loadChildren: () => import('../editar-viagem/editar-viagem.module').then(m => m.EditarViagemPageModule)
+      },
+      {
         path: ':id',
         loadChildren: () => import('../viagem-detalhe/viagem-detalhe.module').then(m => m.ViagemDetalhePageModule)
       }

@@ -75,6 +75,11 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'dias', diaId]);
   }
 
+  editarViagem() {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'editar']);
+  }
+
   adicionarDia() {
     const ultimaData = this.dias.length > 0
       ? this.dias[this.dias.length - 1].data
