@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ViagensService } from '../../services/viagens.service';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { CameraService } from '../../services/camera.service';
 
 @Component({
   selector: 'app-nova-viagem',
@@ -20,6 +21,7 @@ export class NovaViagemPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private viagensService: ViagensService,
+    private cameraService: CameraService,
     private router: Router,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
@@ -99,6 +101,22 @@ export class NovaViagemPage implements OnInit {
   removerFotoCapa() {
     this.fotoCapaFile = null;
     this.fotoCapaPreview = null;
+  }
+
+  async tirarFotoCapa() {
+    const foto = await this.cameraService.takePicture();
+    if (foto) {
+      this.fotoCapaFile = null;
+      this.fotoCapaPreview = foto;
+    }
+  }
+
+  async escolherFotoCapaDaGaleria() {
+    const foto = await this.cameraService.selectPictureFromGallery();
+    if (foto) {
+      this.fotoCapaFile = null;
+      this.fotoCapaPreview = foto;
+    }
   }
 
   async criarViagem() {

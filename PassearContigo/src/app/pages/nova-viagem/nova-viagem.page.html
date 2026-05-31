@@ -25,21 +25,24 @@
       </div>
 
       <div class="foto-capa-upload" *ngIf="!fotoCapaPreview">
-        <input
-          type="file"
-          #fileInput
-          accept="image/*"
-          (change)="onFotoCapaSelected($event)"
-          style="display: none"
-        />
         <ion-button
           expand="block"
           color="primary"
-          (click)="fileInput.click()"
+          (click)="tirarFotoCapa()"
           type="button"
         >
-          <ion-icon slot="start" name="image"></ion-icon>
-          Adicionar Foto de Capa
+          <ion-icon slot="start" name="camera"></ion-icon>
+          Tirar Foto de Capa
+        </ion-button>
+        <ion-button
+          expand="block"
+          color="medium"
+          fill="outline"
+          (click)="escolherFotoCapaDaGaleria()"
+          type="button"
+        >
+          <ion-icon slot="start" name="images"></ion-icon>
+          Escolher da Galeria
         </ion-button>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
+import { CameraService } from '../../services/camera.service';
 
 @Component({
   selector: 'app-editar-viagem',
@@ -28,6 +29,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private cameraService: CameraService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) {}
@@ -65,6 +67,20 @@ export class EditarViagemPage implements OnInit, OnDestroy {
 
   removerFotoCapa() {
     this.fotoCapaPreview = null;
+  }
+
+  async tirarFotoCapa() {
+    const foto = await this.cameraService.takePicture();
+    if (foto) {
+      this.fotoCapaPreview = foto;
+    }
+  }
+
+  async escolherFotoCapaDaGaleria() {
+    const foto = await this.cameraService.selectPictureFromGallery();
+    if (foto) {
+      this.fotoCapaPreview = foto;
+    }
   }
 
   async guardar() {

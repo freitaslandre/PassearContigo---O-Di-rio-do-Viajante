@@ -27,7 +27,7 @@ export class CameraService {
       });
 
       console.log('✓ Foto capturada com sucesso');
-      return image.base64String;
+      return this.converterBase64ParaDataUrl(image.base64String);
     } catch (error) {
       console.warn('⚠ Erro ao capturar foto:', error);
       return undefined;
@@ -48,7 +48,7 @@ export class CameraService {
       });
 
       console.log('✓ Foto selecionada da galeria');
-      return image.base64String;
+      return this.converterBase64ParaDataUrl(image.base64String);
     } catch (error) {
       console.warn('⚠ Erro ao selecionar foto:', error);
       return undefined;
@@ -74,5 +74,9 @@ export class CameraService {
       console.warn('⚠ Erro ao capturar foto como arquivo:', error);
       return undefined;
     }
+  }
+
+  private converterBase64ParaDataUrl(base64?: string): string | undefined {
+    return base64 ? `data:image/jpeg;base64,${base64}` : undefined;
   }
 }
