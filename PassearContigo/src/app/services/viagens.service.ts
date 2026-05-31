@@ -7,7 +7,7 @@ import {
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc } from 'firebase/firestore';
+import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Dia, Viagem } from '../models/viagem.model';
 
@@ -291,11 +291,13 @@ export class ViagensService {
 
     const { id: _id, uidUtilizador: _uidUtilizador, criadoEm: _criadoEm, ...payload } = viagem;
     const payloadLimpo = this.removerUndefined(payload);
+    const db = getFirestore();
+    const viagemRef = doc(db, this.collectionName, id);
 
-    await this.afs.doc<ViagemPayload>(`${this.collectionName}/${id}`).update({
+    await updateDoc(viagemRef, {
       ...payloadLimpo,
       atualizadoEm: new Date()
-    });
+    } as Partial<ViagemPayload>);
   }
 
   /**
@@ -374,7 +376,7 @@ export class ViagensService {
   }
 
   private async obterUidUtilizadorAtual(): Promise<string> {
-    const user = await firstValueFrom(this.afAuth.authState);
+    const user = getAuth().currentUser;
 
     if (!user) {
       throw new Error('E necessario iniciar sessao para gerir viagens.');
@@ -385,13 +387,15 @@ export class ViagensService {
 
   private async garantirViagemDoUtilizadorAtual(id: string): Promise<void> {
     const uid = await this.obterUidUtilizadorAtual();
-    const viagemDoc = await firstValueFrom(
-      this.afs.doc<ViagemPayload>(`${this.collectionName}/${id}`).valueChanges()
-    );
+    const db = getFirestore();
+    const viagemRef = doc(db, this.collectionName, id);
+    const viagemSnapshot = await getDoc(viagemRef);
 
-    if (!viagemDoc) {
+    if (!viagemSnapshot.exists()) {
       throw new Error('Viagem nao encontrada.');
     }
+
+    const viagemDoc = viagemSnapshot.data() as ViagemPayload;
 
     if (viagemDoc.uidUtilizador !== uid) {
       throw new Error('Esta viagem nao pertence ao utilizador autenticado.');
