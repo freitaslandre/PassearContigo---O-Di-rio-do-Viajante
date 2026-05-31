@@ -129,6 +129,46 @@
   font-size: 0.9rem;
 }
 
+.pois-section {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.poi-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.poi-thumbnail {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.poi-fields,
+.poi-inline-fields {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.poi-inline-fields {
+  grid-template-columns: 1fr 2fr;
+}
+
+.empty-pois-note {
+  display: block;
+  padding-top: 0.75rem;
+}
+
 .empty-days {
   text-align: center;
 }
@@ -149,6 +189,11 @@ ion-list {
   }
 
   .dates-container {
+    grid-template-columns: 1fr;
+  }
+
+  .poi-row,
+  .poi-inline-fields {
     grid-template-columns: 1fr;
   }
 }

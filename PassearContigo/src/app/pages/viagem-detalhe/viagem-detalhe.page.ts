@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Dia, Viagem } from '../../models/viagem.model';
+import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
 
 interface DiaViewModel {
@@ -12,7 +12,7 @@ interface DiaViewModel {
   local: string;
   descricao: string;
   observacoes: string;
-  pontosInteresse: Dia['pontosInteresse'];
+  pontosInteresse: POI[];
   custos: Dia['custos'];
 }
 
@@ -116,7 +116,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     try {
       await this.viagensService.updateViagem(this.viagem.id, {
         titulo: this.titulo.trim(),
-        descricao: this.descricao.trim() || undefined,
+        descricao: this.descricao.trim(),
         local: this.local.trim(),
         dataInicio: new Date(this.dataInicio),
         dataFim: new Date(this.dataFim),
@@ -181,6 +181,14 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     return `${total.toFixed(2)} ${dia.custos[0].moeda || 'EUR'}`;
   }
 
+  obterFotoPoi(poi: POI): string {
+    return poi.fotoUrl || 'assets/icon/favicon.png';
+  }
+
+  get totalPois(): number {
+    return this.dias.reduce((total, dia) => total + dia.pontosInteresse.length, 0);
+  }
+
   get totalDias(): number {
     return this.dias.length;
   }
@@ -236,12 +244,36 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       id: dia.id || `dia-${index + 1}`,
       titulo: dia.titulo.trim() || `Dia ${index + 1}`,
       data: new Date(dia.data || this.dataInicio),
-      local: dia.local.trim() || undefined,
-      descricao: dia.descricao.trim() || undefined,
-      observacoes: dia.observacoes.trim() || undefined,
-      pontosInteresse: dia.pontosInteresse || [],
+      local: dia.local.trim(),
+      descricao: dia.descricao.trim(),
+      observacoes: dia.observacoes.trim(),
+      pontosInteresse: dia.pontosInteresse.map(poi => this.converterPoiParaModel(poi)),
       custos: dia.custos || []
     };
+  }
+
+  private converterPoiParaModel(poi: POI): POI {
+    const poiPayload: POI = {
+      id: poi.id,
+      nome: poi.nome || '',
+      descricao: poi.descricao || '',
+      tipo: poi.tipo || '',
+      endereco: poi.endereco || '',
+      telefone: poi.telefone || '',
+      horario: poi.horario || '',
+      url: poi.url || '',
+      fotoUrl: poi.fotoUrl || ''
+    };
+
+    if (typeof poi.latitude === 'number') {
+      poiPayload.latitude = poi.latitude;
+    }
+
+    if (typeof poi.longitude === 'number') {
+      poiPayload.longitude = poi.longitude;
+    }
+
+    return poiPayload;
   }
 
   private converterParaDate(data: Date | string | any): Date {

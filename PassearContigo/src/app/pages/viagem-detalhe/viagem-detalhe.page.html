@@ -42,6 +42,10 @@
           <strong>{{ totalDias }}</strong>
           <span>dias</span>
         </div>
+        <div class="dias-count">
+          <strong>{{ totalPois }}</strong>
+          <span>POIs</span>
+        </div>
       </div>
 
       <div class="dates-container">
@@ -203,6 +207,53 @@
               ></ion-textarea>
             </ion-item>
           </ion-list>
+
+          <div class="pois-section" *ngIf="dia.pontosInteresse.length > 0">
+            <h3>Pontos de interesse</h3>
+
+            <div class="poi-row" *ngFor="let poi of dia.pontosInteresse; let poiIndex = index">
+              <img
+                class="poi-thumbnail"
+                [src]="obterFotoPoi(poi)"
+                [alt]="poi.nome || 'Ponto de interesse'"
+              >
+
+              <div class="poi-fields">
+                <ion-item lines="none">
+                  <ion-label position="stacked">Nome</ion-label>
+                  <ion-input
+                    name="poiNome{{ i }}{{ poiIndex }}"
+                    type="text"
+                    [(ngModel)]="poi.nome"
+                  ></ion-input>
+                </ion-item>
+
+                <div class="poi-inline-fields">
+                  <ion-item lines="none">
+                    <ion-label position="stacked">Tipo</ion-label>
+                    <ion-input
+                      name="poiTipo{{ i }}{{ poiIndex }}"
+                      type="text"
+                      [(ngModel)]="poi.tipo"
+                    ></ion-input>
+                  </ion-item>
+
+                  <ion-item lines="none">
+                    <ion-label position="stacked">Endereco</ion-label>
+                    <ion-input
+                      name="poiEndereco{{ i }}{{ poiIndex }}"
+                      type="text"
+                      [(ngModel)]="poi.endereco"
+                    ></ion-input>
+                  </ion-item>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ion-note *ngIf="dia.pontosInteresse.length === 0" color="medium" class="empty-pois-note">
+            Sem pontos de interesse neste dia.
+          </ion-note>
 
           <div class="dia-footer">
             <span>{{ formatarData(dia.data) }}</span>

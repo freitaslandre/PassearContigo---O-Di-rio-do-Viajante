@@ -66,3 +66,49 @@ Decisões:
 Usar interfaces TypeScript para tipar os dados principais da aplicação;
 Manter o ficheiro viagem.model.ts como base para futuras ligações a serviços, páginas e base de dados;
 Deixar a criação de um possível ficheiro models/index.ts para uma fase posterior, caso seja necessário centralizar as exportações.
+
+Sessao 3 - 31 de maio de 2026
+
+Objetivo:
+Criar a pagina de detalhe de uma viagem e permitir consultar e editar os dias associados a essa viagem usando apenas ngModel.
+
+Atividades realizadas:
+Criei/atualizei a pagina Detalhe Viagem;
+Configurei a leitura do id da viagem atraves do ActivatedRoute;
+Carreguei os dados da viagem selecionada a partir do servico de viagens;
+Mostrei os dados principais da viagem, como titulo, destino, descricao, estado e datas;
+Criei a lista de dias da viagem;
+Adicionei campos editaveis para cada dia usando [(ngModel)];
+Permiti alterar titulo, data, local, descricao e observacoes de cada dia;
+Adicionei a possibilidade de adicionar e remover dias na pagina de detalhe;
+Listei os pontos de interesse de cada dia;
+Mostrei uma foto miniatura para cada ponto de interesse quando existe fotoUrl;
+Adicionei campos editaveis para os pontos de interesse, como nome, tipo e endereco;
+Garanti que, ao guardar a viagem, tambem sao guardadas as alteracoes feitas nos dias e nos pontos de interesse;
+Corrigi a passagem do id da viagem para a pagina de detalhe do dia;
+Atualizei o servico de viagens para guardar as alteracoes no Firestore;
+Removi valores undefined antes de enviar dados para o Firestore, evitando erros ao guardar;
+Confirmei que a build do projeto continuava a funcionar depois das alteracoes.
+
+Problemas:
+Foi necessario garantir que o id da viagem era lido corretamente a partir da rota;
+O detalhe do dia precisava de conseguir obter o id da viagem vindo de uma rota pai;
+O Firestore podia falhar ao receber campos com valor undefined;
+Foi necessario evitar misturar chamadas modulares do Firebase com o AngularFirestore usado no servico;
+O botao de guardar no canto superior direito estava a duplicar a acao de guardar.
+
+Solucao:
+Usei ActivatedRoute para obter o id da viagem;
+Usei ngModel nos campos da viagem, dos dias e dos pontos de interesse;
+Guardei os dias como um array dentro do documento da viagem;
+Substitui valores undefined por strings vazias ou arrays vazios;
+Adicionei uma limpeza dos dados antes do update no Firestore;
+Mantive o update da viagem concentrado no ViagensService;
+Removi o botao duplicado de guardar no topo, deixando apenas o botao principal de guardar viagem.
+
+Decisoes:
+Usar apenas ngModel nesta pagina, em vez de formularios reativos;
+Guardar os detalhes dos dias dentro do proprio documento da viagem;
+Mostrar os pontos de interesse diretamente dentro de cada dia;
+Usar fotoUrl como imagem miniatura dos pontos de interesse;
+Manter a pagina de detalhe da viagem como o local principal para editar a estrutura da viagem e dos seus dias.

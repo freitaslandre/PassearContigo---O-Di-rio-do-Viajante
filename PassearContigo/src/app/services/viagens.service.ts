@@ -290,8 +290,10 @@ export class ViagensService {
     await this.garantirViagemDoUtilizadorAtual(id);
 
     const { id: _id, uidUtilizador: _uidUtilizador, criadoEm: _criadoEm, ...payload } = viagem;
+    const payloadLimpo = this.removerUndefined(payload);
+
     await this.afs.doc<ViagemPayload>(`${this.collectionName}/${id}`).update({
-      ...payload,
+      ...payloadLimpo,
       atualizadoEm: new Date()
     });
   }
@@ -313,6 +315,26 @@ export class ViagensService {
       ...viagem,
       dias: this.gerarDiasDaViagem(viagem.dataInicio, viagem.dataFim)
     };
+  }
+
+  private removerUndefined<T>(valor: T): T {
+    if (Array.isArray(valor)) {
+      return valor.map(item => this.removerUndefined(item)) as T;
+    }
+
+    if (valor && typeof valor === 'object' && !(valor instanceof Date)) {
+      const objetoLimpo: Record<string, any> = {};
+
+      Object.entries(valor as Record<string, any>).forEach(([chave, item]) => {
+        if (item !== undefined) {
+          objetoLimpo[chave] = this.removerUndefined(item);
+        }
+      });
+
+      return objetoLimpo as T;
+    }
+
+    return valor;
   }
 
   private normalizarData(data: DataViagem): Date {
