@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
@@ -46,6 +46,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private router: Router,
     private viagensService: ViagensService,
     private alertCtrl: AlertController,
+    private navCtrl: NavController,
     private toastCtrl: ToastController
   ) {}
 
@@ -172,7 +173,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     try {
       await this.viagensService.deleteViagem(this.viagem.id);
       await this.mostrarToast('Viagem eliminada com sucesso.', 'success');
-      this.router.navigate(['/tabs', 'viagens']);
+      this.navCtrl.navigateRoot('/tabs/viagens');
     } catch (error: any) {
       console.error('Erro ao eliminar viagem:', error);
       await this.mostrarToast(error?.message || 'Erro ao eliminar viagem.', 'danger');

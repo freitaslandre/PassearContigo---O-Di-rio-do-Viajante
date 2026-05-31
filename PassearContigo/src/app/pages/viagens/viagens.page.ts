@@ -3,6 +3,7 @@ import { ViagensService } from '../../services/viagens.service';
 import { Viagem } from '../../models/viagem.model';
 import { Router } from '@angular/router';
 import { Unsubscribe } from 'firebase/firestore';
+import { AlertController, ToastController } from '@ionic/angular';
 /**
  * ViagensPage - Página de Viagens
  * Exibe a lista de viagens/itinerários do utilizador
@@ -20,7 +21,9 @@ export class ViagensPage implements OnInit, OnDestroy {
   private unsubscribe: Unsubscribe | null = null;
   constructor(
     private viagensService: ViagensService,
-    private router: Router
+    private router: Router,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController
   ) {}
   ngOnInit() {
     this.subscribeToViagens();
@@ -47,6 +50,30 @@ export class ViagensPage implements OnInit, OnDestroy {
 
   irParaDetalhes(id: string) {
     this.router.navigate(['/tabs', 'viagens', id]);
+  }
+
+  async confirmarEliminarViagem(event: Event, viagem: Viagem) {
+    event.stopPropagation();
+
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar viagem',
+      message: `Tem a certeza que pretende eliminar "${viagem.titulo}"? Esta acao nao pode ser anulada.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.eliminarViagem(viagem.id);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   formatarData(data: Date | string | any): string {
@@ -132,5 +159,24 @@ export class ViagensPage implements OnInit, OnDestroy {
         return inicio <= agora && agora <= fim;
       }) ?? null
     );
+  }
+
+  private async eliminarViagem(id: string) {
+    try {
+      await this.viagensService.deleteViagem(id);
+      await this.mostrarToast('Viagem eliminada com sucesso.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao eliminar viagem:', error);
+      await this.mostrarToast(error?.message || 'Erro ao eliminar viagem.', 'danger');
+    }
+  }
+
+  private async mostrarToast(message: string, color: 'success' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color
+    });
+    await toast.present();
   }
 }

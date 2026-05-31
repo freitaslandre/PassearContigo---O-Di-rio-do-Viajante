@@ -24,7 +24,12 @@
     <h2 class="section-title">Viagem em curso</h2>
     <ion-card class="viagem-card destaque" (click)="irParaDetalhes(viagemEmCurso.id)">
       <ion-card-header>
-        <ion-card-title>{{ viagemEmCurso.titulo }}</ion-card-title>
+        <div class="card-title-row">
+          <ion-card-title>{{ viagemEmCurso.titulo }}</ion-card-title>
+          <ion-button fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagemEmCurso)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
         <ion-card-subtitle *ngIf="viagemEmCurso.status">
           <ion-badge [color]="obterCorStatus(viagemEmCurso.status)">
             {{ obterTextoStatus(viagemEmCurso.status) }}
@@ -82,7 +87,12 @@
   <div *ngIf="!carregando && viagensRestantes.length > 0">
     <ion-card *ngFor="let viagem of viagensRestantes" class="viagem-card" (click)="irParaDetalhes(viagem.id)">
       <ion-card-header>
-        <ion-card-title>{{ viagem.titulo }}</ion-card-title>
+        <div class="card-title-row">
+          <ion-card-title>{{ viagem.titulo }}</ion-card-title>
+          <ion-button fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagem)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
         <ion-card-subtitle *ngIf="viagem.status">
           <ion-badge [color]="obterCorStatus(viagem.status)">
             {{ obterTextoStatus(viagem.status) }}
