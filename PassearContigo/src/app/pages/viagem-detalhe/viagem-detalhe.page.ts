@@ -23,6 +23,7 @@ interface DiaViewModel {
   styleUrls: ['viagem-detalhe.page.scss']
 })
 export class ViagemDetalhePage implements OnInit, OnDestroy {
+  viagemId = '';
   viagem: Viagem | null = null;
   dias: DiaViewModel[] = [];
   carregando = true;
@@ -48,13 +49,14 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSub = this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('id') || this.obterParametroDaRota('id');
       if (!id) {
         this.erro = 'ID de viagem invalido.';
         this.carregando = false;
         return;
       }
 
+      this.viagemId = id;
       this.carregarViagem(id);
     });
   }
@@ -286,5 +288,16 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       color
     });
     await toast.present();
+  }
+
+  private obterParametroDaRota(nome: string): string | null {
+    for (const rota of [...this.route.pathFromRoot].reverse()) {
+      const valor = rota.snapshot.paramMap.get(nome);
+      if (valor) {
+        return valor;
+      }
+    }
+
+    return null;
   }
 }

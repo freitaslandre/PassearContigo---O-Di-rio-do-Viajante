@@ -27,7 +27,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSub = this.route.paramMap.subscribe(params => {
-      const viagemId = params.get('id');
+      const viagemId = params.get('id') || this.obterParametroDaRota('id');
       const diaId = params.get('diaId');
 
       if (!viagemId || !diaId) {
@@ -97,5 +97,16 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     if (!custos || custos.length === 0) return 'Sem custos';
     const total = custos.reduce((s: number, c: any) => s + (c.valor || 0), 0);
     return `${total.toFixed(2)} ${custos[0].moeda || 'EUR'}`;
+  }
+
+  private obterParametroDaRota(nome: string): string | null {
+    for (const rota of [...this.route.pathFromRoot].reverse()) {
+      const valor = rota.snapshot.paramMap.get(nome);
+      if (valor) {
+        return valor;
+      }
+    }
+
+    return null;
   }
 }
