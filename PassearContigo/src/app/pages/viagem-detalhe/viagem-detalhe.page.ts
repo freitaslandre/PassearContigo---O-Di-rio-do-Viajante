@@ -126,8 +126,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
       await this.mostrarToast('Viagem guardada com sucesso.', 'success');
     } catch (error: any) {
-      console.error('Erro ao guardar viagem:', error);
-      await this.mostrarToast(error?.message || 'Erro ao guardar viagem.', 'danger');
+      console.error('Erro ao guardar detalhes:', error);
+      await this.mostrarToast(error?.message || 'Erro ao guardar .', 'danger');
     } finally {
       this.guardando = false;
     }
