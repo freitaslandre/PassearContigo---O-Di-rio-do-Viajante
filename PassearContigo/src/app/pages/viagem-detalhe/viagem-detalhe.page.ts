@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
@@ -28,6 +28,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   dias: DiaViewModel[] = [];
   carregando = true;
   guardando = false;
+  eliminando = false;
   erro = '';
 
   titulo = '';
@@ -44,6 +45,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private alertCtrl: AlertController,
     private toastCtrl: ToastController
   ) {}
 
@@ -78,6 +80,30 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   editarViagem() {
     if (!this.viagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'editar']);
+  }
+
+  async confirmarEliminarViagem() {
+    if (!this.viagem || this.eliminando) return;
+
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar viagem',
+      message: `Tem a certeza que pretende eliminar "${this.titulo || this.viagem.titulo}"? Esta ação não pode ser anulada.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.eliminarViagem();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   adicionarDia() {
@@ -135,6 +161,23 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       await this.mostrarToast(error?.message || 'Erro ao guardar .', 'danger');
     } finally {
       this.guardando = false;
+    }
+  }
+
+  private async eliminarViagem() {
+    if (!this.viagem) return;
+
+    this.eliminando = true;
+
+    try {
+      await this.viagensService.deleteViagem(this.viagem.id);
+      await this.mostrarToast('Viagem eliminada com sucesso.', 'success');
+      this.router.navigate(['/tabs', 'viagens']);
+    } catch (error: any) {
+      console.error('Erro ao eliminar viagem:', error);
+      await this.mostrarToast(error?.message || 'Erro ao eliminar viagem.', 'danger');
+    } finally {
+      this.eliminando = false;
     }
   }
 

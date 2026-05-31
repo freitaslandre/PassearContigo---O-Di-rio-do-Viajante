@@ -11,6 +11,9 @@
       <ion-button (click)="guardar()" [disabled]="guardando">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
+      <ion-button color="danger" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -274,6 +277,12 @@
       <ion-spinner *ngIf="guardando" name="crescent" slot="start"></ion-spinner>
       <ion-icon *ngIf="!guardando" slot="start" name="save-outline"></ion-icon>
       Guardar detalhes
+    </ion-button>
+
+    <ion-button expand="block" color="danger" fill="outline" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+      <ion-spinner *ngIf="eliminando" name="crescent" slot="start"></ion-spinner>
+      <ion-icon *ngIf="!eliminando" slot="start" name="trash-outline"></ion-icon>
+      Eliminar viagem
     </ion-button>
   </div>
 </ion-content>

@@ -7,7 +7,7 @@ import {
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc, updateDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { Dia, Viagem } from '../models/viagem.model';
 
@@ -305,7 +305,11 @@ export class ViagensService {
    */
   async deleteViagem(id: string): Promise<void> {
     await this.garantirViagemDoUtilizadorAtual(id);
-    await this.afs.doc<ViagemPayload>(`${this.collectionName}/${id}`).delete();
+
+    const db = getFirestore();
+    const viagemRef = doc(db, this.collectionName, id);
+
+    await deleteDoc(viagemRef);
   }
 
   private adicionarDiasSeNecessario(viagem: ViagemPayload): ViagemPayload {
