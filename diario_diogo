@@ -112,3 +112,57 @@ Guardar os detalhes dos dias dentro do proprio documento da viagem;
 Mostrar os pontos de interesse diretamente dentro de cada dia;
 Usar fotoUrl como imagem miniatura dos pontos de interesse;
 Manter a pagina de detalhe da viagem como o local principal para editar a estrutura da viagem e dos seus dias.
+
+
+Sessao 4 - 1 de junho de 2026
+
+Objetivo:
+Concluir funcionalidades de edicao, eliminacao, fotografia, localizacao e persistencia dos Pontos de Interesse, mantendo a arquitetura NgModules e a ligacao ao Firebase.
+
+Atividades realizadas:
+Implementei o metodo de atualizacao de viagens no ViagensService usando updateDoc do Firestore;
+Corrigi o erro NG0203 relacionado com inject() ao substituir chamadas fora do contexto de injecao por chamadas modulares do Firebase;
+Garanti que o botao Guardar Alteracoes grava realmente as alteracoes da viagem, dos dias e dos POIs na base de dados;
+Implementei a eliminacao de viagens com confirmacao atraves de IonAlert;
+Adicionei a navegacao automatica para o dashboard/lista de viagens depois de eliminar uma viagem;
+Integrei o plugin Capacitor Camera para capturar fotografias a partir da camara;
+Implementei tambem a selecao de fotografias a partir da galeria;
+Criei um servico dedicado para a camara, evitando usar diretamente o plugin nas paginas;
+Adicionei upload de fotografias dos POIs para o Firebase Storage;
+Associei o URL devolvido pelo Firebase Storage ao campo fotoUrl do POI;
+Mostrei uma galeria de miniaturas dos POIs no formulario usando IonGrid;
+Integrei o plugin Capacitor Geolocation para obter coordenadas GPS;
+Implementei a obtencao de latitude e longitude ao abrir o formulario de POI;
+Guardei as coordenadas latitude e longitude no modelo do POI e no Firestore;
+Integrei a API externa OpenStreetMap Nominatim para reverse geocoding;
+Usei a resposta da API para obter uma sugestao de endereco e nome do POI;
+Implementei o pre-preenchimento do nome do POI quando existe uma sugestao da API e o campo ainda esta vazio;
+Validei a compilacao do projeto com npm run build.
+
+Problemas:
+Ao guardar e eliminar viagens apareceu o erro NG0203 porque algumas funcoes do AngularFire estavam a ser chamadas fora do contexto correto de injecao;
+Foi necessario garantir que a eliminacao nao acontecia sem confirmacao do utilizador;
+No navegador do computador, a captura pela camara pode falhar por falta de permissao, ambiente emulado ou ausencia de camara disponivel;
+Era necessario guardar as imagens em Firebase Storage em vez de manter apenas dados temporarios no formulario;
+As coordenadas GPS precisavam de ser guardadas no Firestore para nao se perderem ao recarregar a pagina;
+A API Nominatim precisava de ser usada com cuidado para evitar chamadas repetidas desnecessarias.
+
+Solucao:
+Atualizei o ViagensService para usar funcoes modulares do Firebase, como getFirestore, updateDoc, getDoc e deleteDoc;
+Mantive a logica de atualizacao e eliminacao concentrada no servico de viagens;
+Usei AlertController para pedir confirmacao antes de eliminar uma viagem;
+Usei NavController para voltar a lista de viagens depois da eliminacao;
+Criei servicos separados para camara, geolocalizacao, Firebase Storage e Nominatim;
+Converto as fotografias escolhidas ou capturadas para dados utilizaveis no upload para Firebase Storage;
+Depois do upload, guardo o downloadURL no campo fotoUrl do POI;
+Ao obter coordenadas GPS, atualizo latitude e longitude no POI e chamo a persistencia dos dias para gravar no Firestore;
+Usei reverse geocoding para preencher endereco e sugerir nome do POI quando os campos ainda nao tinham dados;
+Confirmei que a aplicacao continua a compilar com sucesso.
+
+Decisoes:
+Manter a aplicacao em NgModules, sem usar componentes standalone;
+Guardar os POIs dentro dos dias da viagem, mantendo a estrutura ja existente;
+Guardar apenas o URL publico da fotografia no Firestore e deixar o ficheiro real no Firebase Storage;
+Usar servicos dedicados para funcionalidades externas ou nativas, deixando as paginas mais organizadas;
+Preencher automaticamente dados do POI apenas quando os campos estao vazios, para nao substituir informacao escrita pelo utilizador;
+Usar OpenStreetMap Nominatim como requisito adicional de API externa para obter informacao a partir das coordenadas GPS.
