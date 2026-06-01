@@ -1,0 +1,142 @@
+.loading-card,
+.empty-pois ion-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.loading-card {
+  min-height: 220px;
+}
+
+.itinerario-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.day-summary {
+  display: grid;
+  gap: 6px;
+  padding: 2px 2px 8px;
+
+  ion-badge {
+    justify-self: start;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    color: var(--ion-color-medium);
+  }
+}
+
+.timeline-list {
+  display: grid;
+  gap: 10px;
+  background: transparent;
+}
+
+.timeline-item {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  --inner-padding-end: 10px;
+  --min-height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  ion-thumbnail {
+    --border-radius: 8px;
+    width: 64px;
+    height: 64px;
+    margin-inline-end: 12px;
+  }
+}
+
+.timeline-marker {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  margin-inline-end: 10px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.poi-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 750;
+  }
+
+  ion-badge {
+    flex-shrink: 0;
+  }
+}
+
+.poi-address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty-pois {
+  ion-icon {
+    font-size: 36px;
+    color: var(--ion-color-medium);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+  }
+}
+
+@media (max-width: 420px) {
+  .timeline-item {
+    --min-height: 88px;
+
+    ion-thumbnail {
+      width: 54px;
+      height: 54px;
+      margin-inline-end: 8px;
+    }
+  }
+
+  .timeline-marker {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    margin-inline-end: 8px;
+  }
+
+  .poi-heading {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

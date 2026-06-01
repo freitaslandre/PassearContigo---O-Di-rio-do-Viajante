@@ -64,6 +64,11 @@
       Adicionar POI
     </ion-button>
 
+    <ion-button expand="block" color="secondary" fill="outline" (click)="abrirItinerario()">
+      <ion-icon slot="start" name="map-outline"></ion-icon>
+      Ver itinerario do dia
+    </ion-button>
+
     <!-- Custos do dia -->
     <ion-card *ngIf="dia.custos && dia.custos.length > 0">
       <ion-card-header>
@@ -96,7 +101,7 @@
           <div
             class="poi-item"
             *ngFor="let poi of pontosInteresseOrdenados; let i = index; trackBy: trackByPoiId"
-            [routerLink]="['/tabs', 'viagens', viagemId, 'dias', dia?.id, 'poi', poi.id]"
+            [routerLink]="['/tabs', 'viagens', viagemId, 'dias', dia.id, 'poi', poi.id]"
             routerDirection="forward"
             style="cursor: pointer;"
           >

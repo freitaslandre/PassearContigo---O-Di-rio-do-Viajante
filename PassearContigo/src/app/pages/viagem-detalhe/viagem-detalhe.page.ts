@@ -89,6 +89,11 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'dias', diaId]);
   }
 
+  irParaItinerarioDia(diaId: string) {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'dias', diaId, 'itinerario']);
+  }
+
   editarViagem() {
     if (!this.viagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'editar']);

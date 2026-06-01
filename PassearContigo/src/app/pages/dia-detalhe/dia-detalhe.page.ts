@@ -91,6 +91,11 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     }
   }
 
+  abrirItinerario() {
+    if (!this.viagemId || !this.dia) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.dia.id, 'itinerario']);
+  }
+
   get temDiaAnterior(): boolean {
     return this.diaAtualIndex > 0;
   }

@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="voltar()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Itinerario do Dia</ion-title>
+    <ion-buttons slot="end" *ngIf="!carregando && dia">
+      <ion-button (click)="adicionarPoi()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="carregando" class="loading-card">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>A carregar itinerario...</p>
+  </div>
+
+  <ion-card *ngIf="!carregando && erro">
+    <ion-card-content>
+      <p>{{ erro }}</p>
+      <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="!carregando && dia" class="itinerario-layout">
+    <section class="day-summary">
+      <ion-badge color="primary">{{ pontosOrdenados.length }} POIs</ion-badge>
+      <h1>{{ dia.titulo || 'Dia sem titulo' }}</h1>
+      <p>{{ formatarData(dia.data) }}</p>
+      <p *ngIf="dia.local">
+        <ion-icon name="location-outline"></ion-icon>
+        {{ dia.local }}
+      </p>
+    </section>
+
+    <ion-list *ngIf="pontosOrdenados.length > 0" lines="none" class="timeline-list">
+      <ion-item
+        button
+        detail="true"
+        *ngFor="let poi of pontosOrdenados; let i = index; trackBy: trackByPoiId"
+        (click)="abrirPoi(poi)"
+        class="timeline-item"
+      >
+        <div class="timeline-marker" slot="start">
+          <span>{{ i + 1 }}</span>
+        </div>
+
+        <ion-thumbnail slot="start">
+          <img [src]="obterFotoPoi(poi)" [alt]="poi.nome || 'Ponto de interesse'">
+        </ion-thumbnail>
+
+        <ion-label>
+          <div class="poi-heading">
+            <h2>{{ poi.nome || 'Ponto de interesse sem nome' }}</h2>
+            <ion-badge color="medium">{{ obterHorario(poi) }}</ion-badge>
+          </div>
+          <p *ngIf="poi.tipo">{{ poi.tipo }}</p>
+          <p *ngIf="poi.endereco" class="poi-address">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ poi.endereco }}
+          </p>
+          <p *ngIf="poi.descricao">{{ poi.descricao }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-card *ngIf="pontosOrdenados.length === 0" class="empty-pois">
+      <ion-card-content>
+        <ion-icon name="map-outline"></ion-icon>
+        <h2>Sem POIs neste dia</h2>
+        <p>Adicione pontos de interesse para montar o itinerario.</p>
+        <ion-button expand="block" color="primary" (click)="adicionarPoi()">
+          <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+          Adicionar POI
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
