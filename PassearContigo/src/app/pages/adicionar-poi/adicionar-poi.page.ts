@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
+import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI } from '../../models/viagem.model';
 
 @Component({
@@ -32,6 +32,10 @@ export class AdicionarPoiPage implements OnInit {
   viagemId: string | null = null;
   diaId: string | null = null;
   diaTitulo = '';
+  sugestoesLocais: NominatimSearchResult[] = [];
+  carregandoSugestoes = false;
+  erroSugestoes = '';
+  private pesquisaSugestaoAtual = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,7 +45,7 @@ export class AdicionarPoiPage implements OnInit {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private http: HttpClient
+    private nominatimService: NominatimService
   ) {}
 
   ngOnInit() {
@@ -82,31 +86,61 @@ export class AdicionarPoiPage implements OnInit {
         return;
       }
 
-      // Usar API Nominatim (OpenStreetMap) para obter o nome do lugar
-      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-      
-      const response = await this.http.get<any>(url).toPromise();
-      
-      if (response && response.address) {
-        // Tentar obter o nome mais apropriado (em ordem de preferência)
-        const nome = response.address.poi ||
-                     response.address.amenity ||
-                     response.address.tourism ||
-                     response.address.historic ||
-                     response.address.leisure ||
-                     response.address.name ||
-                     response.address.road ||
-                     response.display_name?.split(',')[0] ||
-                     'Local';
-        
-        if (!this.poi.nome || this.poi.nome.trim() === '') {
-          this.poi.nome = nome.trim();
-        }
+      const detalhes = await this.nominatimService.obterDetalhesPorCoordenadas(lat, lng);
+
+      if (!this.poi.nome?.trim() && detalhes.nomeSugerido) {
+        this.poi.nome = detalhes.nomeSugerido.trim();
+      }
+
+      if (!this.poi.endereco?.trim() && detalhes.endereco) {
+        this.poi.endereco = detalhes.endereco;
       }
     } catch (error) {
       // Silenciosamente ignorar erros de geolocalização
       console.debug('Erro ao obter geolocalização:', error);
     }
+  }
+
+  async pesquisarSugestoesLocais() {
+    const termo = `${this.poi.nome || ''} ${this.poi.endereco || ''}`.trim();
+    const pesquisaId = ++this.pesquisaSugestaoAtual;
+
+    this.erroSugestoes = '';
+
+    if (termo.length < 3) {
+      this.sugestoesLocais = [];
+      this.carregandoSugestoes = false;
+      return;
+    }
+
+    this.carregandoSugestoes = true;
+
+    try {
+      const resultados = await this.nominatimService.pesquisarLocais(termo);
+
+      if (pesquisaId === this.pesquisaSugestaoAtual) {
+        this.sugestoesLocais = resultados;
+      }
+    } catch (error) {
+      if (pesquisaId === this.pesquisaSugestaoAtual) {
+        this.sugestoesLocais = [];
+        this.erroSugestoes = 'Nao foi possivel carregar sugestoes agora.';
+      }
+    } finally {
+      if (pesquisaId === this.pesquisaSugestaoAtual) {
+        this.carregandoSugestoes = false;
+      }
+    }
+  }
+
+  selecionarSugestaoLocal(local: NominatimSearchResult) {
+    this.poi.nome = local.nome;
+    this.poi.endereco = local.endereco;
+    this.poi.tipo = local.categoria;
+    this.poi.latitude = local.latitude;
+    this.poi.longitude = local.longitude;
+    this.sugestoesLocais = [];
+    this.erroSugestoes = '';
   }
 
   async adicionarPoi() {
