@@ -234,6 +234,20 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- MAPA -->
+    <ion-card *ngIf="temMapaDoDia">
+      <ion-card-header>
+        <ion-card-title>Mapa do Dia</ion-card-title>
+        <ion-card-subtitle>
+          {{ poisDoDiaOrdenadosComLocalizacao.length }} POI{{ poisDoDiaOrdenadosComLocalizacao.length === 1 ? '' : 's' }} com localização
+          <span *ngIf="temPercursoDoDia"> · percurso traçado</span>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div #mapaPoi class="mapa-poi"></div>
+      </ion-card-content>
+    </ion-card>
+
     <!-- AÇÕES RÁPIDAS -->
     <ion-card>
       <ion-card-header>

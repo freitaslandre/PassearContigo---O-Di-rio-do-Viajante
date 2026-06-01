@@ -34,6 +34,13 @@
   margin-bottom: 15px;
 }
 
+.mapa-poi {
+  height: 280px;
+  width: 100%;
+  border-radius: var(--card-border-radius);
+  overflow: hidden;
+}
+
 .stars-display {
   display: flex;
   gap: 2px;
