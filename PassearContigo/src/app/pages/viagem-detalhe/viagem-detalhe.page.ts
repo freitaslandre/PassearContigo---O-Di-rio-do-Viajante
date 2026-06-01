@@ -7,6 +7,7 @@ import { ViagensService } from '../../services/viagens.service';
 import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { GeolocationService } from '../../services/geolocation.service';
+import { NominatimService } from '../../services/nominatim.service';
 
 interface DiaViewModel {
   id: string;
@@ -54,6 +55,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private cameraService: CameraService,
     private firebaseStorageService: FirebaseStorageService,
     private geolocationService: GeolocationService,
+    private nominatimService: NominatimService,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController
@@ -286,6 +288,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
       poi.latitude = position.coords.latitude;
       poi.longitude = position.coords.longitude;
+      poi.endereco = await this.obterEnderecoPorReverseGeocoding(poi.latitude, poi.longitude, poi.endereco);
 
       await this.persistirDias();
       await this.mostrarToast('Localizacao associada ao POI.', 'success');
@@ -391,8 +394,47 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
           }
         });
       });
+
+      await this.preencherEnderecoDosPoisSemEndereco(position.coords.latitude, position.coords.longitude);
     } catch (error) {
       console.warn('Nao foi possivel obter coordenadas GPS ao abrir o formulario de POI:', error);
+    }
+  }
+
+  private async preencherEnderecoDosPoisSemEndereco(latitude: number, longitude: number) {
+    const temPoiSemEndereco = this.dias.some(dia =>
+      dia.pontosInteresse.some(poi => !poi.endereco?.trim())
+    );
+
+    if (!temPoiSemEndereco) {
+      return;
+    }
+
+    const endereco = await this.obterEnderecoPorReverseGeocoding(latitude, longitude);
+
+    if (!endereco) {
+      return;
+    }
+
+    this.dias.forEach(dia => {
+      dia.pontosInteresse.forEach(poi => {
+        if (!poi.endereco?.trim()) {
+          poi.endereco = endereco;
+        }
+      });
+    });
+  }
+
+  private async obterEnderecoPorReverseGeocoding(latitude: number, longitude: number, enderecoAtual = ''): Promise<string> {
+    if (enderecoAtual.trim()) {
+      return enderecoAtual;
+    }
+
+    try {
+      return await this.nominatimService.obterEnderecoPorCoordenadas(latitude, longitude);
+    } catch (error) {
+      console.warn('Reverse geocoding Nominatim falhou:', error);
+      return '';
     }
   }
 
