@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'dias/:diaId/adicionar-poi',
     loadChildren: () => import('./../adicionar-poi/adicionar-poi.module').then(m => m.AdicionarPoiPageModule)
+  },
+  {
+    path: 'dias/:diaId/poi/:poiId',
+    loadChildren: () => import('./../detalhe-poi/detalhe-poi.module').then(m => m.DetalhePoiPageModule)
   }
 ];
 

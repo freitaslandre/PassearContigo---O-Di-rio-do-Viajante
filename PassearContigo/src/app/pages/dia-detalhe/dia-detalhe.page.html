@@ -96,6 +96,9 @@
           <div
             class="poi-item"
             *ngFor="let poi of pontosInteresseOrdenados; let i = index; trackBy: trackByPoiId"
+            [routerLink]="['/tabs', 'viagens', viagemId, 'dias', dia?.id, 'poi', poi.id]"
+            routerDirection="forward"
+            style="cursor: pointer;"
           >
             <div class="poi-order">{{ i + 1 }}</div>
             <div class="poi-image-container">

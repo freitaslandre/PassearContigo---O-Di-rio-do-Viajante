@@ -1,0 +1,337 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="voltar()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ poi?.nome || 'POI' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="carregando" class="ion-text-center" style="margin-top: 40px;">
+    <ion-spinner></ion-spinner>
+    <p>Carregando POI...</p>
+  </div>
+
+  <div *ngIf="erro && !carregando" class="ion-text-center">
+    <ion-text color="danger">
+      <h3>{{ erro }}</h3>
+    </ion-text>
+    <ion-button expand="block" (click)="voltar()">
+      Voltar
+    </ion-button>
+  </div>
+
+  <div *ngIf="poi && !carregando">
+    <!-- CARD DE EDIÇÃO -->
+    <ion-card *ngIf="!modoEdicao">
+      <ion-card-content>
+        <ion-button
+          expand="block"
+          color="warning"
+          fill="outline"
+          (click)="iniciarEdicao()"
+        >
+          <ion-icon slot="start" name="pencil-outline"></ion-icon>
+          Editar POI
+        </ion-button>
+        <ion-button
+          expand="block"
+          color="secondary"
+          fill="outline"
+          (click)="restaurarTemaDefault()"
+          style="margin-top: 10px;"
+        >
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          Restaurar Tema
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- FORMULÁRIO DE EDIÇÃO -->
+    <ion-card *ngIf="modoEdicao">
+      <ion-card-header>
+        <ion-card-title>Editar POI</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nota</ion-label>
+          <ion-input
+            [(ngModel)]="poiEditavel.nota"
+            placeholder="Nota sobre este POI"
+            type="text"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Custo (€)</ion-label>
+          <ion-input
+            [(ngModel)]="poiEditavel.custo"
+            placeholder="Custo em euros"
+            type="number"
+            step="0.01"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Avaliação (Estrelas)</ion-label>
+          <div slot="end" class="stars-container">
+            <ion-button
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              fill="clear"
+              size="small"
+              (click)="poiEditavel.avaliacao = star"
+              [color]="star <= (poiEditavel.avaliacao || 0) ? 'warning' : 'medium'"
+            >
+              <ion-icon slot="icon-only" name="star"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+
+        <div class="button-group" style="margin-top: 20px;">
+          <ion-button
+            expand="block"
+            color="success"
+            (click)="guardarEdicao()"
+          >
+            <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+            Guardar
+          </ion-button>
+          <ion-button
+            expand="block"
+            color="medium"
+            fill="outline"
+            (click)="cancelarEdicao()"
+          >
+            <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+            Cancelar
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- GALERIA DE FOTOS -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Galeria de Fotos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="fotoUrl" class="foto-container">
+          <img [src]="fotoUrl" alt="Foto POI" class="poi-foto" />
+          <ion-button
+            expand="block"
+            color="danger"
+            fill="outline"
+            size="small"
+            (click)="eliminarFoto()"
+            style="margin-top: 10px;"
+          >
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            Eliminar Foto
+          </ion-button>
+        </div>
+
+        <div *ngIf="!fotoUrl" class="sem-foto">
+          <ion-text color="medium">
+            <p>Sem foto adicionada</p>
+          </ion-text>
+        </div>
+
+        <ion-button
+          expand="block"
+          color="primary"
+          (click)="selecionarFoto()"
+          style="margin-top: 10px;"
+        >
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          {{ fotoUrl ? 'Alterar Foto' : 'Adicionar Foto' }}
+        </ion-button>
+
+        <input
+          #fotoInput
+          type="file"
+          accept="image/*"
+          (change)="onFotoSelecionada($event)"
+          style="display: none;"
+        />
+      </ion-card-content>
+    </ion-card>
+
+    <!-- INFORMAÇÕES DO POI -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Informações</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="inset" *ngIf="poi.nome">
+          <ion-label>
+            <strong>Nome:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.nome }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.tipo">
+          <ion-label>
+            <strong>Tipo:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.tipo }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.categoria">
+          <ion-label>
+            <strong>Categoria:</strong>
+          </ion-label>
+          <ion-badge slot="end" color="primary">{{ poi.categoria }}</ion-badge>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.avaliacao && poi.avaliacao > 0">
+          <ion-label>
+            <strong>Avaliação:</strong>
+          </ion-label>
+          <div slot="end" class="stars-display">
+            <ion-icon
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              name="star"
+              [color]="star <= (poi.avaliacao || 0) ? 'warning' : 'medium'"
+            ></ion-icon>
+          </div>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.descricao">
+          <ion-label>
+            <strong>Descrição:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.descricao }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.endereco">
+          <ion-label>
+            <strong>Endereço:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.endereco }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.custo">
+          <ion-label>
+            <strong>Custo:</strong>
+          </ion-label>
+          <ion-text slot="end">€ {{ poi.custo | number: '1.2-2' }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.horario">
+          <ion-label>
+            <strong>Horário:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.horario }}</ion-text>
+        </ion-item>
+
+        <ion-item lines="inset" *ngIf="poi.nota">
+          <ion-label>
+            <strong>Nota Rápida:</strong>
+          </ion-label>
+          <ion-text slot="end">{{ poi.nota }}</ion-text>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Ações Rápidas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button
+          *ngIf="temLocalizacao"
+          expand="block"
+          color="primary"
+          fill="outline"
+          (click)="abrirMapa()"
+        >
+          <ion-icon slot="start" name="map-outline"></ion-icon>
+          Ver no Mapa
+        </ion-button>
+
+        <ion-button
+          *ngIf="poi.telefone"
+          expand="block"
+          color="primary"
+          fill="outline"
+          (click)="abrirTelefone()"
+        >
+          <ion-icon slot="start" name="call-outline"></ion-icon>
+          Ligar
+        </ion-button>
+
+        <ion-button
+          *ngIf="poi.url"
+          expand="block"
+          color="primary"
+          fill="outline"
+          (click)="abrirUrl()"
+        >
+          <ion-icon slot="start" name="link-outline"></ion-icon>
+          Visitar Site
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          color="danger"
+          fill="outline"
+          (click)="eliminarPoi()"
+        >
+          <ion-icon slot="start" name="trash-outline"></ion-icon>
+          Eliminar POI
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- NOTAS -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Notas Pessoais</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Adicionar Nota -->
+        <ion-item>
+          <ion-input
+            placeholder="Adicionar uma nota..."
+            [(ngModel)]="novaNotaTexto"
+          ></ion-input>
+          <ion-button
+            slot="end"
+            color="success"
+            fill="clear"
+            (click)="adicionarNota()"
+          >
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <!-- Lista de Notas -->
+        <div *ngIf="notas.length === 0" class="ion-text-center" style="margin-top: 20px;">
+          <ion-text color="medium">
+            <p>Sem notas adicionadas</p>
+          </ion-text>
+        </div>
+
+        <div *ngFor="let nota of notas" class="nota-card">
+          <ion-item lines="none">
+            <ion-label>
+              <p class="nota-texto">{{ nota.texto }}</p>
+              <small class="nota-data">{{ nota.data | date: 'dd/MM/yyyy HH:mm' }}</small>
+            </ion-label>
+            <ion-button
+              slot="end"
+              color="danger"
+              fill="clear"
+              size="small"
+              (click)="eliminarNota(nota.id)"
+            >
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
