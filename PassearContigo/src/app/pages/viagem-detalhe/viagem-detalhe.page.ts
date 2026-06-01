@@ -45,6 +45,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
   private routeSub: Subscription | null = null;
   private viagemSub: Subscription | null = null;
+  private tentouObterGpsInicial = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -368,6 +369,39 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     });
   }
 
+  private async obterCoordenadasGpsAoAbrirFormularioPoi() {
+    if (this.tentouObterGpsInicial || !this.temPoisSemCoordenadas()) {
+      return;
+    }
+
+    this.tentouObterGpsInicial = true;
+
+    try {
+      const position = await this.geolocationService.getCurrentPosition();
+
+      if (!position) {
+        return;
+      }
+
+      this.dias.forEach(dia => {
+        dia.pontosInteresse.forEach(poi => {
+          if (!this.temCoordenadas(poi)) {
+            poi.latitude = position.coords.latitude;
+            poi.longitude = position.coords.longitude;
+          }
+        });
+      });
+    } catch (error) {
+      console.warn('Nao foi possivel obter coordenadas GPS ao abrir o formulario de POI:', error);
+    }
+  }
+
+  private temPoisSemCoordenadas(): boolean {
+    return this.dias.some(dia =>
+      dia.pontosInteresse.some(poi => !this.temCoordenadas(poi))
+    );
+  }
+
   private preencherFormulario(viagem: Viagem) {
     this.titulo = viagem.titulo;
     this.descricao = viagem.descricao || '';
@@ -385,6 +419,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       pontosInteresse: dia.pontosInteresse || [],
       custos: dia.custos || []
     }));
+
+    this.obterCoordenadasGpsAoAbrirFormularioPoi();
   }
 
   private converterDiaParaModel(dia: DiaViewModel, index: number): Dia {
