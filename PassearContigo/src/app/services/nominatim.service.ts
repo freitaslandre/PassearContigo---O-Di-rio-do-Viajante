@@ -8,18 +8,81 @@ interface NominatimReverseResponse {
   address?: Record<string, string>;
 }
 
+interface NominatimSearchResponse {
+  display_name?: string;
+  name?: string;
+  category?: string;
+  type?: string;
+  lat?: string;
+  lon?: string;
+  address?: Record<string, string>;
+}
+
 export interface NominatimReverseResult {
   endereco: string;
   nomeSugerido: string;
+}
+
+export interface NominatimSearchResult {
+  nome: string;
+  endereco: string;
+  categoria: string;
+  latitude: number;
+  longitude: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class NominatimService {
+  private readonly searchUrl = 'https://nominatim.openstreetmap.org/search';
   private readonly reverseUrl = 'https://nominatim.openstreetmap.org/reverse';
   private readonly cache = new Map<string, NominatimReverseResult>();
+  private readonly searchCache = new Map<string, NominatimSearchResult[]>();
   private ultimoPedidoEm = 0;
+
+  async pesquisarLocais(termo: string): Promise<NominatimSearchResult[]> {
+    const termoLimpo = termo.trim();
+
+    if (termoLimpo.length < 2) {
+      return [];
+    }
+
+    const cacheKey = termoLimpo.toLowerCase();
+    const resultadoEmCache = this.searchCache.get(cacheKey);
+
+    if (resultadoEmCache) {
+      return resultadoEmCache;
+    }
+
+    await this.respeitarIntervaloEntrePedidos();
+
+    const params = new URLSearchParams({
+      format: 'jsonv2',
+      q: termoLimpo,
+      addressdetails: '1',
+      limit: '10',
+      'accept-language': 'pt-PT'
+    });
+
+    const response = await fetch(`${this.searchUrl}?${params.toString()}`, {
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Nao foi possivel pesquisar locais pelo OpenStreetMap.');
+    }
+
+    const data = await response.json() as NominatimSearchResponse[];
+    const resultados = data
+      .map(item => this.converterResultadoPesquisa(item))
+      .filter((item): item is NominatimSearchResult => !!item);
+
+    this.searchCache.set(cacheKey, resultados);
+    return resultados;
+  }
 
   async obterEnderecoPorCoordenadas(latitude: number, longitude: number): Promise<string> {
     const resultado = await this.obterDetalhesPorCoordenadas(latitude, longitude);
@@ -79,6 +142,31 @@ export class NominatimService {
     const partes = [rua, localidade, codigoPostal, pais].filter(Boolean);
 
     return partes.length > 0 ? partes.join(', ') : data.display_name || '';
+  }
+
+  private converterResultadoPesquisa(data: NominatimSearchResponse): NominatimSearchResult | null {
+    const latitude = Number(data.lat);
+    const longitude = Number(data.lon);
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      return null;
+    }
+
+    return {
+      nome: this.obterNomeSugerido(data) || data.display_name?.split(',')[0] || 'Local',
+      endereco: this.formatarEndereco(data),
+      categoria: this.formatarCategoria(data),
+      latitude,
+      longitude
+    };
+  }
+
+  private formatarCategoria(data: NominatimSearchResponse): string {
+    const partes = [data.category, data.type]
+      .filter(Boolean)
+      .map(valor => valor!.replace(/_/g, ' '));
+
+    return partes.length > 0 ? partes.join(' / ') : 'local';
   }
 
   private obterNomeSugerido(data: NominatimReverseResponse): string {

@@ -2,8 +2,55 @@
   <ion-toolbar>
     <ion-title>Descobrir</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="termoPesquisa"
+      placeholder="Pesquisar locais"
+      debounce="500"
+      show-clear-button="focus"
+      (ionInput)="pesquisar($event)"
+      (ionClear)="limparPesquisa()"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p>Exploração de novos locais e viagens recomendadas.</p>
+  <div class="search-state" *ngIf="carregando">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>A pesquisar locais...</p>
+  </div>
+
+  <ion-card *ngIf="erro && !carregando">
+    <ion-card-content>
+      <ion-text color="danger">{{ erro }}</ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="!carregando && resultados.length > 0" lines="full">
+    <ion-item
+      button
+      detail="true"
+      *ngFor="let local of resultados"
+      (click)="abrirMapa(local)"
+    >
+      <ion-icon name="location-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{ local.nome }}</h2>
+        <p>{{ local.endereco }}</p>
+        <ion-note>{{ local.categoria }}</ion-note>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngIf="pesquisou && !carregando && !erro && resultados.length === 0">
+    <ion-card-content>
+      <p>Nenhum local encontrado.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="empty-state" *ngIf="!pesquisou && !carregando">
+    <ion-icon name="search-outline"></ion-icon>
+    <h2>Pesquisar locais</h2>
+    <p>Procure cidades, monumentos, restaurantes ou pontos de interesse.</p>
+  </div>
 </ion-content>
