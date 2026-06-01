@@ -37,6 +37,30 @@
       </p>
     </section>
 
+    <div class="day-navigation">
+      <ion-button
+        fill="outline"
+        color="medium"
+        (click)="irParaDiaAnterior()"
+        [disabled]="!temDiaAnterior"
+      >
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+
+      <span>{{ textoPosicaoDia }}</span>
+
+      <ion-button
+        fill="outline"
+        color="medium"
+        (click)="irParaDiaProximo()"
+        [disabled]="!temDiaProximo"
+      >
+        Proximo
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+
     <ion-reorder-group
       *ngIf="pontosOrdenados.length > 0"
       [disabled]="guardandoOrdem"
@@ -69,6 +93,10 @@
             {{ poi.endereco }}
           </p>
           <p *ngIf="poi.descricao">{{ poi.descricao }}</p>
+          <ion-note *ngIf="i > 0" color="medium" class="travel-estimate">
+            <ion-icon name="walk-outline"></ion-icon>
+            {{ obterTempoEntrePois(i) }}
+          </ion-note>
         </ion-label>
 
         <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)">

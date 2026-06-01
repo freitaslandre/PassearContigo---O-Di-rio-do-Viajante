@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ItemReorderEventDetail, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Dia, POI, Viagem } from '../../models/viagem.model';
+import { GeolocationService } from '../../services/geolocation.service';
 import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
 
@@ -16,6 +17,8 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   viagemId = '';
   diaId = '';
   dia: Dia | null = null;
+  dias: Dia[] = [];
+  diaAtualIndex = -1;
   carregando = true;
   guardandoOrdem = false;
   erro = '';
@@ -27,6 +30,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private geolocationService: GeolocationService,
     private poiService: POIService,
     private toastCtrl: ToastController
   ) {}
@@ -65,6 +69,32 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   adicionarPoi() {
     if (!this.viagemId || !this.diaId) return;
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.diaId, 'adicionar-poi']);
+  }
+
+  get temDiaAnterior(): boolean {
+    return this.diaAtualIndex > 0;
+  }
+
+  get temDiaProximo(): boolean {
+    return this.diaAtualIndex >= 0 && this.diaAtualIndex < this.dias.length - 1;
+  }
+
+  get textoPosicaoDia(): string {
+    if (this.diaAtualIndex < 0 || this.dias.length === 0) {
+      return '';
+    }
+
+    return `${this.diaAtualIndex + 1} de ${this.dias.length}`;
+  }
+
+  irParaDiaAnterior() {
+    if (!this.temDiaAnterior) return;
+    this.irParaItinerarioDoDia(this.dias[this.diaAtualIndex - 1].id);
+  }
+
+  irParaDiaProximo() {
+    if (!this.temDiaProximo) return;
+    this.irParaItinerarioDoDia(this.dias[this.diaAtualIndex + 1].id);
   }
 
   abrirPoi(poi: POI) {
@@ -133,6 +163,30 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     return typeof poi.ordem === 'number';
   }
 
+  obterTempoEntrePois(index: number): string {
+    if (index <= 0) {
+      return '';
+    }
+
+    const pois = this.pontosOrdenados;
+    const anterior = pois[index - 1];
+    const atual = pois[index];
+
+    if (!this.temCoordenadas(anterior) || !this.temCoordenadas(atual)) {
+      return 'Distancia indisponivel';
+    }
+
+    const distanciaKm = this.geolocationService.calculateDistance(
+      anterior.latitude!,
+      anterior.longitude!,
+      atual.latitude!,
+      atual.longitude!
+    );
+    const minutos = Math.max(1, Math.round((distanciaKm / 5) * 60));
+
+    return `${this.formatarDistancia(distanciaKm)} · ${this.formatarDuracao(minutos)} a pe`;
+  }
+
   private carregarDia() {
     this.carregando = true;
     this.erro = '';
@@ -147,7 +201,11 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
           return;
         }
 
-        const diaEncontrado = (viagem.dias || []).find(dia => dia.id === this.diaId);
+        this.dias = [...(viagem.dias || [])].sort((a, b) => {
+          return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);
+        });
+        this.diaAtualIndex = this.dias.findIndex(dia => dia.id === this.diaId);
+        const diaEncontrado = this.dias[this.diaAtualIndex];
 
         if (!diaEncontrado) {
           this.erro = 'Dia nao encontrado.';
@@ -164,6 +222,10 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
         console.error('Erro ao carregar itinerario do dia:', err);
       }
     });
+  }
+
+  private irParaItinerarioDoDia(diaId: string) {
+    this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', diaId, 'itinerario']);
   }
 
   private async juntarPoisLocaisPendentes(dia: Dia): Promise<Dia> {
@@ -248,6 +310,31 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     return (horas * 60) + minutos;
   }
 
+  private temCoordenadas(poi: POI): boolean {
+    return typeof poi.latitude === 'number' && typeof poi.longitude === 'number';
+  }
+
+  private formatarDistancia(distanciaKm: number): string {
+    if (distanciaKm < 1) {
+      return `${Math.round(distanciaKm * 1000)} m`;
+    }
+
+    return `${distanciaKm.toFixed(1)} km`;
+  }
+
+  private formatarDuracao(minutos: number): string {
+    if (minutos < 60) {
+      return `${minutos} min`;
+    }
+
+    const horas = Math.floor(minutos / 60);
+    const minutosRestantes = minutos % 60;
+
+    return minutosRestantes > 0
+      ? `${horas} h ${minutosRestantes} min`
+      : `${horas} h`;
+  }
+
   private converterParaDate(data: Date | string | any): Date {
     if (data instanceof Date) {
       return data;
@@ -259,6 +346,10 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
       return (data as any).toDate();
     }
     return new Date(data);
+  }
+
+  private obterTimestampData(data: Date | string | any): number {
+    return this.converterParaDate(data).getTime() || 0;
   }
 
   private async mostrarToast(message: string, color: 'success' | 'danger') {
