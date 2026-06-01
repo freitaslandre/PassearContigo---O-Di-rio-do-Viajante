@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
+import { GeolocationService } from '../../services/geolocation.service';
+
+interface ResultadoDescobrir extends NominatimSearchResult {
+  distanciaKm?: number;
+  distanciaTexto: string;
+}
 
 /**
  * DescubrirPage - Página de Descobrir
@@ -13,14 +19,18 @@ import { NominatimSearchResult, NominatimService } from '../../services/nominati
 })
 export class DescubrirPage {
   termoPesquisa = '';
-  resultados: NominatimSearchResult[] = [];
+  resultados: ResultadoDescobrir[] = [];
   carregando = false;
   pesquisou = false;
   erro = '';
 
   private pesquisaAtual = 0;
+  private localizacaoAtual?: { latitude: number; longitude: number };
 
-  constructor(private nominatimService: NominatimService) {}
+  constructor(
+    private nominatimService: NominatimService,
+    private geolocationService: GeolocationService
+  ) {}
 
   async pesquisar(event?: CustomEvent) {
     const valor = (event?.detail as { value?: string } | undefined)?.value;
@@ -44,13 +54,16 @@ export class DescubrirPage {
     this.pesquisou = true;
 
     try {
+      await this.carregarLocalizacaoAtual();
       const resultados = await this.nominatimService.pesquisarLocais(termo);
 
       if (pesquisaId !== this.pesquisaAtual) {
         return;
       }
 
-      this.resultados = resultados;
+      this.resultados = resultados
+        .map(local => this.adicionarDistancia(local))
+        .sort((a, b) => (a.distanciaKm ?? Number.MAX_SAFE_INTEGER) - (b.distanciaKm ?? Number.MAX_SAFE_INTEGER));
     } catch (error: any) {
       if (pesquisaId !== this.pesquisaAtual) {
         return;
@@ -79,4 +92,48 @@ export class DescubrirPage {
     window.open(url, '_blank');
   }
 
+  private async carregarLocalizacaoAtual() {
+    if (this.localizacaoAtual) {
+      return;
+    }
+
+    const posicao = await this.geolocationService.getCurrentPosition();
+
+    if (posicao) {
+      this.localizacaoAtual = {
+        latitude: posicao.coords.latitude,
+        longitude: posicao.coords.longitude
+      };
+    }
+  }
+
+  private adicionarDistancia(local: NominatimSearchResult): ResultadoDescobrir {
+    if (!this.localizacaoAtual) {
+      return {
+        ...local,
+        distanciaTexto: 'Distancia indisponivel'
+      };
+    }
+
+    const distanciaKm = this.geolocationService.calculateDistance(
+      this.localizacaoAtual.latitude,
+      this.localizacaoAtual.longitude,
+      local.latitude,
+      local.longitude
+    );
+
+    return {
+      ...local,
+      distanciaKm,
+      distanciaTexto: this.formatarDistancia(distanciaKm)
+    };
+  }
+
+  private formatarDistancia(distanciaKm: number): string {
+    if (distanciaKm < 1) {
+      return `${Math.round(distanciaKm * 1000)} m`;
+    }
+
+    return `${distanciaKm.toFixed(1).replace('.', ',')} km`;
+  }
 }
