@@ -73,14 +73,20 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     const foto = await this.cameraService.takePicture();
     if (foto) {
       this.fotoCapaPreview = foto;
+      return;
     }
+
+    await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
   }
 
   async escolherFotoCapaDaGaleria() {
     const foto = await this.cameraService.selectPictureFromGallery();
     if (foto) {
       this.fotoCapaPreview = foto;
+      return;
     }
+
+    await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
   }
 
   async guardar() {

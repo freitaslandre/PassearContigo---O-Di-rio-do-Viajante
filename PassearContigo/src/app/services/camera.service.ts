@@ -19,6 +19,11 @@ export class CameraService {
    */
   async takePicture(): Promise<string | undefined> {
     try {
+      const permissaoOk = await this.garantirPermissaoCamera();
+      if (!permissaoOk) {
+        return undefined;
+      }
+
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: true,
@@ -40,6 +45,11 @@ export class CameraService {
    */
   async selectPictureFromGallery(): Promise<string | undefined> {
     try {
+      const permissaoOk = await this.garantirPermissaoGaleria();
+      if (!permissaoOk) {
+        return undefined;
+      }
+
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: true,
@@ -61,6 +71,11 @@ export class CameraService {
    */
   async takePictureAsFile(): Promise<string | undefined> {
     try {
+      const permissaoOk = await this.garantirPermissaoCamera();
+      if (!permissaoOk) {
+        return undefined;
+      }
+
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: true,
@@ -74,6 +89,28 @@ export class CameraService {
       console.warn('⚠ Erro ao capturar foto como arquivo:', error);
       return undefined;
     }
+  }
+
+  private async garantirPermissaoCamera(): Promise<boolean> {
+    const permissions = await Camera.checkPermissions();
+
+    if (permissions.camera === 'granted') {
+      return true;
+    }
+
+    const requested = await Camera.requestPermissions({ permissions: ['camera'] });
+    return requested.camera === 'granted';
+  }
+
+  private async garantirPermissaoGaleria(): Promise<boolean> {
+    const permissions = await Camera.checkPermissions();
+
+    if (permissions.photos === 'granted' || permissions.photos === 'limited') {
+      return true;
+    }
+
+    const requested = await Camera.requestPermissions({ permissions: ['photos'] });
+    return requested.photos === 'granted' || requested.photos === 'limited';
   }
 
   private converterBase64ParaDataUrl(base64?: string): string | undefined {

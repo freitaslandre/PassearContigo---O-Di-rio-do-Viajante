@@ -108,7 +108,10 @@ export class NovaViagemPage implements OnInit {
     if (foto) {
       this.fotoCapaFile = null;
       this.fotoCapaPreview = foto;
+      return;
     }
+
+    await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
   }
 
   async escolherFotoCapaDaGaleria() {
@@ -116,7 +119,10 @@ export class NovaViagemPage implements OnInit {
     if (foto) {
       this.fotoCapaFile = null;
       this.fotoCapaPreview = foto;
+      return;
     }
+
+    await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
   }
 
   async criarViagem() {
@@ -197,5 +203,14 @@ export class NovaViagemPage implements OnInit {
 
   get dataFim() {
     return this.form.get('dataFim');
+  }
+
+  private async mostrarToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color
+    });
+    await toast.present();
   }
 }
