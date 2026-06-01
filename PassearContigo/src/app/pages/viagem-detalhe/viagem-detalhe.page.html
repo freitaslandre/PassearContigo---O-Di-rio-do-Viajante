@@ -217,6 +217,30 @@
           <div class="pois-section" *ngIf="dia.pontosInteresse.length > 0">
             <h3>Pontos de interesse</h3>
 
+            <ion-grid class="poi-gallery-grid">
+              <ion-row>
+                <ion-col
+                  size="4"
+                  size-sm="3"
+                  size-md="2"
+                  *ngFor="let poi of dia.pontosInteresse"
+                >
+                  <button
+                    type="button"
+                    class="poi-gallery-item"
+                    (click)="irParaDia(dia.id)"
+                    [attr.aria-label]="poi.nome || 'Ponto de interesse'"
+                  >
+                    <img
+                      [src]="obterFotoPoi(poi)"
+                      [alt]="poi.nome || 'Ponto de interesse'"
+                    >
+                    <span>{{ poi.nome || 'POI' }}</span>
+                  </button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
             <div class="poi-row" *ngFor="let poi of dia.pontosInteresse; let poiIndex = index">
               <div class="poi-photo-tools">
                 <img
