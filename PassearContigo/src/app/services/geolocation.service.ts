@@ -19,7 +19,16 @@ export class GeolocationService {
    */
   async getCurrentPosition(): Promise<GeolocationPosition | null> {
     try {
-      const coordinates = await Geolocation.getCurrentPosition();
+      const permissaoOk = await this.garantirPermissaoLocalizacao();
+
+      if (!permissaoOk) {
+        return null;
+      }
+
+      const coordinates = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000
+      });
       console.log('✓ Localização obtida:', {
         latitude: coordinates.coords.latitude,
         longitude: coordinates.coords.longitude,
@@ -42,7 +51,15 @@ export class GeolocationService {
     callback: (position: GeolocationPosition) => void
   ): Promise<string> {
     try {
-      const watchId = await Geolocation.watchPosition({}, (position) => {
+      const permissaoOk = await this.garantirPermissaoLocalizacao();
+
+      if (!permissaoOk) {
+        return '';
+      }
+
+      const watchId = await Geolocation.watchPosition({
+        enableHighAccuracy: true
+      }, (position) => {
         if (position) {
           console.log('📍 Localização atualizada:', {
             latitude: position.coords.latitude,
@@ -66,7 +83,7 @@ export class GeolocationService {
    */
   async clearWatch(watchId: string): Promise<void> {
     try {
-      await Geolocation.clearWatch({ id: parseInt(watchId) });
+      await Geolocation.clearWatch({ id: watchId });
       console.log('✓ Monitoramento de localização cancelado');
     } catch (error) {
       console.warn('⚠ Erro ao cancelar monitoramento:', error);
@@ -97,5 +114,16 @@ export class GeolocationService {
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+  }
+
+  private async garantirPermissaoLocalizacao(): Promise<boolean> {
+    const permissions = await Geolocation.checkPermissions();
+
+    if (permissions.location === 'granted') {
+      return true;
+    }
+
+    const requested = await Geolocation.requestPermissions({ permissions: ['location'] });
+    return requested.location === 'granted';
   }
 }

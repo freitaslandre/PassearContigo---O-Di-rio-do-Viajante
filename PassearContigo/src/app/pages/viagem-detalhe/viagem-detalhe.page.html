@@ -300,6 +300,24 @@
                     ></ion-input>
                   </ion-item>
                 </div>
+
+                <div class="poi-location-tools">
+                  <ion-button
+                    fill="outline"
+                    size="small"
+                    color="primary"
+                    (click)="usarLocalizacaoAtualNoPoi(dia, poi)"
+                    [disabled]="localizacaoPoiAEnviar(dia.id, poi)"
+                  >
+                    <ion-spinner *ngIf="localizacaoPoiAEnviar(dia.id, poi)" name="crescent" slot="start"></ion-spinner>
+                    <ion-icon *ngIf="!localizacaoPoiAEnviar(dia.id, poi)" slot="start" name="locate-outline"></ion-icon>
+                    Usar localizacao atual
+                  </ion-button>
+
+                  <ion-note *ngIf="temCoordenadas(poi)" color="medium">
+                    {{ formatarCoordenada(poi.latitude) }}, {{ formatarCoordenada(poi.longitude) }}
+                  </ion-note>
+                </div>
               </div>
             </div>
           </div>

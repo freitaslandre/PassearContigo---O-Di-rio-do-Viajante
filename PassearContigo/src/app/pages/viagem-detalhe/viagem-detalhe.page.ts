@@ -6,6 +6,7 @@ import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
 import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
+import { GeolocationService } from '../../services/geolocation.service';
 
 interface DiaViewModel {
   id: string;
@@ -33,6 +34,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   eliminando = false;
   erro = '';
   fotosPoiAEnviar: Record<string, boolean> = {};
+  localizacaoPoiAObter: Record<string, boolean> = {};
 
   titulo = '';
   descricao = '';
@@ -50,6 +52,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private viagensService: ViagensService,
     private cameraService: CameraService,
     private firebaseStorageService: FirebaseStorageService,
+    private geolocationService: GeolocationService,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController
@@ -243,6 +246,10 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     return !!this.fotosPoiAEnviar[this.obterChaveFotoPoi(diaId, poi)];
   }
 
+  localizacaoPoiAEnviar(diaId: string, poi: POI): boolean {
+    return !!this.localizacaoPoiAObter[this.obterChaveFotoPoi(diaId, poi)];
+  }
+
   async tirarFotoPoi(dia: DiaViewModel, poi: POI) {
     const foto = await this.cameraService.takePicture();
     if (!foto) {
@@ -261,6 +268,40 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     }
 
     await this.guardarFotoPoi(dia, poi, foto);
+  }
+
+  async usarLocalizacaoAtualNoPoi(dia: DiaViewModel, poi: POI) {
+    poi.id = poi.id || this.gerarIdPoi();
+    const chave = this.obterChaveFotoPoi(dia.id, poi);
+    this.localizacaoPoiAObter[chave] = true;
+
+    try {
+      const position = await this.geolocationService.getCurrentPosition();
+
+      if (!position) {
+        await this.mostrarToast('Nao foi possivel obter a localizacao.', 'warning');
+        return;
+      }
+
+      poi.latitude = position.coords.latitude;
+      poi.longitude = position.coords.longitude;
+
+      await this.persistirDias();
+      await this.mostrarToast('Localizacao associada ao POI.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao obter localizacao do POI:', error);
+      await this.mostrarToast(error?.message || 'Erro ao obter localizacao.', 'danger');
+    } finally {
+      delete this.localizacaoPoiAObter[chave];
+    }
+  }
+
+  formatarCoordenada(valor?: number): string {
+    return typeof valor === 'number' ? valor.toFixed(6) : '';
+  }
+
+  temCoordenadas(poi: POI): boolean {
+    return typeof poi.latitude === 'number' && typeof poi.longitude === 'number';
   }
 
   get totalPois(): number {

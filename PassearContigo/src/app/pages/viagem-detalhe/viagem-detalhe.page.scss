@@ -223,6 +223,17 @@
   grid-template-columns: 1fr 2fr;
 }
 
+.poi-location-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-note {
+    font-size: 0.8rem;
+  }
+}
+
 .empty-pois-note {
   display: block;
   padding-top: 0.75rem;
