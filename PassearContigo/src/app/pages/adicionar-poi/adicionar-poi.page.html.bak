@@ -17,7 +17,7 @@
 
       <ion-card-content>
         <ion-item>
-          <ion-label position="stacked">Nome *</ion-label>
+          <ion-label position="floating">Nome *</ion-label>
           <ion-input
             name="nome"
             [(ngModel)]="poi.nome"
@@ -33,7 +33,7 @@
         </ion-text>
 
         <ion-item>
-          <ion-label position="stacked">Descrição</ion-label>
+          <ion-label position="floating">Descrição</ion-label>
           <ion-input
             name="descricao"
             [(ngModel)]="poi.descricao"
@@ -43,7 +43,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Tipo</ion-label>
+          <ion-label position="floating">Tipo</ion-label>
           <ion-input
             name="tipo"
             [(ngModel)]="poi.tipo"
@@ -53,7 +53,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Endereço</ion-label>
+          <ion-label position="floating">Endereço</ion-label>
           <ion-input
             name="endereco"
             [(ngModel)]="poi.endereco"
@@ -92,7 +92,7 @@
         </div>
 
         <ion-item>
-          <ion-label position="stacked">Telefone</ion-label>
+          <ion-label position="floating">Telefone</ion-label>
           <ion-input
             name="telefone"
             [(ngModel)]="poi.telefone"
@@ -102,7 +102,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Horário</ion-label>
+          <ion-label position="floating">Horário</ion-label>
           <ion-input
             name="horario"
             [(ngModel)]="poi.horario"
@@ -112,7 +112,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">URL</ion-label>
+          <ion-label position="floating">URL</ion-label>
           <ion-input
             name="url"
             [(ngModel)]="poi.url"
@@ -122,7 +122,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Latitude</ion-label>
+          <ion-label position="floating">Latitude</ion-label>
           <ion-input
             name="latitude"
             [(ngModel)]="poi.latitude"
@@ -134,7 +134,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Longitude</ion-label>
+          <ion-label position="floating">Longitude</ion-label>
           <ion-input
             name="longitude"
             [(ngModel)]="poi.longitude"
@@ -146,7 +146,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Nota</ion-label>
+          <ion-label position="floating">Nota</ion-label>
           <ion-input
             name="nota"
             [(ngModel)]="poi.nota"
@@ -156,7 +156,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Custo (€)</ion-label>
+          <ion-label position="floating">Custo (€)</ion-label>
           <ion-input
             name="custo"
             [(ngModel)]="poi.custo"
@@ -167,7 +167,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Categoria</ion-label>
+          <ion-label position="floating">Categoria</ion-label>
           <ion-select
             name="categoria"
             [(ngModel)]="poi.categoria"

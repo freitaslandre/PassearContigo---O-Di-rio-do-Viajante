@@ -49,7 +49,7 @@
 
     <!-- Título -->
     <ion-item>
-      <ion-label position="stacked">Título da Viagem *</ion-label>
+      <ion-label position="floating">Título da Viagem *</ion-label>
       <ion-input
         formControlName="titulo"
         type="text"
@@ -65,7 +65,7 @@
 
     <!-- Destino -->
     <ion-item>
-      <ion-label position="stacked">Destino *</ion-label>
+      <ion-label position="floating">Destino *</ion-label>
       <ion-input
         formControlName="destino"
         type="text"
@@ -78,7 +78,7 @@
 
     <!-- Data de Início -->
     <ion-item>
-      <ion-label position="stacked">Data de Início *</ion-label>
+      <ion-label position="floating">Data de Início *</ion-label>
       <ion-input
         formControlName="dataInicio"
         type="date"
@@ -92,7 +92,7 @@
 
     <!-- Data de Fim -->
     <ion-item>
-      <ion-label position="stacked">Data de Fim *</ion-label>
+      <ion-label position="floating">Data de Fim *</ion-label>
       <ion-input
         formControlName="dataFim"
         type="date"

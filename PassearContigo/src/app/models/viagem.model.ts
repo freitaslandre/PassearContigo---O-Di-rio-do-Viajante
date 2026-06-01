@@ -60,10 +60,11 @@ export interface POI {
 
 /**
  * Custo Model
- * Registra despesas ou custos associados à viagem
+ * Registra despesas ou custos associados à viagem, dia ou POI
  */
 export interface Custo {
   id: string;
+  uidUtilizador?: string;
   descricao: string;
   valor: number;
   moeda: string;
@@ -71,6 +72,11 @@ export interface Custo {
   categoria?: string;
   pagoPor?: Colaborador;
   reembolsavel?: boolean;
+  viagemId?: string;
+  diaId?: string;
+  poiId?: string;
+  criadoEm?: Date;
+  atualizadoEm?: Date;
 }
 
 /**

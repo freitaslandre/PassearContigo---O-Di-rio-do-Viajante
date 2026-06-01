@@ -55,7 +55,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-item>
-          <ion-label position="stacked">Nota</ion-label>
+          <ion-label position="floating">Nota</ion-label>
           <ion-input
             [(ngModel)]="poiEditavel.nota"
             placeholder="Nota sobre este POI"
@@ -64,7 +64,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="stacked">Custo (€)</ion-label>
+          <ion-label position="floating">Custo (€)</ion-label>
           <ion-input
             [(ngModel)]="poiEditavel.custo"
             placeholder="Custo em euros"
