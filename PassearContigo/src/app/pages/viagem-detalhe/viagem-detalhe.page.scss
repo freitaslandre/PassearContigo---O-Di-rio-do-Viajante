@@ -7,6 +7,12 @@
   gap: 1rem;
 }
 
+.back-button {
+  --color: var(--ion-color-primary-contrast);
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
 .detalhe-layout {
   display: flex;
   flex-direction: column;
