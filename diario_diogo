@@ -166,3 +166,194 @@ Guardar apenas o URL publico da fotografia no Firestore e deixar o ficheiro real
 Usar servicos dedicados para funcionalidades externas ou nativas, deixando as paginas mais organizadas;
 Preencher automaticamente dados do POI apenas quando os campos estao vazios, para nao substituir informacao escrita pelo utilizador;
 Usar OpenStreetMap Nominatim como requisito adicional de API externa para obter informacao a partir das coordenadas GPS.
+
+
+Sessao 5 - 1 de junho de 2026
+
+Objetivo:
+Implementar persistencia offline dos Pontos de Interesse e permitir que a aplicacao continue a funcionar quando o utilizador fica sem rede.
+
+Atividades realizadas:
+
+Ativei a persistencia offline do Firestore com enableIndexedDbPersistence;
+Configurei a inicializacao da persistencia no app.module.ts atraves de APP_INITIALIZER;
+Mantive a arquitetura da aplicacao em NgModules, sem usar componentes standalone;
+Atualizei o POIService para guardar POIs localmente quando nao existe ligacao a internet;
+Usei Ionic Storage para manter uma lista de POIs pendentes de sincronizacao;
+Criei um estado de sincronizacao com informacao sobre online, offline, sincronizacao em curso e numero de POIs pendentes;
+Adicionei deteccao dos eventos online e offline do navegador;
+Implementei a sincronizacao automatica dos POIs locais com o Firestore quando a ligacao e recuperada;
+Adicionei um indicador global de estado offline usando IonBadge;
+Mostrei no badge os estados Offline, A sincronizar e quantidade de POIs por sincronizar;
+Garanti que a adicao de POIs continua a funcionar mesmo em modo offline;
+Validei a compilacao do projeto com npm run build.
+
+Problemas:
+
+Era necessario garantir que os POIs criados sem rede nao se perdiam;
+O Firestore podia falhar quando a aplicacao estivesse offline ou com ligacao instavel;
+Era necessario informar visualmente o utilizador de que existiam dados pendentes de sincronizacao;
+Foi necessario evitar que a sincronizacao duplicasse POIs ja existentes no Firestore.
+
+Solucao:
+
+Configurei a persistencia IndexedDB do Firestore no arranque da aplicacao;
+Criei uma fila local de POIs pendentes usando Ionic Storage;
+No POIService, quando nao existe rede, o POI e guardado localmente em vez de ser enviado diretamente para o Firestore;
+Quando a rede volta, o servico percorre os POIs pendentes e envia-os para o Firestore;
+Depois da sincronizacao, os POIs sincronizados sao removidos da lista local;
+Adicionei verificacao por id para impedir duplicacao de POIs;
+Usei um BehaviorSubject para expor o estado de sincronizacao ao AppComponent.
+
+Decisoes:
+
+Usar Ionic Storage para guardar dados locais simples e pendentes;
+Manter o Firestore como origem principal dos dados quando existe internet;
+Guardar localmente apenas os POIs criados offline e sincronizar depois;
+Mostrar o estado offline de forma global para o utilizador perceber o comportamento da aplicacao;
+Manter a implementacao dentro de servicos para evitar duplicar logica nas paginas.
+
+
+Sessao 6 - 1 de junho de 2026
+
+Objetivo:
+Criar a pagina Itinerario do Dia e permitir organizar os POIs de cada dia numa lista ordenada.
+
+Atividades realizadas:
+
+Criei a pagina Itinerario do Dia com modulo, routing, template, controlador e estilos;
+Configurei a rota para abrir o itinerario de um dia especifico a partir da viagem;
+Usei ActivatedRoute para obter o id da viagem e o id do dia;
+Carreguei os dados da viagem e do dia selecionado;
+Listei os POIs do dia em ordem definida pelo campo ordem;
+Adicionei botoes para navegar para o dia anterior e para o proximo dia;
+Implementei a reordenacao dos POIs com IonReorder e IonReorderGroup;
+Guardei a nova ordem dos POIs no Firestore;
+Atualizei o modelo POI para incluir o campo ordem;
+Integrei os POIs pendentes locais na listagem do itinerario;
+Calculei uma estimativa simples de distancia entre locais consecutivos;
+Mostrei o tempo estimado entre locais com base numa velocidade media a pe;
+Adicionei acessos para abrir o itinerario a partir da pagina de detalhe da viagem e da pagina de detalhe do dia;
+Validei a compilacao do projeto com npm run build.
+
+Problemas:
+
+Era necessario manter a ordem dos POIs mesmo depois de recarregar a aplicacao;
+A lista precisava de aceitar POIs vindos do Firestore e tambem POIs pendentes locais;
+Foi necessario atualizar a viagem inteira no Firestore para guardar a ordem dentro dos dias;
+Era necessario navegar entre dias sem perder o contexto da viagem;
+Alguns POIs podiam nao ter coordenadas, impedindo o calculo de distancia.
+
+Solucao:
+
+Adicionei o campo ordem aos POIs e usei esse campo para ordenar a lista;
+Ao terminar o drag-and-drop, atualizo as posicoes dos POIs e guardo os dias atualizados no Firestore;
+Usei ActivatedRoute para ler os parametros da rota e identificar viagem e dia;
+Usei os dados da viagem para descobrir o dia anterior e o dia seguinte;
+Quando existem coordenadas em dois POIs consecutivos, calculo a distancia com a formula ja existente no GeolocationService;
+Quando nao existem coordenadas suficientes, nao mostro estimativa para esse intervalo.
+
+Decisoes:
+
+Guardar a ordem diretamente no POI para manter a estrutura simples;
+Usar IonReorder por ser o componente Ionic adequado para drag-and-drop em listas;
+Manter a pagina de itinerario focada apenas na organizacao diaria dos POIs;
+Usar um calculo simples de distancia e tempo, suficiente para o requisito pedido;
+Continuar a guardar os POIs dentro dos dias da viagem.
+
+
+Sessao 7 - 1 de junho de 2026
+
+Objetivo:
+Melhorar a navegacao mobile e criar a pagina Descobrir com pesquisa de locais atraves da API OpenStreetMap Nominatim.
+
+Atividades realizadas:
+
+Corrigi a falta da seta de voltar no canto superior esquerdo em modo mobile na pagina de detalhe da viagem;
+Substitui o ion-back-button por um botao explicito com icone de voltar e chamada ao metodo voltar;
+Criei a pagina Descobrir com IonSearchbar para pesquisa de locais;
+Implementei a pesquisa de locais usando a API OpenStreetMap Nominatim;
+Criei/atualizei o NominatimService para centralizar chamadas de pesquisa e reverse geocoding;
+Adicionei cache simples para evitar chamadas repetidas a API;
+Respeitei um intervalo minimo entre pedidos ao Nominatim;
+Mostrei os resultados em IonList com nome, categoria, endereco e distancia;
+Usei a localizacao atual do utilizador para calcular a distancia ate cada resultado;
+Ordenei os resultados pela distancia quando a localizacao esta disponivel;
+Mantive a pesquisa funcional mesmo quando a distancia nao esta disponivel;
+Adicionei sugestoes de locais no formulario de adicionar POI;
+Ao selecionar uma sugestao, preencho automaticamente nome, tipo, endereco, latitude e longitude;
+Substitui chamadas diretas de reverse geocoding por chamadas ao NominatimService;
+Validei a compilacao do projeto com npm run build.
+
+Problemas:
+
+Era necessario evitar chamadas duplicadas ou demasiado frequentes a API Nominatim;
+A distancia so pode ser calculada quando o utilizador autoriza a localizacao;
+No formulario de POI, os dados da sugestao nao deviam apagar informacao escrita manualmente sem necessidade;
+Foi necessario manter a pagina Descobrir em NgModules e evitar qualquer uso de standalone;
+No mobile, o comportamento automatico do ion-back-button nao mostrava a seta pretendida.
+
+Solucao:
+
+Centralizei a comunicacao com o Nominatim num servico dedicado;
+Adicionei cache por termo pesquisado e por coordenadas;
+Usei debounce nos campos de pesquisa;
+Usei o GeolocationService para obter a posicao atual e calcular distancias;
+Quando nao existe permissao de localizacao, a lista mostra a distancia como indisponivel;
+No detalhe da viagem, implementei um botao de voltar proprio, com icone e metodo de navegacao;
+No formulario de adicionar POI, a selecao de uma sugestao preenche os principais campos do POI.
+
+Decisoes:
+
+Usar OpenStreetMap Nominatim como API externa para pesquisa e sugestoes de locais;
+Manter a logica da API fora das paginas, dentro do NominatimService;
+Mostrar resultados em IonList para manter consistencia com o Ionic;
+Calcular distancia apenas no cliente, usando coordenadas dos resultados e localizacao atual;
+Continuar a usar NgModules em todas as paginas.
+
+
+Sessao 8 - 1 de junho de 2026
+
+Objetivo:
+Permitir adicionar locais pesquisados diretamente ao itinerario de um dia e apresentar sugestoes automaticas com base nos POIs ja criados.
+
+Atividades realizadas:
+
+Adicionei um seletor na pagina Descobrir para escolher a viagem e o dia de destino;
+Carreguei as viagens do utilizador atraves do ViagensService;
+Gerei a lista de destinos possiveis a partir dos dias de cada viagem;
+Adicionei um botao de adicionar em cada resultado da pesquisa;
+Ao clicar no botao, o local pesquisado e convertido num POI;
+Guardei o POI diretamente no dia selecionado usando o POIService;
+Mantive o suporte ao fluxo offline, pois a adicao passa pelo mesmo servico de POIs;
+Defini automaticamente a proxima ordem do POI no itinerario;
+Mostrei feedback ao utilizador atraves de ToastController;
+Criei sugestoes automaticas com base nas categorias e tipos dos POIs ja adicionados;
+Mostrei as sugestoes automaticas em IonChip;
+Ao clicar numa sugestao, a pesquisa e executada automaticamente;
+Validei a compilacao do projeto com npm run build.
+
+Problemas:
+
+Era necessario escolher claramente em que viagem e dia o resultado seria guardado;
+A pagina Descobrir precisava de conhecer as viagens do utilizador sem duplicar logica do servico;
+Foi necessario garantir que o POI criado a partir da pesquisa tinha os campos principais preenchidos;
+O projeto nao suportava flatMap no alvo TypeScript configurado, causando erro de build;
+As sugestoes automaticas precisavam de ser uteis sem criar uma funcionalidade demasiado complexa.
+
+Solucao:
+
+Usei o ViagensService para subscrever as viagens do utilizador;
+Criei uma lista de destinos no formato viagem + dia para o ion-select;
+Usei o POIService.adicionarPOI para guardar o resultado como POI, mantendo o suporte offline;
+Calculei a ordem seguinte com base nos POIs ja existentes no dia;
+Substitui flatMap por reduce para manter compatibilidade com a configuracao TypeScript do projeto;
+Gerei sugestoes simples a partir dos campos categoria e tipo dos POIs existentes.
+
+Decisoes:
+
+Adicionar locais ao itinerario diretamente a partir da pagina Descobrir, evitando obrigar o utilizador a copiar dados manualmente;
+Reutilizar o POIService para preservar a mesma regra de persistencia online/offline;
+Usar categorias e tipos dos POIs existentes como base para sugestoes automaticas;
+Mostrar as sugestoes como chips por serem pequenas acoes de pesquisa rapida;
+Manter a experiencia simples: escolher dia, pesquisar local e adicionar ao itinerario.
