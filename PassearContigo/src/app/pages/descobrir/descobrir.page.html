@@ -15,6 +15,36 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-item class="destino-itinerario" *ngIf="destinosItinerario.length > 0">
+    <ion-label>Adicionar a</ion-label>
+    <ion-select
+      [(ngModel)]="destinoSelecionado"
+      interface="popover"
+      placeholder="Escolha um dia"
+    >
+      <ion-select-option
+        *ngFor="let destino of destinosItinerario"
+        [value]="destino.valor"
+      >
+        {{ destino.rotulo }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="sugestoes-automaticas" *ngIf="!pesquisou && sugestoesAutomaticas.length > 0">
+    <ion-note>Sugestões com base nos seus POIs</ion-note>
+    <div class="sugestoes-chips">
+      <ion-chip
+        button
+        *ngFor="let sugestao of sugestoesAutomaticas"
+        (click)="pesquisarSugestao(sugestao)"
+      >
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <ion-label>{{ sugestao }}</ion-label>
+      </ion-chip>
+    </div>
+  </div>
+
   <div class="search-state" *ngIf="carregando">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A pesquisar locais...</p>
@@ -42,6 +72,23 @@
         </p>
         <p>{{ local.endereco }}</p>
       </ion-label>
+      <ion-button
+        slot="end"
+        fill="clear"
+        size="small"
+        [disabled]="!destinoSelecionado || adicionandoPoiId === criarChaveResultado(local)"
+        (click)="adicionarAoItinerario(local, $event)"
+      >
+        <ion-spinner
+          *ngIf="adicionandoPoiId === criarChaveResultado(local)"
+          name="crescent"
+        ></ion-spinner>
+        <ion-icon
+          *ngIf="adicionandoPoiId !== criarChaveResultado(local)"
+          slot="icon-only"
+          name="add-circle-outline"
+        ></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

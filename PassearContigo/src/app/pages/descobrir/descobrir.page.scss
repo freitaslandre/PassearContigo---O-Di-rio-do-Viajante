@@ -11,6 +11,27 @@ ion-item {
   margin-bottom: 8px;
 }
 
+.destino-itinerario {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.sugestoes-automaticas {
+  margin-bottom: 14px;
+}
+
+.sugestoes-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.sugestoes-chips ion-chip {
+  margin: 0;
+}
+
 .resultado-meta {
   align-items: center;
   display: flex;
@@ -23,6 +44,18 @@ ion-item {
   color: var(--ion-color-medium);
   content: "•";
   margin-left: 6px;
+}
+
+ion-item ion-button[slot="end"] {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 36px;
+  width: 36px;
+}
+
+ion-item ion-button[slot="end"] ion-spinner {
+  height: 18px;
+  width: 18px;
 }
 
 .search-state,
