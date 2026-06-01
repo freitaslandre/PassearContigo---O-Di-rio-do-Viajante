@@ -529,7 +529,9 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       telefone: poi.telefone || '',
       horario: poi.horario || '',
       url: poi.url || '',
-      fotoUrl: poi.fotoUrl || ''
+      fotoUrl: poi.fotoUrl || '',
+      nota: poi.nota || '',
+      categoria: poi.categoria || ''
     };
 
     if (typeof poi.latitude === 'number') {
@@ -538,6 +540,18 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
     if (typeof poi.longitude === 'number') {
       poiPayload.longitude = poi.longitude;
+    }
+
+    if (typeof poi.custo === 'number') {
+      poiPayload.custo = poi.custo;
+    }
+
+    if (typeof poi.avaliacao === 'number') {
+      poiPayload.avaliacao = poi.avaliacao;
+    }
+
+    if (typeof poi.ordem === 'number') {
+      poiPayload.ordem = poi.ordem;
     }
 
     return poiPayload;

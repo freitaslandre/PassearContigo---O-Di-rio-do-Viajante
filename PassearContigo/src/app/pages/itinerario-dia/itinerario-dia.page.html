@@ -28,6 +28,7 @@
   <div *ngIf="!carregando && dia" class="itinerario-layout">
     <section class="day-summary">
       <ion-badge color="primary">{{ pontosOrdenados.length }} POIs</ion-badge>
+      <ion-badge *ngIf="guardandoOrdem" color="warning">A guardar ordem</ion-badge>
       <h1>{{ dia.titulo || 'Dia sem titulo' }}</h1>
       <p>{{ formatarData(dia.data) }}</p>
       <p *ngIf="dia.local">
@@ -36,12 +37,14 @@
       </p>
     </section>
 
-    <ion-list *ngIf="pontosOrdenados.length > 0" lines="none" class="timeline-list">
+    <ion-reorder-group
+      *ngIf="pontosOrdenados.length > 0"
+      [disabled]="guardandoOrdem"
+      (ionItemReorder)="reordenarPois($event)"
+      class="timeline-list"
+    >
       <ion-item
-        button
-        detail="true"
         *ngFor="let poi of pontosOrdenados; let i = index; trackBy: trackByPoiId"
-        (click)="abrirPoi(poi)"
         class="timeline-item"
       >
         <div class="timeline-marker" slot="start">
@@ -55,7 +58,10 @@
         <ion-label>
           <div class="poi-heading">
             <h2>{{ poi.nome || 'Ponto de interesse sem nome' }}</h2>
-            <ion-badge color="medium">{{ obterHorario(poi) }}</ion-badge>
+            <div class="poi-badges">
+              <ion-badge color="medium">{{ obterHorario(poi) }}</ion-badge>
+              <ion-badge *ngIf="temOrdemManual(poi)" color="primary">#{{ i + 1 }}</ion-badge>
+            </div>
           </div>
           <p *ngIf="poi.tipo">{{ poi.tipo }}</p>
           <p *ngIf="poi.endereco" class="poi-address">
@@ -64,8 +70,13 @@
           </p>
           <p *ngIf="poi.descricao">{{ poi.descricao }}</p>
         </ion-label>
+
+        <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)">
+          <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+        <ion-reorder slot="end"></ion-reorder>
       </ion-item>
-    </ion-list>
+    </ion-reorder-group>
 
     <ion-card *ngIf="pontosOrdenados.length === 0" class="empty-pois">
       <ion-card-content>

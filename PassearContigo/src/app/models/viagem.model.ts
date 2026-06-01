@@ -55,6 +55,7 @@ export interface POI {
   custo?: number;
   categoria?: string;
   avaliacao?: number;
+  ordem?: number;
 }
 
 /**

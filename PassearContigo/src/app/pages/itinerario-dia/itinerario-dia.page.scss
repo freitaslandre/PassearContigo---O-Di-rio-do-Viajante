@@ -94,6 +94,13 @@
   }
 }
 
+.poi-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
 .poi-address {
   display: flex;
   align-items: center;

@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ItemReorderEventDetail, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Dia, POI } from '../../models/viagem.model';
+import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
 
@@ -16,6 +17,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   diaId = '';
   dia: Dia | null = null;
   carregando = true;
+  guardandoOrdem = false;
   erro = '';
 
   private routeSub: Subscription | null = null;
@@ -25,7 +27,8 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
-    private poiService: POIService
+    private poiService: POIService,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -71,6 +74,13 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
   get pontosOrdenados(): POI[] {
     return [...(this.dia?.pontosInteresse || [])].sort((a, b) => {
+      const ordemA = this.normalizarOrdem(a.ordem);
+      const ordemB = this.normalizarOrdem(b.ordem);
+
+      if (ordemA !== ordemB) {
+        return ordemA - ordemB;
+      }
+
       const horarioA = this.normalizarHorario(a.horario);
       const horarioB = this.normalizarHorario(b.horario);
 
@@ -80,6 +90,26 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
       return (a.nome || '').localeCompare(b.nome || '', 'pt-PT', { sensitivity: 'base' });
     });
+  }
+
+  async reordenarPois(event: CustomEvent<ItemReorderEventDetail>) {
+    if (!this.dia || this.guardandoOrdem) {
+      event.detail.complete();
+      return;
+    }
+
+    const novaOrdem = event.detail.complete(this.pontosOrdenados) as POI[];
+    const pontosInteresse = novaOrdem.map((poi, index) => ({
+      ...poi,
+      ordem: index
+    }));
+
+    this.dia = {
+      ...this.dia,
+      pontosInteresse
+    };
+
+    await this.persistirOrdemPois(pontosInteresse);
   }
 
   obterFotoPoi(poi: POI): string {
@@ -97,6 +127,10 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
   trackByPoiId(index: number, poi: POI): string {
     return poi.id || String(index);
+  }
+
+  temOrdemManual(poi: POI): boolean {
+    return typeof poi.ordem === 'number';
   }
 
   private carregarDia() {
@@ -147,6 +181,52 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     };
   }
 
+  private async persistirOrdemPois(pontosInteresse: POI[]): Promise<void> {
+    this.guardandoOrdem = true;
+
+    try {
+      const viagem = await this.viagensService.getViagemByIdOnce(this.viagemId);
+
+      if (!viagem?.dias) {
+        throw new Error('Viagem nao encontrada.');
+      }
+
+      const dias = viagem.dias.map(dia => {
+        if (dia.id !== this.diaId) {
+          return dia;
+        }
+
+        return {
+          ...dia,
+          pontosInteresse: this.juntarOrdemComPoisAtuais(dia.pontosInteresse || [], pontosInteresse)
+        };
+      });
+
+      await this.viagensService.updateViagem(this.viagemId, { dias } as Partial<Viagem>);
+      await this.mostrarToast('Ordem do itinerario guardada.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao guardar ordem dos POIs:', error);
+      await this.mostrarToast(error?.message || 'Erro ao guardar ordem.', 'danger');
+    } finally {
+      this.guardandoOrdem = false;
+    }
+  }
+
+  private juntarOrdemComPoisAtuais(poisAtuais: POI[], poisOrdenados: POI[]): POI[] {
+    const ordemPorId = new Map(poisOrdenados.map((poi, index) => [poi.id, index]));
+
+    return poisAtuais
+      .map(poi => ({
+        ...poi,
+        ordem: ordemPorId.get(poi.id) ?? poi.ordem
+      }))
+      .sort((a, b) => this.normalizarOrdem(a.ordem) - this.normalizarOrdem(b.ordem));
+  }
+
+  private normalizarOrdem(ordem?: number): number {
+    return typeof ordem === 'number' ? ordem : Number.MAX_SAFE_INTEGER;
+  }
+
   private normalizarHorario(horario?: string): number {
     if (!horario?.trim()) {
       return Number.MAX_SAFE_INTEGER;
@@ -179,6 +259,15 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
       return (data as any).toDate();
     }
     return new Date(data);
+  }
+
+  private async mostrarToast(message: string, color: 'success' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 1600,
+      color
+    });
+    await toast.present();
   }
 
   private obterParametroDaRota(nome: string): string | null {
