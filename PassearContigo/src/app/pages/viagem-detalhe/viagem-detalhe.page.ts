@@ -386,47 +386,63 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         return;
       }
 
+      let alterouPois = false;
+
       this.dias.forEach(dia => {
         dia.pontosInteresse.forEach(poi => {
           if (!this.temCoordenadas(poi)) {
             poi.latitude = position.coords.latitude;
             poi.longitude = position.coords.longitude;
+            alterouPois = true;
           }
         });
       });
 
-      await this.preencherDadosDosPoisComSugestaoNominatim(position.coords.latitude, position.coords.longitude);
+      const alterouSugestoes = await this.preencherDadosDosPoisComSugestaoNominatim(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      if (alterouPois || alterouSugestoes) {
+        await this.persistirDias();
+      }
     } catch (error) {
       console.warn('Nao foi possivel obter coordenadas GPS ao abrir o formulario de POI:', error);
     }
   }
 
-  private async preencherDadosDosPoisComSugestaoNominatim(latitude: number, longitude: number) {
+  private async preencherDadosDosPoisComSugestaoNominatim(latitude: number, longitude: number): Promise<boolean> {
     const temPoiSemDados = this.dias.some(dia =>
       dia.pontosInteresse.some(poi => !poi.endereco?.trim() || !poi.nome?.trim())
     );
 
     if (!temPoiSemDados) {
-      return;
+      return false;
     }
 
     const sugestoes = await this.obterSugestoesPorReverseGeocoding(latitude, longitude);
 
     if (!sugestoes) {
-      return;
+      return false;
     }
+
+    let alterouPois = false;
 
     this.dias.forEach(dia => {
       dia.pontosInteresse.forEach(poi => {
         if (!poi.nome?.trim() && sugestoes.nomeSugerido) {
           poi.nome = sugestoes.nomeSugerido;
+          alterouPois = true;
         }
 
         if (!poi.endereco?.trim() && sugestoes.endereco) {
           poi.endereco = sugestoes.endereco;
+          alterouPois = true;
         }
       });
     });
+
+    return alterouPois;
   }
 
   private async aplicarSugestoesNominatimAoPoi(poi: POI) {
