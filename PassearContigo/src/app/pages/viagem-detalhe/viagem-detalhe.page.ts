@@ -288,7 +288,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
       poi.latitude = position.coords.latitude;
       poi.longitude = position.coords.longitude;
-      poi.endereco = await this.obterEnderecoPorReverseGeocoding(poi.latitude, poi.longitude, poi.endereco);
+      await this.aplicarSugestoesNominatimAoPoi(poi);
 
       await this.persistirDias();
       await this.mostrarToast('Localizacao associada ao POI.', 'success');
@@ -395,46 +395,66 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         });
       });
 
-      await this.preencherEnderecoDosPoisSemEndereco(position.coords.latitude, position.coords.longitude);
+      await this.preencherDadosDosPoisComSugestaoNominatim(position.coords.latitude, position.coords.longitude);
     } catch (error) {
       console.warn('Nao foi possivel obter coordenadas GPS ao abrir o formulario de POI:', error);
     }
   }
 
-  private async preencherEnderecoDosPoisSemEndereco(latitude: number, longitude: number) {
-    const temPoiSemEndereco = this.dias.some(dia =>
-      dia.pontosInteresse.some(poi => !poi.endereco?.trim())
+  private async preencherDadosDosPoisComSugestaoNominatim(latitude: number, longitude: number) {
+    const temPoiSemDados = this.dias.some(dia =>
+      dia.pontosInteresse.some(poi => !poi.endereco?.trim() || !poi.nome?.trim())
     );
 
-    if (!temPoiSemEndereco) {
+    if (!temPoiSemDados) {
       return;
     }
 
-    const endereco = await this.obterEnderecoPorReverseGeocoding(latitude, longitude);
+    const sugestoes = await this.obterSugestoesPorReverseGeocoding(latitude, longitude);
 
-    if (!endereco) {
+    if (!sugestoes) {
       return;
     }
 
     this.dias.forEach(dia => {
       dia.pontosInteresse.forEach(poi => {
-        if (!poi.endereco?.trim()) {
-          poi.endereco = endereco;
+        if (!poi.nome?.trim() && sugestoes.nomeSugerido) {
+          poi.nome = sugestoes.nomeSugerido;
+        }
+
+        if (!poi.endereco?.trim() && sugestoes.endereco) {
+          poi.endereco = sugestoes.endereco;
         }
       });
     });
   }
 
-  private async obterEnderecoPorReverseGeocoding(latitude: number, longitude: number, enderecoAtual = ''): Promise<string> {
-    if (enderecoAtual.trim()) {
-      return enderecoAtual;
+  private async aplicarSugestoesNominatimAoPoi(poi: POI) {
+    if (!this.temCoordenadas(poi)) {
+      return;
     }
 
+    const sugestoes = await this.obterSugestoesPorReverseGeocoding(poi.latitude!, poi.longitude!);
+
+    if (!sugestoes) {
+      return;
+    }
+
+    if (!poi.nome?.trim() && sugestoes.nomeSugerido) {
+      poi.nome = sugestoes.nomeSugerido;
+    }
+
+    if (!poi.endereco?.trim() && sugestoes.endereco) {
+      poi.endereco = sugestoes.endereco;
+    }
+  }
+
+  private async obterSugestoesPorReverseGeocoding(latitude: number, longitude: number) {
     try {
-      return await this.nominatimService.obterEnderecoPorCoordenadas(latitude, longitude);
+      return await this.nominatimService.obterDetalhesPorCoordenadas(latitude, longitude);
     } catch (error) {
       console.warn('Reverse geocoding Nominatim falhou:', error);
-      return '';
+      return null;
     }
   }
 
