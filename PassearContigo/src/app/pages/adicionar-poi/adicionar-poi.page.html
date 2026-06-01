@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/viagens"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adicionar POI</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #poiForm="ngForm" (ngSubmit)="adicionarPoi()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Dados do POI</ion-card-title>
+        <ion-card-subtitle *ngIf="diaTitulo">Dia: {{ diaTitulo }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nome *</ion-label>
+          <ion-input
+            name="nome"
+            [(ngModel)]="poi.nome"
+            required
+            type="text"
+            placeholder="Nome do ponto de interesse"
+          ></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="poiForm.submitted && !poi.nome?.trim()">
+          <small>Nome é obrigatório.</small>
+        </ion-text>
+
+        <ion-item>
+          <ion-label position="floating">Descrição</ion-label>
+          <ion-input
+            name="descricao"
+            [(ngModel)]="poi.descricao"
+            type="text"
+            placeholder="Descrição opcional"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Tipo</ion-label>
+          <ion-input
+            name="tipo"
+            [(ngModel)]="poi.tipo"
+            type="text"
+            placeholder="Ex: Museu, Restaurante"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Endereço</ion-label>
+          <ion-input
+            name="endereco"
+            [(ngModel)]="poi.endereco"
+            type="text"
+            placeholder="Endereço ou local"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Telefone</ion-label>
+          <ion-input
+            name="telefone"
+            [(ngModel)]="poi.telefone"
+            type="tel"
+            placeholder="Telefone"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Horário</ion-label>
+          <ion-input
+            name="horario"
+            [(ngModel)]="poi.horario"
+            type="text"
+            placeholder="Horário de abertura"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">URL</ion-label>
+          <ion-input
+            name="url"
+            [(ngModel)]="poi.url"
+            type="url"
+            placeholder="Site ou referência"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Latitude</ion-label>
+          <ion-input
+            name="latitude"
+            [(ngModel)]="poi.latitude"
+            type="number"
+            step="any"
+            placeholder="Latitude"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Longitude</ion-label>
+          <ion-input
+            name="longitude"
+            [(ngModel)]="poi.longitude"
+            type="number"
+            step="any"
+            placeholder="Longitude"
+          ></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="button-group">
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!poiForm.form.valid"
+      >
+        <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+        Adicionar POI
+      </ion-button>
+      <ion-button
+        expand="block"
+        color="medium"
+        fill="outline"
+        type="button"
+        (click)="cancelar()"
+      >
+        <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

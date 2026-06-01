@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'dias/:diaId',
     loadChildren: () => import('./../../pages/dia-detalhe/dia-detalhe.module').then(m => m.DiaDetalhePageModule)
+  },
+  {
+    path: 'dias/:diaId/adicionar-poi',
+    loadChildren: () => import('./../adicionar-poi/adicionar-poi.module').then(m => m.AdicionarPoiPageModule)
   }
 ];
 
