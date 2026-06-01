@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ViagensService } from './viagens.service';
 import { POI, Viagem } from '../models/viagem.model';
 import { StorageService } from './storage.service';
@@ -8,6 +9,12 @@ interface PoiLocalPendente {
   diaId: string;
   poi: POI;
   criadoEm: string;
+}
+
+export interface EstadoSincronizacaoPoi {
+  online: boolean;
+  sincronizando: boolean;
+  pendentes: number;
 }
 
 /**
@@ -21,16 +28,30 @@ interface PoiLocalPendente {
 export class POIService {
   private readonly poisPendentesKey = 'pois_pendentes_offline';
   private sincronizacaoEmCurso = false;
+  private readonly estadoSincronizacaoSubject = new BehaviorSubject<EstadoSincronizacaoPoi>({
+    online: this.temRede(),
+    sincronizando: false,
+    pendentes: 0
+  });
+
+  estadoSincronizacao$ = this.estadoSincronizacaoSubject.asObservable();
 
   constructor(
     private viagensService: ViagensService,
     private storageService: StorageService
   ) {
     if (typeof window !== 'undefined') {
+      window.addEventListener('offline', () => {
+        this.atualizarEstadoSincronizacao({ online: false });
+      });
+
       window.addEventListener('online', () => {
+        this.atualizarEstadoSincronizacao({ online: true });
         this.sincronizarPoisPendentes();
       });
     }
+
+    this.atualizarContagemPendentes();
 
     if (this.temRede()) {
       this.sincronizarPoisPendentes();
@@ -49,30 +70,8 @@ export class POIService {
       return;
     }
 
-    const viagem = await this.viagensService.getViagemByIdOnce(viagemId);
-    
-    if (!viagem || !viagem.dias) {
-      throw new Error('Viagem não encontrada.');
-    }
-
-    const dia = viagem.dias.find(d => d.id === diaId);
-    if (!dia) {
-      throw new Error('Dia não encontrado.');
-    }
-
-    const diasAtualizados = viagem.dias.map(d => {
-      if (d.id !== diaId) {
-        return d;
-      }
-
-      return {
-        ...d,
-        pontosInteresse: [...(d.pontosInteresse || []), poi]
-      };
-    });
-
     try {
-      await this.viagensService.updateViagem(viagemId, { dias: diasAtualizados });
+      await this.adicionarPoiNoFirestore(viagemId, diaId, poi);
     } catch (error) {
       if (this.ehErroDeRede(error)) {
         await this.guardarPoiLocalmente(viagemId, diaId, poi);
@@ -231,6 +230,10 @@ export class POIService {
     return dia?.pontosInteresse?.find(poi => poi.id === poiId) || poiLocal;
   }
 
+  async obterPOIsLocaisPendentesPorDia(viagemId: string, diaId: string): Promise<POI[]> {
+    return this.obterPoisLocaisPorDia(viagemId, diaId);
+  }
+
   private async guardarPoiLocalmente(viagemId: string, diaId: string, poi: POI): Promise<void> {
     const pendentes = await this.obterPoisPendentes();
     const existe = pendentes.some(item =>
@@ -249,14 +252,19 @@ export class POIService {
     }
 
     await this.storageService.setItem(this.poisPendentesKey, pendentes);
+    this.atualizarEstadoSincronizacao({ pendentes: pendentes.length });
   }
 
-  private async sincronizarPoisPendentes(): Promise<void> {
+  async sincronizarPoisPendentes(): Promise<void> {
     if (this.sincronizacaoEmCurso || !this.temRede()) {
       return;
     }
 
     this.sincronizacaoEmCurso = true;
+    this.atualizarEstadoSincronizacao({
+      online: true,
+      sincronizando: true
+    });
 
     try {
       const pendentes = await this.obterPoisPendentes();
@@ -272,8 +280,13 @@ export class POIService {
       }
 
       await this.storageService.setItem(this.poisPendentesKey, aindaPendentes);
+      this.atualizarEstadoSincronizacao({ pendentes: aindaPendentes.length });
     } finally {
       this.sincronizacaoEmCurso = false;
+      this.atualizarEstadoSincronizacao({
+        online: this.temRede(),
+        sincronizando: false
+      });
     }
   }
 
@@ -319,6 +332,18 @@ export class POIService {
   private async obterPoisPendentes(): Promise<PoiLocalPendente[]> {
     const pendentes = await this.storageService.getItem(this.poisPendentesKey);
     return Array.isArray(pendentes) ? pendentes : [];
+  }
+
+  private async atualizarContagemPendentes(): Promise<void> {
+    const pendentes = await this.obterPoisPendentes();
+    this.atualizarEstadoSincronizacao({ pendentes: pendentes.length });
+  }
+
+  private atualizarEstadoSincronizacao(estado: Partial<EstadoSincronizacaoPoi>): void {
+    this.estadoSincronizacaoSubject.next({
+      ...this.estadoSincronizacaoSubject.value,
+      ...estado
+    });
   }
 
   private juntarPoisSemDuplicados(poisRemotos: POI[], poisLocais: POI[]): POI[] {

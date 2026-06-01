@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
+import { POIService } from '../../services/poi.service';
 import { Dia, POI } from '../../models/viagem.model';
 
 @Component({
@@ -24,7 +25,8 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private viagensService: ViagensService
+    private viagensService: ViagensService,
+    private poiService: POIService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
 
       this.viagemSub?.unsubscribe();
       this.viagemSub = this.viagensService.getViagemById(viagemId).subscribe({
-        next: (viagem) => {
+        next: async (viagem) => {
           if (!viagem) {
             this.erro = 'Viagem não encontrada.';
             this.carregando = false;
@@ -61,7 +63,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
           const diaEncontrado = this.dias[this.diaAtualIndex];
 
           if (diaEncontrado) {
-            this.dia = diaEncontrado;
+            this.dia = await this.juntarPoisLocaisPendentes(diaEncontrado);
           } else {
             this.erro = 'Dia não encontrado.';
           }
@@ -157,6 +159,25 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
 
   private irParaDia(diaId: string) {
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', diaId]);
+  }
+
+  private async juntarPoisLocaisPendentes(dia: Dia): Promise<Dia> {
+    if (!this.viagemId) {
+      return dia;
+    }
+
+    const poisLocais = await this.poiService.obterPOIsLocaisPendentesPorDia(this.viagemId, dia.id);
+    const idsRemotos = new Set((dia.pontosInteresse || []).map(poi => poi.id));
+    const poisLocaisNovos = poisLocais.filter(poi => !idsRemotos.has(poi.id));
+
+    if (poisLocaisNovos.length === 0) {
+      return dia;
+    }
+
+    return {
+      ...dia,
+      pontosInteresse: [...(dia.pontosInteresse || []), ...poisLocaisNovos]
+    };
   }
 
   private obterTimestampData(data: Date | string | any): number {

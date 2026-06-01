@@ -1,0 +1,8 @@
+.offline-badge {
+  position: fixed;
+  top: calc(var(--ion-safe-area-top, 0px) + 10px);
+  right: 12px;
+  z-index: 10000;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}

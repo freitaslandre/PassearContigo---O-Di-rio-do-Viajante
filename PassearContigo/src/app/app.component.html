@@ -1,3 +1,17 @@
 <ion-app>
+  <ng-container *ngIf="estadoSincronizacao$ | async as estado">
+    <ion-badge
+      *ngIf="!estado.online || estado.pendentes > 0 || estado.sincronizando"
+      class="offline-badge"
+      [color]="estado.online ? 'warning' : 'danger'"
+    >
+      <ng-container *ngIf="!estado.online">Offline</ng-container>
+      <ng-container *ngIf="estado.online && estado.sincronizando">A sincronizar</ng-container>
+      <ng-container *ngIf="estado.online && !estado.sincronizando && estado.pendentes > 0">
+        {{ estado.pendentes }} por sincronizar
+      </ng-container>
+    </ion-badge>
+  </ng-container>
+
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
