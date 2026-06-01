@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 import { ViagensService } from '../../services/viagens.service';
+import { POIService } from '../../services/poi.service';
 import { POI } from '../../models/viagem.model';
 
 @Component({
@@ -20,7 +22,11 @@ export class AdicionarPoiPage implements OnInit {
     horario: '',
     url: '',
     latitude: undefined,
-    longitude: undefined
+    longitude: undefined,
+    nota: '',
+    custo: undefined,
+    categoria: '',
+    avaliacao: 0
   };
 
   viagemId: string | null = null;
@@ -31,9 +37,11 @@ export class AdicionarPoiPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private poiService: POIService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -54,6 +62,51 @@ export class AdicionarPoiPage implements OnInit {
 
     const dia = viagem.dias.find(d => d.id === this.diaId);
     this.diaTitulo = dia?.titulo || '';
+  }
+
+  async atualizarNomePorGeolocalizacao() {
+    const latitude = this.poi.latitude;
+    const longitude = this.poi.longitude;
+
+    // Validar que ambos os valores estão preenchidos
+    if (latitude === undefined || latitude === null ||
+        longitude === undefined || longitude === null) {
+      return;
+    }
+
+    try {
+      const lat = Number(latitude);
+      const lng = Number(longitude);
+
+      if (Number.isNaN(lat) || Number.isNaN(lng)) {
+        return;
+      }
+
+      // Usar API Nominatim (OpenStreetMap) para obter o nome do lugar
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+      
+      const response = await this.http.get<any>(url).toPromise();
+      
+      if (response && response.address) {
+        // Tentar obter o nome mais apropriado (em ordem de preferência)
+        const nome = response.address.poi ||
+                     response.address.amenity ||
+                     response.address.tourism ||
+                     response.address.historic ||
+                     response.address.leisure ||
+                     response.address.name ||
+                     response.address.road ||
+                     response.display_name?.split(',')[0] ||
+                     'Local';
+        
+        if (!this.poi.nome || this.poi.nome.trim() === '') {
+          this.poi.nome = nome.trim();
+        }
+      }
+    } catch (error) {
+      // Silenciosamente ignorar erros de geolocalização
+      console.debug('Erro ao obter geolocalização:', error);
+    }
   }
 
   async adicionarPoi() {
@@ -77,16 +130,6 @@ export class AdicionarPoiPage implements OnInit {
     await loader.present();
 
     try {
-      const viagem = await this.viagensService.getViagemByIdOnce(this.viagemId);
-      if (!viagem || !viagem.dias) {
-        throw new Error('Viagem ou dia não encontrado.');
-      }
-
-      const dia = viagem.dias.find(d => d.id === this.diaId);
-      if (!dia) {
-        throw new Error('Dia não encontrado.');
-      }
-
       const novoPoi: POI = {
         id: `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         nome: this.poi.nome.trim(),
@@ -95,8 +138,18 @@ export class AdicionarPoiPage implements OnInit {
         endereco: this.poi.endereco?.trim() || undefined,
         telefone: this.poi.telefone?.trim() || undefined,
         horario: this.poi.horario?.trim() || undefined,
-        url: this.poi.url?.trim() || undefined
+        url: this.poi.url?.trim() || undefined,
+        nota: this.poi.nota?.trim() || undefined,
+        categoria: this.poi.categoria?.trim() || undefined,
+        avaliacao: this.poi.avaliacao ? Number(this.poi.avaliacao) : undefined
       };
+
+      if (this.poi.custo !== undefined && this.poi.custo !== null) {
+        const custValue = Number(this.poi.custo);
+        if (!Number.isNaN(custValue)) {
+          novoPoi.custo = custValue;
+        }
+      }
 
       const latitudeValue = this.poi.latitude;
       if (latitudeValue !== undefined && latitudeValue !== null) {
@@ -120,18 +173,9 @@ export class AdicionarPoiPage implements OnInit {
         }
       }
 
-      const diasAtualizados = viagem.dias.map(d => {
-        if (d.id !== this.diaId) {
-          return d;
-        }
-
-        return {
-          ...d,
-          pontosInteresse: [...(d.pontosInteresse || []), novoPoi]
-        };
-      });
-
-      await this.viagensService.updateViagem(this.viagemId, { dias: diasAtualizados });
+      // Usar POIService para guardar no Firestore
+      await this.poiService.adicionarPOI(this.viagemId, this.diaId, novoPoi);
+      
       await loader.dismiss();
 
       const toast = await this.toastCtrl.create({

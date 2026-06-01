@@ -7,3 +7,13 @@
 ion-card {
   margin-bottom: 1rem;
 }
+
+.stars-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+}

@@ -95,6 +95,7 @@
           <ion-input
             name="latitude"
             [(ngModel)]="poi.latitude"
+            (ngModelChange)="atualizarNomePorGeolocalizacao()"
             type="number"
             step="any"
             placeholder="Latitude"
@@ -106,10 +107,64 @@
           <ion-input
             name="longitude"
             [(ngModel)]="poi.longitude"
+            (ngModelChange)="atualizarNomePorGeolocalizacao()"
             type="number"
             step="any"
             placeholder="Longitude"
           ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Nota</ion-label>
+          <ion-input
+            name="nota"
+            [(ngModel)]="poi.nota"
+            type="text"
+            placeholder="Notas pessoais sobre o POI"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Custo (€)</ion-label>
+          <ion-input
+            name="custo"
+            [(ngModel)]="poi.custo"
+            type="number"
+            step="0.01"
+            placeholder="Custo em euros"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Categoria</ion-label>
+          <ion-select
+            name="categoria"
+            [(ngModel)]="poi.categoria"
+            placeholder="Selecione uma categoria"
+          >
+            <ion-select-option value="gastronomia">Gastronomia</ion-select-option>
+            <ion-select-option value="cultura">Cultura</ion-select-option>
+            <ion-select-option value="natureza">Natureza</ion-select-option>
+            <ion-select-option value="aventura">Aventura</ion-select-option>
+            <ion-select-option value="compras">Compras</ion-select-option>
+            <ion-select-option value="hospedagem">Hospedagem</ion-select-option>
+            <ion-select-option value="outro">Outro</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Avaliação (Estrelas)</ion-label>
+          <div slot="end" class="stars-container">
+            <ion-button
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              fill="clear"
+              size="small"
+              (click)="poi.avaliacao = star"
+              [color]="star <= (poi.avaliacao || 0) ? 'warning' : 'medium'"
+            >
+              <ion-icon slot="icon-only" name="star"></ion-icon>
+            </ion-button>
+          </div>
         </ion-item>
       </ion-card-content>
     </ion-card>

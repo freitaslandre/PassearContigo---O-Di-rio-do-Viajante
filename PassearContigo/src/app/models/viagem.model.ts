@@ -51,6 +51,10 @@ export interface POI {
   horario?: string;
   url?: string;
   fotoUrl?: string;
+  nota?: string;
+  custo?: number;
+  categoria?: string;
+  avaliacao?: number;
 }
 
 /**
