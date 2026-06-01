@@ -142,16 +142,34 @@
 
 .poi-row {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 84px 1fr;
   gap: 0.75rem;
   align-items: start;
 }
 
+.poi-photo-tools {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+
 .poi-thumbnail {
-  width: 64px;
-  height: 64px;
+  width: 76px;
+  height: 76px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.poi-photo-actions {
+  display: flex;
+  gap: 0.25rem;
+
+  ion-button {
+    width: 32px;
+    height: 32px;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
 }
 
 .poi-fields,

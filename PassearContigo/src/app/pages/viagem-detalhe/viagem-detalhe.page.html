@@ -218,11 +218,34 @@
             <h3>Pontos de interesse</h3>
 
             <div class="poi-row" *ngFor="let poi of dia.pontosInteresse; let poiIndex = index">
-              <img
-                class="poi-thumbnail"
-                [src]="obterFotoPoi(poi)"
-                [alt]="poi.nome || 'Ponto de interesse'"
-              >
+              <div class="poi-photo-tools">
+                <img
+                  class="poi-thumbnail"
+                  [src]="obterFotoPoi(poi)"
+                  [alt]="poi.nome || 'Ponto de interesse'"
+                >
+                <div class="poi-photo-actions">
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    color="primary"
+                    (click)="tirarFotoPoi(dia, poi)"
+                    [disabled]="fotoPoiAEnviar(dia.id, poi)"
+                  >
+                    <ion-spinner *ngIf="fotoPoiAEnviar(dia.id, poi)" name="crescent" slot="icon-only"></ion-spinner>
+                    <ion-icon *ngIf="!fotoPoiAEnviar(dia.id, poi)" slot="icon-only" name="camera-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    color="medium"
+                    (click)="escolherFotoPoiDaGaleria(dia, poi)"
+                    [disabled]="fotoPoiAEnviar(dia.id, poi)"
+                  >
+                    <ion-icon slot="icon-only" name="images-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
 
               <div class="poi-fields">
                 <ion-item lines="none">

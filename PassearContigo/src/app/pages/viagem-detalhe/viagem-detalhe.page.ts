@@ -4,6 +4,8 @@ import { AlertController, NavController, ToastController } from '@ionic/angular'
 import { Subscription } from 'rxjs';
 import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
+import { CameraService } from '../../services/camera.service';
+import { FirebaseStorageService } from '../../services/firebase-storage.service';
 
 interface DiaViewModel {
   id: string;
@@ -30,6 +32,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   guardando = false;
   eliminando = false;
   erro = '';
+  fotosPoiAEnviar: Record<string, boolean> = {};
 
   titulo = '';
   descricao = '';
@@ -45,6 +48,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private cameraService: CameraService,
+    private firebaseStorageService: FirebaseStorageService,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController
@@ -234,6 +239,30 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     return poi.fotoUrl || 'assets/icon/favicon.png';
   }
 
+  fotoPoiAEnviar(diaId: string, poi: POI): boolean {
+    return !!this.fotosPoiAEnviar[this.obterChaveFotoPoi(diaId, poi)];
+  }
+
+  async tirarFotoPoi(dia: DiaViewModel, poi: POI) {
+    const foto = await this.cameraService.takePicture();
+    if (!foto) {
+      await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
+      return;
+    }
+
+    await this.guardarFotoPoi(dia, poi, foto);
+  }
+
+  async escolherFotoPoiDaGaleria(dia: DiaViewModel, poi: POI) {
+    const foto = await this.cameraService.selectPictureFromGallery();
+    if (!foto) {
+      await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
+      return;
+    }
+
+    await this.guardarFotoPoi(dia, poi, foto);
+  }
+
   get totalPois(): number {
     return this.dias.reduce((total, dia) => total + dia.pontosInteresse.length, 0);
   }
@@ -266,6 +295,35 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         this.erro = err?.message || 'Erro ao carregar viagem.';
         console.error('Erro ao carregar viagem:', err);
       }
+    });
+  }
+
+  private async guardarFotoPoi(dia: DiaViewModel, poi: POI, dataUrl: string) {
+    if (!this.viagem) return;
+
+    poi.id = poi.id || this.gerarIdPoi();
+    const chave = this.obterChaveFotoPoi(dia.id, poi);
+    this.fotosPoiAEnviar[chave] = true;
+
+    try {
+      const downloadUrl = await this.firebaseStorageService.uploadPoiPhoto(this.viagem.id, dia.id, poi.id, dataUrl);
+      poi.fotoUrl = downloadUrl;
+
+      await this.persistirDias();
+      await this.mostrarToast('Foto do POI guardada com sucesso.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao guardar foto do POI:', error);
+      await this.mostrarToast(error?.message || 'Erro ao guardar foto do POI.', 'danger');
+    } finally {
+      delete this.fotosPoiAEnviar[chave];
+    }
+  }
+
+  private async persistirDias() {
+    if (!this.viagem) return;
+
+    await this.viagensService.updateViagem(this.viagem.id, {
+      dias: this.dias.map((dia, index) => this.converterDiaParaModel(dia, index))
     });
   }
 
@@ -360,6 +418,14 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     const date = new Date(data);
     date.setDate(date.getDate() + 1);
     return this.formatarDataInput(date);
+  }
+
+  private obterChaveFotoPoi(diaId: string, poi: POI): string {
+    return `${diaId}-${poi.id || poi.nome || 'poi'}`;
+  }
+
+  private gerarIdPoi(): string {
+    return `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
   private async mostrarToast(message: string, color: 'success' | 'warning' | 'danger') {
