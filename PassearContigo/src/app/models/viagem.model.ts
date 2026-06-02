@@ -79,15 +79,18 @@ export interface Custo {
   atualizadoEm?: Date;
 }
 
+export type NivelAcessoColaborador = 'dono' | 'editor' | 'visualizador';
+
 /**
  * Colaborador Model
  * Representa uma pessoa responsável ou participante da viagem
  */
 export interface Colaborador {
-  id: string;
-  nome: string;
-  email?: string;
+  id?: string;
+  uid: string;
+  nome?: string;
+  email: string;
   telefone?: string;
-  papel?: string;
+  nivelAcesso: NivelAcessoColaborador;
   avatarUrl?: string;
 }
