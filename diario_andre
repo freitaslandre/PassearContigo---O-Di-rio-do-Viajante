@@ -239,3 +239,46 @@ Decisões:
 Consistência Técnica: Manter a arquitetura baseada em NgModules e formulários estruturados em `ngModel` para garantir total compatibilidade com o código legado da aplicação.
 Modelagem de Dados: Manter os POIs aninhados dentro da estrutura de viagens no Firestore, evitando a complexidade de coleções separadas.
 Experiência do Utilizador (UX): Priorizar o uso de APIs secundárias sem bloquear a app em caso de falha de rede e garantir sempre feedback visual imediato para ações críticas do utilizador.
+
+
+
+Sessão 9 — 2 de junho de 2026
+Objetivo:
+Implementar identificadores visuais (badges com iniciais) nos Pontos de Interesse para indicar qual colaborador adicionou cada POI, permitindo rastreabilidade e transparência na colaboração em tempo real, com atualização automática através de subscrições Firestore.
+Atividades realizadas:
+
+Extensão do modelo `POI` em `src/app/models/viagem.model.ts` com novos campos de colaborador: `colaboradorUid`, `colaboradorNome` e `colaboradorEmail`, garantindo persistência de metadados de autoria;
+Atualização do serviço `adicionar-poi.page.ts` para capturar automaticamente o utilizador autenticado via `getAuth().currentUser` no momento de criação do POI, preenchendo os campos de colaborador antes de persistir no Firestore;
+Integração da captura de autoria no serviço `descobrir.page.ts` para POIs adicionados a partir da página de descoberta, mantendo consistência de rastreabilidade;
+Adição de campos de colaborador ao `dia-detalhe.page.ts` com carregamento de lista de colaboradores desde o objeto `viagem.colaboradores`, implementação de métodos auxiliares (`obterColaboradorPorPoi`, `obterColaboradorLabel`, `obterInicialColaborador`) para resolução de nomes e cálculo de iniciais;
+Atualização do template `dia-detalhe.page.html` com badge visual (`.poi-collaborator-badge`) que exibe as iniciais do colaborador no item de lista de POIs, com tooltip indicando nome completo;
+Adição de estilos em `dia-detalhe.page.scss` para o badge com background de cor secundária, border-radius circular e positioning flexível;
+Replicação da funcionalidade no `itinerario-dia.page.ts` e template correspondente, incluindo os mesmos métodos auxiliares e badge visual integrado nas badges de POI;
+Atualização dos estilos em `itinerario-dia.page.scss` com classe `.poi-collaborator-badge` e adaptação responsive para dispositivos móveis;
+Adição de chip informativo em `detalhe-poi.page.html` exibindo "Adicionado por [Nome]" no topo da página de detalhe com `ion-chip` e cor `secondary`;
+Implementação do método `obterColaboradorLabel` em `detalhe-poi.page.ts` para obtenção consistente do nome de colaborador;
+Adição de novo estilo `.poi-author-chip` em `detalhe-poi.page.scss` para positioning e margem;
+Atualização de dependências com `npm install` para resolver erros de compilação relacionados com módulo `leaflet` ausente.
+
+Problemas:
+
+Módulo `leaflet` não encontrado durante a compilação (`Cannot find module 'leaflet'`), causado por node_modules obsoleto ou cache de build desatualizado;
+Necessidade de sincronização entre metadados de colaborador em múltiplas páginas (dia-detalhe, itinerario-dia, detalhe-poi) para evitar duplicação de lógica;
+Resolução de nomes de colaboradores dependente tanto de dados locais (`viagem.colaboradores`) quanto de fallback para dados inline (`poi.colaboradorNome`, `poi.colaboradorEmail`);
+Alinhamento visual e responsive design do badge em diferentes tamanhos de ecrã.
+
+Solução:
+
+Execução de `npm ci` para reinstalação limpa de dependências, seguida de `npm install` para sincronizar package-lock.json com versões atualizadas de `leaflet` e `@types/leaflet`;
+Criação de métodos auxiliares centralizados (`obterColaboradorPorPoi`, `obterColaboradorLabel`, `obterInicialColaborador`) replicados em cada página para garantir coesão visual e comportamental;
+Implementação de fallback em cascata no método `obterColaboradorLabel`: primeiro tenta colaborador resolvido de `viagem.colaboradores`, depois tenta dados inline de `poi`, finalmente retorna string vazia se sem autoria;
+Adição de classe `.poi-collaborator-badge` com estilo flexível e adaptável a diferentes contextos (dia-detalhe usa `span`, itinerario-dia usa `ion-badge`), com media queries para mobile;
+Revisão de tsconfig.json e angular.json para garantir que caminhos de import estão resolvidos corretamente.
+
+Decisões:
+
+Armazenar metadados de colaborador diretamente no objeto `POI` durante criação para garantir rastreabilidade persistente e offline, sem dependência de lookup dinâmico no momento de renderização;
+Manter referência tanto ao `uid` quanto ao nome/email no POI para suportar resolução via lista local e fallback para dados anteriormente gravados;
+Usar iniciais baseadas em nome completo quando disponível, calculadas a partir de primeiros caracteres de cada palavra para optimização de espaço visual;
+Aplicar badge em dois contextos principais (lista de dia e itinerário), com variações de estilo apropriadas a cada container (`span` vs `ion-badge`);
+Implementar tooltips (`[title]`) para revelar nome completo ao hover, preservando espaço e limpeza visual da interface.
