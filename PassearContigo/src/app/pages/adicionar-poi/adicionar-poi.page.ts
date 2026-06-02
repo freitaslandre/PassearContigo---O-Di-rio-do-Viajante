@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI } from '../../models/viagem.model';
+import * as L from 'leaflet';
 
 @Component({
   standalone: false,
@@ -12,7 +13,7 @@ import { POI } from '../../models/viagem.model';
   templateUrl: './adicionar-poi.page.html',
   styleUrls: ['./adicionar-poi.page.scss']
 })
-export class AdicionarPoiPage implements OnInit {
+export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   poi: Partial<POI> & { latitude?: string | number; longitude?: string | number } = {
     nome: '',
     descricao: '',
@@ -37,6 +38,11 @@ export class AdicionarPoiPage implements OnInit {
   erroSugestoes = '';
   private pesquisaSugestaoAtual = 0;
 
+  private map: L.Map | null = null;
+  private marker: L.Marker | null = null;
+  private defaultLat = 40.7128;
+  private defaultLng = -74.0060;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -52,6 +58,57 @@ export class AdicionarPoiPage implements OnInit {
     this.viagemId = this.route.snapshot.paramMap.get('id');
     this.diaId = this.route.snapshot.paramMap.get('diaId');
     this.carregarDiaTitulo();
+  }
+
+  ngAfterViewInit() {
+    this.inicializarMapa();
+  }
+
+  ngOnDestroy() {
+    if (this.map) {
+      this.map.remove();
+    }
+  }
+
+  private inicializarMapa() {
+    if (this.map) return;
+
+    const lat = this.poi.latitude ? Number(this.poi.latitude) : this.defaultLat;
+    const lng = this.poi.longitude ? Number(this.poi.longitude) : this.defaultLng;
+
+    this.map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(this.map);
+
+    if (this.poi.latitude && this.poi.longitude) {
+      this.adicionarMarcador(Number(this.poi.latitude), Number(this.poi.longitude));
+    }
+
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      this.atualizarPorCliqueMapa(e.latlng.lat, e.latlng.lng);
+    });
+  }
+
+  private adicionarMarcador(lat: number, lng: number) {
+    if (this.marker) {
+      this.marker.setLatLng([lat, lng]);
+    } else {
+      this.marker = L.marker([lat, lng]).addTo(this.map!);
+    }
+
+    if (this.map) {
+      this.map.setView([lat, lng], 13);
+    }
+  }
+
+  private atualizarPorCliqueMapa(lat: number, lng: number) {
+    this.poi.latitude = lat;
+    this.poi.longitude = lng;
+    this.adicionarMarcador(lat, lng);
+    this.atualizarNomePorGeolocalizacao();
   }
 
   private async carregarDiaTitulo() {
@@ -141,6 +198,10 @@ export class AdicionarPoiPage implements OnInit {
     this.poi.longitude = local.longitude;
     this.sugestoesLocais = [];
     this.erroSugestoes = '';
+
+    if (this.map && this.marker) {
+      this.adicionarMarcador(local.latitude, local.longitude);
+    }
   }
 
   async adicionarPoi() {

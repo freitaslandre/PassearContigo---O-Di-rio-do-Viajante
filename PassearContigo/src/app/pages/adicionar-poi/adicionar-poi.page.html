@@ -91,6 +91,24 @@
           </ion-list>
         </div>
 
+        <ion-card class="mapa-card">
+          <ion-card-header>
+            <ion-card-title>Localização no Mapa</ion-card-title>
+            <ion-card-subtitle *ngIf="poi.latitude && poi.longitude">
+              📍 Clique no mapa ou selecione uma sugestão acima
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div id="map" class="map-container"></div>
+            <div *ngIf="poi.latitude && poi.longitude" class="coordenadas-info">
+              <small>Coordenadas: {{ poi.latitude | number:'1.4-4' }}, {{ poi.longitude | number:'1.4-4' }}</small>
+            </div>
+            <div *ngIf="!poi.latitude || !poi.longitude" class="coordenadas-info-empty">
+              <small>Selecione uma sugestão acima ou clique no mapa para definir a localização</small>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
         <ion-item>
           <ion-label position="stacked">Telefone</ion-label>
           <ion-input
@@ -118,30 +136,6 @@
             [(ngModel)]="poi.url"
             type="url"
             placeholder="Site ou referência"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="stacked">Latitude</ion-label>
-          <ion-input
-            name="latitude"
-            [(ngModel)]="poi.latitude"
-            (ngModelChange)="atualizarNomePorGeolocalizacao()"
-            type="number"
-            step="any"
-            placeholder="Latitude"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="stacked">Longitude</ion-label>
-          <ion-input
-            name="longitude"
-            [(ngModel)]="poi.longitude"
-            (ngModelChange)="atualizarNomePorGeolocalizacao()"
-            type="number"
-            step="any"
-            placeholder="Longitude"
           ></ion-input>
         </ion-item>
 

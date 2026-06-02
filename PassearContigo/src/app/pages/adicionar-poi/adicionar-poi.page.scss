@@ -67,5 +67,30 @@ ion-item {
   }
 }
 
+.mapa-card {
+  margin: 1rem 0;
+}
 
+.map-container {
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.coordenadas-info,
+.coordenadas-info-empty {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+}
+
+.coordenadas-info {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--ion-color-success);
+  border-radius: 4px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
 
