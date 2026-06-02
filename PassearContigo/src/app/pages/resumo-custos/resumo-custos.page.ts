@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustosService } from '../../services/custos.service';
 import { Custo } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
+import { ToastController } from '@ionic/angular';
 
 interface CustosPorCategoria {
   categoria: string;
@@ -20,6 +21,18 @@ interface SegmentoGrafico {
   dashoffset: number;
 }
 
+const CATEGORIAS_DISPONIVEIS = [
+  'Alimentação',
+  'Transporte',
+  'Hospedagem',
+  'Compras',
+  'Cultura',
+  'Natureza',
+  'Aventura',
+  'Gastronomia',
+  'Sem categoria'
+];
+
 @Component({
   selector: 'app-resumo-custos',
   standalone: false,
@@ -32,10 +45,15 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   totalGeral = 0;
   carregando = true;
   erroCarregamento = '';
+  categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
+  atualizandoCustoId: string | null = null;
   
   private unsubscribe: Unsubscribe | null = null;
 
-  constructor(private custosService: CustosService) {}
+  constructor(
+    private custosService: CustosService,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit(): void {
     this.carregarCustos();
@@ -162,5 +180,37 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
   recarregar(): void {
     this.carregarCustos();
+  }
+
+  async atualizarCategoriaCusto(custoId: string, novaCategoria: string): Promise<void> {
+    if (!novaCategoria) {
+      return;
+    }
+
+    this.atualizandoCustoId = custoId;
+    
+    try {
+      await this.custosService.updateCusto(custoId, { categoria: novaCategoria });
+      
+      const toast = await this.toastController.create({
+        message: 'Categoria atualizada com sucesso',
+        duration: 2000,
+        position: 'bottom',
+        color: 'success'
+      });
+      await toast.present();
+    } catch (erro) {
+      console.error('Erro ao atualizar categoria:', erro);
+      
+      const toast = await this.toastController.create({
+        message: 'Erro ao atualizar categoria',
+        duration: 2000,
+        position: 'bottom',
+        color: 'danger'
+      });
+      await toast.present();
+    } finally {
+      this.atualizandoCustoId = null;
+    }
   }
 }

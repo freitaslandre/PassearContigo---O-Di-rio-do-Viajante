@@ -123,4 +123,34 @@
       </ion-card-content>
     </ion-card>
   </div>
+
+  <!-- Lista de Custos com Edição de Categoria -->
+  <div *ngIf="!carregando && custos.length > 0" class="custos-lista-section">
+    <ion-card class="card-lista-custos">
+      <ion-card-header>
+        <ion-card-title>Editar Categoria dos Custos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="custos-lista">
+          <div *ngFor="let custo of custos" class="custo-item">
+            <div class="custo-info">
+              <h4>{{ custo.descricao }}</h4>
+              <p class="custo-valor">{{ formatarValor(custo.valor) }} €</p>
+            </div>
+            <div class="custo-categoria-select">
+              <ion-select
+                [value]="custo.categoria"
+                [disabled]="atualizandoCustoId === custo.id"
+                (ionChange)="atualizarCategoriaCusto(custo.id, $event.detail.value)"
+                placeholder="Sem categoria">
+                <ion-select-option *ngFor="let cat of categoriasDisponiveis" [value]="cat">
+                  {{ cat }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
