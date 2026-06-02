@@ -133,6 +133,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
           return;
         }
 
+        console.log('POI carregado:', poiEncontrado);
         this.diaAtual = dia;
         this.poi = poiEncontrado;
         this.fotoUrl = this.poi.fotoUrl || undefined;
@@ -326,7 +327,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
       const poiAtualizado = {
         ...this.poi,
         nota: this.poiEditavel.nota,
-        custo: this.poiEditavel.custo,
+        custo: this.poiEditavel.custo ? Number(this.poiEditavel.custo) : undefined,
         avaliacao: this.poiEditavel.avaliacao
       };
 

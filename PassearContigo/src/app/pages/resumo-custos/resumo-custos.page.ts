@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustosService } from '../../services/custos.service';
-import { Custo } from '../../models/viagem.model';
+import { ViagensService } from '../../services/viagens.service';
+import { Custo, Viagem, POI } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
 import { ToastController } from '@ionic/angular';
+import { firstValueFrom } from 'rxjs';
 
 interface CustosPorCategoria {
   categoria: string;
@@ -52,6 +54,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
   constructor(
     private custosService: CustosService,
+    private viagensService: ViagensService,
     private toastController: ToastController
   ) {}
 
@@ -72,6 +75,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     this.unsubscribe = this.custosService.subscribeToCustos(
       (custos: Custo[]) => {
         this.custos = custos;
+        this.adicionarCustosDosPOIs();
         this.processarCustos();
         this.carregando = false;
       },
@@ -81,6 +85,41 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
         this.carregando = false;
       }
     );
+  }
+
+  private async adicionarCustosDosPOIs(): Promise<void> {
+    try {
+      const viagens = await firstValueFrom(this.viagensService.getViagens());
+
+      viagens.forEach(viagem => {
+        if (viagem.dias) {
+          viagem.dias.forEach(dia => {
+            if (dia.pontosInteresse) {
+              dia.pontosInteresse.forEach(poi => {
+                if (poi.custo && poi.custo > 0) {
+                  const custoPOI: Custo = {
+                    id: `poi-custo-${poi.id}`,
+                    descricao: `${poi.nome} (POI)`,
+                    valor: poi.custo,
+                    moeda: 'EUR',
+                    data: new Date(dia.data),
+                    categoria: poi.categoria || 'Outro',
+                    viagemId: viagem.id,
+                    poiId: poi.id
+                  };
+
+                  if (!this.custos.find(c => c.id === custoPOI.id)) {
+                    this.custos.push(custoPOI);
+                  }
+                }
+              });
+            }
+          });
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao adicionar custos dos POIs:', error);
+    }
   }
 
   private processarCustos(): void {

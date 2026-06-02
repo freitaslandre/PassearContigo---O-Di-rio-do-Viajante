@@ -146,6 +146,13 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.dias.splice(index, 1);
   }
 
+  obterCustoDia(dia: DiaViewModel): number {
+    if (!dia.pontosInteresse) {
+      return 0;
+    }
+    return dia.pontosInteresse.reduce((total, poi) => total + (poi.custo || 0), 0);
+  }
+
   async guardar() {
     if (!this.viagem) return;
 

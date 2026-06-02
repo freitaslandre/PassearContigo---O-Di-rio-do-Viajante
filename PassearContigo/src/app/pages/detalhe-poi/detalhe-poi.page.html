@@ -211,7 +211,7 @@
           <ion-text slot="end">{{ poi.endereco }}</ion-text>
         </ion-item>
 
-        <ion-item lines="inset" *ngIf="poi.custo">
+        <ion-item lines="inset" *ngIf="poi.custo !== undefined && poi.custo !== null">
           <ion-label>
             <strong>Custo:</strong>
           </ion-label>
