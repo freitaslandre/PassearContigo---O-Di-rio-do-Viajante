@@ -129,6 +129,26 @@
   margin: 0;
 }
 
+.dia-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.dia-custo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #fff3e0;
+  border-radius: 6px;
+  border-left: 3px solid #ff9800;
+  font-weight: 600;
+  color: #ff9800;
+  white-space: nowrap;
+}
+
 .dia-footer {
   flex-wrap: wrap;
   padding-top: 0.75rem;

@@ -96,6 +96,13 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.dia.id, 'itinerario']);
   }
 
+  obterCustoDia(dia: Dia): number {
+    if (!dia.pontosInteresse) {
+      return 0;
+    }
+    return dia.pontosInteresse.reduce((total, poi) => total + (poi.custo || 0), 0);
+  }
+
   get temDiaAnterior(): boolean {
     return this.diaAtualIndex > 0;
   }
