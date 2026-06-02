@@ -60,9 +60,24 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
       this.diaId = params.get('diaId');
       this.poiId = params.get('poiId');
 
-      // Obter o ID da viagem da rota pai
-      if (this.route.parent) {
-        this.viagemId = this.route.parent.snapshot.paramMap.get('id');
+      // Tentar obter o ID da viagem dos parents
+      let currentRoute = this.route.parent;
+      while (currentRoute) {
+        const idFromParent = currentRoute.snapshot.paramMap.get('id');
+        if (idFromParent) {
+          this.viagemId = idFromParent;
+          break;
+        }
+        currentRoute = currentRoute.parent;
+      }
+
+      // Se ainda não encontrou, extrair da URL (fallback)
+      if (!this.viagemId) {
+        const urlParts = this.router.url.split('/');
+        const viagensIndex = urlParts.indexOf('viagens');
+        if (viagensIndex >= 0 && viagensIndex < urlParts.length - 1) {
+          this.viagemId = urlParts[viagensIndex + 1];
+        }
       }
 
       if (!this.viagemId || !this.diaId || !this.poiId) {
