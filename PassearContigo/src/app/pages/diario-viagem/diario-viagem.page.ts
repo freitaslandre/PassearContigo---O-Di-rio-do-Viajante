@@ -2,7 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import { Gesture, GestureController, ToastController } from '@ionic/angular';
 import { Unsubscribe } from 'firebase/firestore';
-import { Dia, POI, Viagem } from '../../models/viagem.model';
+import { Custo, Dia, POI, Viagem } from '../../models/viagem.model';
+import { CustosService } from '../../services/custos.service';
 import { ViagensService } from '../../services/viagens.service';
 
 @Component({
@@ -17,18 +18,21 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   viagemId = '';
   viagem: Viagem | null = null;
   dias: Dia[] = [];
+  custosFirestore: Custo[] = [];
   diaAtualIndex = 0;
   carregando = true;
   guardando = false;
   erro = '';
 
   private viagemSub: Unsubscribe | null = null;
+  private custosSub: Unsubscribe | null = null;
   private swipeGesture: Gesture | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private custosService: CustosService,
     private gestureCtrl: GestureController,
     private toastCtrl: ToastController
   ) {}
@@ -52,6 +56,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.viagemSub?.();
+    this.custosSub?.();
     this.swipeGesture?.destroy();
   }
 
@@ -108,12 +113,110 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.diaAtual.id, 'poi', poi.id]);
   }
 
+  async guardarNotaPoi(poi: POI) {
+    if (!this.viagem || !this.diaAtual || this.guardando) return;
+
+    poi.nota = poi.nota?.trim() || '';
+    await this.guardarDiario();
+  }
+
   obterFotoPoi(poi: POI): string {
     return poi.fotoUrl || 'assets/icon/favicon.png';
   }
 
+  obterCorStatus(status?: string): string {
+    switch (status) {
+      case 'planejada':
+        return 'primary';
+      case 'em-andamento':
+        return 'warning';
+      case 'concluida':
+        return 'success';
+      case 'cancelada':
+        return 'danger';
+      default:
+        return 'medium';
+    }
+  }
+
+  obterTextoStatus(status?: string): string {
+    switch (status) {
+      case 'planejada':
+        return 'Planejada';
+      case 'em-andamento':
+        return 'Em curso';
+      case 'concluida':
+        return 'Concluída';
+      case 'cancelada':
+        return 'Cancelada';
+      default:
+        return 'Sem estado';
+    }
+  }
+
   obterCustoDia(dia: Dia): number {
-    return (dia.pontosInteresse || []).reduce((total, poi) => total + (Number(poi.custo) || 0), 0);
+    const totalPois = (dia.pontosInteresse || []).reduce((total, poi) => total + this.obterTotalCustoPoi(poi), 0);
+    const totalCustosDia = this.obterCustosDia(dia)
+      .filter(custo => !custo.poiId)
+      .reduce((total, custo) => total + (Number(custo.valor) || 0), 0);
+
+    return totalPois + totalCustosDia;
+  }
+
+  obterTotalCustoPoi(poi: POI): number {
+    const custoDireto = Number(poi.custo) || 0;
+    const custosAssociados = this.obterCustosPoi(poi)
+      .reduce((total, custo) => total + (Number(custo.valor) || 0), 0);
+
+    return custoDireto + custosAssociados;
+  }
+
+  obterCustosDia(dia: Dia): Custo[] {
+    const poiIds = new Set((dia.pontosInteresse || []).map(poi => poi.id));
+    const custosFirestore = this.custosFirestore.filter(custo =>
+      custo.diaId === dia.id || (custo.poiId ? poiIds.has(custo.poiId) : false)
+    );
+    const custosDia = dia.custos || [];
+    const ids = new Set<string>();
+
+    return [...custosFirestore, ...custosDia].filter(custo => {
+      if (!custo.id) {
+        return true;
+      }
+
+      if (ids.has(custo.id)) {
+        return false;
+      }
+
+      ids.add(custo.id);
+      return true;
+    });
+  }
+
+  obterCustosPoi(poi: POI): Custo[] {
+    return this.custosFirestore.filter(custo => custo.poiId === poi.id);
+  }
+
+  obterNotaPoi(poi: POI): string {
+    return poi.nota?.trim() || poi.descricao?.trim() || '';
+  }
+
+  diaTemRegistosIncompletos(dia: Dia): boolean {
+    const semEntradaDiario = !dia.titulo?.trim()
+      || !dia.data
+      || (!dia.local?.trim() && !dia.descricao?.trim() && !dia.observacoes?.trim());
+
+    return semEntradaDiario || (dia.pontosInteresse || []).some(poi => this.poiTemRegistoIncompleto(poi));
+  }
+
+  poiTemRegistoIncompleto(poi: POI): boolean {
+    const semCusto = (poi.custo === undefined || poi.custo === null)
+      && this.obterCustosPoi(poi).length === 0;
+
+    return !poi.nome?.trim()
+      || !poi.fotoUrl?.trim()
+      || !this.obterNotaPoi(poi)
+      || semCusto;
   }
 
   formatarValor(valor: number): string {
@@ -127,6 +230,10 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
 
   trackByPoiId(index: number, poi: POI): string {
     return poi.id || String(index);
+  }
+
+  trackByCustoId(index: number, custo: Custo): string {
+    return custo.id || String(index);
   }
 
   async guardarDiario() {
@@ -180,6 +287,18 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
         this.carregando = false;
         this.erro = error?.message || 'Erro ao carregar diario.';
         console.error('Erro ao carregar diario:', error);
+      }
+    );
+
+    this.custosSub?.();
+    this.custosSub = this.custosService.subscribeToCustosByViagemId(
+      viagemId,
+      (custos) => {
+        this.custosFirestore = custos;
+      },
+      (error) => {
+        console.warn('Nao foi possivel carregar custos do diario:', error);
+        this.custosFirestore = [];
       }
     );
   }

@@ -40,7 +40,16 @@
     <section *ngIf="!carregando && viagem && diaAtual" class="diario-content">
       <div class="diario-hero">
         <div>
-          <ion-badge color="primary">Dia {{ diaAtualIndex + 1 }}</ion-badge>
+          <div class="badge-row">
+            <ion-badge color="primary">Dia {{ diaAtualIndex + 1 }}</ion-badge>
+            <ion-badge [color]="obterCorStatus(viagem.status)">
+              {{ obterTextoStatus(viagem.status) }}
+            </ion-badge>
+            <ion-badge *ngIf="diaTemRegistosIncompletos(diaAtual)" color="warning">
+              <ion-icon name="warning-outline"></ion-icon>
+              Incompleto
+            </ion-badge>
+          </div>
           <h1>{{ diaAtual.titulo || 'Dia da viagem' }}</h1>
           <p *ngIf="diaAtual.local">
             <ion-icon name="location-outline"></ion-icon>
@@ -58,13 +67,17 @@
           <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
         </ion-button>
 
-        <div class="day-dots" aria-hidden="true">
+        <div class="day-dots">
           <button
             type="button"
             *ngFor="let dia of dias; let i = index"
             [class.active]="i === diaAtualIndex"
+            [class.incomplete]="diaTemRegistosIncompletos(dia)"
             (click)="irParaDia(i)"
-          ></button>
+            [attr.aria-label]="'Dia ' + (i + 1)"
+          >
+            <ion-icon *ngIf="diaTemRegistosIncompletos(dia)" name="warning-outline"></ion-icon>
+          </button>
         </div>
 
         <ion-button fill="outline" color="medium" (click)="irParaDiaProximo()" [disabled]="!temDiaProximo">
@@ -124,7 +137,7 @@
                 <ion-icon name="cash-outline"></ion-icon>
                 <div>
                   <strong>{{ formatarValor(obterCustoDia(diaAtual)) }} €</strong>
-                  <span>Custo previsto</span>
+                  <span>Custo do dia</span>
                 </div>
               </div>
             </ion-card-content>
@@ -147,21 +160,74 @@
         </div>
 
         <div *ngIf="(diaAtual.pontosInteresse || []).length > 0" class="poi-strip">
-          <button
-            type="button"
+          <article
             class="poi-card"
             *ngFor="let poi of diaAtual.pontosInteresse || []; trackBy: trackByPoiId"
-            (click)="abrirPoi(poi)"
           >
-            <img [src]="obterFotoPoi(poi)" [alt]="poi.nome || 'Ponto de interesse'">
-            <span>{{ poi.nome || 'Ponto de interesse' }}</span>
-            <small *ngIf="poi.tipo || poi.categoria">{{ poi.tipo || poi.categoria }}</small>
-          </button>
+            <button type="button" class="poi-open-area" (click)="abrirPoi(poi)">
+              <img [src]="obterFotoPoi(poi)" [alt]="poi.nome || 'Ponto de interesse'">
+            </button>
+            <div class="poi-card-body">
+              <div class="poi-title">
+                <span>{{ poi.nome || 'Ponto de interesse' }}</span>
+                <ion-icon *ngIf="poiTemRegistoIncompleto(poi)" name="warning-outline" color="warning"></ion-icon>
+              </div>
+              <small *ngIf="poi.tipo || poi.categoria">{{ poi.tipo || poi.categoria }}</small>
+              <ion-textarea
+                class="poi-note-input"
+                [(ngModel)]="poi.nota"
+                [name]="'notaPoi' + poi.id"
+                autoGrow="true"
+                placeholder="Adicionar nota tardia"
+              ></ion-textarea>
+              <div class="poi-card-footer">
+                <ion-badge color="success" *ngIf="obterTotalCustoPoi(poi) > 0">
+                  {{ formatarValor(obterTotalCustoPoi(poi)) }} €
+                </ion-badge>
+                <ion-badge color="medium" *ngIf="obterTotalCustoPoi(poi) === 0">
+                  Sem custo
+                </ion-badge>
+                <ion-button fill="clear" size="small" (click)="guardarNotaPoi(poi)" [disabled]="guardando">
+                  <ion-icon slot="start" name="save-outline"></ion-icon>
+                  Guardar nota
+                </ion-button>
+              </div>
+            </div>
+          </article>
         </div>
 
         <ion-card *ngIf="!diaAtual.pontosInteresse || diaAtual.pontosInteresse.length === 0" class="empty-pois">
           <ion-card-content>
             <p>Sem pontos de interesse neste dia.</p>
+          </ion-card-content>
+        </ion-card>
+      </section>
+
+      <section class="custos-section">
+        <div class="section-header">
+          <h2>Custos do dia</h2>
+          <ion-badge color="success" *ngIf="obterCustoDia(diaAtual) > 0">
+            {{ formatarValor(obterCustoDia(diaAtual)) }} €
+          </ion-badge>
+        </div>
+
+        <ion-card *ngIf="obterCustosDia(diaAtual).length > 0" class="custos-card">
+          <ion-card-content>
+            <ion-list lines="full">
+              <ion-item *ngFor="let custo of obterCustosDia(diaAtual); trackBy: trackByCustoId">
+                <ion-label>
+                  <h3>{{ custo.descricao }}</h3>
+                  <p>{{ custo.categoria || 'Sem categoria' }}</p>
+                </ion-label>
+                <ion-note slot="end">{{ formatarValor(custo.valor) }} {{ custo.moeda || 'EUR' }}</ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="obterCustosDia(diaAtual).length === 0" class="empty-pois">
+          <ion-card-content>
+            <p>Sem custos registados neste dia.</p>
           </ion-card-content>
         </ion-card>
       </section>
