@@ -7,6 +7,22 @@
 <ion-content class="ion-padding">
   <p>Gerir viagens e itinerários.</p>
 
+  <div *ngIf="!carregando && viagens.length > 0" class="filtros-status">
+    <ion-item lines="none">
+      <ion-icon slot="start" name="filter-outline"></ion-icon>
+      <ion-select
+        label="Estado"
+        interface="popover"
+        [value]="statusSelecionado"
+        (ionChange)="selecionarStatus($event.detail.value)"
+      >
+        <ion-select-option *ngFor="let filtro of filtrosStatus" [value]="filtro.valor">
+          {{ filtro.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
   <div *ngIf="!carregando && viagens.length === 0" class="empty-state">
     <div class="empty-icon">📭</div>
     <ion-text class="empty-text" color="medium">
@@ -16,6 +32,18 @@
     <ion-button color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
       Criar Primeira Viagem
+    </ion-button>
+  </div>
+
+  <div *ngIf="!carregando && viagens.length > 0 && viagensFiltradas.length === 0" class="empty-state filtered-empty">
+    <ion-icon name="filter-outline" class="empty-icon"></ion-icon>
+    <ion-text class="empty-text" color="medium">
+      <h2>Sem viagens neste estado</h2>
+      <p>Escolha outro filtro para ver mais viagens.</p>
+    </ion-text>
+    <ion-button color="medium" fill="outline" (click)="selecionarStatus('todos')">
+      <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+      Limpar filtro
     </ion-button>
   </div>
 

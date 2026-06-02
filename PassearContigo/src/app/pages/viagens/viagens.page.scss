@@ -1,5 +1,25 @@
 /* TripsPage - Viagens */
 
+.filtros-status {
+  margin: 0 0 1rem;
+
+  ion-item {
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+  }
+
+  ion-icon {
+    color: var(--ion-color-primary);
+    margin-right: 0.5rem;
+  }
+
+  ion-select {
+    width: 100%;
+    min-height: 44px;
+  }
+}
 
 .loading-container {
   display: flex;
@@ -33,6 +53,14 @@
   p {
     color: var(--ion-text-color-secondary);
     margin-bottom: 2rem;
+  }
+}
+
+.filtered-empty {
+  min-height: 320px;
+
+  ion-icon.empty-icon {
+    font-size: 72px;
   }
 }
 

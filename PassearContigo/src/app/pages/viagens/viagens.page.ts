@@ -4,6 +4,7 @@ import { Viagem } from '../../models/viagem.model';
 import { Router } from '@angular/router';
 import { Unsubscribe } from 'firebase/firestore';
 import { AlertController, ToastController } from '@ionic/angular';
+
 /**
  * ViagensPage - Página de Viagens
  * Exibe a lista de viagens/itinerários do utilizador
@@ -17,6 +18,14 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class ViagensPage implements OnInit, OnDestroy {
   viagens: Viagem[] = [];
   viagemEmCurso: Viagem | null = null;
+  statusSelecionado = 'todos';
+  filtrosStatus = [
+    { valor: 'todos', label: 'Todas' },
+    { valor: 'planejada', label: 'Planejadas' },
+    { valor: 'em-andamento', label: 'Em andamento' },
+    { valor: 'concluida', label: 'Concluídas' },
+    { valor: 'cancelada', label: 'Canceladas' }
+  ];
   carregando = true;
   private unsubscribe: Unsubscribe | null = null;
   constructor(
@@ -38,7 +47,7 @@ export class ViagensPage implements OnInit, OnDestroy {
     this.unsubscribe = this.viagensService.subscribeToViagens(
       (viagens) => {
         this.viagens = viagens;
-        this.viagemEmCurso = this.encontrarViagemEmCurso(viagens);
+        this.atualizarViagemEmCurso();
         this.carregando = false;
       },
       (error) => {
@@ -140,9 +149,24 @@ export class ViagensPage implements OnInit, OnDestroy {
   }
 
   get viagensRestantes(): Viagem[] {
+    const viagens = this.viagensFiltradas;
+
     return this.viagemEmCurso
-      ? this.viagens.filter((viagem) => viagem.id !== this.viagemEmCurso?.id)
-      : this.viagens;
+      ? viagens.filter((viagem) => viagem.id !== this.viagemEmCurso?.id)
+      : viagens;
+  }
+
+  get viagensFiltradas(): Viagem[] {
+    if (this.statusSelecionado === 'todos') {
+      return this.viagens;
+    }
+
+    return this.viagens.filter((viagem) => viagem.status === this.statusSelecionado);
+  }
+
+  selecionarStatus(status: string | number | null | undefined) {
+    this.statusSelecionado = status ? String(status) : 'todos';
+    this.atualizarViagemEmCurso();
   }
 
   private encontrarViagemEmCurso(viagens: Viagem[]): Viagem | null {
@@ -159,6 +183,10 @@ export class ViagensPage implements OnInit, OnDestroy {
         return inicio <= agora && agora <= fim;
       }) ?? null
     );
+  }
+
+  private atualizarViagemEmCurso() {
+    this.viagemEmCurso = this.encontrarViagemEmCurso(this.viagensFiltradas);
   }
 
   private async eliminarViagem(id: string) {
