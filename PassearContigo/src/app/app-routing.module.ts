@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/editar-custo/editar-custo.module').then(m => m.EditarCustoPageModule)
   },
   {
+    path: 'gerir-colaboradores',
+    loadChildren: () => import('./pages/gerir-colaboradores/gerir-colaboradores.module').then(m => m.GerirColaboradoresPageModule)
+  },
+  {
     path: '',
     redirectTo: 'tabs/viagens',
     pathMatch: 'full'

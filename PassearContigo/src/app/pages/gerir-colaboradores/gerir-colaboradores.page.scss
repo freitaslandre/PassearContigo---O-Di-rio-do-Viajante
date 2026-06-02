@@ -1,0 +1,16 @@
+.empty-state {
+  text-align: center;
+  color: var(--ion-color-medium);
+  margin-top: 2rem;
+}
+
+ion-list ion-item {
+  --border-style: solid;
+  --border-width: 1px;
+  --border-color: rgba(0, 0, 0, 0.08);
+}
+
+.nivel {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+}

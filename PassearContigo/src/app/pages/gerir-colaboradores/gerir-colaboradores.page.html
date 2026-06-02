@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Gerir Colaboradores</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Convidar Colaborador</ion-card-title>
+      <ion-card-subtitle>Adicione convidados por email e defina o nível de acesso.</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input [(ngModel)]="novoConvidado.nome" placeholder="Nome do colaborador"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="novoConvidado.email" type="email" placeholder="email@exemplo.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Nível de Acesso</ion-label>
+        <ion-select [(ngModel)]="novoConvidado.nivelAcesso">
+          <ion-select-option *ngFor="let nivel of niveisAcesso" [value]="nivel">
+            {{ nivel | titlecase }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim()">
+        Adicionar convidado
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="convidados.length > 0">
+    <ion-list-header>
+      <ion-label>Lista de convidados</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let convidado of convidados; let i = index">
+      <ion-avatar slot="start">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ convidado.nome || 'Convidado' }}</h2>
+        <p>{{ convidado.email }}</p>
+        <p class="nivel">Nível: {{ convidado.nivelAcesso | titlecase }}</p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)">
+        Remover
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="convidados.length === 0" class="empty-state">
+    <p>Não há convidados adicionados.</p>
+  </div>
+</ion-content>
