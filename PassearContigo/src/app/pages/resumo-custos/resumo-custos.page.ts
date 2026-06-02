@@ -13,6 +13,7 @@ interface CustosPorCategoria {
   percentual: number;
   icone: string;
   cor: string;
+  corHex: string;
 }
 
 interface SegmentoGrafico {
@@ -21,6 +22,7 @@ interface SegmentoGrafico {
   percentual: number;
   cor: string;
   dasharray: number;
+  dashgap: number;
   dashoffset: number;
 }
 
@@ -35,6 +37,20 @@ const CATEGORIAS_DISPONIVEIS = [
   'Gastronomia',
   'Sem categoria'
 ];
+
+const CORES_CATEGORIA: Record<string, string> = {
+  alimentacao: '#E75A5A',
+  transporte: '#F6A23A',
+  hospedagem: '#3F7CFF',
+  alojamento: '#3F7CFF',
+  compras: '#A855F7',
+  cultura: '#14B8A6',
+  natureza: '#22A65A',
+  aventura: '#E56B2F',
+  gastronomia: '#D9468F',
+  outro: '#64748B',
+  semcategoria: '#94A3B8'
+};
 
 @Component({
   selector: 'app-resumo-custos',
@@ -181,7 +197,8 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       total,
       percentual: this.totalGeral > 0 ? (total / this.totalGeral) * 100 : 0,
       icone: this.obterIconeCategoria(categoria),
-      cor: this.obterCorCategoria(categoria)
+      cor: this.obterCorCategoria(categoria),
+      corHex: this.obterCorHexadecimalCategoria(categoria)
     }));
 
     // Ordenar por total descendente
@@ -191,14 +208,28 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   private obterIconeCategoria(categoria: string): string {
     const iconesMap: Record<string, string> = {
       'Alimentação': 'restaurant',
+      'alimentação': 'restaurant',
+      'alimentacao': 'restaurant',
       'Transporte': 'car',
+      'transporte': 'car',
       'Hospedagem': 'bed',
-      'Compras': 'shopping-bag',
+      'hospedagem': 'bed',
+      'Alojamento': 'bed',
+      'alojamento': 'bed',
+      'Compras': 'bag-handle',
+      'compras': 'bag-handle',
       'Cultura': 'ticket',
+      'cultura': 'ticket',
       'Natureza': 'leaf',
+      'natureza': 'leaf',
       'Aventura': 'bicycle',
+      'aventura': 'bicycle',
       'Gastronomia': 'wine',
-      'Sem categoria': 'ellipsis-horizontal'
+      'gastronomia': 'wine',
+      'Outro': 'cash',
+      'outro': 'cash',
+      'Sem categoria': 'ellipsis-horizontal',
+      'sem categoria': 'ellipsis-horizontal'
     };
     return iconesMap[categoria] || 'cash';
   }
@@ -206,28 +237,55 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   private obterCorCategoria(categoria: string): string {
     const coresMap: Record<string, string> = {
       'Alimentação': 'danger',
+      'alimentação': 'danger',
+      'alimentacao': 'danger',
       'Transporte': 'warning',
+      'transporte': 'warning',
       'Hospedagem': 'primary',
+      'hospedagem': 'primary',
+      'Alojamento': 'primary',
+      'alojamento': 'primary',
       'Compras': 'secondary',
+      'compras': 'secondary',
       'Cultura': 'tertiary',
+      'cultura': 'tertiary',
       'Natureza': 'success',
+      'natureza': 'success',
       'Aventura': 'medium',
+      'aventura': 'medium',
       'Gastronomia': 'warning',
-      'Sem categoria': 'light'
+      'gastronomia': 'warning',
+      'Outro': 'medium',
+      'outro': 'medium',
+      'Sem categoria': 'light',
+      'sem categoria': 'light'
     };
     return coresMap[categoria] || 'medium';
+  }
+
+  private obterChaveCategoria(categoria: string): string {
+    return (categoria || 'sem categoria')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase();
+  }
+
+  obterCorHexadecimalCategoria(categoria: string): string {
+    const chave = this.obterChaveCategoria(categoria);
+    return CORES_CATEGORIA[chave] || this.obterCorHexadecimal(this.obterCorCategoria(categoria));
   }
 
   obterCorHexadecimal(corIonica: string): string {
     const coresMap: Record<string, string> = {
       'primary': '#3880FF',
-      'secondary': '#2DD36F',
-      'tertiary': '#FFC409',
+      'secondary': '#A855F7',
+      'tertiary': '#14B8A6',
       'success': '#2DD36F',
       'warning': '#FFC409',
       'danger': '#FF4755',
-      'medium': '#92949C',
-      'light': '#F4F5F8'
+      'medium': '#64748B',
+      'light': '#94A3B8'
     };
     return coresMap[corIonica] || '#3880FF';
   }
@@ -255,8 +313,9 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
         categoria: categoria.categoria,
         valor: categoria.total,
         percentual: categoria.percentual,
-        cor: this.obterCorHexadecimal(categoria.cor),
+        cor: categoria.corHex,
         dasharray,
+        dashgap: perimetro - dasharray,
         dashoffset
       });
       dashoffset -= dasharray;

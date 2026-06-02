@@ -88,9 +88,10 @@
               [attr.fill]="'none'"
               [attr.stroke]="seg.cor"
               [attr.stroke-width]="40"
-              [attr.stroke-dasharray]="seg.dasharray"
+              [attr.stroke-dasharray]="seg.dasharray + ' ' + seg.dashgap"
               [attr.stroke-dashoffset]="seg.dashoffset"
-              [attr.stroke-linecap]="'round'"
+              [attr.stroke-linecap]="'butt'"
+              [attr.transform]="'rotate(-90 100 100)'"
               class="pie-segment"
               [title]="seg.categoria + ': ' + formatarValor(seg.valor) + ' € (' + seg.percentual.toFixed(1) + '%)'">
             </circle>
@@ -98,7 +99,7 @@
         </div>
         <div class="chart-legenda">
           <div *ngFor="let categoria of custosPorCategoria" class="legenda-item">
-            <div class="legenda-cor" [style.backgroundColor]="obterCorHexadecimal(categoria.cor)"></div>
+            <div class="legenda-cor" [style.backgroundColor]="categoria.corHex"></div>
             <div class="legenda-texto">
               <span class="legenda-categoria">{{ categoria.categoria }}</span>
               <span class="legenda-valor">{{ formatarValor(categoria.total) }} € ({{ categoria.percentual.toFixed(1) }}%)</span>
