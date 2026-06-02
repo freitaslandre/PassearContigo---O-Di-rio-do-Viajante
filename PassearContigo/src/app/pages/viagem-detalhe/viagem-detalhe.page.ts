@@ -100,6 +100,11 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'editar']);
   }
 
+  abrirDiario() {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'diario']);
+  }
+
   async confirmarEliminarViagem() {
     if (!this.viagem || this.eliminando) return;
 

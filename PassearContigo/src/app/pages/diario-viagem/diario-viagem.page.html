@@ -1,0 +1,170 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Diário da Viagem</ion-title>
+    <ion-buttons slot="end" *ngIf="!carregando && viagem && dias.length > 0">
+      <ion-button (click)="guardarDiario()" [disabled]="guardando">
+        <ion-spinner *ngIf="guardando" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!guardando" slot="icon-only" name="save-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #diarioSwipeArea class="diario-page">
+    <div *ngIf="carregando" class="loading-card">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>A carregar diário...</p>
+    </div>
+
+    <ion-card *ngIf="!carregando && erro" class="state-card">
+      <ion-card-content>
+        <p>{{ erro }}</p>
+        <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="!carregando && viagem && dias.length === 0" class="state-card">
+      <ion-card-content>
+        <ion-icon name="book-outline"></ion-icon>
+        <h2>Sem dias no diário</h2>
+        <p>Adicione dias à viagem para começar o diário.</p>
+      </ion-card-content>
+    </ion-card>
+
+    <section *ngIf="!carregando && viagem && diaAtual" class="diario-content">
+      <div class="diario-hero">
+        <div>
+          <ion-badge color="primary">Dia {{ diaAtualIndex + 1 }}</ion-badge>
+          <h1>{{ diaAtual.titulo || 'Dia da viagem' }}</h1>
+          <p *ngIf="diaAtual.local">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ diaAtual.local }}
+          </p>
+        </div>
+        <div class="diario-date">
+          <span>{{ formatarData(diaAtual.data) }}</span>
+          <strong>{{ textoPosicaoDia }}</strong>
+        </div>
+      </div>
+
+      <div class="day-navigation">
+        <ion-button fill="outline" color="medium" (click)="irParaDiaAnterior()" [disabled]="!temDiaAnterior">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+
+        <div class="day-dots" aria-hidden="true">
+          <button
+            type="button"
+            *ngFor="let dia of dias; let i = index"
+            [class.active]="i === diaAtualIndex"
+            (click)="irParaDia(i)"
+          ></button>
+        </div>
+
+        <ion-button fill="outline" color="medium" (click)="irParaDiaProximo()" [disabled]="!temDiaProximo">
+          <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="diario-grid">
+        <ion-card class="entry-card">
+          <ion-card-header>
+            <ion-card-title>Entrada do dia</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="full">
+              <ion-item>
+                <ion-label position="stacked">Título</ion-label>
+                <ion-input [(ngModel)]="diaAtual.titulo" name="tituloDia"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Local</ion-label>
+                <ion-input [(ngModel)]="diaAtual.local" name="localDia"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Descrição</ion-label>
+                <ion-textarea
+                  [(ngModel)]="diaAtual.descricao"
+                  name="descricaoDia"
+                  autoGrow="true"
+                ></ion-textarea>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Observações</ion-label>
+                <ion-textarea
+                  [(ngModel)]="diaAtual.observacoes"
+                  name="observacoesDia"
+                  autoGrow="true"
+                ></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+        <aside class="day-summary">
+          <ion-card>
+            <ion-card-content>
+              <div class="summary-row">
+                <ion-icon name="map-outline"></ion-icon>
+                <div>
+                  <strong>{{ (diaAtual.pontosInteresse || []).length }}</strong>
+                  <span>POIs</span>
+                </div>
+              </div>
+              <div class="summary-row">
+                <ion-icon name="cash-outline"></ion-icon>
+                <div>
+                  <strong>{{ formatarValor(obterCustoDia(diaAtual)) }} €</strong>
+                  <span>Custo previsto</span>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDetalheDia()">
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            Abrir dia
+          </ion-button>
+        </aside>
+      </div>
+
+      <section class="pois-section">
+        <div class="section-header">
+          <h2>Pontos de interesse</h2>
+          <ion-button fill="clear" size="small" [routerLink]="['/tabs', 'viagens', viagemId, 'dias', diaAtual.id, 'adicionar-poi']">
+            <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+            Adicionar
+          </ion-button>
+        </div>
+
+        <div *ngIf="(diaAtual.pontosInteresse || []).length > 0" class="poi-strip">
+          <button
+            type="button"
+            class="poi-card"
+            *ngFor="let poi of diaAtual.pontosInteresse || []; trackBy: trackByPoiId"
+            (click)="abrirPoi(poi)"
+          >
+            <img [src]="obterFotoPoi(poi)" [alt]="poi.nome || 'Ponto de interesse'">
+            <span>{{ poi.nome || 'Ponto de interesse' }}</span>
+            <small *ngIf="poi.tipo || poi.categoria">{{ poi.tipo || poi.categoria }}</small>
+          </button>
+        </div>
+
+        <ion-card *ngIf="!diaAtual.pontosInteresse || diaAtual.pontosInteresse.length === 0" class="empty-pois">
+          <ion-card-content>
+            <p>Sem pontos de interesse neste dia.</p>
+          </ion-card-content>
+        </ion-card>
+      </section>
+    </section>
+  </div>
+</ion-content>

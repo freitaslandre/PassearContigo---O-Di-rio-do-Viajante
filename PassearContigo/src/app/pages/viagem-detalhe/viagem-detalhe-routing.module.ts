@@ -8,6 +8,10 @@ const routes: Routes = [
     component: ViagemDetalhePage
   },
   {
+    path: 'diario',
+    loadChildren: () => import('./../diario-viagem/diario-viagem.module').then(m => m.DiarioViagemPageModule)
+  },
+  {
     path: 'dias/:diaId',
     loadChildren: () => import('./../../pages/dia-detalhe/dia-detalhe.module').then(m => m.DiaDetalhePageModule)
   },
