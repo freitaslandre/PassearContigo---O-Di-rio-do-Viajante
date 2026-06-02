@@ -7,6 +7,14 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
+    path: 'resumo-custos',
+    loadChildren: () => import('./pages/resumo-custos/resumo-custos.module').then(m => m.ResumoCustosPageModule)
+  },
+  {
+    path: 'editar-custo/:id',
+    loadChildren: () => import('./pages/editar-custo/editar-custo.module').then(m => m.EditarCustoPageModule)
+  },
+  {
     path: '',
     redirectTo: 'tabs/viagens',
     pathMatch: 'full'

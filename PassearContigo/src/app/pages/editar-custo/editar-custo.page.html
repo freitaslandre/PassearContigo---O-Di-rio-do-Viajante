@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/resumo-custos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Custo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button 
+        (click)="deletarCusto()" 
+        [disabled]="salvando"
+        color="danger">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Carregando -->
+  <ion-card *ngIf="carregando" class="card-loading">
+    <ion-card-content>
+      <div class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Carregando custo...</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Formulário de Edição -->
+  <div *ngIf="!carregando && custo" class="formulario-container">
+    <ion-card class="card-formulario">
+      <ion-card-header>
+        <ion-card-title>Informações do Custo</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <!-- Descrição -->
+          <ion-item>
+            <ion-label position="floating">Descrição</ion-label>
+            <ion-input
+              [(ngModel)]="custo.descricao"
+              [disabled]="salvando"
+              placeholder="Digite a descrição"
+              clearInput>
+            </ion-input>
+          </ion-item>
+
+          <!-- Valor -->
+          <ion-item>
+            <ion-label position="floating">Valor (€)</ion-label>
+            <ion-input
+              [(ngModel)]="custo.valor"
+              [disabled]="salvando"
+              type="number"
+              step="0.01"
+              placeholder="0.00"
+              clearInput>
+            </ion-input>
+          </ion-item>
+
+          <!-- Data -->
+          <ion-item>
+            <ion-label position="floating">Data</ion-label>
+            <ion-datetime
+              [(ngModel)]="custo.data"
+              [disabled]="salvando"
+              presentation="date">
+            </ion-datetime>
+          </ion-item>
+
+          <!-- Categoria com IonSelect -->
+          <ion-item>
+            <ion-label position="floating">Categoria</ion-label>
+            <ion-select
+              [(ngModel)]="custo.categoria"
+              [disabled]="salvando"
+              placeholder="Selecione uma categoria"
+              cancelText="Cancelar"
+              okText="Selecionar">
+              <ion-select-option *ngFor="let cat of categoriasDisponiveis" [value]="cat">
+                {{ cat }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Preview de Categoria -->
+          <ion-item *ngIf="custo.categoria" class="categoria-preview">
+            <ion-label>Categoria Selecionada</ion-label>
+            <ion-badge [color]="obterCorCategoria(custo.categoria)" slot="end">
+              {{ custo.categoria }}
+            </ion-badge>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botões de Ação -->
+    <div class="botoes-acao">
+      <ion-button
+        expand="block"
+        fill="clear"
+        (click)="cancelar()"
+        [disabled]="salvando">
+        Cancelar
+      </ion-button>
+      <ion-button
+        expand="block"
+        color="primary"
+        (click)="salvarAlteracoes()"
+        [disabled]="salvando">
+        <ion-spinner *ngIf="salvando" name="lines-small"></ion-spinner>
+        {{ salvando ? 'Salvando...' : 'Salvar Alterações' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

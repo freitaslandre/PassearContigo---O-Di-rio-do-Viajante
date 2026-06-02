@@ -148,6 +148,13 @@
                 </ion-select-option>
               </ion-select>
             </div>
+            <ion-button
+              fill="clear"
+              size="small"
+              [routerLink]="['/editar-custo', custo.id]"
+              color="primary">
+              <ion-icon slot="icon-only" name="create"></ion-icon>
+            </ion-button>
           </div>
         </div>
       </ion-card-content>
