@@ -111,6 +111,56 @@ export class ViagensService {
   }
 
   /**
+   * Subscreve a viagens partilhadas/publicadas por outros utilizadores onde
+   * o utilizador autenticado aparece como colaborador.
+   */
+  subscribeToFeedAmigos(onData: (viagens: Viagem[]) => void, onError?: (error: any) => void): Unsubscribe | null {
+    let unsubscribeSnapshot: Unsubscribe | null = null;
+
+    const authUnsubscribe = this.afAuth.authState.subscribe(user => {
+      unsubscribeSnapshot?.();
+      unsubscribeSnapshot = null;
+
+      if (!user) {
+        onError?.(new Error('E necessario iniciar sessao para ver o feed.'));
+        return;
+      }
+
+      try {
+        const db = getFirestore();
+        const viagensRef = collection(db, this.collectionName);
+
+        unsubscribeSnapshot = onSnapshot(
+          viagensRef,
+          (snapshot) => {
+            const viagens: Viagem[] = snapshot.docs
+              .map(doc => ({
+                id: doc.id,
+                ...doc.data() as ViagemPayload
+              }))
+              .filter(viagem => this.viagemApareceNoFeed(viagem, user.uid, user.email || ''))
+              .sort((a, b) => this.compararDatasDesc(a.atualizadoEm || a.dataInicio, b.atualizadoEm || b.dataInicio));
+
+            onData(viagens);
+          },
+          (error) => {
+            console.error('Erro ao subscrever feed de amigos:', error);
+            onError?.(error);
+          }
+        );
+      } catch (error) {
+        console.error('Erro ao configurar feed de amigos:', error);
+        onError?.(error);
+      }
+    });
+
+    return () => {
+      authUnsubscribe.unsubscribe();
+      unsubscribeSnapshot?.();
+    };
+  }
+
+  /**
    * Subscreve a uma viagem especifica usando onSnapshot do Firestore.
    * Retorna um callback de unsubscribe para cleanup.
    */
@@ -140,7 +190,7 @@ export class ViagensService {
 
             const data = snapshot.data() as ViagemPayload;
 
-            if (data.uidUtilizador !== user.uid) {
+            if (!this.utilizadorPodeVerViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
               onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
               return;
             }
@@ -189,7 +239,7 @@ export class ViagensService {
 
           const data = snapshot.data() as ViagemPayload;
 
-          if (data.uidUtilizador !== user.uid) {
+          if (!this.utilizadorPodeVerViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
             observer.error(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
             return;
           }
@@ -418,6 +468,10 @@ export class ViagensService {
     return this.converterParaTimestamp(dataA) - this.converterParaTimestamp(dataB);
   }
 
+  private compararDatasDesc(dataA: DataOrdenavel, dataB: DataOrdenavel): number {
+    return this.converterParaTimestamp(dataB) - this.converterParaTimestamp(dataA);
+  }
+
   private converterParaTimestamp(data: DataOrdenavel): number {
     if (data instanceof Date) {
       return data.getTime();
@@ -428,5 +482,30 @@ export class ViagensService {
     }
 
     return data.toDate().getTime();
+  }
+
+  private viagemApareceNoFeed(viagem: Viagem, uid: string, email: string): boolean {
+    if (viagem.uidUtilizador === uid) {
+      return false;
+    }
+
+    if (!this.utilizadorEColaborador(viagem, uid, email)) {
+      return false;
+    }
+
+    const marcadaComoPublicada = (viagem as any).publicada === true || (viagem as any).publico === true;
+
+    return marcadaComoPublicada || viagem.status === 'concluida' || viagem.status === 'em-andamento';
+  }
+
+  private utilizadorPodeVerViagem(viagem: Viagem, uid: string, email: string): boolean {
+    return viagem.uidUtilizador === uid || this.utilizadorEColaborador(viagem, uid, email);
+  }
+
+  private utilizadorEColaborador(viagem: Viagem, uid: string, email: string): boolean {
+    const colaboradores = viagem.colaboradores || [];
+    return colaboradores.some(colaborador =>
+      colaborador.uid === uid || (!!email && colaborador.email === email)
+    );
   }
 }

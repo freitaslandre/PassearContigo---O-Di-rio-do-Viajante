@@ -7,6 +7,10 @@
     </ion-buttons>
     <ion-title>Detalhe Viagem</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && viagem">
+      <ion-button (click)="publicarViagem()" [disabled]="publicando || guardando">
+        <ion-spinner *ngIf="publicando" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!publicando" slot="icon-only" name="megaphone-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="editarViagem()">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>
@@ -86,6 +90,48 @@
         Álbum da viagem
       </ion-button>
     </section>
+
+    <ion-card class="publicacao-card">
+      <ion-card-header>
+        <div class="publicacao-header">
+          <div>
+            <ion-card-title>Publicação da viagem</ion-card-title>
+            <ion-card-subtitle>
+              {{ viagem.publicada ? 'Já publicada' : 'Ainda não publicada' }}
+            </ion-card-subtitle>
+          </div>
+          <ion-badge [color]="visibilidadePublicacao === 'publica' ? 'success' : 'secondary'">
+            {{ visibilidadePublicacao === 'publica' ? 'Público' : 'Amigos' }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="visibilidadePublicacao" name="visibilidadePublicacao">
+          <ion-segment-button value="amigos">
+            <ion-label>Amigos</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="publica">
+            <ion-label>Público</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <ion-item lines="full">
+          <ion-label position="stacked">Texto da publicação</ion-label>
+          <ion-textarea
+            name="textoPublicacao"
+            autoGrow="true"
+            [(ngModel)]="textoPublicacao"
+            placeholder="Escreva uma pequena descrição para o feed"
+          ></ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" color="secondary" (click)="publicarViagem()" [disabled]="publicando || guardando">
+          <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!publicando" slot="start" name="megaphone-outline"></ion-icon>
+          {{ viagem.publicada ? 'Atualizar publicação' : 'Publicar viagem' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
 
     <ion-card>
       <ion-card-header>

@@ -21,6 +21,11 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               {
+                "glob": "firebase-messaging-sw.js",
+                "input": "src",
+                "output": "."
+              },
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
@@ -100,6 +105,11 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
+              {
+                "glob": "firebase-messaging-sw.js",
+                "input": "src",
+                "output": "."
+              },
               {
                 "glob": "**/*",
                 "input": "src/assets",

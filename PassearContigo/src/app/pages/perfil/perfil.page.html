@@ -14,6 +14,15 @@
       </ion-card-header>
       <ion-card-content>
         <p>A sua aplicação está conectada ao Firebase Authentication e à base de dados Cloud Firestore.</p>
+        <ion-button expand="block" color="primary" routerLink="/tabs/perfil/feed" class="ion-margin-top">
+          <ion-icon slot="start" name="newspaper-outline"></ion-icon>
+          Ver Feed de Amigos
+        </ion-button>
+        <ion-button expand="block" color="secondary" fill="outline" class="ion-margin-top" (click)="ativarNotificacoesPush()" [disabled]="ativandoNotificacoes">
+          <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-outline"></ion-icon>
+          Ativar notificações push
+        </ion-button>
         <ion-button expand="block" color="danger" class="ion-margin-top" (click)="realizarLogout()">
           Terminar Sessão (Logout)
         </ion-button>

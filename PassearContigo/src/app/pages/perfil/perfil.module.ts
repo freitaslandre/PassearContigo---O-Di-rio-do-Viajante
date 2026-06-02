@@ -11,7 +11,13 @@ import { PerfilPage } from './perfil.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([{ path: '', component: PerfilPage }])
+    RouterModule.forChild([
+      {
+        path: 'feed',
+        loadChildren: () => import('../feed-amigos/feed-amigos.module').then(m => m.FeedAmigosPageModule)
+      },
+      { path: '', component: PerfilPage }
+    ])
   ],
   declarations: [PerfilPage]
 })

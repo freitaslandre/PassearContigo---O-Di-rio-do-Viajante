@@ -3,8 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Unsubscribe } from 'firebase/firestore';
-import { Dia, POI, Viagem } from '../../models/viagem.model';
+import { Dia, POI, Viagem, VisibilidadePublicacao } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
+import { PublicacoesService } from '../../services/publicacoes.service';
 import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { GeolocationService } from '../../services/geolocation.service';
@@ -34,6 +35,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   carregando = true;
   guardando = false;
   eliminando = false;
+  publicando = false;
   erro = '';
   fotosPoiAEnviar: Record<string, boolean> = {};
   localizacaoPoiAObter: Record<string, boolean> = {};
@@ -44,6 +46,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   dataInicio = '';
   dataFim = '';
   status: Viagem['status'] = 'planejada';
+  visibilidadePublicacao: VisibilidadePublicacao = 'amigos';
+  textoPublicacao = '';
 
   private routeSub: Subscription | null = null;
   private viagemSub: Unsubscribe | null = null;
@@ -53,6 +57,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
+    private publicacoesService: PublicacoesService,
     private cameraService: CameraService,
     private firebaseStorageService: FirebaseStorageService,
     private geolocationService: GeolocationService,
@@ -108,6 +113,59 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   abrirAlbum() {
     if (!this.viagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'album']);
+  }
+
+  async publicarViagem() {
+    if (!this.viagem || this.publicando) return;
+
+    if (!this.titulo.trim() || !this.local.trim() || !this.dataInicio || !this.dataFim) {
+      await this.mostrarToast('Preencha titulo, destino e datas antes de publicar.', 'warning');
+      return;
+    }
+
+    if (new Date(this.dataFim) < new Date(this.dataInicio)) {
+      await this.mostrarToast('A data de fim nao pode ser anterior a data de inicio.', 'warning');
+      return;
+    }
+
+    this.publicando = true;
+
+    try {
+      const viagemAtualizada: Viagem = {
+        ...this.viagem,
+        titulo: this.titulo.trim() || this.viagem.titulo,
+        descricao: this.descricao.trim(),
+        local: this.local.trim(),
+        dataInicio: new Date(this.dataInicio),
+        dataFim: new Date(this.dataFim),
+        status: this.status,
+        dias: this.dias.map((dia, index) => this.converterDiaParaModel(dia, index))
+      };
+      const publicacaoId = await this.publicacoesService.publicarViagem(
+        viagemAtualizada,
+        this.textoPublicacao.trim() || this.descricao.trim(),
+        this.visibilidadePublicacao
+      );
+
+      await this.viagensService.updateViagem(this.viagem.id, {
+        publicada: true,
+        publicacaoId,
+        visibilidadePublicacao: this.visibilidadePublicacao,
+        textoPublicacao: this.textoPublicacao.trim() || this.descricao.trim()
+      });
+
+      await this.mostrarToast(
+        this.visibilidadePublicacao === 'publica'
+          ? 'Viagem publicada como publica.'
+          : 'Viagem publicada para amigos.',
+        'success'
+      );
+    } catch (error: any) {
+      console.error('Erro ao publicar viagem:', error);
+      await this.mostrarToast(error?.message || 'Erro ao publicar viagem.', 'danger');
+    } finally {
+      this.publicando = false;
+    }
   }
 
   async confirmarEliminarViagem() {
@@ -511,6 +569,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.dataInicio = this.formatarDataInput(viagem.dataInicio);
     this.dataFim = this.formatarDataInput(viagem.dataFim);
     this.status = viagem.status || 'planejada';
+    this.visibilidadePublicacao = viagem.visibilidadePublicacao || 'amigos';
+    this.textoPublicacao = viagem.textoPublicacao || viagem.descricao || '';
     this.dias = (viagem.dias || []).map((dia, index) => ({
       id: dia.id || `dia-${index + 1}`,
       titulo: dia.titulo || `Dia ${index + 1}`,

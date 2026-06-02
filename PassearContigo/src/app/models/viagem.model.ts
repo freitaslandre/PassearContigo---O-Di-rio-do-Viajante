@@ -17,6 +17,10 @@ export interface Viagem {
   custos?: Custo[];
   colaboradores?: Colaborador[];
   status?: 'planejada' | 'em-andamento' | 'concluida' | 'cancelada';
+  publicada?: boolean;
+  publicacaoId?: string;
+  visibilidadePublicacao?: VisibilidadePublicacao;
+  textoPublicacao?: string;
   criadoEm?: Date;
   atualizadoEm?: Date;
 }
@@ -32,6 +36,53 @@ export interface FotoAlbumViagem {
   dataCaptura?: Date | string;
   origem?: 'rolo' | 'capa' | 'poi';
   metadados?: Record<string, any>;
+}
+
+export type VisibilidadePublicacao = 'publica' | 'amigos' | 'privada';
+
+/**
+ * Publicacao Model
+ * Representa uma viagem publicada no feed/social da aplicação
+ */
+export interface Publicacao {
+  id: string;
+  uidUtilizador?: string;
+  autorNome?: string;
+  autorEmail?: string;
+  autorAvatarUrl?: string;
+  viagemId?: string;
+  viagemTitulo?: string;
+  viagemLocal?: string;
+  viagemFotoUrl?: string;
+  texto?: string;
+  visibilidade: VisibilidadePublicacao;
+  colaboradorUids?: string[];
+  colaboradorEmails?: string[];
+  gostos?: number;
+  comentariosCount?: number;
+  tags?: string[];
+  criadoEm?: Date;
+  atualizadoEm?: Date;
+}
+
+export type TipoReacaoPublicacao = 'gosto';
+
+export interface ReacaoPublicacao {
+  id: string;
+  uidUtilizador?: string;
+  autorNome?: string;
+  autorAvatarUrl?: string;
+  tipo: TipoReacaoPublicacao;
+  criadoEm?: Date;
+}
+
+export interface ComentarioPublicacao {
+  id: string;
+  uidUtilizador?: string;
+  autorNome?: string;
+  autorAvatarUrl?: string;
+  texto: string;
+  criadoEm?: Date;
 }
 
 /**

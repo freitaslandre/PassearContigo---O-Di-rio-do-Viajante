@@ -1,0 +1,142 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Feed</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="carregarFeed()" [disabled]="carregando">
+        <ion-spinner *ngIf="carregando" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!carregando" slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="feed-header">
+    <ion-badge color="secondary">{{ publicacoes.length }} publicações</ion-badge>
+    <h1>Viagens publicadas por amigos</h1>
+    <p>Veja viagens partilhadas consigo ou publicadas no feed.</p>
+  </section>
+
+  <ion-card *ngIf="carregando" class="state-card">
+    <ion-card-content>
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>A carregar feed...</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!carregando && erro" class="state-card">
+    <ion-card-content>
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <h2>Não foi possível carregar</h2>
+      <p>{{ erro }}</p>
+      <ion-button expand="block" color="medium" (click)="carregarFeed()">Tentar novamente</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!carregando && !erro && publicacoes.length === 0" class="state-card">
+    <ion-card-content>
+      <ion-icon name="people-outline"></ion-icon>
+      <h2>Sem publicações de amigos</h2>
+      <p>Quando amigos partilharem viagens consigo, elas aparecem aqui.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <section *ngIf="!carregando && !erro && publicacoes.length > 0" class="feed-list">
+    <article *ngFor="let publicacao of publicacoes" class="feed-card">
+      <button type="button" class="feed-card-main" (click)="abrirPublicacao(publicacao)">
+        <div class="feed-cover" [class.has-photo]="publicacao.viagemFotoUrl" [style.backgroundImage]="publicacao.viagemFotoUrl ? 'url(' + publicacao.viagemFotoUrl + ')' : ''">
+          <ion-badge [color]="obterCorVisibilidade(publicacao)">
+            {{ obterTextoVisibilidade(publicacao) }}
+          </ion-badge>
+        </div>
+
+        <div class="feed-body">
+          <div class="feed-author">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <span>Publicado por {{ publicacao.autorNome || 'Amigo' }}</span>
+          </div>
+
+          <h2>{{ publicacao.viagemTitulo || 'Viagem publicada' }}</h2>
+          <p *ngIf="publicacao.texto" class="feed-description">{{ publicacao.texto }}</p>
+
+          <div class="feed-meta">
+            <span *ngIf="publicacao.viagemLocal">
+              <ion-icon name="location-outline"></ion-icon>
+              {{ publicacao.viagemLocal }}
+            </span>
+            <span>
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ formatarData(publicacao.criadoEm) }}
+            </span>
+          </div>
+
+          <div class="feed-stats">
+            <span>
+              <strong>{{ totalReacoes(publicacao) }}</strong>
+              gostos
+            </span>
+            <span>
+              <strong>{{ totalComentarios(publicacao) }}</strong>
+              comentários
+            </span>
+          </div>
+        </div>
+      </button>
+
+      <div class="feed-social">
+        <div class="feed-actions">
+          <ion-button
+            fill="clear"
+            size="small"
+            [color]="utilizadorReagiu(publicacao) ? 'danger' : 'medium'"
+            (click)="alternarReacao(publicacao)"
+            [disabled]="reagindo[publicacao.id]"
+          >
+            <ion-spinner *ngIf="reagindo[publicacao.id]" name="crescent" slot="start"></ion-spinner>
+            <ion-icon *ngIf="!reagindo[publicacao.id]" slot="start" [name]="utilizadorReagiu(publicacao) ? 'heart' : 'heart-outline'"></ion-icon>
+            {{ totalReacoes(publicacao) }}
+          </ion-button>
+
+          <span class="reaction-users" *ngIf="obterReacoes(publicacao).length > 0">
+            {{ obterReacoes(publicacao)[0].autorNome || 'Utilizador' }}
+            <ng-container *ngIf="obterReacoes(publicacao).length > 1">
+              e mais {{ obterReacoes(publicacao).length - 1 }}
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="comments-list" *ngIf="obterComentarios(publicacao).length > 0">
+          <div class="comment-item" *ngFor="let comentario of obterComentarios(publicacao)">
+            <strong>{{ comentario.autorNome || 'Utilizador' }}</strong>
+            <span>{{ comentario.texto }}</span>
+          </div>
+        </div>
+
+        <form class="comment-form" (ngSubmit)="adicionarComentario(publicacao)">
+          <ion-item lines="none">
+            <ion-input
+              name="comentario{{ publicacao.id }}"
+              type="text"
+              [(ngModel)]="comentarioNovo[publicacao.id]"
+              placeholder="Adicionar comentário"
+            ></ion-input>
+          </ion-item>
+          <ion-button
+            type="submit"
+            fill="clear"
+            size="small"
+            [disabled]="comentando[publicacao.id] || !comentarioNovo[publicacao.id]?.trim()"
+          >
+            <ion-spinner *ngIf="comentando[publicacao.id]" name="crescent" slot="icon-only"></ion-spinner>
+            <ion-icon *ngIf="!comentando[publicacao.id]" slot="icon-only" name="send-outline"></ion-icon>
+          </ion-button>
+        </form>
+      </div>
+    </article>
+  </section>
+</ion-content>

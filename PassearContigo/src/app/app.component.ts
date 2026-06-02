@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ScreenOrientationService } from './services/screen-orientation.service';
 import { EstadoSincronizacaoPoi, POIService } from './services/poi.service';
+import { PushNotificationsService } from './services/push-notifications.service';
 
 /**
  * AppComponent
@@ -19,12 +20,14 @@ export class AppComponent {
 
   constructor(
     private screenOrientationService: ScreenOrientationService,
-    private poiService: POIService
+    private poiService: POIService,
+    private pushNotificationsService: PushNotificationsService
   ) {
     this.estadoSincronizacao$ = this.poiService.estadoSincronizacao$;
 
     // Bloqueia a orientação em portrait ao inicializar a app (req. 12)
     this.initializeScreenOrientation();
+    this.pushNotificationsService.inicializar();
   }
 
   /**

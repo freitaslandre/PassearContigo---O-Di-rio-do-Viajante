@@ -11,7 +11,8 @@ export const environment = {
     storageBucket: "passearcontigo.firebasestorage.app",
     messagingSenderId: "898427379877",
     appId: "1:898427379877:web:d026b07303a523787dad4c"
-}
+  },
+  firebaseMessagingVapidKey: ""
 };
 
 /*
