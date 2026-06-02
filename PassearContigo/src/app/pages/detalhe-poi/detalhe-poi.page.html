@@ -23,6 +23,11 @@
   </div>
 
   <div *ngIf="poi && !carregando">
+    <div *ngIf="obterColaboradorLabel(poi)" class="poi-author-chip">
+      <ion-chip color="secondary" outline>
+        <ion-label>Adicionado por {{ obterColaboradorLabel(poi) }}</ion-label>
+      </ion-chip>
+    </div>
     <!-- CARD DE EDIÇÃO -->
     <ion-card *ngIf="!modoEdicao">
       <ion-card-content>

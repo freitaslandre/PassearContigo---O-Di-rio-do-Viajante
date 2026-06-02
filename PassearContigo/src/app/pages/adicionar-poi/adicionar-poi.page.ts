@@ -6,6 +6,7 @@ import { POIService } from '../../services/poi.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI } from '../../models/viagem.model';
+import { getAuth } from 'firebase/auth';
 import * as L from 'leaflet';
 
 @Component({
@@ -312,6 +313,13 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
         } catch (error) {
           console.warn('Aviso: Não foi possível fazer upload da foto, continuando sem imagem', error);
         }
+      }
+
+      const currentUser = getAuth().currentUser;
+      if (currentUser) {
+        novoPoi.colaboradorUid = currentUser.uid;
+        novoPoi.colaboradorEmail = currentUser.email || undefined;
+        novoPoi.colaboradorNome = currentUser.displayName || undefined;
       }
 
       await this.poiService.adicionarPOI(this.viagemId, this.diaId, novoPoi);

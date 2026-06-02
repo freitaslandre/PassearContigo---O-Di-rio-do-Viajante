@@ -112,6 +112,19 @@
   }
 }
 
+.poi-collaborator-badge {
+  --border-radius: 999px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .poi-badges {
   display: flex;
   flex-wrap: wrap;

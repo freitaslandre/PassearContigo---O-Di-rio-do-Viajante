@@ -122,7 +122,16 @@
               >
             </div>
             <div class="poi-info">
-              <h3>{{ poi.nome || 'Ponto de interesse sem nome' }}</h3>
+              <div class="poi-title-row">
+                <h3>{{ poi.nome || 'Ponto de interesse sem nome' }}</h3>
+                <span
+                  *ngIf="obterColaboradorLabel(poi)"
+                  class="poi-collaborator-badge"
+                  [title]="'Adicionado por ' + obterColaboradorLabel(poi)"
+                >
+                  {{ obterInicialColaborador(poi) }}
+                </span>
+              </div>
               <p *ngIf="poi.tipo" class="poi-tipo">{{ poi.tipo }}</p>
               <p *ngIf="poi.descricao" class="poi-descricao">{{ poi.descricao }}</p>
               <ion-text color="medium" *ngIf="poi.endereco" class="poi-endereco">

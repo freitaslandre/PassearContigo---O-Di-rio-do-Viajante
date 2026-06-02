@@ -6,6 +6,7 @@ import { GeolocationService } from '../../services/geolocation.service';
 import { POI, Viagem } from '../../models/viagem.model';
 import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
+import { getAuth } from 'firebase/auth';
 
 interface ResultadoDescobrir extends NominatimSearchResult {
   distanciaKm?: number;
@@ -163,6 +164,13 @@ export class DescubrirPage implements OnInit, OnDestroy {
         longitude: local.longitude,
         ordem: this.obterProximaOrdem(destino.viagemId, destino.diaId)
       };
+
+      const currentUser = getAuth().currentUser;
+      if (currentUser) {
+        poi.colaboradorUid = currentUser.uid;
+        poi.colaboradorEmail = currentUser.email || undefined;
+        poi.colaboradorNome = currentUser.displayName || undefined;
+      }
 
       await this.poiService.adicionarPOI(destino.viagemId, destino.diaId, poi);
 

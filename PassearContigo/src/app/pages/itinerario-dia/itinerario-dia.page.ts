@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemReorderEventDetail, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Dia, POI, Viagem } from '../../models/viagem.model';
+import { Colaborador, Dia, POI, Viagem } from '../../models/viagem.model';
 import { GeolocationService } from '../../services/geolocation.service';
 import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
@@ -19,6 +19,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   dia: Dia | null = null;
   dias: Dia[] = [];
   diaAtualIndex = -1;
+  colaboradores: Colaborador[] = [];
   carregando = true;
   guardandoOrdem = false;
   erro = '';
@@ -146,6 +147,40 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     return poi.fotoUrl || 'assets/icon/favicon.png';
   }
 
+  obterColaboradorPorPoi(poi: POI): Colaborador | undefined {
+    if (!poi.colaboradorUid) {
+      return undefined;
+    }
+    return this.colaboradores.find(colaborador => colaborador.uid === poi.colaboradorUid);
+  }
+
+  obterColaboradorLabel(poi: POI): string {
+    const colaborador = this.obterColaboradorPorPoi(poi);
+    if (colaborador) {
+      return colaborador.nome?.trim() || colaborador.email || 'Colaborador';
+    }
+
+    return poi.colaboradorNome?.trim() || poi.colaboradorEmail || '';
+  }
+
+  obterInicialColaborador(poi: POI): string | undefined {
+    const label = this.obterColaboradorLabel(poi);
+    if (!label) {
+      return undefined;
+    }
+
+    const parts = label.split(/\s+/).filter(Boolean);
+    if (parts.length === 0) {
+      return undefined;
+    }
+
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   obterHorario(poi: POI): string {
     return poi.horario?.trim() || 'Sem hora';
   }
@@ -201,6 +236,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
           return;
         }
 
+        this.colaboradores = viagem.colaboradores || [];
         this.dias = [...(viagem.dias || [])].sort((a, b) => {
           return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);
         });

@@ -56,6 +56,9 @@ export interface POI {
   categoria?: string;
   avaliacao?: number;
   ordem?: number;
+  colaboradorUid?: string;
+  colaboradorNome?: string;
+  colaboradorEmail?: string;
 }
 
 /**

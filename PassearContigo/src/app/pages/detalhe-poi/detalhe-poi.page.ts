@@ -161,6 +161,10 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  obterColaboradorLabel(poi: POI): string {
+    return poi.colaboradorNome?.trim() || poi.colaboradorEmail || (poi.colaboradorUid ? 'Colaborador' : '');
+  }
+
   private guardarNotas() {
     localStorage.setItem(`notas-poi-${this.poiId}`, JSON.stringify(this.notas));
   }

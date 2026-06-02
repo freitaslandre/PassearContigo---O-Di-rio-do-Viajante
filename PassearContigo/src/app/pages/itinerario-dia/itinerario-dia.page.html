@@ -83,6 +83,14 @@
           <div class="poi-heading">
             <h2>{{ poi.nome || 'Ponto de interesse sem nome' }}</h2>
             <div class="poi-badges">
+              <ion-badge
+                *ngIf="obterColaboradorLabel(poi)"
+                color="secondary"
+                class="poi-collaborator-badge"
+                [title]="'Adicionado por ' + obterColaboradorLabel(poi)"
+              >
+                {{ obterInicialColaborador(poi) }}
+              </ion-badge>
               <ion-badge color="medium">{{ obterHorario(poi) }}</ion-badge>
               <ion-badge *ngIf="temOrdemManual(poi)" color="primary">#{{ i + 1 }}</ion-badge>
             </div>

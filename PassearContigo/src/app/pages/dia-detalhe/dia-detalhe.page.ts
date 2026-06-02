@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
-import { Dia, POI } from '../../models/viagem.model';
+import { Dia, POI, Colaborador } from '../../models/viagem.model';
 
 @Component({
   selector: 'app-dia-detalhe',
@@ -16,6 +16,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   dias: Dia[] = [];
   diaAtualIndex = -1;
   viagemId: string | null = null;
+  colaboradores: Colaborador[] = [];
   carregando = true;
   erro = '';
 
@@ -56,6 +57,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
             return;
           }
 
+          this.colaboradores = viagem.colaboradores || [];
           this.dias = [...(viagem.dias || [])].sort((a, b) => {
             return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);
           });
@@ -167,6 +169,40 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
     if (!custos || custos.length === 0) return 'Sem custos';
     const total = custos.reduce((s: number, c: any) => s + (c.valor || 0), 0);
     return `${total.toFixed(2)} ${custos[0].moeda || 'EUR'}`;
+  }
+
+  obterColaboradorPorPoi(poi: POI): Colaborador | undefined {
+    if (!poi.colaboradorUid) {
+      return undefined;
+    }
+    return this.colaboradores.find(colaborador => colaborador.uid === poi.colaboradorUid);
+  }
+
+  obterColaboradorLabel(poi: POI): string {
+    const colaborador = this.obterColaboradorPorPoi(poi);
+    if (colaborador) {
+      return colaborador.nome?.trim() || colaborador.email || 'Colaborador';
+    }
+
+    return poi.colaboradorNome?.trim() || poi.colaboradorEmail || '';
+  }
+
+  obterInicialColaborador(poi: POI): string | undefined {
+    const label = this.obterColaboradorLabel(poi);
+    if (!label) {
+      return undefined;
+    }
+
+    const partes = label.split(/\s+/).filter(Boolean);
+    if (partes.length === 0) {
+      return undefined;
+    }
+
+    if (partes.length === 1) {
+      return partes[0].slice(0, 2).toUpperCase();
+    }
+
+    return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
   }
 
   private irParaDia(diaId: string) {
