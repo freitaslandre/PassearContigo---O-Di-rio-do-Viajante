@@ -139,6 +139,7 @@
             </div>
             <div class="custo-categoria-select">
               <ion-select
+                *ngIf="!ehCustoDoPOI(custo)"
                 [value]="custo.categoria"
                 [disabled]="atualizandoCustoId === custo.id"
                 (ionChange)="atualizarCategoriaCusto(custo.id, $event.detail.value)"
@@ -147,8 +148,12 @@
                   {{ cat }}
                 </ion-select-option>
               </ion-select>
+              <ion-chip *ngIf="ehCustoDoPOI(custo)" color="medium">
+                <ion-label>{{ custo.categoria || 'Sem categoria' }}</ion-label>
+              </ion-chip>
             </div>
             <ion-button
+              *ngIf="!ehCustoDoPOI(custo)"
               fill="clear"
               size="small"
               [routerLink]="['/editar-custo', custo.id]"

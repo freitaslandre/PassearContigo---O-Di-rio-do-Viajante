@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustosService } from '../../services/custos.service';
 import { ViagensService } from '../../services/viagens.service';
-import { Custo, Viagem, POI } from '../../models/viagem.model';
+import { Custo, Viagem } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
 import { ToastController } from '@ionic/angular';
-import { firstValueFrom } from 'rxjs';
 
 interface CustosPorCategoria {
   categoria: string;
@@ -50,7 +49,12 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
   atualizandoCustoId: string | null = null;
   
-  private unsubscribe: Unsubscribe | null = null;
+  private unsubscribeCustos: Unsubscribe | null = null;
+  private unsubscribeViagens: Unsubscribe | null = null;
+  private custosBase: Custo[] = [];
+  private viagens: Viagem[] = [];
+  private custosCarregados = false;
+  private viagensCarregadas = false;
 
   constructor(
     private custosService: CustosService,
@@ -63,21 +67,24 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.limparSubscricoes();
   }
 
   private carregarCustos(): void {
+    this.limparSubscricoes();
+
     this.carregando = true;
     this.erroCarregamento = '';
+    this.custosBase = [];
+    this.viagens = [];
+    this.custosCarregados = false;
+    this.viagensCarregadas = false;
 
-    this.unsubscribe = this.custosService.subscribeToCustos(
+    this.unsubscribeCustos = this.custosService.subscribeToCustos(
       (custos: Custo[]) => {
-        this.custos = custos;
-        this.adicionarCustosDosPOIs();
-        this.processarCustos();
-        this.carregando = false;
+        this.custosBase = custos;
+        this.custosCarregados = true;
+        this.atualizarResumo();
       },
       (error: any) => {
         console.error('Erro ao carregar custos:', error);
@@ -85,41 +92,76 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
         this.carregando = false;
       }
     );
+
+    this.unsubscribeViagens = this.viagensService.subscribeToViagens(
+      (viagens: Viagem[]) => {
+        this.viagens = viagens;
+        this.viagensCarregadas = true;
+        this.atualizarResumo();
+      },
+      (error: any) => {
+        console.error('Erro ao carregar viagens para custos dos POIs:', error);
+        this.erroCarregamento = 'Erro ao carregar custos dos POIs. Tente novamente.';
+        this.carregando = false;
+      }
+    );
   }
 
-  private async adicionarCustosDosPOIs(): Promise<void> {
+  private atualizarResumo(): void {
+    if (!this.custosCarregados || !this.viagensCarregadas) {
+      return;
+    }
+
+    this.custos = this.adicionarCustosDosPOIs(this.custosBase);
+    this.processarCustos();
+    this.carregando = false;
+  }
+
+  private adicionarCustosDosPOIs(custosBase: Custo[]): Custo[] {
+    const custosComPOIs = [...custosBase];
+    const idsExistentes = new Set(custosComPOIs.map(custo => custo.id));
+
     try {
-      const viagens = await firstValueFrom(this.viagensService.getViagens());
+      this.viagens.forEach(viagem => {
+        viagem.dias?.forEach(dia => {
+          dia.pontosInteresse?.forEach(poi => {
+            const valor = Number(poi.custo);
 
-      viagens.forEach(viagem => {
-        if (viagem.dias) {
-          viagem.dias.forEach(dia => {
-            if (dia.pontosInteresse) {
-              dia.pontosInteresse.forEach(poi => {
-                if (poi.custo && poi.custo > 0) {
-                  const custoPOI: Custo = {
-                    id: `poi-custo-${poi.id}`,
-                    descricao: `${poi.nome} (POI)`,
-                    valor: poi.custo,
-                    moeda: 'EUR',
-                    data: new Date(dia.data),
-                    categoria: poi.categoria || 'Outro',
-                    viagemId: viagem.id,
-                    poiId: poi.id
-                  };
+            if (!Number.isFinite(valor) || valor <= 0) {
+              return;
+            }
 
-                  if (!this.custos.find(c => c.id === custoPOI.id)) {
-                    this.custos.push(custoPOI);
-                  }
-                }
-              });
+            const custoPOI: Custo = {
+              id: `poi-custo-${poi.id}`,
+              descricao: `${poi.nome} (POI)`,
+              valor,
+              moeda: 'EUR',
+              data: this.normalizarData(dia.data),
+              categoria: poi.categoria?.trim() || 'Sem categoria',
+              viagemId: viagem.id,
+              diaId: dia.id,
+              poiId: poi.id
+            };
+
+            if (!idsExistentes.has(custoPOI.id)) {
+              custosComPOIs.push(custoPOI);
+              idsExistentes.add(custoPOI.id);
             }
           });
-        }
+        });
       });
     } catch (error) {
       console.error('Erro ao adicionar custos dos POIs:', error);
     }
+
+    return custosComPOIs;
+  }
+
+  private limparSubscricoes(): void {
+    this.unsubscribeCustos?.();
+    this.unsubscribeViagens?.();
+    this.unsubscribeCustos = null;
+    this.unsubscribeViagens = null;
   }
 
   private processarCustos(): void {
@@ -221,6 +263,10 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     this.carregarCustos();
   }
 
+  ehCustoDoPOI(custo: Custo): boolean {
+    return custo.id.startsWith('poi-custo-');
+  }
+
   async atualizarCategoriaCusto(custoId: string, novaCategoria: string): Promise<void> {
     if (!novaCategoria) {
       return;
@@ -251,5 +297,18 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     } finally {
       this.atualizandoCustoId = null;
     }
+  }
+
+  private normalizarData(data: any): Date {
+    if (data instanceof Date) {
+      return data;
+    }
+
+    if (data?.toDate instanceof Function) {
+      return data.toDate();
+    }
+
+    const dataConvertida = new Date(data);
+    return Number.isNaN(dataConvertida.getTime()) ? new Date() : dataConvertida;
   }
 }
