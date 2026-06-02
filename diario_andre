@@ -211,3 +211,31 @@ Decisões:
 Manter toda a lógica do Capacitor isolada em serviços dedicados, impedindo que as páginas consumam plugins nativos diretamente;
 Adotar a conversão imediata de caminhos locais (webPath) em objetos Blob via API fetch nativa, garantindo compatibilidade com o SDK de upload do Firebase Storage;
 Utilizar sempre o LoadingController em operações que envolvam tráfego de rede assíncrono para dar feedback visual ao utilizador.
+
+
+
+Sessão 8 — 1 de junho de 2026
+Objetivo:
+Implementar as páginas "Adicionar POI" e "Detalhe do POI", integrando formulários template-driven, metadados expandidos, geolocalização reversa, gestão de estado de edição/eliminação, feedback visual e estilização dinâmica, com persistência no Firestore.
+Atividades realizadas:
+
+Gestão de POIs (Criação e Detalhe): Criação das páginas `AdicionarPoiPage` e `DetalhePoiPage` utilizando a arquitetura de módulos tradicionais (`standalone: false` e `NgModule`).
+Formulários e UI: Implementação de formulários template-driven (`ngModel`) para capturar e editar dados como `nota`, `custo`, `categoria` e `avaliacao` (esta última com um sistema interativo de estrelas usando Ionicons).
+Geolocalização Reversa: Integração do `HttpClientModule` para consumir a API pública Nominatim (OpenStreetMap), sugerindo automaticamente o nome do POI com base na latitude e longitude.
+Arquitetura de Serviços: Criação do `POIService` para centralizar as operações de CRUD (adicionar, atualizar, obter e eliminar), delegando a persistência final ao `ViagensService` para manter os dados aninhados (`viagem.dias[].pontosInteresse[]`) no Firestore.
+Fluxo de Edição e Navegação: Configuração de rotas filhas parametrizadas (`dias/:diaId/poi/:poiId`) e desenvolvimento de lógica com um objeto clone (`poiEditavel`) para permitir edição inline (iniciar, guardar ou cancelar alterações).
+Feedback e Segurança: Utilização de `LoadingController` para processos assíncronos, `ToastController` (`IonToast`) para avisos de sucesso/erro e `AlertController` (`IonAlert`) para confirmação destrutiva antes de eliminar um POI.
+Design Dinâmico: Aplicação de CSS Custom Properties combinadas com `@HostBinding` no TypeScript para alterar dinamicamente o tema e estilo da página consoante a categoria do POI.
+
+Problemas e Soluções:
+
+Tipagem no TypeScript: Resolvidos os erros de compilação ao comparar `number | string` com strings vazias (`''`), substituindo-as por validações explícitas de `null`/`undefined` e conversões controladas via `Number()`.
+Conflito de Arquitetura de Formulários: Corrigida a confusão inicial entre Reactive Forms e Template-driven Forms, removendo dependências do `FormGroup` e padronizando todo o projeto com `[(ngModel)]` e o atributo `name`.
+Contexto de Rotas no Angular: Resolvida a dificuldade em obter o ID da viagem na página de detalhe (que recebia apenas os parâmetros filhos) através do uso de `ActivatedRoute.parent.snapshot.paramMap.get('id')`.
+Estabilidade do Código: Garantida a consistência de dados e imagens no modelo e validação final de sucesso através do comando `npm run build`.
+
+Decisões:
+
+Consistência Técnica: Manter a arquitetura baseada em NgModules e formulários estruturados em `ngModel` para garantir total compatibilidade com o código legado da aplicação.
+Modelagem de Dados: Manter os POIs aninhados dentro da estrutura de viagens no Firestore, evitando a complexidade de coleções separadas.
+Experiência do Utilizador (UX): Priorizar o uso de APIs secundárias sem bloquear a app em caso de falha de rede e garantir sempre feedback visual imediato para ações críticas do utilizador.
