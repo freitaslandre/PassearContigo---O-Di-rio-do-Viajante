@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { Unsubscribe } from 'firebase/firestore';
 import { Dia, POI, Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
 import { CameraService } from '../../services/camera.service';
@@ -45,7 +46,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   status: Viagem['status'] = 'planejada';
 
   private routeSub: Subscription | null = null;
-  private viagemSub: Subscription | null = null;
+  private viagemSub: Unsubscribe | null = null;
   private tentouObterGpsInicial = false;
 
   constructor(
@@ -77,7 +78,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSub?.unsubscribe();
-    this.viagemSub?.unsubscribe();
+    this.viagemSub?.();
   }
 
   voltar() {
@@ -334,9 +335,10 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.viagem = null;
     this.dias = [];
 
-    this.viagemSub?.unsubscribe();
-    this.viagemSub = this.viagensService.getViagemById(id).subscribe({
-      next: (viagem) => {
+    this.viagemSub?.();
+    this.viagemSub = this.viagensService.subscribeToViagemById(
+      id,
+      (viagem) => {
         this.viagem = viagem ?? null;
         this.carregando = false;
 
@@ -347,12 +349,12 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
         this.preencherFormulario(viagem);
       },
-      error: (err) => {
+      (err) => {
         this.carregando = false;
         this.erro = err?.message || 'Erro ao carregar viagem.';
         console.error('Erro ao carregar viagem:', err);
       }
-    });
+    );
   }
 
   private async guardarFotoPoi(dia: DiaViewModel, poi: POI, dataUrl: string) {
