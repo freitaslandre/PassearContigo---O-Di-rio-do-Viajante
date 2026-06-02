@@ -115,45 +115,53 @@ export class ViagensService {
    * Retorna um callback de unsubscribe para cleanup.
    */
   subscribeToViagemById(id: string, onData: (viagem: Viagem | null) => void, onError?: (error: any) => void): Unsubscribe | null {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    let unsubscribeSnapshot: Unsubscribe | null = null;
 
-    if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
-      return null;
-    }
+    const authUnsubscribe = this.afAuth.authState.subscribe(user => {
+      unsubscribeSnapshot?.();
+      unsubscribeSnapshot = null;
 
-    try {
-      const db = getFirestore();
-      const docRef = doc(db, this.collectionName, id);
+      if (!user) {
+        onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+        return;
+      }
 
-      return onSnapshot(
-        docRef,
-        (snapshot) => {
-          if (!snapshot.exists()) {
-            onData(null);
-            return;
+      try {
+        const db = getFirestore();
+        const docRef = doc(db, this.collectionName, id);
+
+        unsubscribeSnapshot = onSnapshot(
+          docRef,
+          (snapshot) => {
+            if (!snapshot.exists()) {
+              onData(null);
+              return;
+            }
+
+            const data = snapshot.data() as ViagemPayload;
+
+            if (data.uidUtilizador !== user.uid) {
+              onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
+              return;
+            }
+
+            onData({ id: snapshot.id, ...data });
+          },
+          (error) => {
+            console.error('Erro ao subscrever viagem:', error);
+            onError?.(error);
           }
+        );
+      } catch (error) {
+        console.error('Erro ao configurar subscrição:', error);
+        onError?.(error);
+      }
+    });
 
-          const data = snapshot.data() as ViagemPayload;
-
-          if (data.uidUtilizador !== user.uid) {
-            onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
-            return;
-          }
-
-          onData({ id: snapshot.id, ...data });
-        },
-        (error) => {
-          console.error('Erro ao subscrever viagem:', error);
-          onError?.(error);
-        }
-      );
-    } catch (error) {
-      console.error('Erro ao configurar subscrição:', error);
-      onError?.(error);
-      return null;
-    }
+    return () => {
+      authUnsubscribe.unsubscribe();
+      unsubscribeSnapshot?.();
+    };
   }
 
   /**

@@ -87,37 +87,48 @@
             size-lg="2"
             *ngFor="let foto of grupo.fotos; trackBy: trackByFotoId"
           >
-            <button
-              type="button"
-              class="photo-tile"
-              [class.selection-mode]="modoSelecao"
-              [class.selected]="fotoEstaSelecionada(foto)"
-              [class.locked-photo]="modoSelecao && !fotoPodeEditar(foto)"
-              (click)="abrirFoto(foto)"
-              (press)="alternarSelecaoFoto(foto)"
-            >
-              <div class="selection-indicator" *ngIf="modoSelecao || fotoEstaSelecionada(foto)">
-                <ion-icon [name]="fotoEstaSelecionada(foto) ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
-              </div>
-              <ion-img [src]="foto.url" [alt]="foto.titulo"></ion-img>
-              <div class="photo-info">
-                <div class="photo-title-row">
-                  <span>{{ foto.titulo }}</span>
-                  <ion-badge color="light">{{ foto.origemLabel }}</ion-badge>
+            <div class="photo-tile-shell">
+              <button
+                type="button"
+                class="photo-tile"
+                [class.selection-mode]="modoSelecao"
+                [class.selected]="fotoEstaSelecionada(foto)"
+                [class.locked-photo]="modoSelecao && !fotoPodeEditar(foto)"
+                (click)="abrirFoto(foto)"
+                (press)="alternarSelecaoFoto(foto)"
+              >
+                <div class="selection-indicator" *ngIf="modoSelecao || fotoEstaSelecionada(foto)">
+                  <ion-icon [name]="fotoEstaSelecionada(foto) ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
                 </div>
-                <p class="photo-caption" [class.empty-caption]="!foto.legenda">
-                  {{ foto.legenda || 'Sem legenda' }}
-                </p>
-                <small class="photo-poi" [class.no-poi]="!foto.poiId">
-                  <ion-icon name="location-outline"></ion-icon>
-                  {{ foto.poiNome }}
-                </small>
-                <small class="photo-date">{{ foto.subtitulo }}</small>
-                <small class="photo-locked" *ngIf="modoSelecao && !fotoPodeEditar(foto)">
-                  Gerida no POI
-                </small>
-              </div>
-            </button>
+                <ion-img [src]="foto.url" [alt]="foto.titulo"></ion-img>
+                <div class="photo-info">
+                  <div class="photo-title-row">
+                    <span>{{ foto.titulo }}</span>
+                    <ion-badge color="light">{{ foto.origemLabel }}</ion-badge>
+                  </div>
+                  <p class="photo-caption" [class.empty-caption]="!foto.legenda">
+                    {{ foto.legenda || 'Sem legenda' }}
+                  </p>
+                  <small class="photo-poi" [class.no-poi]="!foto.poiId">
+                    <ion-icon name="location-outline"></ion-icon>
+                    {{ foto.poiNome }}
+                  </small>
+                  <small class="photo-date">{{ foto.subtitulo }}</small>
+                  <small class="photo-locked" *ngIf="modoSelecao && !fotoPodeEditar(foto)">
+                    Gerida no POI
+                  </small>
+                </div>
+              </button>
+              <button
+                *ngIf="!modoSelecao"
+                type="button"
+                class="photo-share-button"
+                aria-label="Partilhar foto"
+                (click)="partilharFoto(foto)"
+              >
+                <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+              </button>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -128,4 +139,78 @@
       Carregar mais fotos
     </ion-button>
   </section>
+
+  <ion-modal [isOpen]="!!fotoAberta" (didDismiss)="fecharFoto()" class="photo-detail-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ fotoAberta?.titulo || 'Foto' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="fecharFoto()" aria-label="Fechar">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content *ngIf="fotoAberta as foto" class="photo-detail-content">
+        <div class="photo-detail-viewer">
+          <img [src]="foto.url" [alt]="foto.titulo" />
+        </div>
+
+        <section class="photo-detail-info">
+          <div class="photo-detail-title-row">
+            <div>
+              <ion-badge color="primary">{{ foto.origemLabel }}</ion-badge>
+              <h2>{{ foto.titulo }}</h2>
+            </div>
+            <ion-button fill="clear" color="primary" (click)="partilharFoto(foto)" aria-label="Partilhar foto">
+              <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+            </ion-button>
+          </div>
+
+          <p class="photo-detail-caption" [class.empty-caption]="!foto.legenda">
+            {{ foto.legenda || 'Sem legenda' }}
+          </p>
+
+          <ion-list lines="full">
+            <ion-item>
+              <ion-icon slot="start" name="calendar-outline"></ion-icon>
+              <ion-label>
+                <p>Data</p>
+                <h3>{{ foto.subtitulo }}</h3>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-icon slot="start" name="location-outline"></ion-icon>
+              <ion-label>
+                <p>POI</p>
+                <h3>{{ foto.poiNome }}</h3>
+              </ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="viagem?.titulo">
+              <ion-icon slot="start" name="map-outline"></ion-icon>
+              <ion-label>
+                <p>Viagem</p>
+                <h3>{{ viagem?.titulo }}</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <ion-button
+            *ngIf="foto.diaId"
+            expand="block"
+            color="primary"
+            fill="outline"
+            (click)="abrirOrigemFoto(foto)"
+          >
+            <ion-icon slot="start" name="navigate-outline"></ion-icon>
+            {{ foto.poiId ? 'Abrir POI' : 'Abrir Dia' }}
+          </ion-button>
+        </section>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -4,6 +4,7 @@ import { Gesture, GestureController, ToastController } from '@ionic/angular';
 import { Unsubscribe } from 'firebase/firestore';
 import { Custo, Dia, POI, Viagem } from '../../models/viagem.model';
 import { CustosService } from '../../services/custos.service';
+import { DiarioPdfService } from '../../services/diario-pdf.service';
 import { ViagensService } from '../../services/viagens.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   diaAtualIndex = 0;
   carregando = true;
   guardando = false;
+  gerandoPdf = false;
   erro = '';
 
   private viagemSub: Unsubscribe | null = null;
@@ -33,6 +35,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private viagensService: ViagensService,
     private custosService: CustosService,
+    private diarioPdfService: DiarioPdfService,
     private gestureCtrl: GestureController,
     private toastCtrl: ToastController
   ) {}
@@ -252,6 +255,29 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
       await this.mostrarToast(error?.message || 'Erro ao guardar diario.', 'danger');
     } finally {
       this.guardando = false;
+    }
+  }
+
+  async gerarPdfDiario() {
+    if (!this.viagem || this.gerandoPdf) {
+      return;
+    }
+
+    this.gerandoPdf = true;
+
+    try {
+      this.diarioPdfService.gerarDiarioCompleto({
+        viagem: this.viagem,
+        dias: this.dias,
+        custos: this.custosFirestore
+      });
+
+      await this.mostrarToast('PDF do diario gerado com sucesso.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao gerar PDF do diario:', error);
+      await this.mostrarToast(error?.message || 'Erro ao gerar PDF do diario.', 'danger');
+    } finally {
+      this.gerandoPdf = false;
     }
   }
 

@@ -63,6 +63,10 @@
   padding: 0;
 }
 
+.photo-tile-shell {
+  position: relative;
+}
+
 .photo-tile {
   position: relative;
   display: grid;
@@ -111,6 +115,36 @@
     }
   }
 
+}
+
+.photo-share-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.24);
+  color: var(--ion-color-primary);
+
+  ion-icon {
+    color: var(--ion-color-primary);
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    stroke-width: 40px;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
 }
 
 .photo-info {
@@ -214,6 +248,63 @@
   }
 }
 
+.photo-detail-modal {
+  --height: 92%;
+  --max-width: 920px;
+  --border-radius: 8px;
+}
+
+.photo-detail-content {
+  --background: var(--ion-background-color);
+}
+
+.photo-detail-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48vh;
+  background: #111;
+
+  img {
+    display: block;
+    width: 100%;
+    max-height: 62vh;
+    object-fit: contain;
+  }
+}
+
+.photo-detail-info {
+  display: grid;
+  gap: 14px;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.photo-detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  h2 {
+    margin: 8px 0 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+}
+
+.photo-detail-caption {
+  margin: 0;
+  color: var(--ion-text-color);
+  line-height: 1.45;
+
+  &.empty-caption {
+    color: var(--ion-color-medium);
+    font-style: italic;
+  }
+}
+
 @media (max-width: 420px) {
   .album-header {
     align-items: stretch;
@@ -222,5 +313,18 @@
 
   .photo-tile {
     aspect-ratio: 1 / 1.62;
+  }
+
+  .photo-detail-modal {
+    --height: 100%;
+    --border-radius: 0;
+  }
+
+  .photo-detail-viewer {
+    min-height: 42vh;
+
+    img {
+      max-height: 54vh;
+    }
   }
 }

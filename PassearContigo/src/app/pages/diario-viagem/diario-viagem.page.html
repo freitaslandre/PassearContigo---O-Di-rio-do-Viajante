@@ -7,6 +7,10 @@
     </ion-buttons>
     <ion-title>Diário da Viagem</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && viagem && dias.length > 0">
+      <ion-button (click)="gerarPdfDiario()" [disabled]="gerandoPdf || guardando">
+        <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="guardarDiario()" [disabled]="guardando">
         <ion-spinner *ngIf="guardando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!guardando" slot="icon-only" name="save-outline"></ion-icon>

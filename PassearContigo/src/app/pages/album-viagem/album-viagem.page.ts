@@ -5,6 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Unsubscribe } from 'firebase/firestore';
 import { Dia, FotoAlbumViagem, POI, Viagem } from '../../models/viagem.model';
+import { PhotoShareService } from '../../services/photo-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
 interface FotoAlbum {
@@ -61,12 +62,13 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   importando = false;
   erro = '';
   fotosIgnoradasPorTamanho = 0;
+  fotoAberta: FotoAlbum | null = null;
 
   private viagemSub: Unsubscribe | null = null;
   private quantidadeVisivel = 12;
   private readonly tamanhoLote = 12;
   private readonly limiteImportacao = 12;
-  private readonly tamanhoMaximoDataUrl = 350_000;
+  private readonly tamanhoMaximoDataUrl = 2_500_000;
 
   constructor(
     private route: ActivatedRoute,
@@ -74,7 +76,8 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     private viagensService: ViagensService,
     private cdr: ChangeDetectorRef,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private photoShareService: PhotoShareService
   ) {}
 
   ngOnInit() {
@@ -108,6 +111,20 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
       return;
     }
 
+    this.fotoAberta = foto;
+  }
+
+  fecharFoto() {
+    this.fotoAberta = null;
+  }
+
+  abrirOrigemFoto(foto: FotoAlbum | null = this.fotoAberta) {
+    if (!foto) {
+      return;
+    }
+
+    this.fecharFoto();
+
     if (foto.diaId && foto.poiId) {
       this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', foto.diaId, 'poi', foto.poiId]);
       return;
@@ -115,6 +132,29 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
 
     if (foto.diaId) {
       this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', foto.diaId]);
+    }
+  }
+
+  async partilharFoto(foto: FotoAlbum) {
+    try {
+      const podePartilhar = await this.photoShareService.canShare();
+      if (!podePartilhar) {
+        await this.mostrarToast('Partilha de fotos não disponível neste dispositivo.', 'medium');
+        return;
+      }
+
+      await this.photoShareService.sharePhoto(foto.url, {
+        title: foto.titulo || 'Foto de viagem',
+        text: this.criarTextoPartilhaFoto(foto),
+        dialogTitle: 'Partilhar foto',
+        fileNamePrefix: foto.titulo || foto.poiNome || 'foto-viagem'
+      });
+    } catch (error: any) {
+      if (error?.message?.toLowerCase().includes('cancel')) {
+        return;
+      }
+
+      await this.mostrarToast(error?.message || 'Erro ao partilhar foto.', 'danger');
     }
   }
 
@@ -346,6 +386,19 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     return this.fotos.filter(foto => this.fotosSelecionadas.has(foto.id) && this.fotoPodeEditar(foto));
   }
 
+  private criarTextoPartilhaFoto(foto: FotoAlbum): string {
+    const linhas = [
+      foto.titulo,
+      foto.legenda,
+      foto.poiId ? `Local: ${foto.poiNome}` : '',
+      foto.subtitulo,
+      this.viagem?.titulo ? `Viagem: ${this.viagem.titulo}` : '',
+      'Partilhado com Passear Contigo'
+    ];
+
+    return linhas.filter(Boolean).join('\n');
+  }
+
   private async eliminarFotosSelecionadas(fotos: FotoAlbum[]) {
     if (!this.viagem) return;
 
@@ -499,6 +552,10 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   private obterUrlMedia(media: MediaResult): string | undefined {
+    if (media.thumbnail && (!media.webPath || media.webPath.startsWith('blob:'))) {
+      return `data:image/${media.metadata?.format || 'jpeg'};base64,${media.thumbnail}`;
+    }
+
     if (media.webPath) {
       return media.webPath;
     }

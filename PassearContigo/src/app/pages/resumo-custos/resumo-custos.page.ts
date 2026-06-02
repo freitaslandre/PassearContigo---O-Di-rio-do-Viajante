@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustosService } from '../../services/custos.service';
+import { CustosPdfService } from '../../services/custos-pdf.service';
 import { ViagensService } from '../../services/viagens.service';
 import { Custo, Viagem } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
@@ -48,6 +49,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   erroCarregamento = '';
   categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
   atualizandoCustoId: string | null = null;
+  gerandoPdf = false;
   
   private unsubscribeCustos: Unsubscribe | null = null;
   private unsubscribeViagens: Unsubscribe | null = null;
@@ -58,6 +60,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
   constructor(
     private custosService: CustosService,
+    private custosPdfService: CustosPdfService,
     private viagensService: ViagensService,
     private toastController: ToastController
   ) {}
@@ -263,6 +266,29 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     this.carregarCustos();
   }
 
+  async gerarPdfCustosPorCategoria(): Promise<void> {
+    if (this.gerandoPdf || this.custos.length === 0) {
+      return;
+    }
+
+    this.gerandoPdf = true;
+
+    try {
+      this.custosPdfService.gerarRelatorioPorCategoria({
+        custos: this.custos,
+        categorias: this.custosPorCategoria,
+        totalGeral: this.totalGeral
+      });
+
+      await this.mostrarToast('PDF de custos gerado com sucesso.', 'success');
+    } catch (error) {
+      console.error('Erro ao gerar PDF de custos:', error);
+      await this.mostrarToast('Erro ao gerar PDF de custos.', 'danger');
+    } finally {
+      this.gerandoPdf = false;
+    }
+  }
+
   ehCustoDoPOI(custo: Custo): boolean {
     return custo.id.startsWith('poi-custo-');
   }
@@ -310,5 +336,16 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
     const dataConvertida = new Date(data);
     return Number.isNaN(dataConvertida.getTime()) ? new Date() : dataConvertida;
+  }
+
+  private async mostrarToast(message: string, color: 'success' | 'danger'): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color
+    });
+
+    await toast.present();
   }
 }

@@ -125,6 +125,17 @@
           <img [src]="fotoUrl" alt="Foto POI" class="poi-foto" />
           <ion-button
             expand="block"
+            color="secondary"
+            fill="outline"
+            size="small"
+            (click)="partilharFotoPoi()"
+            style="margin-top: 10px;"
+          >
+            <ion-icon slot="start" name="share-social-outline"></ion-icon>
+            Partilhar Foto
+          </ion-button>
+          <ion-button
+            expand="block"
             color="danger"
             fill="outline"
             size="small"
@@ -259,6 +270,16 @@
         <ion-card-title>Ações Rápidas</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <ion-button
+          expand="block"
+          color="secondary"
+          fill="outline"
+          (click)="partilharPoi()"
+        >
+          <ion-icon slot="start" name="share-social-outline"></ion-icon>
+          Partilhar POI
+        </ion-button>
+
         <ion-button
           *ngIf="temLocalizacao"
           expand="block"

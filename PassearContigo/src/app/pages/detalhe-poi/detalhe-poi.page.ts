@@ -1,10 +1,12 @@
 import { AfterViewInit, Component, ElementRef, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Share } from '@capacitor/share';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
 import { MapCacheService } from '../../services/map-cache.service';
+import { PhotoShareService } from '../../services/photo-share.service';
 import { POI, Dia } from '../../models/viagem.model';
 
 @Component({
@@ -52,7 +54,8 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     private poiService: POIService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private mapCacheService: MapCacheService
+    private mapCacheService: MapCacheService,
+    private photoShareService: PhotoShareService
   ) {}
 
   ngOnInit() {
@@ -312,6 +315,43 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     await alert.present();
   }
 
+  async partilharFotoPoi() {
+    if (!this.fotoUrl || !this.poi) {
+      return;
+    }
+
+    try {
+      const podePartilhar = await this.photoShareService.canShare();
+      if (!podePartilhar) {
+        const toast = await this.toastCtrl.create({
+          message: 'Partilha de fotos não disponível neste dispositivo.',
+          duration: 2000,
+          color: 'medium'
+        });
+        await toast.present();
+        return;
+      }
+
+      await this.photoShareService.sharePhoto(this.fotoUrl, {
+        title: this.poi.nome || 'Foto do POI',
+        text: this.criarTextoPartilhaFotoPoi(),
+        dialogTitle: 'Partilhar foto',
+        fileNamePrefix: this.poi.nome || 'foto-poi'
+      });
+    } catch (error: any) {
+      if (error?.message?.toLowerCase().includes('cancel')) {
+        return;
+      }
+
+      const toast = await this.toastCtrl.create({
+        message: error?.message || 'Erro ao partilhar foto.',
+        duration: 2200,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
   iniciarEdicao() {
     if (!this.poi) return;
     this.poiEditavel = {
@@ -452,11 +492,88 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     return this.poisDoDiaComLocalizacao.length > 0;
   }
 
+  async partilharPoi() {
+    if (!this.poi) {
+      return;
+    }
+
+    try {
+      const podePartilhar = await Share.canShare();
+      if (!podePartilhar.value) {
+        const toast = await this.toastCtrl.create({
+          message: 'Partilha nativa não disponível neste dispositivo.',
+          duration: 2000,
+          color: 'medium'
+        });
+        await toast.present();
+        return;
+      }
+
+      await Share.share({
+        title: this.poi.nome,
+        text: this.criarTextoPartilhaPoi(this.poi),
+        url: this.obterUrlPartilhaPoi(this.poi),
+        dialogTitle: 'Partilhar POI'
+      });
+    } catch (error: any) {
+      if (error?.message?.toLowerCase().includes('cancel')) {
+        return;
+      }
+
+      const toast = await this.toastCtrl.create({
+        message: error?.message || 'Erro ao partilhar POI.',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
   abrirMapa() {
     if (this.temLocalizacao) {
-      const mapsUrl = `https://www.openstreetmap.org/?mlat=${this.poi?.latitude}&mlon=${this.poi?.longitude}#map=16/${this.poi?.latitude}/${this.poi?.longitude}`;
+      const mapsUrl = this.obterUrlMapaPoi(this.poi);
       window.open(mapsUrl, '_blank');
     }
+  }
+
+  private criarTextoPartilhaPoi(poi: POI): string {
+    const linhas = [
+      poi.nome,
+      poi.tipo || poi.categoria ? `Tipo: ${poi.tipo || poi.categoria}` : '',
+      poi.descricao ? `Descrição: ${poi.descricao}` : '',
+      poi.endereco ? `Endereço: ${poi.endereco}` : '',
+      poi.horario ? `Horário: ${poi.horario}` : '',
+      poi.custo !== undefined && poi.custo !== null ? `Custo: € ${Number(poi.custo).toFixed(2)}` : '',
+      poi.avaliacao ? `Avaliação: ${poi.avaliacao}/5` : '',
+      poi.nota ? `Nota: ${poi.nota}` : '',
+      poi.url ? `Site: ${poi.url}` : '',
+      this.temLocalizacao ? `Mapa: ${this.obterUrlMapaPoi(poi)}` : ''
+    ];
+
+    return linhas.filter(Boolean).join('\n');
+  }
+
+  private criarTextoPartilhaFotoPoi(): string {
+    const linhas = [
+      this.poi?.nome ? `Foto de ${this.poi.nome}` : 'Foto de viagem',
+      this.poi?.endereco ? `Local: ${this.poi.endereco}` : '',
+      this.temLocalizacao ? `Mapa: ${this.obterUrlMapaPoi(this.poi)}` : '',
+      'Partilhado com Passear Contigo'
+    ];
+
+    return linhas.filter(Boolean).join('\n');
+  }
+
+  private obterUrlPartilhaPoi(poi: POI): string | undefined {
+    if (this.temLocalizacao) {
+      return this.obterUrlMapaPoi(poi);
+    }
+
+    return poi.url || undefined;
+  }
+
+  private obterUrlMapaPoi(poi: POI | null): string {
+    return `https://www.openstreetmap.org/?mlat=${poi?.latitude}&mlon=${poi?.longitude}#map=16/${poi?.latitude}/${poi?.longitude}`;
   }
 
   private agendarAtualizacaoMapa() {
