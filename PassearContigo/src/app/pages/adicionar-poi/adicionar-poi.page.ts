@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
+import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI } from '../../models/viagem.model';
 import * as L from 'leaflet';
@@ -38,6 +39,10 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   erroSugestoes = '';
   private pesquisaSugestaoAtual = 0;
 
+  fotoPreview: string | null = null;
+  fotoFile: File | null = null;
+  @ViewChild('fotoInput') fotoInput!: ElementRef;
+
   private map: L.Map | null = null;
   private marker: L.Marker | null = null;
   private defaultLat = 40.7128;
@@ -51,7 +56,8 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private nominatimService: NominatimService
+    private nominatimService: NominatimService,
+    private storageService: FirebaseStorageService
   ) {}
 
   ngOnInit() {
@@ -204,6 +210,30 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  selecionarFoto() {
+    this.fotoInput.nativeElement.click();
+  }
+
+  onFotoSelecionada(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    this.fotoFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.fotoPreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removerFoto() {
+    this.fotoFile = null;
+    this.fotoPreview = null;
+    this.fotoInput.nativeElement.value = '';
+  }
+
   async adicionarPoi() {
     if (!this.poi.nome?.trim()) {
       const alert = await this.alertCtrl.create({
@@ -225,8 +255,10 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     await loader.present();
 
     try {
+      const poiId = `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
       const novoPoi: POI = {
-        id: `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        id: poiId,
         nome: this.poi.nome.trim(),
         descricao: this.poi.descricao?.trim() || undefined,
         tipo: this.poi.tipo?.trim() || undefined,
@@ -268,9 +300,22 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
         }
       }
 
-      // Usar POIService para guardar no Firestore
+      if (this.fotoPreview && this.fotoPreview.startsWith('data:')) {
+        try {
+          const fotoUrl = await this.storageService.uploadPoiPhoto(
+            this.viagemId,
+            this.diaId,
+            poiId,
+            this.fotoPreview
+          );
+          novoPoi.fotoUrl = fotoUrl;
+        } catch (error) {
+          console.warn('Aviso: Não foi possível fazer upload da foto, continuando sem imagem', error);
+        }
+      }
+
       await this.poiService.adicionarPOI(this.viagemId, this.diaId, novoPoi);
-      
+
       await loader.dismiss();
 
       const toast = await this.toastCtrl.create({

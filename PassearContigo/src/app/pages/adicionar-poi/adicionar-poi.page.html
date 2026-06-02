@@ -17,6 +17,26 @@
 
       <ion-card-content>
         <ion-item>
+          <ion-label position="stacked">Foto</ion-label>
+          <div class="foto-upload-container">
+            <ion-text color="medium" *ngIf="!fotoPreview">
+              <small>Funcionalidade de upload de foto será habilitada em breve.</small>
+            </ion-text>
+            <div *ngIf="fotoPreview" class="foto-preview">
+              <img [src]="fotoPreview" alt="Preview da foto" />
+              <ion-button
+                size="small"
+                color="danger"
+                fill="outline"
+                (click)="removerFoto()"
+              >
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-item>
+
+        <ion-item>
           <ion-label position="stacked">Nome *</ion-label>
           <ion-input
             name="nome"

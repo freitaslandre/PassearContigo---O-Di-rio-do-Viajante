@@ -13,6 +13,30 @@ ion-card {
   gap: 0.5rem;
 }
 
+.foto-upload-container {
+  padding: 1rem 0;
+}
+
+.foto-preview {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  ion-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
 .sugestoes-wrapper {
   margin: 0.75rem 0 1rem;
   position: relative;
