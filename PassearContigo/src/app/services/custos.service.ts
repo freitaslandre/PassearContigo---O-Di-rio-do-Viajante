@@ -138,13 +138,13 @@ export class CustosService {
           return of([]);
         }
 
-        let baseQuery = ref => ref
+        let baseQuery = (ref: any) => ref
           .where('uidUtilizador', '==', user.uid)
           .where('viagemId', '==', viagemId)
           .where('diaId', '==', diaId);
 
         if (poiId) {
-          baseQuery = ref =>
+          baseQuery = (ref: any) =>
             ref
               .where('uidUtilizador', '==', user.uid)
               .where('viagemId', '==', viagemId)
@@ -242,17 +242,17 @@ export class CustosService {
 
       return onSnapshot(
         q,
-        (snapshot) => {
+        (snapshot: any) => {
           const custos: Custo[] = snapshot.docs
-            .map(doc => ({
+            .map((doc: any) => ({
               id: doc.id,
               ...doc.data() as CustoPayload
             }))
-            .sort((a, b) => this.compararDatas(a.data, b.data));
+            .sort((a: any, b: any) => this.compararDatas(a.data, b.data));
 
           onData(custos);
         },
-        (error) => {
+        (error: any) => {
           console.error('Erro ao subscrever custos:', error);
           onError?.(error);
         }
@@ -291,17 +291,17 @@ export class CustosService {
 
       return onSnapshot(
         q,
-        (snapshot) => {
+        (snapshot: any) => {
           const custos: Custo[] = snapshot.docs
-            .map(doc => ({
+            .map((doc: any) => ({
               id: doc.id,
               ...doc.data() as CustoPayload
             }))
-            .sort((a, b) => this.compararDatas(a.data, b.data));
+            .sort((a: any, b: any) => this.compararDatas(a.data, b.data));
 
           onData(custos);
         },
-        (error) => {
+        (error: any) => {
           console.error('Erro ao subscrever custos do dia:', error);
           onError?.(error);
         }
@@ -340,17 +340,17 @@ export class CustosService {
 
       return onSnapshot(
         q,
-        (snapshot) => {
+        (snapshot: any) => {
           const custos: Custo[] = snapshot.docs
-            .map(doc => ({
+            .map((doc: any) => ({
               id: doc.id,
               ...doc.data() as CustoPayload
             }))
-            .sort((a, b) => this.compararDatas(a.data, b.data));
+            .sort((a: any, b: any) => this.compararDatas(a.data, b.data));
 
           onData(custos);
         },
-        (error) => {
+        (error: any) => {
           console.error('Erro ao subscrever custos do POI:', error);
           onError?.(error);
         }
@@ -404,17 +404,17 @@ export class CustosService {
 
       return onSnapshot(
         q,
-        (snapshot) => {
+        (snapshot: any) => {
           const custos: Custo[] = snapshot.docs
-            .map(doc => ({
+            .map((doc: any) => ({
               id: doc.id,
               ...doc.data() as CustoPayload
             }))
-            .sort((a, b) => this.compararDatas(a.data, b.data));
+            .sort((a: any, b: any) => this.compararDatas(a.data, b.data));
 
           onData(custos);
         },
-        (error) => {
+        (error: any) => {
           console.error('Erro ao subscrever custos:', error);
           onError?.(error);
         }
@@ -443,7 +443,7 @@ export class CustosService {
     return new Observable(observer => {
       const unsubscribe = onSnapshot(
         docRef,
-        (snapshot) => {
+        (snapshot: any) => {
           if (!snapshot.exists()) {
             observer.next(undefined);
             return;
@@ -458,7 +458,7 @@ export class CustosService {
 
           observer.next({ id: snapshot.id, ...data });
         },
-        (error) => {
+        (error: any) => {
           observer.error(error);
         }
       );

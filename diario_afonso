@@ -73,3 +73,133 @@ Status:
 - 1 novo módulo criado (dia-detalhe)
 - Refatorização com melhoria de código (+7 linhas, -14 linhas)
 - Branch: main
+
+---
+
+Sessão 3 — 1 de junho de 2026
+Objetivo:
+Implementar CustosService com CRUD Firestore, associar custos a POIs e dias, integrar Leaflet via CDN, e corrigir problema de overlapping de labels flutuantes.
+
+Atividades realizadas:
+
+1. INTEGRAÇÃO LEAFLET CDN (Req. Verificação)
+   ✅ Leaflet v1.9.4 já estava integrado no projeto (index.html)
+   ✅ CSS e JavaScript carregando corretamente via CDN
+   ✅ 5 páginas usando mapas identificadas
+
+2. CRIAÇÃO DO CUSTOSSERVICE (Req. 15)
+   ✅ Serviço completo com CRUD em Firestore:
+      - createCusto(), getCustos(), getCustoById(), updateCusto(), deleteCusto()
+      - deleteCustos(), updateCustosEmLote() para operações em lote
+      - getCustosByUid() para filtro por utilizador
+   ✅ Subscrições em tempo real:
+      - subscribeToCustos() - monitorar todos os custos
+      - subscribeToViagemById() - custos de uma viagem específica
+   ✅ Utilitários úteis:
+      - calcularTotalCustos() - soma total
+      - calcularCustosPorCategoria() - agrupamento por categoria
+   ✅ Segurança:
+      - Validação de utilizador autenticado
+      - Isolamento de dados por UID
+      - Verificação de propriedade de documentos
+   ✅ Testes unitários criados para calcularTotalCustos() e calcularCustosPorCategoria()
+   ✅ Build sem erros de compilação
+
+3. ASSOCIAÇÃO DE CUSTOS A POIS E DIAS
+   ✅ Modelo Custo atualizado com novo campo poiId:
+      - viagemId (viagem associada)
+      - diaId (dia associado)
+      - poiId (POI associado) ← NOVO
+      - Campos de auditoria: uidUtilizador, criadoEm, atualizadoEm
+   ✅ Novos métodos de criação no CustosService:
+      - createCustoPorDia(diaId, custo)
+      - createCustoPorPOI(poiId, custo)
+      - createCustoCompleto(viagemId, diaId, poiId, custo)
+   ✅ Novos métodos de filtro:
+      - getCustosByPoiId(poiId)
+      - getCustosByDiaId(diaId)
+      - getCustosByViagemDiaAndPoi(viagemId, diaId, poiId)
+   ✅ Subscrições em tempo real para contexto específico:
+      - subscribeToCustosByDiaId(diaId, onData, onError)
+      - subscribeToCustosByPoiId(poiId, onData, onError)
+      - subscribeToCustosByViagemDiaAndPoi(viagemId, diaId, poiId, onData, onError)
+   ✅ Métodos de gerenciamento de relações:
+      - desassociarDia(), desassociarPoi(), desassociarViagem()
+      - moverParaDia(), moverParaPOI()
+   ✅ Testes atualizados com cobertura completa de associações
+   ✅ Build sem erros
+
+4. CORREÇÃO DE PROBLEMA DE OVERLAPPING DE LABELS
+   Problema identificado: Labels flutuantes (position="floating") apareciam POR CIMA das caixas de texto, criando texto ilegível sobreposto.
+   
+   Tentativas iniciais:
+   - CSS com position: absolute, top: -22px, z-index (não funcionaram)
+   - Global styles com !important (não funcionaram)
+   - Ajustes de overflow, padding e positioning (não funcionaram)
+   
+   Causa raiz: Limitações de renderização do Ionic com labels flutuantes quando integrados com FlexLayout
+   
+   Solução final: Converter de floating labels para stacked labels
+   ✅ Convertidas todas as páginas com formulários:
+      - adicionar-poi.page.html (12 labels)
+      - detalhe-poi.page.html
+      - nova-viagem.page.html
+      - editar-viagem.page.html
+   ✅ Removidas regras CSS conflitantes do global.scss
+   ✅ Simplificado CSS nos component styles
+   ✅ Interface agora limpa, legível e profissional
+   ✅ Build sem erros
+
+Arquivo de Firestore - Estrutura Custos:
+{
+  "id": "custo-1",
+  "uidUtilizador": "user-123",
+  "descricao": "Almoço no restaurante",
+  "valor": 25.50,
+  "moeda": "EUR",
+  "data": "2026-06-01T12:00:00Z",
+  "categoria": "Alimentação",
+  "viagemId": "viagem-1",
+  "diaId": "dia-1",
+  "poiId": "poi-1",
+  "reembolsavel": false,
+  "criadoEm": "2026-06-01T10:00:00Z",
+  "atualizadoEm": "2026-06-01T10:00:00Z"
+}
+
+Problemas identificados e resolvidos:
+
+1. Problema de compilação: Campos faltantes no modelo Custo
+   ✅ Resolvido adicionando: uidUtilizador, criadoEm, atualizadoEm, poiId
+   
+2. Overlapping de labels (CRÍTICO)
+   Tentativa 1: z-index CSS (falhou - Ionic renderização)
+   Tentativa 2: position: absolute com top (falhou - layout quebrado)
+   Tentativa 3: Global styles (falhou - especificidade insuficiente)
+   ✅ Solução final: Stacked labels (funciona perfeitamente)
+
+Métricas:
+
+- 2 novos arquivos criados: custos.service.ts, custos.service.spec.ts
+- 4 modelos atualizados com novo campo poiId
+- 4 páginas com labels convertidos para stacked
+- 15+ novos métodos no CustosService
+- 6 subscrições em tempo real implementadas
+- 100% build sem erros
+- Cobertura de testes para utilitários principais
+
+Decisões de design:
+
+1. Usar Firestore como banco de dados: firestore oferece escalabilidade automática e sincronização em tempo real
+2. Modelo de dados desnormalizado: custos armazenados separadamente para flexibilidade (podem existir sem viagem/dia/POI)
+3. Stacked labels vs Floating: Stacked é mais confiável no Ionic e melhor para legibilidade
+4. Campos de auditoria: uidUtilizador, criadoEm, atualizadoEm para rastreabilidade completa
+5. Métodos de subscrição separados: Reutilização de código e flexibilidade
+
+Próximos passos recomendados:
+
+- Criar páginas de gestão de custos (listar, editar, deletar)
+- Implementar relatórios de custos por categoria/dia/viagem
+- Adicionar cálculo automático de custos no detalhe do dia
+- Criar componente reutilizável de moeda/conversão
+- Implementar sincronização offline de custos (similar a POI)

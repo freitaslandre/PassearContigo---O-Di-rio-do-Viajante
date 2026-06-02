@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Resumo de Custos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="recarregar()" [disabled]="carregando">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Carregando -->
+  <ion-card *ngIf="carregando" class="card-loading">
+    <ion-card-content>
+      <div class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Carregando custos...</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Erro -->
+  <ion-card *ngIf="erroCarregamento && !carregando" color="danger">
+    <ion-card-header>
+      <ion-card-title>Erro</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ erroCarregamento }}</p>
+      <ion-button expand="block" (click)="recarregar()">Tentar Novamente</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Sem Custos -->
+  <ion-card *ngIf="!carregando && custos.length === 0 && !erroCarregamento">
+    <ion-card-content class="empty-state">
+      <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
+      <h2>Sem Custos</h2>
+      <p>Nenhum custo registado ainda.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Total Geral -->
+  <ion-card *ngIf="!carregando && custos.length > 0" class="card-total">
+    <ion-card-content>
+      <div class="total-container">
+        <div class="total-label">
+          <ion-icon name="cash"></ion-icon>
+          <span>Total de Gastos</span>
+        </div>
+        <div class="total-valor">
+          {{ formatarValor(totalGeral) }} €
+        </div>
+        <div class="total-info">
+          <span>{{ custos.length }} transações</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Custos por Categoria -->
+  <div *ngIf="!carregando && custosPorCategoria.length > 0">
+    <ion-card *ngFor="let categoria of custosPorCategoria" [class.card-categoria]="true">
+      <ion-card-content>
+        <div class="categoria-header">
+          <div class="categoria-info">
+            <ion-icon [name]="categoria.icone" [color]="categoria.cor"></ion-icon>
+            <div>
+              <h3>{{ categoria.categoria }}</h3>
+              <p class="valor-categoria">{{ formatarValor(categoria.total) }} €</p>
+            </div>
+          </div>
+          <div class="percentual">
+            <span class="percentual-texto">{{ categoria.percentual.toFixed(1) }}%</span>
+          </div>
+        </div>
+
+        <!-- Barra de Progresso -->
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [ngClass]="'progress-' + categoria.cor"
+            [style.width]="obterLarguraPercentual(categoria.percentual)"
+          ></div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

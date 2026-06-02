@@ -16,6 +16,10 @@ const routes: Routes = [
         loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescubrirPageModule)
       },
       {
+        path: 'resumo-custos',
+        loadChildren: () => import('../pages/resumo-custos/resumo-custos.module').then(m => m.ResumoCustosPageModule)
+      },
+      {
         path: 'perfil',
         loadChildren: () => import('../pages/perfil/perfil.module').then(m => m.PerfilPageModule)
       },
