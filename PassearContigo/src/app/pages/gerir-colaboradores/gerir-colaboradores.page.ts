@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { Colaborador, NivelAcessoColaborador } from '../../models/viagem.model';
 
 @Component({
@@ -17,30 +19,64 @@ export class GerirColaboradoresPage {
   };
 
   niveisAcesso: NivelAcessoColaborador[] = ['dono', 'editor', 'visualizador'];
+  mensagemErro: string | null = null;
+  pesquisando: boolean = false;
 
-  adicionarConvidado() {
-    if (!this.novoConvidado.email?.trim() || !this.novoConvidado.nivelAcesso) {
+  async adicionarConvidado() {
+    const email = this.novoConvidado.email?.trim();
+    if (!email || !this.novoConvidado.nivelAcesso) {
+      return;
+    }
+
+    this.mensagemErro = null;
+    this.pesquisando = true;
+
+    const usuario = await this.obterUtilizadorPorEmail(email);
+    this.pesquisando = false;
+
+    if (!usuario) {
+      this.mensagemErro = 'Utilizador não encontrado no Firestore. Certifique-se de que o email está registado.';
       return;
     }
 
     const convidado: Colaborador = {
-      uid: this.gerarUid(),
-      nome: this.novoConvidado.nome?.trim() || 'Convidado',
-      email: this.novoConvidado.email.trim(),
+      uid: usuario.uid,
+      nome: usuario.nome || this.novoConvidado.nome?.trim() || 'Convidado',
+      email: usuario.email,
       nivelAcesso: this.novoConvidado.nivelAcesso,
-      telefone: this.novoConvidado.telefone,
-      avatarUrl: this.novoConvidado.avatarUrl
+      telefone: usuario.telefone,
+      avatarUrl: usuario.avatarUrl
     };
 
     this.convidados = [...this.convidados, convidado];
     this.novoConvidado = { nome: '', email: '', nivelAcesso: 'visualizador' };
   }
 
-  removerConvidado(index: number) {
-    this.convidados = this.convidados.filter((_, i) => i !== index);
+  async obterUtilizadorPorEmail(email: string): Promise<any | null> {
+    try {
+      const querySnapshot = await firebase.firestore()
+        .collection('users')
+        .where('email', '==', email)
+        .limit(1)
+        .get();
+
+      if (querySnapshot.empty) {
+        return null;
+      }
+
+      const doc = querySnapshot.docs[0];
+      return {
+        uid: doc.id,
+        ...doc.data()
+      };
+    } catch (error) {
+      console.error('Erro ao pesquisar utilizador por email:', error);
+      this.mensagemErro = 'Erro ao pesquisar utilizador. Tente novamente mais tarde.';
+      return null;
+    }
   }
 
-  private gerarUid(): string {
-    return 'uid-' + Math.random().toString(36).substring(2, 12);
+  removerConvidado(index: number) {
+    this.convidados = this.convidados.filter((_, i) => i !== index);
   }
 }

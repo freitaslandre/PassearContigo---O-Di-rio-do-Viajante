@@ -31,8 +31,13 @@
         </ion-select>
       </ion-item>
 
-      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim()">
-        Adicionar convidado
+      <ion-text color="danger" *ngIf="mensagemErro">
+        <p class="ion-padding-start">{{ mensagemErro }}</p>
+      </ion-text>
+
+      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando">
+        <ion-spinner *ngIf="pesquisando" name="crescent"></ion-spinner>
+        <span *ngIf="!pesquisando">Adicionar convidado</span>
       </ion-button>
     </ion-card-content>
   </ion-card>
