@@ -58,6 +58,43 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Gráfico de Distribuição de Custos -->
+  <ion-card *ngIf="!carregando && custosPorCategoria.length > 0" class="card-grafico">
+    <ion-card-header>
+      <ion-card-title>Distribuição de Custos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="chart-container">
+        <div class="pie-chart">
+          <svg viewBox="0 0 200 200" class="pie-svg">
+            <circle *ngFor="let seg of obterSegmentosGrafico(); let i = index" 
+              [attr.cx]="100" 
+              [attr.cy]="100" 
+              [attr.r]="70"
+              [attr.fill]="'none'"
+              [attr.stroke]="seg.cor"
+              [attr.stroke-width]="40"
+              [attr.stroke-dasharray]="seg.dasharray"
+              [attr.stroke-dashoffset]="seg.dashoffset"
+              [attr.stroke-linecap]="'round'"
+              class="pie-segment"
+              [title]="seg.categoria + ': ' + formatarValor(seg.valor) + ' € (' + seg.percentual.toFixed(1) + '%)'">
+            </circle>
+          </svg>
+        </div>
+        <div class="chart-legenda">
+          <div *ngFor="let categoria of custosPorCategoria" class="legenda-item">
+            <div class="legenda-cor" [style.backgroundColor]="obterCorHexadecimal(categoria.cor)"></div>
+            <div class="legenda-texto">
+              <span class="legenda-categoria">{{ categoria.categoria }}</span>
+              <span class="legenda-valor">{{ formatarValor(categoria.total) }} € ({{ categoria.percentual.toFixed(1) }}%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Custos por Categoria -->
   <div *ngIf="!carregando && custosPorCategoria.length > 0">
     <ion-card *ngFor="let categoria of custosPorCategoria" [class.card-categoria]="true">
@@ -79,7 +116,7 @@
         <div class="progress-bar">
           <div 
             class="progress-fill" 
-            [ngClass]="'progress-' + categoria.cor"
+            [class]="'progress-' + categoria.cor"
             [style.width]="obterLarguraPercentual(categoria.percentual)"
           ></div>
         </div>

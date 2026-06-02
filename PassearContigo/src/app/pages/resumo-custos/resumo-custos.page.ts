@@ -11,6 +11,15 @@ interface CustosPorCategoria {
   cor: string;
 }
 
+interface SegmentoGrafico {
+  categoria: string;
+  valor: number;
+  percentual: number;
+  cor: string;
+  dasharray: number;
+  dashoffset: number;
+}
+
 @Component({
   selector: 'app-resumo-custos',
   standalone: false,
@@ -104,12 +113,51 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     return coresMap[categoria] || 'medium';
   }
 
+  obterCorHexadecimal(corIonica: string): string {
+    const coresMap: Record<string, string> = {
+      'primary': '#3880FF',
+      'secondary': '#2DD36F',
+      'tertiary': '#FFC409',
+      'success': '#2DD36F',
+      'warning': '#FFC409',
+      'danger': '#FF4755',
+      'medium': '#92949C',
+      'light': '#F4F5F8'
+    };
+    return coresMap[corIonica] || '#3880FF';
+  }
+
   obterLarguraPercentual(percentual: number): string {
     return `${Math.min(percentual, 100)}%`;
   }
 
   formatarValor(valor: number): string {
     return valor.toFixed(2).replace('.', ',');
+  }
+
+  obterSegmentosGrafico(): SegmentoGrafico[] {
+    if (!this.custosPorCategoria || this.custosPorCategoria.length === 0) {
+      return [];
+    }
+
+    const perimetro = 2 * Math.PI * 70;
+    const segmentos: SegmentoGrafico[] = [];
+    let dashoffset = 0;
+
+    for (const categoria of this.custosPorCategoria) {
+      const dasharray = (categoria.percentual / 100) * perimetro;
+      segmentos.push({
+        categoria: categoria.categoria,
+        valor: categoria.total,
+        percentual: categoria.percentual,
+        cor: this.obterCorHexadecimal(categoria.cor),
+        dasharray,
+        dashoffset
+      });
+      dashoffset -= dasharray;
+    }
+
+    return segmentos;
   }
 
   recarregar(): void {
