@@ -44,13 +44,13 @@ export class DiarioPdfService {
     this.doc.setTextColor(35, 35, 35);
     this.doc.setFont('helvetica', 'bold');
     this.doc.setFontSize(22);
-    this.escreverTexto(viagem.titulo || 'Diario da viagem', 22, 'bold');
+    this.escreverTexto(viagem.titulo || 'Diário da viagem', 22, 'bold');
 
     this.doc.setFontSize(11);
     this.doc.setFont('helvetica', 'normal');
     this.escreverTexto([
       viagem.local ? `Local: ${viagem.local}` : '',
-      `Periodo: ${this.formatarData(viagem.dataInicio)} - ${this.formatarData(viagem.dataFim)}`,
+      `Período: ${this.formatarData(viagem.dataInicio)} - ${this.formatarData(viagem.dataFim)}`,
       viagem.status ? `Estado: ${this.formatarStatus(viagem.status)}` : '',
       `Dias no diario: ${dias.length}`,
       `POIs registados: ${dias.reduce((total, dia) => total + (dia.pontosInteresse || []).length, 0)}`,
@@ -59,7 +59,7 @@ export class DiarioPdfService {
 
     if (viagem.descricao) {
       this.adicionarEspaco(5);
-      this.escreverTituloSecao('Descricao');
+      this.escreverTituloSecao('Descrição');
       this.escreverTexto(viagem.descricao, 11);
     }
 
@@ -70,7 +70,7 @@ export class DiarioPdfService {
       const linha = [
         `Dia ${index + 1}`,
         this.formatarData(dia.data),
-        dia.titulo || 'Sem titulo',
+        dia.titulo || 'Sem título',
         `${(dia.pontosInteresse || []).length} POIs`,
         `${this.formatarValor(this.obterCustoDia(dia, custos))} EUR`
       ].join(' | ');
@@ -126,12 +126,12 @@ export class DiarioPdfService {
 
       const detalhes = [
         poi.tipo || poi.categoria ? `Tipo: ${poi.tipo || poi.categoria}` : '',
-        poi.endereco ? `Endereco: ${poi.endereco}` : '',
+        poi.endereco ? `Endereço: ${poi.endereco}` : '',
         poi.horario ? `Horario: ${poi.horario}` : '',
         poi.avaliacao ? `Avaliacao: ${poi.avaliacao}/5` : '',
         poi.url ? `Site: ${poi.url}` : '',
-        this.temLocalizacao(poi) ? `Localizacao: ${poi.latitude}, ${poi.longitude}` : '',
-        poi.descricao ? `Descricao: ${poi.descricao}` : '',
+        this.temLocalização(poi) ? `Localização: ${poi.latitude}, ${poi.longitude}` : '',
+        poi.descricao ? `Descrição: ${poi.descricao}` : '',
         poi.nota ? `Nota: ${poi.nota}` : ''
       ].filter(Boolean).join('\n');
 
@@ -301,16 +301,16 @@ export class DiarioPdfService {
 
   private formatarStatus(status: string): string {
     const labels: Record<string, string> = {
-      planejada: 'Planejada',
+      planejada: 'Planeada',
       'em-andamento': 'Em curso',
-      concluida: 'Concluida',
+      concluida: 'Concluída',
       cancelada: 'Cancelada'
     };
 
     return labels[status] || status;
   }
 
-  private temLocalizacao(poi: POI): boolean {
+  private temLocalização(poi: POI): boolean {
     return typeof poi.latitude === 'number' && typeof poi.longitude === 'number';
   }
 

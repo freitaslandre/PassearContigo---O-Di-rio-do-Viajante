@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
-    <p>Carregando dia...</p>
+    <p>A carregar dia...</p>
   </div>
 
   <ion-card *ngIf="!carregando && erro">
@@ -74,7 +74,7 @@
 
     <ion-button expand="block" color="secondary" fill="outline" (click)="abrirItinerario()">
       <ion-icon slot="start" name="map-outline"></ion-icon>
-      Ver itinerario do dia
+      Ver itinerário do dia
     </ion-button>
 
     <!-- Custos do dia -->

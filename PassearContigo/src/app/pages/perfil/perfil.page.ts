@@ -53,7 +53,7 @@ export class PerfilPage {
         await this.authService.login(email, password);
         alert('Sessão iniciada com sucesso!');
       } catch (error: any) {
-        alert('Erro ao entrar: ' + error.message);
+        alert('Erro ao iniciar sessão: ' + error.message);
       }
     }
   }
@@ -63,7 +63,7 @@ export class PerfilPage {
       const { email, password, nome } = this.registo;
       try {
         await this.authService.registo(email, password, nome);
-        alert('Utilizador registado e salvo no Firestore!');
+        alert('Utilizador registado e guardado.');
         this.modoRegisto = false;
       } catch (error: any) {
         alert('Erro ao registar: ' + error.message);
@@ -83,10 +83,10 @@ export class PerfilPage {
 
     try {
       await this.pushNotificationsService.ativarNotificacoes();
-      await this.mostrarToast('Notificacoes push ativadas.', 'success');
+      await this.mostrarToast('Notificações push ativadas.', 'success');
     } catch (error: any) {
-      console.error('Erro ao ativar notificacoes push:', error);
-      await this.mostrarToast(error?.message || 'Erro ao ativar notificacoes.', 'danger');
+      console.error('Erro ao ativar notificações push:', error);
+      await this.mostrarToast(error?.message || 'Erro ao ativar notificações.', 'danger');
     } finally {
       this.ativandoNotificacoes = false;
     }

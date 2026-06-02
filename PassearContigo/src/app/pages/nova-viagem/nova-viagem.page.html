@@ -9,10 +9,10 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="form" (ngSubmit)="criarViagem()">
-    <!-- Foto de Capa -->
+    <!-- Foto de capa -->
     <div class="foto-capa-section">
       <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
-        <img [src]="fotoCapaPreview" alt="Foto de Capa" />
+        <img [src]="fotoCapaPreview" alt="Foto de capa" />
         <ion-button
           color="danger"
           size="small"
@@ -32,7 +32,7 @@
           type="button"
         >
           <ion-icon slot="start" name="camera"></ion-icon>
-          Tirar Foto de Capa
+          Tirar foto de capa
         </ion-button>
         <ion-button
           expand="block"
@@ -42,7 +42,7 @@
           type="button"
         >
           <ion-icon slot="start" name="images"></ion-icon>
-          Escolher da Galeria
+          Escolher da galeria
         </ion-button>
       </div>
     </div>

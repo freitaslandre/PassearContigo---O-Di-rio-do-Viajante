@@ -16,12 +16,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Carregando -->
+  <!-- A carregar -->
   <ion-card *ngIf="carregando" class="card-loading">
     <ion-card-content>
       <div class="loading-container">
         <ion-spinner name="crescent"></ion-spinner>
-        <p>Carregando custo...</p>
+        <p>A carregar custo...</p>
       </div>
     </ion-card-content>
   </ion-card>
@@ -40,7 +40,7 @@
             <ion-input
               [(ngModel)]="custo.descricao"
               [disabled]="salvando"
-              placeholder="Digite a descrição"
+              placeholder="Digite a descricao"
               clearInput>
             </ion-input>
           </ion-item>
@@ -109,7 +109,7 @@
         (click)="salvarAlteracoes()"
         [disabled]="salvando">
         <ion-spinner *ngIf="salvando" name="lines-small"></ion-spinner>
-        {{ salvando ? 'Salvando...' : 'Salvar Alterações' }}
+        {{ salvando ? 'A guardar...' : 'Guardar alterações' }}
       </ion-button>
     </div>
   </div>

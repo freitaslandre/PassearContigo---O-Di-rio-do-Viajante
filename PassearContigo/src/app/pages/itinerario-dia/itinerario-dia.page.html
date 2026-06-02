@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="voltar()"></ion-back-button>
     </ion-buttons>
-    <ion-title>Itinerario do Dia</ion-title>
+    <ion-title>Itinerário do Dia</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && dia">
       <ion-button (click)="adicionarPoi()">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
@@ -15,7 +15,7 @@
 <ion-content class="ion-padding">
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
-    <p>A carregar itinerario...</p>
+    <p>A carregar itinerário...</p>
   </div>
 
   <ion-card *ngIf="!carregando && erro">
@@ -118,7 +118,7 @@
       <ion-card-content>
         <ion-icon name="map-outline"></ion-icon>
         <h2>Sem POIs neste dia</h2>
-        <p>Adicione pontos de interesse para montar o itinerario.</p>
+        <p>Adicione pontos de interesse para montar o itinerário.</p>
         <ion-button expand="block" color="primary" (click)="adicionarPoi()">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar POI

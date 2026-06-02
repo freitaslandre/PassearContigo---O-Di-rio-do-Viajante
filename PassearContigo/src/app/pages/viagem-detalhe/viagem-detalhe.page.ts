@@ -119,12 +119,12 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     if (!this.viagem || this.publicando) return;
 
     if (!this.titulo.trim() || !this.local.trim() || !this.dataInicio || !this.dataFim) {
-      await this.mostrarToast('Preencha titulo, destino e datas antes de publicar.', 'warning');
+      await this.mostrarToast('Preencha título, destino e datas antes de publicar.', 'warning');
       return;
     }
 
     if (new Date(this.dataFim) < new Date(this.dataInicio)) {
-      await this.mostrarToast('A data de fim nao pode ser anterior a data de inicio.', 'warning');
+      await this.mostrarToast('A data de fim não pode ser anterior à data de início.', 'warning');
       return;
     }
 
@@ -156,7 +156,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
       await this.mostrarToast(
         this.visibilidadePublicacao === 'publica'
-          ? 'Viagem publicada como publica.'
+          ? 'Viagem publicada como pública.'
           : 'Viagem publicada para amigos.',
         'success'
       );
@@ -226,12 +226,12 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     if (!this.viagem) return;
 
     if (!this.titulo.trim() || !this.local.trim() || !this.dataInicio || !this.dataFim) {
-      await this.mostrarToast('Preencha titulo, destino e datas da viagem.', 'warning');
+      await this.mostrarToast('Preencha título, destino e datas da viagem.', 'warning');
       return;
     }
 
     if (new Date(this.dataFim) < new Date(this.dataInicio)) {
-      await this.mostrarToast('A data de fim nao pode ser anterior a data de inicio.', 'warning');
+      await this.mostrarToast('A data de fim não pode ser anterior à data de início.', 'warning');
       return;
     }
 
@@ -304,15 +304,15 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   obterTextoStatus(status?: string): string {
     switch (status) {
       case 'planejada':
-        return 'Planejada';
+        return 'Planeada';
       case 'em-andamento':
-        return 'Em Andamento';
+        return 'Em curso';
       case 'concluida':
-        return 'Concluida';
+        return 'Concluída';
       case 'cancelada':
         return 'Cancelada';
       default:
-        return 'Sem Status';
+        return 'Sem estado';
     }
   }
 
@@ -337,7 +337,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   async tirarFotoPoi(dia: DiaViewModel, poi: POI) {
     const foto = await this.cameraService.takePicture();
     if (!foto) {
-      await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
+      await this.mostrarToast('Não foi possível capturar a foto.', 'warning');
       return;
     }
 
@@ -347,7 +347,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   async escolherFotoPoiDaGaleria(dia: DiaViewModel, poi: POI) {
     const foto = await this.cameraService.selectPictureFromGallery();
     if (!foto) {
-      await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
+      await this.mostrarToast('Não foi possível selecionar a foto.', 'warning');
       return;
     }
 
@@ -363,7 +363,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       const position = await this.geolocationService.getCurrentPosition();
 
       if (!position) {
-        await this.mostrarToast('Nao foi possivel obter a localizacao.', 'warning');
+        await this.mostrarToast('Não foi possível obter a localização.', 'warning');
         return;
       }
 
@@ -372,10 +372,10 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       await this.aplicarSugestoesNominatimAoPoi(poi);
 
       await this.persistirDias();
-      await this.mostrarToast('Localizacao associada ao POI.', 'success');
+      await this.mostrarToast('Localização associada ao POI.', 'success');
     } catch (error: any) {
-      console.error('Erro ao obter localizacao do POI:', error);
-      await this.mostrarToast(error?.message || 'Erro ao obter localizacao.', 'danger');
+      console.error('Erro ao obter localização do POI:', error);
+      await this.mostrarToast(error?.message || 'Erro ao obter localização.', 'danger');
     } finally {
       delete this.localizacaoPoiAObter[chave];
     }
@@ -489,7 +489,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         await this.persistirDias();
       }
     } catch (error) {
-      console.warn('Nao foi possivel obter coordenadas GPS ao abrir o formulario de POI:', error);
+      console.warn('Não foi possível obter coordenadas GPS ao abrir o formulario de POI:', error);
     }
   }
 

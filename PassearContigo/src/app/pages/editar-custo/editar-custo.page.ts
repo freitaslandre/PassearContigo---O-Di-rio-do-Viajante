@@ -119,8 +119,8 @@ export class EditarCustoPage implements OnInit {
 
       this.router.navigate(['/resumo-custos']);
     } catch (erro) {
-      console.error('Erro ao salvar custo:', erro);
-      this.mostrarErro('Erro ao salvar alterações');
+      console.error('Erro ao guardar custo:', erro);
+      this.mostrarErro('Erro ao guardar alterações');
     } finally {
       this.salvando = false;
     }

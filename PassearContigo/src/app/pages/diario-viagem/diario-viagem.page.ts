@@ -148,7 +148,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   obterTextoStatus(status?: string): string {
     switch (status) {
       case 'planejada':
-        return 'Planejada';
+        return 'Planeada';
       case 'em-andamento':
         return 'Em curso';
       case 'concluida':
@@ -305,7 +305,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
       });
 
       await this.pdfShareService.sharePdf(pdf, {
-        title: this.viagem.titulo || 'Diario da viagem',
+        title: this.viagem.titulo || 'Diário da viagem',
         text: 'PDF do diario completo da viagem.',
         dialogTitle: 'Partilhar diario'
       });
@@ -363,7 +363,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
         this.custosFirestore = custos;
       },
       (error) => {
-        console.warn('Nao foi possivel carregar custos do diario:', error);
+        console.warn('Não foi possível carregar custos do diario:', error);
         this.custosFirestore = [];
       }
     );

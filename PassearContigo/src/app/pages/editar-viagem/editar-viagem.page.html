@@ -33,22 +33,22 @@
       <div class="foto-capa-upload" *ngIf="!fotoCapaPreview">
         <ion-button expand="block" color="primary" type="button" (click)="tirarFotoCapa()">
           <ion-icon slot="start" name="camera-outline"></ion-icon>
-          Tirar Foto de Capa
+          Tirar foto de capa
         </ion-button>
         <ion-button expand="block" color="medium" fill="outline" type="button" (click)="escolherFotoCapaDaGaleria()">
           <ion-icon slot="start" name="images-outline"></ion-icon>
-          Escolher da Galeria
+          Escolher da galeria
         </ion-button>
       </div>
     </div>
 
     <ion-item>
-      <ion-label position="stacked">Titulo da Viagem *</ion-label>
+      <ion-label position="stacked">Título da Viagem *</ion-label>
       <ion-input formControlName="titulo" type="text"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="titulo?.invalid && titulo?.touched">
-      <small *ngIf="titulo?.hasError('required')">Titulo e obrigatorio</small>
-      <small *ngIf="titulo?.hasError('minlength')">Minimo 3 caracteres</small>
+      <small *ngIf="titulo?.hasError('required')">Título é obrigatório</small>
+      <small *ngIf="titulo?.hasError('minlength')">Mínimo 3 caracteres</small>
     </ion-text>
 
     <ion-item>
@@ -56,30 +56,30 @@
       <ion-input formControlName="destino" type="text"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="destino?.invalid && destino?.touched">
-      <small *ngIf="destino?.hasError('required')">Destino e obrigatorio</small>
+      <small *ngIf="destino?.hasError('required')">Destino é obrigatório</small>
     </ion-text>
 
     <ion-item>
-      <ion-label position="stacked">Descricao</ion-label>
+      <ion-label position="stacked">Descrição</ion-label>
       <ion-textarea formControlName="descricao" autoGrow="true"></ion-textarea>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Estado</ion-label>
       <ion-select formControlName="status" interface="popover">
-        <ion-select-option value="planejada">Planejada</ion-select-option>
-        <ion-select-option value="em-andamento">Em andamento</ion-select-option>
-        <ion-select-option value="concluida">Concluida</ion-select-option>
+        <ion-select-option value="planejada">Planeada</ion-select-option>
+        <ion-select-option value="em-andamento">Em curso</ion-select-option>
+        <ion-select-option value="concluida">Concluída</ion-select-option>
         <ion-select-option value="cancelada">Cancelada</ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Data de Inicio *</ion-label>
+      <ion-label position="stacked">Data de Início *</ion-label>
       <ion-input formControlName="dataInicio" type="date"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="dataInicio?.invalid && dataInicio?.touched">
-      <small *ngIf="dataInicio?.hasError('required')">Data de inicio e obrigatoria</small>
+      <small *ngIf="dataInicio?.hasError('required')">Data de início é obrigatória</small>
     </ion-text>
 
     <ion-item>
@@ -87,20 +87,20 @@
       <ion-input formControlName="dataFim" type="date"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="dataFim?.invalid && dataFim?.touched">
-      <small *ngIf="dataFim?.hasError('required')">Data de fim e obrigatoria</small>
+      <small *ngIf="dataFim?.hasError('required')">Data de fim é obrigatória</small>
     </ion-text>
     <ion-text color="danger" *ngIf="form.hasError('datasInvalidas')">
-      <small>A data de fim nao pode ser anterior a data de inicio</small>
+      <small>A data de fim não pode ser anterior à data de início</small>
     </ion-text>
 
     <ion-note color="medium" class="dias-note" *ngIf="numeroDias > 0">
-      Duracao: {{ numeroDias }} dias
+      Duração: {{ numeroDias }} dias
     </ion-note>
 
     <div class="button-group">
       <ion-button expand="block" color="primary" type="submit" [disabled]="form.invalid">
         <ion-icon slot="start" name="save-outline"></ion-icon>
-        Guardar Alteracoes
+        Guardar alterações
       </ion-button>
       <ion-button expand="block" color="medium" type="button" (click)="cancelar()">
         <ion-icon slot="start" name="close-circle-outline"></ion-icon>

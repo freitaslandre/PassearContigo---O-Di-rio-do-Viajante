@@ -2,7 +2,7 @@
   "app": {
     "title": "PassearContigo — Diário do Viajante",
     "subtitle": "Compartilhe seus momentos de viagem",
-    "description": "Aplicação para registrar e compartilhar viagens com amigos"
+    "description": "Aplicação para registar e partilhar viagens com amigos"
   },
   "common": {
     "ok": "OK",
@@ -15,7 +15,7 @@
     "back": "Voltar",
     "next": "Próximo",
     "previous": "Anterior",
-    "loading": "Carregando...",
+    "loading": "A carregar...",
     "error": "Erro",
     "success": "Sucesso",
     "warning": "Aviso",
@@ -28,7 +28,7 @@
     "search": "Pesquisar",
     "clear": "Limpar",
     "logout": "Sair",
-    "login": "Entrar"
+    "login": "Iniciar sessão"
   },
   "tabs": {
     "viagens": "Viagens",
@@ -86,14 +86,14 @@
     "version": "Versão"
   },
   "auth": {
-    "login": "Entrar",
+    "login": "Iniciar sessão",
     "signup": "Criar conta",
     "email": "Email",
     "password": "Senha",
     "confirmPassword": "Confirmar senha",
     "forgotPassword": "Esqueceu a senha?",
     "rememberMe": "Lembrar-me",
-    "loginFailed": "Falha ao entrar",
+    "loginFailed": "Falha ao iniciar sessão",
     "signupFailed": "Falha ao criar conta",
     "invalidEmail": "Email inválido",
     "passwordMismatch": "As senhas não coincidem",
@@ -112,7 +112,7 @@
     "passwordStrength": "A senha deve conter letras, números e caracteres especiais"
   },
   "errors": {
-    "networkError": "Erro de conexão. Verifique sua conexão com a internet",
+    "networkError": "Erro de ligação. Verifique a sua ligação com a internet",
     "serverError": "Erro do servidor. Tente novamente mais tarde",
     "notFound": "Recurso não encontrado",
     "unauthorized": "Não autorizado",
@@ -124,8 +124,8 @@
     "title": "Câmera",
     "take": "Tirar foto",
     "cancel": "Cancelar",
-    "error": "Erro ao aceder à câmera",
-    "permissionDenied": "Permissão negada para aceder à câmera"
+    "error": "Erro ao aceder à câmara",
+    "permissionDenied": "Permissão negada para aceder à câmara"
   },
   "geolocation": {
     "title": "Localização",
@@ -135,7 +135,7 @@
   },
   "storage": {
     "title": "Armazenamento",
-    "loading": "Carregando dados...",
+    "loading": "A carregar dados...",
     "saving": "Guardando dados...",
     "error": "Erro ao guardar dados",
     "success": "Dados guardados com sucesso"
@@ -145,7 +145,7 @@
     "goodbye": "Até breve!",
     "confirmDelete": "Tem a certeza que deseja eliminar?",
     "confirmAction": "Confirme a ação",
-    "operationInProgress": "Operação em andamento...",
+    "operationInProgress": "Operação em curso...",
     "operationComplete": "Operação concluída com sucesso",
     "tryAgain": "Tente novamente"
   },

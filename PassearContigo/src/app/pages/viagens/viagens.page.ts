@@ -21,8 +21,8 @@ export class ViagensPage implements OnInit, OnDestroy {
   statusSelecionado = 'todos';
   filtrosStatus = [
     { valor: 'todos', label: 'Todas' },
-    { valor: 'planejada', label: 'Planejadas' },
-    { valor: 'em-andamento', label: 'Em andamento' },
+    { valor: 'planejada', label: 'Planeadas' },
+    { valor: 'em-andamento', label: 'Em curso' },
     { valor: 'concluida', label: 'Concluídas' },
     { valor: 'cancelada', label: 'Canceladas' }
   ];
@@ -66,7 +66,7 @@ export class ViagensPage implements OnInit, OnDestroy {
 
     const alert = await this.alertCtrl.create({
       header: 'Eliminar viagem',
-      message: `Tem a certeza que pretende eliminar "${viagem.titulo}"? Esta acao nao pode ser anulada.`,
+      message: `Tem a certeza que pretende eliminar "${viagem.titulo}"? Esta ação não pode ser anulada.`,
       buttons: [
         {
           text: 'Cancelar',
@@ -136,15 +136,15 @@ export class ViagensPage implements OnInit, OnDestroy {
   obterTextoStatus(status?: string): string {
     switch (status) {
       case 'planejada':
-        return 'Planejada';
+        return 'Planeada';
       case 'em-andamento':
-        return 'Em Andamento';
+        return 'Em curso';
       case 'concluida':
         return 'Concluída';
       case 'cancelada':
         return 'Cancelada';
       default:
-        return 'Sem Status';
+        return 'Sem estado';
     }
   }
 

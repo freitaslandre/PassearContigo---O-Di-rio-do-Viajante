@@ -171,7 +171,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
         const unsubscribe = this.publicacoesService.subscribeToComentariosPublicacao(
           publicacao.id,
           comentarios => this.comentariosPorPublicacao[publicacao.id] = comentarios,
-          error => console.warn('Nao foi possivel carregar comentarios:', error)
+          error => console.warn('Não foi possível carregar comentarios:', error)
         );
 
         if (unsubscribe) {
@@ -183,7 +183,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
         const unsubscribe = this.publicacoesService.subscribeToReacoesPublicacao(
           publicacao.id,
           reacoes => this.reacoesPorPublicacao[publicacao.id] = reacoes,
-          error => console.warn('Nao foi possivel carregar reacoes:', error)
+          error => console.warn('Não foi possível carregar reacoes:', error)
         );
 
         if (unsubscribe) {

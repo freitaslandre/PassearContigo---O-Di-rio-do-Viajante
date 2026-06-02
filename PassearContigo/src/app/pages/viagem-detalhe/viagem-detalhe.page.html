@@ -44,51 +44,51 @@
           <ion-badge [color]="obterCorStatus(status)">
             {{ obterTextoStatus(status) }}
           </ion-badge>
-          <h1>{{ titulo || 'Viagem sem titulo' }}</h1>
+          <h1>{{ titulo || 'Viagem sem título' }}</h1>
           <p *ngIf="local">
             <ion-icon name="location-outline"></ion-icon>
             {{ local }}
           </p>
         </div>
-        <div class="dias-count">
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-item">
           <strong>{{ totalDias }}</strong>
           <span>dias</span>
         </div>
-        <div class="dias-count">
+        <div class="summary-item">
           <strong>{{ totalPois }}</strong>
           <span>POIs</span>
         </div>
-      </div>
-
-      <div class="dates-container">
-        <div class="date-info">
+        <div class="summary-item">
           <ion-icon name="calendar-outline"></ion-icon>
-          <div class="date-label">Inicio</div>
-          <div class="date-value">{{ formatarData(dataInicio) }}</div>
+          <span>Início</span>
+          <strong>{{ formatarData(dataInicio) }}</strong>
         </div>
-        <div class="duration-info">
+        <div class="summary-item">
           <ion-icon name="time-outline"></ion-icon>
-          <div class="duration-label">Duracao</div>
-          <div class="duration-value">
-            {{ obterNumDias(dataInicio, dataFim) }} dias
-          </div>
+          <span>Duração</span>
+          <strong>{{ obterNumDias(dataInicio, dataFim) }} dias</strong>
         </div>
-        <div class="date-info">
+        <div class="summary-item">
           <ion-icon name="flag-outline"></ion-icon>
-          <div class="date-label">Fim</div>
-          <div class="date-value">{{ formatarData(dataFim) }}</div>
+          <span>Fim</span>
+          <strong>{{ formatarData(dataFim) }}</strong>
         </div>
       </div>
 
-      <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDiario()">
-        <ion-icon slot="start" name="book-outline"></ion-icon>
-        Diário da viagem
-      </ion-button>
+      <div class="summary-actions">
+        <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDiario()">
+          <ion-icon slot="start" name="book-outline"></ion-icon>
+          Diário
+        </ion-button>
 
-      <ion-button expand="block" color="tertiary" fill="outline" (click)="abrirAlbum()">
-        <ion-icon slot="start" name="images-outline"></ion-icon>
-        Álbum da viagem
-      </ion-button>
+        <ion-button expand="block" color="tertiary" fill="outline" (click)="abrirAlbum()">
+          <ion-icon slot="start" name="images-outline"></ion-icon>
+          Álbum
+        </ion-button>
+      </div>
     </section>
 
     <ion-card class="publicacao-card">
@@ -140,7 +140,7 @@
       <ion-card-content>
         <ion-list lines="full">
           <ion-item>
-            <ion-label position="stacked">Titulo</ion-label>
+            <ion-label position="stacked">Título</ion-label>
             <ion-input
               name="titulo"
               type="text"
@@ -160,7 +160,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-label position="stacked">Descricao</ion-label>
+            <ion-label position="stacked">Descrição</ion-label>
             <ion-textarea
               name="descricao"
               autoGrow="true"
@@ -172,15 +172,15 @@
           <ion-item>
             <ion-label position="stacked">Estado</ion-label>
             <ion-select name="status" [(ngModel)]="status" interface="popover">
-              <ion-select-option value="planejada">Planejada</ion-select-option>
-              <ion-select-option value="em-andamento">Em andamento</ion-select-option>
-              <ion-select-option value="concluida">Concluida</ion-select-option>
+              <ion-select-option value="planejada">Planeada</ion-select-option>
+              <ion-select-option value="em-andamento">Em curso</ion-select-option>
+              <ion-select-option value="concluida">Concluída</ion-select-option>
               <ion-select-option value="cancelada">Cancelada</ion-select-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
-            <ion-label position="stacked">Data de inicio</ion-label>
+            <ion-label position="stacked">Data de início</ion-label>
             <ion-input name="dataInicio" type="date" [(ngModel)]="dataInicio"></ion-input>
           </ion-item>
 
@@ -196,7 +196,7 @@
       <div class="section-header">
         <div>
           <h2>Lista de dias</h2>
-          <p>Organize o itinerario dia a dia.</p>
+          <p>Organize o itinerário dia a dia.</p>
         </div>
         <ion-button fill="clear" color="primary" (click)="adicionarDia()">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
@@ -231,7 +231,7 @@
         <ion-card-content>
           <ion-list lines="full">
             <ion-item>
-              <ion-label position="stacked">Titulo do dia</ion-label>
+              <ion-label position="stacked">Título do dia</ion-label>
               <ion-input
                 name="diaTitulo{{ i }}"
                 type="text"
@@ -259,9 +259,9 @@
             </ion-item>
 
             <ion-item>
-              <ion-label position="stacked">Descricao</ion-label>
+              <ion-label position="stacked">Descrição</ion-label>
               <ion-textarea
-                name="diaDescricao{{ i }}"
+                name="diaDescrição{{ i }}"
                 autoGrow="true"
                 [(ngModel)]="dia.descricao"
               ></ion-textarea>
@@ -355,9 +355,9 @@
                   </ion-item>
 
                   <ion-item lines="none">
-                    <ion-label position="stacked">Endereco</ion-label>
+                    <ion-label position="stacked">Endereço</ion-label>
                     <ion-input
-                      name="poiEndereco{{ i }}{{ poiIndex }}"
+                      name="poiEndereço{{ i }}{{ poiIndex }}"
                       type="text"
                       [(ngModel)]="poi.endereco"
                     ></ion-input>
@@ -374,7 +374,7 @@
                   >
                     <ion-spinner *ngIf="localizacaoPoiAEnviar(dia.id, poi)" name="crescent" slot="start"></ion-spinner>
                     <ion-icon *ngIf="!localizacaoPoiAEnviar(dia.id, poi)" slot="start" name="locate-outline"></ion-icon>
-                    Usar localizacao atual
+                    Usar localização atual
                   </ion-button>
 
                   <ion-note *ngIf="temCoordenadas(poi)" color="medium">
@@ -396,7 +396,7 @@
               <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
             </ion-button>
             <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)">
-              Itinerario
+              Itinerário
               <ion-icon slot="end" name="map-outline"></ion-icon>
             </ion-button>
           </div>
