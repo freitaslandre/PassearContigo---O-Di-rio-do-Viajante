@@ -11,6 +11,7 @@ export interface Viagem {
   fotoCapaUrl?: string;
   dataInicio: Date;
   dataFim: Date;
+  fotosAlbum?: FotoAlbumViagem[];
   dias?: Dia[];
   pontosInteresse?: POI[];
   custos?: Custo[];
@@ -18,6 +19,19 @@ export interface Viagem {
   status?: 'planejada' | 'em-andamento' | 'concluida' | 'cancelada';
   criadoEm?: Date;
   atualizadoEm?: Date;
+}
+
+export interface FotoAlbumViagem {
+  id: string;
+  url: string;
+  titulo?: string;
+  legenda?: string;
+  poiId?: string;
+  diaId?: string;
+  poiNome?: string;
+  dataCaptura?: Date | string;
+  origem?: 'rolo' | 'capa' | 'poi';
+  metadados?: Record<string, any>;
 }
 
 /**

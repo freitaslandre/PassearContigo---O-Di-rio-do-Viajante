@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button *ngIf="!modoSelecao" (click)="voltar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="modoSelecao" (click)="cancelarSelecao()" aria-label="Cancelar seleção">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ modoSelecao ? totalSelecionadas + ' selecionadas' : 'Álbum' }}</ion-title>
+    <ion-buttons slot="end" *ngIf="!carregando && fotos.length > 0">
+      <ion-button *ngIf="!modoSelecao" (click)="importarFotosDoRolo()" [disabled]="importando">
+        <ion-spinner *ngIf="importando" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!importando" slot="icon-only" name="cloud-upload-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!modoSelecao" (click)="ativarSelecao()">
+        <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="modoSelecao" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0">
+        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="modoSelecao" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+        <ion-icon slot="icon-only" name="swap-horizontal-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="modoSelecao" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="modoSelecao" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length">
+        <ion-icon slot="icon-only" name="checkbox-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="carregando" class="loading-card">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>A carregar álbum...</p>
+  </div>
+
+  <ion-card *ngIf="!carregando && erro" class="state-card">
+    <ion-card-content>
+      <p>{{ erro }}</p>
+      <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <section *ngIf="!carregando && viagem && !erro" class="album-layout">
+    <div class="album-header">
+      <div>
+        <ion-badge color="primary">{{ fotos.length }} fotos</ion-badge>
+        <h1>{{ viagem.titulo || 'Álbum da viagem' }}</h1>
+        <p *ngIf="viagem.local">
+          <ion-icon name="location-outline"></ion-icon>
+          {{ viagem.local }}
+        </p>
+      </div>
+      <ion-button color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
+        <ion-spinner *ngIf="importando" name="crescent" slot="start"></ion-spinner>
+        <ion-icon *ngIf="!importando" slot="start" name="cloud-upload-outline"></ion-icon>
+        Importar do rolo
+      </ion-button>
+    </div>
+
+    <ion-note *ngIf="fotosIgnoradasPorTamanho > 0" color="warning" class="album-warning">
+      {{ fotosIgnoradasPorTamanho }} fotos muito pesadas foram ocultadas para evitar bloquear a app.
+    </ion-note>
+
+    <ion-card *ngIf="fotos.length === 0" class="state-card">
+      <ion-card-content>
+        <ion-icon name="images-outline"></ion-icon>
+        <h2>Sem fotos no álbum</h2>
+        <p>Adicione fotos aos POIs ou uma foto de capa à viagem.</p>
+      </ion-card-content>
+    </ion-card>
+
+    <section *ngFor="let grupo of gruposFotos" class="photo-group">
+      <h2>{{ grupo.titulo }}</h2>
+
+      <ion-grid class="album-grid">
+        <ion-row>
+          <ion-col
+            size="6"
+            size-sm="4"
+            size-md="3"
+            size-lg="2"
+            *ngFor="let foto of grupo.fotos; trackBy: trackByFotoId"
+          >
+            <button
+              type="button"
+              class="photo-tile"
+              [class.selection-mode]="modoSelecao"
+              [class.selected]="fotoEstaSelecionada(foto)"
+              [class.locked-photo]="modoSelecao && !fotoPodeEditar(foto)"
+              (click)="abrirFoto(foto)"
+              (press)="alternarSelecaoFoto(foto)"
+            >
+              <div class="selection-indicator" *ngIf="modoSelecao || fotoEstaSelecionada(foto)">
+                <ion-icon [name]="fotoEstaSelecionada(foto) ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+              </div>
+              <ion-img [src]="foto.url" [alt]="foto.titulo"></ion-img>
+              <div class="photo-info">
+                <div class="photo-title-row">
+                  <span>{{ foto.titulo }}</span>
+                  <ion-badge color="light">{{ foto.origemLabel }}</ion-badge>
+                </div>
+                <p class="photo-caption" [class.empty-caption]="!foto.legenda">
+                  {{ foto.legenda || 'Sem legenda' }}
+                </p>
+                <small class="photo-poi" [class.no-poi]="!foto.poiId">
+                  <ion-icon name="location-outline"></ion-icon>
+                  {{ foto.poiNome }}
+                </small>
+                <small class="photo-date">{{ foto.subtitulo }}</small>
+                <small class="photo-locked" *ngIf="modoSelecao && !fotoPodeEditar(foto)">
+                  Gerida no POI
+                </small>
+              </div>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </section>
+
+    <ion-button *ngIf="temMaisFotos" expand="block" fill="outline" color="medium" (click)="carregarMaisFotos()">
+      <ion-icon slot="start" name="images-outline"></ion-icon>
+      Carregar mais fotos
+    </ion-button>
+  </section>
+</ion-content>
