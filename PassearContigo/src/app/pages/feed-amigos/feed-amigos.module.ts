@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { FeedAmigosPageRoutingModule } from './feed-amigos-routing.module';
 import { FeedAmigosPage } from './feed-amigos.page';
 
 @NgModule({
@@ -10,7 +10,7 @@ import { FeedAmigosPage } from './feed-amigos.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([{ path: '', component: FeedAmigosPage }])
+    FeedAmigosPageRoutingModule
   ],
   declarations: [FeedAmigosPage]
 })

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { PushNotificationsService } from '../../services/push-notifications.service';
 
 @Component({

@@ -6,36 +6,34 @@ import 'firebase/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
-}
-)
+})
 export class AuthService {
-  // Guarda o estado do utilizador em tempo real (logado ou não)
+  /** Estado do utilizador autenticado, actualizado em tempo real pelo Firebase. */
   user$: Observable<firebase.User | null>;
 
-  constructor(
-    private afAuth: AngularFireAuth,
-  ) {
+  /** Injeta o serviço de autenticação Firebase e expõe o estado actual. */
+  constructor(private afAuth: AngularFireAuth) {
     this.user$ = this.afAuth.authState;
   }
 
-  // Método de Login
+  /** Inicia sessão com email e palavra-passe. */
   login(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  // Método de Logout
+  /** Termina a sessão do utilizador actual. */
   logout() {
     return this.afAuth.signOut();
   }
 
-  // Método de Registo (Cria no Auth e grava dados na coleção 'users' do Firestore)
+  /** Cria a conta no Firebase Authentication e guarda o perfil inicial no Firestore. */
   async registo(email: string, password: string, nome: string) {
     try {
       const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
       const user = credential.user;
 
       if (!user) {
-        throw new Error('Erro interno: não foi possível obter o utilizador após o registo.');
+        throw new Error('Erro interno: nao foi possivel obter o utilizador apos o registo.');
       }
 
       const userDoc = firebase.firestore().doc(`users/${user.uid}`);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { jsPDF } from 'jspdf';
 import { Custo } from '../models/viagem.model';
+import { PdfDocumentBase } from './pdf-document.base';
 import { PdfGerado } from './pdf-share.service';
 
 export interface CategoriaRelatorioCusto {
@@ -19,28 +19,19 @@ interface CustosPdfData {
 @Injectable({
   providedIn: 'root'
 })
-export class CustosPdfService {
-  private doc!: jsPDF;
-  private y = 0;
-  private readonly marginX = 16;
-  private readonly pageWidth = 210;
-  private readonly pageHeight = 297;
-  private readonly contentWidth = this.pageWidth - this.marginX * 2;
-  private readonly bottomMargin = 18;
-
+export class CustosPdfService extends PdfDocumentBase {
   gerarRelatorioPorCategoria({ custos, categorias, totalGeral }: CustosPdfData): void {
     const pdf = this.criarRelatorioPorCategoria({ custos, categorias, totalGeral });
     this.doc.save(pdf.fileName);
   }
 
   criarRelatorioPorCategoria({ custos, categorias, totalGeral }: CustosPdfData): PdfGerado {
-    this.doc = new jsPDF({ unit: 'mm', format: 'a4' });
-    this.y = 18;
+    this.iniciarDocumento();
 
     this.adicionarCabecalho(custos, categorias, totalGeral);
     this.adicionarResumoCategorias(categorias, totalGeral);
     this.adicionarDetalheCategorias(custos, categorias);
-    this.adicionarRodapes();
+    this.adicionarRodapes('Passear Contigo - Relatorio de Custos');
 
     return {
       fileName: `relatorio-custos-${this.obterDataFicheiro()}.pdf`,
@@ -166,79 +157,8 @@ export class CustosPdfService {
     return partes.filter(Boolean).join(' | ');
   }
 
-  private escreverTituloSecao(texto: string): void {
-    this.garantirEspaco(10);
-    this.doc.setTextColor(28, 105, 112);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.setFontSize(13);
-    this.doc.text(texto, this.marginX, this.y);
-    this.y += 7;
-  }
-
-  private escreverTexto(
-    texto: string,
-    fontSize = 10,
-    fontStyle: 'normal' | 'bold' = 'normal',
-    color: [number, number, number] = [45, 45, 45]
-  ): void {
-    this.doc.setFont('helvetica', fontStyle);
-    this.doc.setFontSize(fontSize);
-    this.doc.setTextColor(...color);
-
-    const linhas = this.doc.splitTextToSize(texto, this.contentWidth);
-    linhas.forEach((linha: string) => {
-      this.garantirEspaco(fontSize * 0.42 + 2);
-      this.doc.text(linha, this.marginX, this.y);
-      this.y += fontSize * 0.42 + 1.5;
-    });
-  }
-
-  private adicionarRodapes(): void {
-    const totalPaginas = this.doc.getNumberOfPages();
-
-    for (let pagina = 1; pagina <= totalPaginas; pagina += 1) {
-      this.doc.setPage(pagina);
-      this.doc.setFont('helvetica', 'normal');
-      this.doc.setFontSize(8);
-      this.doc.setTextColor(130, 130, 130);
-      this.doc.text(`Passear Contigo - Relatorio de Custos | Pagina ${pagina}/${totalPaginas}`, this.marginX, 287);
-    }
-  }
-
-  private garantirEspaco(altura: number): void {
-    if (this.y + altura > this.pageHeight - this.bottomMargin) {
-      this.doc.addPage();
-      this.y = 18;
-    }
-  }
-
-  private adicionarEspaco(altura: number): void {
-    this.y += altura;
-  }
-
   private obterCategoriaCusto(custo: Custo): string {
     return custo.categoria?.trim() || 'Sem categoria';
-  }
-
-  private formatarValor(valor: number): string {
-    return (Number(valor) || 0).toFixed(2).replace('.', ',');
-  }
-
-  private formatarData(data: Date | string | any): string {
-    const date = this.converterParaDate(data);
-    return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('pt-PT');
-  }
-
-  private converterParaDate(data: Date | string | any): Date {
-    if (data instanceof Date) {
-      return data;
-    }
-
-    if (data && typeof data === 'object' && 'toDate' in data) {
-      return data.toDate();
-    }
-
-    return new Date(data);
   }
 
   private obterDataFicheiro(): string {
@@ -269,7 +189,4 @@ export class CustosPdfService {
     ];
   }
 
-  private obterBase64Pdf(): string {
-    return this.doc.output('datauristring').split(',')[1];
-  }
 }
