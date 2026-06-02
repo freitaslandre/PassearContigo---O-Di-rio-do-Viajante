@@ -6,7 +6,7 @@
     <ion-title>Editar Custo</ion-title>
     <ion-buttons slot="end">
       <ion-button 
-        (click)="deletarCusto()" 
+        (click)="eliminarCusto()" 
         [disabled]="salvando"
         color="danger">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
@@ -16,38 +16,38 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- A carregar -->
+    <!-- Estado de carregamento do custo. -->
   <ion-card *ngIf="carregando" class="card-loading">
     <ion-card-content>
       <div class="loading-container">
         <ion-spinner name="crescent"></ion-spinner>
-        <p>A carregar custo...</p>
+        <p>{{ strings.get('custos.editar.loading') }}</p>
       </div>
     </ion-card-content>
   </ion-card>
 
-  <!-- Formulário de Edição -->
+  <!-- Formulário de edição do custo. -->
   <div *ngIf="!carregando && custo" class="formulario-container">
     <ion-card class="card-formulario">
       <ion-card-header>
-        <ion-card-title>Informações do Custo</ion-card-title>
+        <ion-card-title>{{ strings.get('custos.editar.informacoes') }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <!-- Descrição -->
+          <!-- Campo da descrição do custo. -->
           <ion-item>
-            <ion-label position="floating">Descrição</ion-label>
+            <ion-label position="floating">{{ strings.get('custos.editar.campos.descricao') }}</ion-label>
             <ion-input
               [(ngModel)]="custo.descricao"
               [disabled]="salvando"
-              placeholder="Digite a descricao"
+              [placeholder]="strings.get('custos.editar.placeholders.descricao')"
               clearInput>
             </ion-input>
           </ion-item>
 
-          <!-- Valor -->
+          <!-- Campo do valor do custo. -->
           <ion-item>
-            <ion-label position="floating">Valor (€)</ion-label>
+            <ion-label position="floating">{{ strings.get('custos.editar.campos.valor') }}</ion-label>
             <ion-input
               [(ngModel)]="custo.valor"
               [disabled]="salvando"
@@ -58,9 +58,9 @@
             </ion-input>
           </ion-item>
 
-          <!-- Data -->
+          <!-- Campo da data do custo. -->
           <ion-item>
-            <ion-label position="floating">Data</ion-label>
+            <ion-label position="floating">{{ strings.get('custos.editar.campos.data') }}</ion-label>
             <ion-datetime
               [(ngModel)]="custo.data"
               [disabled]="salvando"
@@ -68,40 +68,40 @@
             </ion-datetime>
           </ion-item>
 
-          <!-- Categoria com IonSelect -->
+          <!-- Selector da categoria do custo. -->
           <ion-item>
-            <ion-label position="floating">Categoria</ion-label>
+            <ion-label position="floating">{{ strings.get('custos.editar.campos.categoria') }}</ion-label>
             <ion-select
               [(ngModel)]="custo.categoria"
               [disabled]="salvando"
-              placeholder="Selecione uma categoria"
-              cancelText="Cancelar"
-              okText="Selecionar">
+              [placeholder]="strings.get('custos.editar.placeholders.categoria')"
+              [cancelText]="strings.get('common.cancel')"
+              [okText]="strings.get('common.select')">
               <ion-select-option *ngFor="let cat of categoriasDisponiveis" [value]="cat">
-                {{ cat }}
+                {{ obterNomeCategoria(cat) }}
               </ion-select-option>
             </ion-select>
           </ion-item>
 
-          <!-- Preview de Categoria -->
+          <!-- Pré-visualização da categoria escolhida. -->
           <ion-item *ngIf="custo.categoria" class="categoria-preview">
-            <ion-label>Categoria Selecionada</ion-label>
+            <ion-label>{{ strings.get('custos.editar.categoriaSelecionada') }}</ion-label>
             <ion-badge [color]="obterCorCategoria(custo.categoria)" slot="end">
-              {{ custo.categoria }}
+              {{ obterNomeCategoria(custo.categoria) }}
             </ion-badge>
           </ion-item>
         </ion-list>
       </ion-card-content>
     </ion-card>
 
-    <!-- Botões de Ação -->
+    <!-- Botões principais da edição. -->
     <div class="botoes-acao">
       <ion-button
         expand="block"
         fill="clear"
         (click)="cancelar()"
         [disabled]="salvando">
-        Cancelar
+        {{ strings.get('common.cancel') }}
       </ion-button>
       <ion-button
         expand="block"
@@ -109,7 +109,7 @@
         (click)="salvarAlteracoes()"
         [disabled]="salvando">
         <ion-spinner *ngIf="salvando" name="lines-small"></ion-spinner>
-        {{ salvando ? 'A guardar...' : 'Guardar alterações' }}
+        {{ salvando ? strings.get('custos.editar.aGuardar') : strings.get('custos.editar.guardarAlteracoes') }}
       </ion-button>
     </div>
   </div>

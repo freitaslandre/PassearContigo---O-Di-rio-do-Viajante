@@ -1,48 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustosService } from '../../services/custos.service';
+import { StringsService } from '../../services/strings.service';
 import { Custo } from '../../models/viagem.model';
-import { AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
+/** Chaves das categorias de custos apresentadas no selector. */
 const CATEGORIAS_DISPONIVEIS = [
-  'Alimentação',
-  'Transporte',
-  'Hospedagem',
-  'Compras',
-  'Cultura',
-  'Natureza',
-  'Aventura',
-  'Gastronomia',
-  'Sem categoria'
+  'alimentacao',
+  'transporte',
+  'alojamento',
+  'compras',
+  'cultura',
+  'natureza',
+  'aventura',
+  'gastronomia',
+  'semCategoria'
 ];
 
 @Component({
   selector: 'app-editar-custo',
-  standalone: true,
   templateUrl: './editar-custo.page.html',
   styleUrls: ['./editar-custo.page.scss'],
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule]
+  standalone: false
 })
+/** Página responsável por editar ou eliminar um custo já registado. */
 export class EditarCustoPage implements OnInit {
+  /** Cópia editável do custo carregado. */
   custo: Custo | null = null;
+  /** Cópia original usada para calcular apenas os campos alterados. */
   custoOriginal: Custo | null = null;
+  /** Indica se o custo ainda está a ser carregado. */
   carregando = true;
+  /** Bloqueia acções enquanto uma gravação ou eliminação está em curso. */
   salvando = false;
+  /** Lista de categorias disponíveis, guardada como chaves de tradução. */
   categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
+  /** Identificador do custo recebido pela rota. */
   custoId: string | null = null;
 
+  /** Injeta serviços de rota, navegação, persistência, mensagens e strings. */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private custosService: CustosService,
     private alertController: AlertController,
     private toastController: ToastController,
-    private loadingController: LoadingController
+    public strings: StringsService
   ) {}
 
+  /** Lê o identificador da rota e inicia o carregamento do custo. */
   ngOnInit(): void {
     this.custoId = this.route.snapshot.paramMap.get('id');
     if (this.custoId) {
@@ -50,6 +57,7 @@ export class EditarCustoPage implements OnInit {
     }
   }
 
+  /** Obtém o custo no serviço e prepara as cópias de edição e comparação. */
   private carregarCusto(): void {
     if (!this.custoId) {
       this.carregando = false;
@@ -62,18 +70,19 @@ export class EditarCustoPage implements OnInit {
           this.custo = { ...custo };
           this.custoOriginal = { ...custo };
         } else {
-          this.mostrarErro('Custo não encontrado');
+          this.mostrarErro(this.strings.get('custos.editar.mensagens.custoNaoEncontrado'));
         }
         this.carregando = false;
       },
       error: (erro) => {
-        console.error('Erro ao carregar custo:', erro);
-        this.mostrarErro('Erro ao carregar custo');
+        console.error(this.strings.get('custos.editar.logs.erroCarregar'), erro);
+        this.mostrarErro(this.strings.get('custos.editar.mensagens.erroCarregar'));
         this.carregando = false;
       }
     });
   }
 
+  /** Valida o formulário, calcula alterações e guarda apenas os campos modificados. */
   async salvarAlteracoes(): Promise<void> {
     if (!this.custo || !this.custoId) {
       return;
@@ -86,7 +95,7 @@ export class EditarCustoPage implements OnInit {
     this.salvando = true;
 
     try {
-      // Comparar e atualizar apenas os campos que mudaram
+      // Compara e actualiza apenas os campos que mudaram.
       const alteracoes: Partial<Custo> = {};
       if (this.custo.descricao !== this.custoOriginal?.descricao) {
         alteracoes.descricao = this.custo.descricao;
@@ -102,7 +111,7 @@ export class EditarCustoPage implements OnInit {
       }
 
       if (Object.keys(alteracoes).length === 0) {
-        this.mostrarMensagem('Nenhuma alteração foi feita');
+        this.mostrarMensagem(this.strings.get('custos.editar.mensagens.semAlteracoes'));
         this.salvando = false;
         return;
       }
@@ -110,7 +119,7 @@ export class EditarCustoPage implements OnInit {
       await this.custosService.updateCusto(this.custoId, alteracoes);
 
       const toast = await this.toastController.create({
-        message: 'Custo atualizado com sucesso',
+        message: this.strings.get('custos.editar.mensagens.custoAtualizado'),
         duration: 2000,
         position: 'bottom',
         color: 'success'
@@ -119,31 +128,32 @@ export class EditarCustoPage implements OnInit {
 
       this.router.navigate(['/resumo-custos']);
     } catch (erro) {
-      console.error('Erro ao guardar custo:', erro);
-      this.mostrarErro('Erro ao guardar alterações');
+      console.error(this.strings.get('custos.editar.logs.erroGuardar'), erro);
+      this.mostrarErro(this.strings.get('custos.editar.mensagens.erroGuardar'));
     } finally {
       this.salvando = false;
     }
   }
 
-  async deletarCusto(): Promise<void> {
+  /** Pede confirmação antes de eliminar definitivamente o custo. */
+  async eliminarCusto(): Promise<void> {
     if (!this.custoId) {
       return;
     }
 
     const alert = await this.alertController.create({
-      header: 'Confirmar Exclusão',
-      message: 'Tem certeza que deseja deletar este custo? Esta ação não pode ser desfeita.',
+      header: this.strings.get('custos.editar.confirmarEliminar.titulo'),
+      message: this.strings.get('custos.editar.confirmarEliminar.mensagem'),
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.strings.get('common.cancel'),
           role: 'cancel'
         },
         {
-          text: 'Deletar',
+          text: this.strings.get('common.delete'),
           role: 'destructive',
           handler: async () => {
-            await this.executarDelecao();
+            await this.executarEliminacao();
           }
         }
       ]
@@ -152,7 +162,8 @@ export class EditarCustoPage implements OnInit {
     await alert.present();
   }
 
-  private async executarDelecao(): Promise<void> {
+  /** Executa a eliminação do custo depois da confirmação do utilizador. */
+  private async executarEliminacao(): Promise<void> {
     if (!this.custoId) {
       return;
     }
@@ -163,7 +174,7 @@ export class EditarCustoPage implements OnInit {
       await this.custosService.deleteCusto(this.custoId);
 
       const toast = await this.toastController.create({
-        message: 'Custo deletado com sucesso',
+        message: this.strings.get('custos.editar.mensagens.custoEliminado'),
         duration: 2000,
         position: 'bottom',
         color: 'success'
@@ -172,50 +183,54 @@ export class EditarCustoPage implements OnInit {
 
       this.router.navigate(['/resumo-custos']);
     } catch (erro) {
-      console.error('Erro ao deletar custo:', erro);
-      this.mostrarErro('Erro ao deletar custo');
+      console.error(this.strings.get('custos.editar.logs.erroEliminar'), erro);
+      this.mostrarErro(this.strings.get('custos.editar.mensagens.erroEliminar'));
     } finally {
       this.salvando = false;
     }
   }
 
+  /** Cancela a edição e volta ao resumo de custos. */
   cancelar(): void {
     this.router.navigate(['/resumo-custos']);
   }
 
+  /** Garante que os campos obrigatórios do custo estão preenchidos. */
   private validarFormulario(): boolean {
     if (!this.custo) {
-      this.mostrarMensagem('Dados do custo não carregados');
+      this.mostrarMensagem(this.strings.get('custos.editar.mensagens.dadosNaoCarregados'));
       return false;
     }
 
     if (!this.custo.descricao || this.custo.descricao.trim() === '') {
-      this.mostrarMensagem('Descrição é obrigatória');
+      this.mostrarMensagem(this.strings.get('custos.editar.validacao.descricaoObrigatoria'));
       return false;
     }
 
     if (!this.custo.valor || this.custo.valor <= 0) {
-      this.mostrarMensagem('Valor deve ser maior que zero');
+      this.mostrarMensagem(this.strings.get('custos.editar.validacao.valorMaiorZero'));
       return false;
     }
 
     if (!this.custo.data) {
-      this.mostrarMensagem('Data é obrigatória');
+      this.mostrarMensagem(this.strings.get('custos.editar.validacao.dataObrigatoria'));
       return false;
     }
 
     return true;
   }
 
+  /** Mostra um alerta simples com uma mensagem informativa. */
   private async mostrarMensagem(mensagem: string): Promise<void> {
     const alert = await this.alertController.create({
-      header: 'Atenção',
+      header: this.strings.get('common.warning'),
       message: mensagem,
-      buttons: ['OK']
+      buttons: [this.strings.get('common.ok')]
     });
     await alert.present();
   }
 
+  /** Mostra uma notificação de erro no fundo do ecrã. */
   private async mostrarErro(mensagem: string): Promise<void> {
     const toast = await this.toastController.create({
       message: mensagem,
@@ -226,26 +241,33 @@ export class EditarCustoPage implements OnInit {
     await toast.present();
   }
 
+  /** Devolve a cor visual associada à categoria seleccionada. */
   obterCorCategoria(categoria: string | undefined): string {
     if (!categoria) {
       return 'medium';
     }
 
     const coresMap: Record<string, string> = {
-      'Alimentação': 'danger',
-      'Transporte': 'warning',
-      'Hospedagem': 'primary',
-      'Compras': 'secondary',
-      'Cultura': 'tertiary',
-      'Natureza': 'success',
-      'Aventura': 'medium',
-      'Gastronomia': 'warning',
-      'Sem categoria': 'light'
+      alimentacao: 'danger',
+      transporte: 'warning',
+      alojamento: 'primary',
+      compras: 'secondary',
+      cultura: 'tertiary',
+      natureza: 'success',
+      aventura: 'medium',
+      gastronomia: 'warning',
+      semCategoria: 'light'
     };
     return coresMap[categoria] || 'medium';
   }
 
+  /** Formata valores monetários com vírgula decimal. */
   formatarValor(valor: number): string {
     return valor.toFixed(2).replace('.', ',');
+  }
+
+  /** Obtém o texto visível de uma categoria a partir da sua chave. */
+  obterNomeCategoria(categoria: string): string {
+    return this.strings.get(`custos.categorias.${categoria}`);
   }
 }

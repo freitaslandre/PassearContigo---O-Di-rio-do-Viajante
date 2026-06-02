@@ -8,12 +8,12 @@ import { EditarCustoPageRoutingModule } from './editar-custo-routing.module';
 import { EditarCustoPage } from './editar-custo.page';
 
 @NgModule({
+  declarations: [EditarCustoPage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EditarCustoPageRoutingModule,
-    EditarCustoPage
+    EditarCustoPageRoutingModule
   ]
 })
 export class EditarCustoPageModule { }

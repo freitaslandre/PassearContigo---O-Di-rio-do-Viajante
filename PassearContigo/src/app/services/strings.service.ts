@@ -10,16 +10,20 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StringsService {
+  /** Mapa completo de strings carregado a partir de assets/strings.json. */
   private strings: any = {};
+  /** Idioma atualmente activo na aplicação. */
   private currentLanguage = new BehaviorSubject<string>('pt');
+  /** Indica se o ficheiro de strings já foi carregado. */
   private stringsLoaded = false;
 
+  /** Inicia o carregamento das strings assim que o serviço é criado. */
   constructor() {
     this.loadStrings();
   }
 
   /**
-   * Carrega as strings do arquivo strings.json
+   * Carrega as strings do ficheiro strings.json
    */
   private async loadStrings(): Promise<void> {
     try {
@@ -73,11 +77,11 @@ export class StringsService {
   }
 
   /**
-   * Obtém o valor aninhado de um objeto usando notação de ponto
+   * Obtém o valor aninhado de um objecto usando notação de ponto
    * @param key - Chave com notação de ponto (ex: 'app.title')
    * @returns Valor encontrado ou undefined
    */
-  private getNestedValue(key: string): string {
+  private getNestedValue(key: string): string | undefined {
     const keys = key.split('.');
     let value: any = this.strings;
 
