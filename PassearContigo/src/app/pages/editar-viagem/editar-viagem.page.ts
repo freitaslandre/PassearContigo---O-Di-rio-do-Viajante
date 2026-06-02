@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
 import { CameraService } from '../../services/camera.service';
+import { FirebaseStorageService } from '../../services/firebase-storage.service';
 
 @Component({
   selector: 'app-editar-viagem',
@@ -30,6 +31,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     private router: Router,
     private viagensService: ViagensService,
     private cameraService: CameraService,
+    private firebaseStorageService: FirebaseStorageService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) {}
@@ -59,8 +61,8 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      this.fotoCapaPreview = String(reader.result || '');
+    reader.onload = async () => {
+      this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(String(reader.result || ''), 1280, 0.72);
     };
     reader.readAsDataURL(file);
   }
@@ -72,7 +74,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   async tirarFotoCapa() {
     const foto = await this.cameraService.takePicture();
     if (foto) {
-      this.fotoCapaPreview = foto;
+      this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
       return;
     }
 
@@ -82,7 +84,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   async escolherFotoCapaDaGaleria() {
     const foto = await this.cameraService.selectPictureFromGallery();
     if (foto) {
-      this.fotoCapaPreview = foto;
+      this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
       return;
     }
 
@@ -102,6 +104,17 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     await loader.present();
 
     try {
+      let fotoCapaUrl = this.fotoCapaPreview || '';
+
+      if (this.fotoCapaPreview?.startsWith('data:image/')) {
+        loader.message = 'A enviar capa...';
+        fotoCapaUrl = await this.firebaseStorageService.uploadViagemCover(
+          this.viagem.id,
+          this.fotoCapaPreview,
+          { optimize: false }
+        );
+      }
+
       await this.viagensService.updateViagem(this.viagem.id, {
         titulo: this.form.value.titulo.trim(),
         local: this.form.value.destino.trim(),
@@ -109,7 +122,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
         dataInicio: new Date(this.form.value.dataInicio),
         dataFim: new Date(this.form.value.dataFim),
         status: this.form.value.status,
-        fotoCapaUrl: this.fotoCapaPreview || ''
+        fotoCapaUrl
       });
 
       await loader.dismiss();

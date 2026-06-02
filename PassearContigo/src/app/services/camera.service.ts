@@ -25,7 +25,9 @@ export class CameraService {
       }
 
       const image = await Camera.getPhoto({
-        quality: 90,
+        quality: 72,
+        width: 1280,
+        height: 1280,
         allowEditing: true,
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera
@@ -51,7 +53,9 @@ export class CameraService {
       }
 
       const image = await Camera.getPhoto({
-        quality: 90,
+        quality: 72,
+        width: 1280,
+        height: 1280,
         allowEditing: true,
         resultType: CameraResultType.Base64,
         source: CameraSource.Photos
@@ -77,7 +81,9 @@ export class CameraService {
       }
 
       const image = await Camera.getPhoto({
-        quality: 90,
+        quality: 72,
+        width: 1280,
+        height: 1280,
         allowEditing: true,
         resultType: CameraResultType.Uri,
         source: CameraSource.Camera

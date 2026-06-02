@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ViagensService } from '../../services/viagens.service';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { CameraService } from '../../services/camera.service';
+import { FirebaseStorageService } from '../../services/firebase-storage.service';
 
 @Component({
   selector: 'app-nova-viagem',
@@ -22,6 +23,7 @@ export class NovaViagemPage implements OnInit {
     private fb: FormBuilder,
     private viagensService: ViagensService,
     private cameraService: CameraService,
+    private firebaseStorageService: FirebaseStorageService,
     private router: Router,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
@@ -91,8 +93,8 @@ export class NovaViagemPage implements OnInit {
     if (file) {
       this.fotoCapaFile = file;
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fotoCapaPreview = e.target.result;
+      reader.onload = async (e: any) => {
+        this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(e.target.result, 1280, 0.72);
       };
       reader.readAsDataURL(file);
     }
@@ -107,7 +109,7 @@ export class NovaViagemPage implements OnInit {
     const foto = await this.cameraService.takePicture();
     if (foto) {
       this.fotoCapaFile = null;
-      this.fotoCapaPreview = foto;
+      this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
       return;
     }
 
@@ -118,7 +120,7 @@ export class NovaViagemPage implements OnInit {
     const foto = await this.cameraService.selectPictureFromGallery();
     if (foto) {
       this.fotoCapaFile = null;
-      this.fotoCapaPreview = foto;
+      this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
       return;
     }
 
@@ -143,7 +145,7 @@ export class NovaViagemPage implements OnInit {
     }
 
     const loader = await this.loadingCtrl.create({
-      message: 'Criando viagem...'
+      message: 'A criar viagem...'
     });
     await loader.present();
 
@@ -156,11 +158,11 @@ export class NovaViagemPage implements OnInit {
         local: this.form.get('destino')?.value,
         dataInicio,
         dataFim,
-        fotoCapaUrl: this.fotoCapaPreview || undefined,
         status: 'planejada' as const
       };
 
       const id = await this.viagensService.createViagem(novaViagem);
+      const fotoCapaParaEnviar = this.fotoCapaPreview;
 
       await loader.dismiss();
 
@@ -170,9 +172,11 @@ export class NovaViagemPage implements OnInit {
         color: 'success'
       });
       await toast.present();
-      await toast.onDidDismiss();
-
       this.router.navigate(['/tabs', 'viagens', id]);
+
+      if (fotoCapaParaEnviar) {
+        this.enviarCapaEmSegundoPlano(id, fotoCapaParaEnviar);
+      }
     } catch (error: any) {
       await loader.dismiss();
 
@@ -212,5 +216,19 @@ export class NovaViagemPage implements OnInit {
       color
     });
     await toast.present();
+  }
+
+  private async enviarCapaEmSegundoPlano(viagemId: string, fotoCapaDataUrl: string) {
+    try {
+      const fotoCapaUrl = await this.firebaseStorageService.uploadViagemCover(
+        viagemId,
+        fotoCapaDataUrl,
+        { optimize: false }
+      );
+      await this.viagensService.updateViagem(viagemId, { fotoCapaUrl });
+    } catch (error) {
+      console.warn('Não foi possível enviar a capa da viagem:', error);
+      await this.mostrarToast('A viagem foi criada, mas a capa não foi enviada.', 'warning');
+    }
   }
 }

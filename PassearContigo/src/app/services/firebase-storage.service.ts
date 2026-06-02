@@ -6,14 +6,35 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   providedIn: 'root'
 })
 export class FirebaseStorageService {
+  async uploadViagemCover(viagemId: string, dataUrl: string, options: { optimize?: boolean } = {}): Promise<string> {
+    const uid = getAuth().currentUser?.uid;
+
+    if (!uid) {
+      throw new Error('É necessário iniciar sessão para guardar fotos.');
+    }
+
+    const compressedDataUrl = options.optimize === false
+      ? dataUrl
+      : await this.optimizeImage(dataUrl, 1280, 0.72);
+    const blob = await this.dataUrlToBlob(compressedDataUrl);
+
+    const storage = getStorage();
+    const timestamp = Date.now();
+    const path = `users/${uid}/viagens/${viagemId}/capa/${timestamp}.jpg`;
+    const photoRef = ref(storage, path);
+
+    await uploadBytes(photoRef, blob, { contentType: 'image/jpeg' });
+    return getDownloadURL(photoRef);
+  }
+
   async uploadPoiPhoto(viagemId: string, diaId: string, poiId: string, dataUrl: string): Promise<string> {
     const uid = getAuth().currentUser?.uid;
 
     if (!uid) {
-      throw new Error('E necessario iniciar sessao para guardar fotos.');
+      throw new Error('É necessário iniciar sessão para guardar fotos.');
     }
 
-    const compressedDataUrl = await this.compressImage(dataUrl);
+    const compressedDataUrl = await this.optimizeImage(dataUrl);
     const blob = await this.dataUrlToBlob(compressedDataUrl);
 
     const storage = getStorage();
@@ -25,7 +46,7 @@ export class FirebaseStorageService {
     return getDownloadURL(photoRef);
   }
 
-  private async compressImage(dataUrl: string): Promise<string> {
+  async optimizeImage(dataUrl: string, maxWidth = 1024, quality = 0.7): Promise<string> {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
@@ -33,9 +54,12 @@ export class FirebaseStorageService {
         let width = img.width;
         let height = img.height;
 
-        if (width > 1024) {
-          height = (height * 1024) / width;
-          width = 1024;
+        const maiorDimensao = Math.max(width, height);
+
+        if (maiorDimensao > maxWidth) {
+          const ratio = maxWidth / maiorDimensao;
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
         }
 
         canvas.width = width;
@@ -43,8 +67,9 @@ export class FirebaseStorageService {
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(img, 0, 0, width, height);
 
-        resolve(canvas.toDataURL('image/jpeg', 0.7));
+        resolve(canvas.toDataURL('image/jpeg', quality));
       };
+      img.onerror = () => resolve(dataUrl);
       img.src = dataUrl;
     });
   }
@@ -65,4 +90,3 @@ export class FirebaseStorageService {
     });
   }
 }
-
