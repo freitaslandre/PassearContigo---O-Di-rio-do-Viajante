@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustosService } from '../../services/custos.service';
 import { CustosPdfService } from '../../services/custos-pdf.service';
+import { PdfShareService } from '../../services/pdf-share.service';
 import { ViagensService } from '../../services/viagens.service';
 import { Custo, Viagem } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
@@ -50,6 +51,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
   atualizandoCustoId: string | null = null;
   gerandoPdf = false;
+  partilhandoPdf = false;
   
   private unsubscribeCustos: Unsubscribe | null = null;
   private unsubscribeViagens: Unsubscribe | null = null;
@@ -61,6 +63,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   constructor(
     private custosService: CustosService,
     private custosPdfService: CustosPdfService,
+    private pdfShareService: PdfShareService,
     private viagensService: ViagensService,
     private toastController: ToastController
   ) {}
@@ -267,7 +270,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   }
 
   async gerarPdfCustosPorCategoria(): Promise<void> {
-    if (this.gerandoPdf || this.custos.length === 0) {
+    if (this.gerandoPdf || this.partilhandoPdf || this.custos.length === 0) {
       return;
     }
 
@@ -286,6 +289,43 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       await this.mostrarToast('Erro ao gerar PDF de custos.', 'danger');
     } finally {
       this.gerandoPdf = false;
+    }
+  }
+
+  async partilharPdfCustosPorCategoria(): Promise<void> {
+    if (this.partilhandoPdf || this.gerandoPdf || this.custos.length === 0) {
+      return;
+    }
+
+    this.partilhandoPdf = true;
+
+    try {
+      const podePartilhar = await this.pdfShareService.canShare();
+      if (!podePartilhar) {
+        await this.mostrarToast('Partilha de PDF não disponível neste dispositivo.', 'danger');
+        return;
+      }
+
+      const pdf = this.custosPdfService.criarRelatorioPorCategoria({
+        custos: this.custos,
+        categorias: this.custosPorCategoria,
+        totalGeral: this.totalGeral
+      });
+
+      await this.pdfShareService.sharePdf(pdf, {
+        title: 'Relatorio de custos por categoria',
+        text: 'PDF com o resumo de custos por categoria.',
+        dialogTitle: 'Partilhar relatorio de custos'
+      });
+    } catch (error: any) {
+      if (error?.message?.toLowerCase().includes('cancel')) {
+        return;
+      }
+
+      console.error('Erro ao partilhar PDF de custos:', error);
+      await this.mostrarToast(error?.message || 'Erro ao partilhar PDF de custos.', 'danger');
+    } finally {
+      this.partilhandoPdf = false;
     }
   }
 

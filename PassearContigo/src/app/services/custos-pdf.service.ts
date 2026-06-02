@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { Custo } from '../models/viagem.model';
+import { PdfGerado } from './pdf-share.service';
 
 export interface CategoriaRelatorioCusto {
   categoria: string;
@@ -28,6 +29,11 @@ export class CustosPdfService {
   private readonly bottomMargin = 18;
 
   gerarRelatorioPorCategoria({ custos, categorias, totalGeral }: CustosPdfData): void {
+    const pdf = this.criarRelatorioPorCategoria({ custos, categorias, totalGeral });
+    this.doc.save(pdf.fileName);
+  }
+
+  criarRelatorioPorCategoria({ custos, categorias, totalGeral }: CustosPdfData): PdfGerado {
     this.doc = new jsPDF({ unit: 'mm', format: 'a4' });
     this.y = 18;
 
@@ -36,7 +42,10 @@ export class CustosPdfService {
     this.adicionarDetalheCategorias(custos, categorias);
     this.adicionarRodapes();
 
-    this.doc.save(`relatorio-custos-${this.obterDataFicheiro()}.pdf`);
+    return {
+      fileName: `relatorio-custos-${this.obterDataFicheiro()}.pdf`,
+      base64: this.obterBase64Pdf()
+    };
   }
 
   private adicionarCabecalho(custos: Custo[], categorias: CategoriaRelatorioCusto[], totalGeral: number): void {
@@ -258,5 +267,9 @@ export class CustosPdfService {
       Math.round((rgb[1] + 255 * 3) / 4),
       Math.round((rgb[2] + 255 * 3) / 4)
     ];
+  }
+
+  private obterBase64Pdf(): string {
+    return this.doc.output('datauristring').split(',')[1];
   }
 }

@@ -5,6 +5,7 @@ import { Unsubscribe } from 'firebase/firestore';
 import { Custo, Dia, POI, Viagem } from '../../models/viagem.model';
 import { CustosService } from '../../services/custos.service';
 import { DiarioPdfService } from '../../services/diario-pdf.service';
+import { PdfShareService } from '../../services/pdf-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   carregando = true;
   guardando = false;
   gerandoPdf = false;
+  partilhandoPdf = false;
   erro = '';
 
   private viagemSub: Unsubscribe | null = null;
@@ -36,6 +38,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
     private viagensService: ViagensService,
     private custosService: CustosService,
     private diarioPdfService: DiarioPdfService,
+    private pdfShareService: PdfShareService,
     private gestureCtrl: GestureController,
     private toastCtrl: ToastController
   ) {}
@@ -278,6 +281,43 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
       await this.mostrarToast(error?.message || 'Erro ao gerar PDF do diario.', 'danger');
     } finally {
       this.gerandoPdf = false;
+    }
+  }
+
+  async partilharPdfDiario() {
+    if (!this.viagem || this.partilhandoPdf) {
+      return;
+    }
+
+    this.partilhandoPdf = true;
+
+    try {
+      const podePartilhar = await this.pdfShareService.canShare();
+      if (!podePartilhar) {
+        await this.mostrarToast('Partilha de PDF não disponível neste dispositivo.', 'danger');
+        return;
+      }
+
+      const pdf = this.diarioPdfService.criarDiarioCompleto({
+        viagem: this.viagem,
+        dias: this.dias,
+        custos: this.custosFirestore
+      });
+
+      await this.pdfShareService.sharePdf(pdf, {
+        title: this.viagem.titulo || 'Diario da viagem',
+        text: 'PDF do diario completo da viagem.',
+        dialogTitle: 'Partilhar diario'
+      });
+    } catch (error: any) {
+      if (error?.message?.toLowerCase().includes('cancel')) {
+        return;
+      }
+
+      console.error('Erro ao partilhar PDF do diario:', error);
+      await this.mostrarToast(error?.message || 'Erro ao partilhar PDF do diario.', 'danger');
+    } finally {
+      this.partilhandoPdf = false;
     }
   }
 

@@ -3,8 +3,15 @@
     <ion-title>Resumo de Custos</ion-title>
     <ion-buttons slot="end">
       <ion-button
+        (click)="partilharPdfCustosPorCategoria()"
+        [disabled]="carregando || partilhandoPdf || gerandoPdf || custos.length === 0"
+      >
+        <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-outline"></ion-icon>
+      </ion-button>
+      <ion-button
         (click)="gerarPdfCustosPorCategoria()"
-        [disabled]="carregando || gerandoPdf || custos.length === 0"
+        [disabled]="carregando || gerandoPdf || partilhandoPdf || custos.length === 0"
       >
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
