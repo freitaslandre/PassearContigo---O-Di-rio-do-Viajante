@@ -203,3 +203,205 @@ Próximos passos recomendados:
 - Adicionar cálculo automático de custos no detalhe do dia
 - Criar componente reutilizável de moeda/conversão
 - Implementar sincronização offline de custos (similar a POI)
+
+---
+
+Sessão 4 — 2 de junho de 2026
+Objetivo:
+Criar e melhorar as áreas de Diário da Viagem e Álbum da Viagem, corrigir custos associados a POIs, melhorar filtros da lista de viagens e estabilizar a galeria de fotos.
+
+Atividades realizadas:
+
+1. CORREÇÃO DA TAB DE CUSTOS
+   ✅ Investigado problema em que os custos adicionados nos POIs não apareciam na tab/resumo de custos.
+   ✅ Corrigido erro Angular NG0203 relacionado com uso de inject() fora de contexto de injeção.
+   ✅ Ajustada a lógica para carregar custos associados aos POIs sem bloquear a página.
+   ✅ Custos de POIs passaram a ser considerados no resumo da viagem.
+
+2. FILTROS NA TAB DE VIAGENS/IMAGENS
+   ✅ Implementados filtros por estado da viagem:
+      - Todas
+      - Planejadas
+      - Em andamento
+      - Concluídas
+      - Canceladas
+   ✅ Corrigida interpretação inicial: filtro é por estado da viagem, não por tipo/categoria.
+   ✅ Ajustado layout dos filtros para caber no ecrã, usando controlo mais compacto e adequado a mobile.
+
+3. PÁGINA DIÁRIO DA VIAGEM
+   ✅ Criada página Diário da Viagem:
+      - diario-viagem.page.ts
+      - diario-viagem.page.html
+      - diario-viagem.page.scss
+      - diario-viagem.module.ts
+      - diario-viagem-routing.module.ts
+   ✅ Criada rota no detalhe da viagem:
+      - /tabs/viagens/:id/diario
+   ✅ Adicionado botão para abrir o diário a partir do detalhe da viagem.
+   ✅ Implementada navegação por swipe entre dias usando gestos.
+   ✅ Exibido estado da viagem com IonBadge:
+      - em curso
+      - concluída
+      - planeada/cancelada quando aplicável
+   ✅ Mostrados POIs por dia com:
+      - fotos
+      - notas
+      - descrição
+      - custos associados carregados do Firestore
+   ✅ Adicionados avisos para dias com registos incompletos.
+   ✅ Permitido adicionar nota tardia a um POI diretamente no diário.
+   ✅ Guardadas observações/notas no Firestore através da atualização da viagem.
+
+4. PÁGINA ÁLBUM DA VIAGEM
+   ✅ Criada página Álbum da Viagem:
+      - album-viagem.page.ts
+      - album-viagem.page.html
+      - album-viagem.page.scss
+      - album-viagem.module.ts
+      - album-viagem-routing.module.ts
+   ✅ Criada rota no detalhe da viagem:
+      - /tabs/viagens/:id/album
+   ✅ Adicionado botão para abrir o álbum a partir do detalhe da viagem.
+   ✅ Implementada grelha de fotos com IonGrid.
+   ✅ Álbum reúne fotos de várias origens:
+      - foto de capa da viagem
+      - fotos importadas do rolo
+      - fotos associadas aos POIs
+   ✅ Modelo Viagem atualizado com fotosAlbum.
+   ✅ Criada interface FotoAlbumViagem com:
+      - id
+      - url
+      - titulo
+      - legenda
+      - poiId
+      - diaId
+      - poiNome
+      - dataCaptura
+      - origem
+      - metadados
+
+5. SELEÇÃO MÚLTIPLA DE FOTOS
+   ✅ Implementado modo de seleção no álbum.
+   ✅ Adicionadas ações:
+      - selecionar foto
+      - selecionar todas
+      - limpar seleção
+      - cancelar seleção
+   ✅ Mostrado contador de fotos selecionadas no título.
+   ✅ Adicionado indicador visual de seleção em cada foto.
+
+6. IMPORTAÇÃO DE FOTOS DO ROLO VIA CAPACITOR
+   ✅ Implementada importação com Camera.chooseFromGallery().
+   ✅ Suporte para seleção múltipla.
+   ✅ Pedido/verificação de permissões de galeria.
+   ✅ Organização por data usando EXIF/creationDate quando disponível.
+   ✅ Conversão de caminhos nativos com Capacitor.convertFileSrc().
+   ✅ Guardados metadados básicos da foto:
+      - formato
+      - resolução
+      - tamanho
+      - indicação de EXIF disponível
+   ✅ Limitada importação por lote para reduzir risco de bloqueio da app.
+
+7. EXIBIÇÃO DE FOTOS COM LEGENDA E POI ASSOCIADO
+   ✅ Cada foto passou a mostrar:
+      - título
+      - legenda ou "Sem legenda"
+      - POI associado
+      - data/subtítulo
+      - badge de origem: Capa, Rolo ou POI
+   ✅ Implementada resolução automática de POI:
+      - se a foto tiver poiId, procura o nome do POI dentro dos dias da viagem
+      - se também tiver diaId, permite navegação correta para o detalhe do POI
+   ✅ Melhorado layout dos cartões para manter legenda e POI visíveis em mobile.
+
+8. CORREÇÃO DO BLOQUEIO AO ABRIR A GALERIA
+   Problema:
+   A app bloqueava ao abrir a galeria/álbum sem apresentar erro.
+
+   Causas prováveis:
+   - muitas fotos renderizadas de uma vez;
+   - imagens base64 demasiado grandes guardadas no Firestore;
+   - agrupamento de fotos recalculado continuamente no template.
+
+   Soluções aplicadas:
+   ✅ Renderização por lotes de 12 fotos.
+   ✅ Botão "Carregar mais fotos".
+   ✅ Troca de img para ion-img para carregamento mais leve/lazy.
+   ✅ Grupos de fotos calculados em cache em vez de getter no template.
+   ✅ Ativada ChangeDetectionStrategy.OnPush na página do álbum.
+   ✅ Bloqueadas imagens data:image/base64 demasiado grandes.
+   ✅ Mostrado aviso quando fotos pesadas são ocultadas para evitar bloquear a app.
+   ✅ Reduzida qualidade de importação e limite de fotos por importação.
+
+9. ELIMINAR OU REATRIBUIR FOTOS A OUTRO POI NO FIRESTORE
+   ✅ Implementada eliminação de fotos selecionadas do fotosAlbum no Firestore.
+   ✅ Implementada reatribuição de fotos selecionadas a outro POI.
+   ✅ Permitido remover associação ao POI escolhendo "Sem POI associado".
+   ✅ Criada lista de POIs disponíveis a partir dos dias da viagem e POIs soltos.
+   ✅ Adicionados AlertController e ToastController para confirmação e feedback.
+   ✅ Fotos vindas diretamente de POIs ficam marcadas como "Gerida no POI" e não são apagadas pelo álbum, evitando remover acidentalmente a foto principal do POI.
+
+10. VALIDAÇÕES
+   ✅ Build executado várias vezes com sucesso:
+      npm run build -- --configuration development
+   ✅ Sem erros de compilação após as alterações.
+   ⚠️ Warnings existentes mantidos:
+      - localforage como dependência CommonJS
+      - leaflet como dependência CommonJS
+
+Ficheiros principais alterados/criados:
+
+- src/app/pages/diario-viagem/diario-viagem.page.ts
+- src/app/pages/diario-viagem/diario-viagem.page.html
+- src/app/pages/diario-viagem/diario-viagem.page.scss
+- src/app/pages/diario-viagem/diario-viagem.module.ts
+- src/app/pages/diario-viagem/diario-viagem-routing.module.ts
+- src/app/pages/album-viagem/album-viagem.page.ts
+- src/app/pages/album-viagem/album-viagem.page.html
+- src/app/pages/album-viagem/album-viagem.page.scss
+- src/app/pages/album-viagem/album-viagem.module.ts
+- src/app/pages/album-viagem/album-viagem-routing.module.ts
+- src/app/models/viagem.model.ts
+- src/app/pages/viagem-detalhe/viagem-detalhe-routing.module.ts
+- src/app/pages/viagem-detalhe/viagem-detalhe.page.ts
+- src/app/pages/viagem-detalhe/viagem-detalhe.page.html
+- src/app/pages/viagens/viagens.page.ts
+- src/app/pages/viagens/viagens.page.html
+- src/app/pages/viagens/viagens.page.scss
+- src/app/pages/resumo-custos/resumo-custos.page.ts
+- src/app/services/viagens.service.ts
+
+Problemas identificados e resolvidos:
+
+1. Custos dos POIs não apareciam no resumo.
+   ✅ Resolvido ajustando carregamento e associação dos custos.
+
+2. Erro NG0203 EnvironmentInjector/inject().
+   ✅ Resolvido removendo uso incorreto de injeção fora do contexto Angular.
+
+3. Filtros não cabiam no ecrã.
+   ✅ Resolvido com layout de filtro mais compacto para mobile.
+
+4. Galeria bloqueava sem erro visível.
+   ✅ Mitigado com lazy loading, lotes, cache, OnPush e bloqueio de imagens base64 pesadas.
+
+5. Fotos importadas não mostravam bem legenda/POI associado.
+   ✅ Resolvido com modelo atualizado, resolução automática de POI e novo layout visual.
+
+Decisões:
+
+- Separar Diário e Álbum em páginas próprias para manter responsabilidades claras.
+- Usar Firestore como origem dos dados da viagem, dias, POIs, fotos e associações.
+- Manter fotos do POI protegidas no álbum, permitindo apagar apenas fotos de fotosAlbum.
+- Preferir ion-img e carregamento por lotes para estabilidade em dispositivos móveis.
+- Guardar diaId em FotoAlbumViagem para melhorar navegação e reatribuição.
+- Mostrar aviso quando fotos pesadas são ocultadas em vez de bloquear a app.
+
+Próximos passos recomendados:
+
+- Migrar fotos pesadas para Firebase Storage em vez de guardar base64 no Firestore.
+- Criar modal de detalhe da foto com edição de legenda e POI associado.
+- Permitir editar legenda diretamente no álbum.
+- Adicionar teste manual em dispositivo Android/iOS real para confirmar estabilidade da galeria.
+- Criar limpeza/migração de fotos antigas demasiado grandes já guardadas no Firestore.
