@@ -122,7 +122,7 @@ export class PublicacoesService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('É necessário iniciar sessão para ver publicações.'));
+        onData([]);
         return;
       }
 

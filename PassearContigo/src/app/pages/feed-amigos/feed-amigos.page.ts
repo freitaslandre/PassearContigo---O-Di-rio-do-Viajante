@@ -48,6 +48,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
     this.unsubscribe = this.publicacoesService.subscribeToFeedPublicacoes(
       (publicacoes) => {
         this.publicacoes = publicacoes;
+        this.erro = '';
         this.sincronizarSubscricoesInteracoes(publicacoes);
         this.carregando = false;
       },

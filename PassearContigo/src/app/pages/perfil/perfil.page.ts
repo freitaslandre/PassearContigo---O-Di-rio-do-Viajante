@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { PushNotificationsService } from '../../services/push-notifications.service';
@@ -31,7 +32,8 @@ export class PerfilPage {
     public authService: AuthService,
     private pushNotificationsService: PushNotificationsService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
   loginValido(): boolean {
@@ -57,6 +59,7 @@ export class PerfilPage {
     try {
       await this.authService.login(email, password);
       await this.mostrarToast('Sessão iniciada com sucesso.', 'success');
+      await this.router.navigate(['/tabs', 'viagens']);
     } catch (error: any) {
       await this.mostrarErroLogin(error);
     } finally {
