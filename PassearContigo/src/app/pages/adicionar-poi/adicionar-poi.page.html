@@ -19,9 +19,6 @@
         <ion-item>
           <ion-label position="stacked">Foto</ion-label>
           <div class="foto-upload-container">
-            <ion-text color="medium" *ngIf="!fotoPreview">
-              <small>Funcionalidade de upload de foto será habilitada em breve.</small>
-            </ion-text>
             <div *ngIf="fotoPreview" class="foto-preview">
               <img [src]="fotoPreview" alt="Preview da foto" />
               <ion-button
@@ -29,9 +26,45 @@
                 color="danger"
                 fill="outline"
                 (click)="removerFoto()"
+                type="button"
               >
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
+            </div>
+            <div class="foto-acoes">
+              <ion-button
+                color="primary"
+                type="button"
+                (click)="tirarFoto()"
+              >
+                <ion-icon slot="start" name="camera-outline"></ion-icon>
+                Tirar foto
+              </ion-button>
+              <ion-button
+                color="medium"
+                fill="outline"
+                type="button"
+                (click)="escolherFotoDaGaleria()"
+              >
+                <ion-icon slot="start" name="images-outline"></ion-icon>
+                Galeria
+              </ion-button>
+              <ion-button
+                color="medium"
+                fill="clear"
+                type="button"
+                (click)="selecionarFoto()"
+              >
+                <ion-icon slot="start" name="folder-open-outline"></ion-icon>
+                Ficheiro
+              </ion-button>
+              <input
+                #fotoInput
+                type="file"
+                accept="image/*"
+                hidden
+                (change)="onFotoSelecionada($event)"
+              />
             </div>
           </div>
         </ion-item>

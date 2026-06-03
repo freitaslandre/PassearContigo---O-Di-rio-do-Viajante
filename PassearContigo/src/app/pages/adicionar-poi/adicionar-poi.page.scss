@@ -15,6 +15,7 @@ ion-card {
 
 .foto-upload-container {
   padding: 1rem 0;
+  width: 100%;
 }
 
 .foto-preview {
@@ -34,6 +35,16 @@ ion-card {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
+  }
+}
+
+.foto-acoes {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+
+  ion-button {
+    margin: 0;
   }
 }
 

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
+import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI } from '../../models/viagem.model';
@@ -58,7 +59,8 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private nominatimService: NominatimService,
-    private storageService: FirebaseStorageService
+    private storageService: FirebaseStorageService,
+    private cameraService: CameraService
   ) {}
 
   ngOnInit() {
@@ -213,6 +215,38 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
 
   selecionarFoto() {
     this.fotoInput.nativeElement.click();
+  }
+
+  async tirarFoto(): Promise<void> {
+    const foto = await this.cameraService.takePicture();
+    if (foto) {
+      this.fotoFile = null;
+      this.fotoPreview = foto;
+      return;
+    }
+
+    const toast = await this.toastCtrl.create({
+      message: 'Nao foi possivel capturar a foto.',
+      duration: 2000,
+      color: 'warning'
+    });
+    await toast.present();
+  }
+
+  async escolherFotoDaGaleria(): Promise<void> {
+    const foto = await this.cameraService.selectPictureFromGallery();
+    if (foto) {
+      this.fotoFile = null;
+      this.fotoPreview = foto;
+      return;
+    }
+
+    const toast = await this.toastCtrl.create({
+      message: 'Nao foi possivel selecionar a foto.',
+      duration: 2000,
+      color: 'warning'
+    });
+    await toast.present();
   }
 
   onFotoSelecionada(event: Event) {
