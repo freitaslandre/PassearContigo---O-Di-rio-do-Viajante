@@ -26,18 +26,6 @@ interface SegmentoGrafico {
   dashoffset: number;
 }
 
-const CATEGORIAS_DISPONIVEIS = [
-  'Alimentação',
-  'Transporte',
-  'Hospedagem',
-  'Compras',
-  'Cultura',
-  'Natureza',
-  'Aventura',
-  'Gastronomia',
-  'Sem categoria'
-];
-
 const CORES_CATEGORIA: Record<string, string> = {
   alimentacao: '#E75A5A',
   transporte: '#F6A23A',
@@ -64,10 +52,10 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   totalGeral = 0;
   carregando = true;
   erroCarregamento = '';
-  categoriasDisponiveis = CATEGORIAS_DISPONIVEIS;
-  atualizandoCustoId: string | null = null;
   gerandoPdf = false;
   partilhandoPdf = false;
+  viagemSelecionadaId = 'todas';
+  viagensDisponiveis: Viagem[] = [];
   
   private unsubscribeCustos: Unsubscribe | null = null;
   private unsubscribeViagens: Unsubscribe | null = null;
@@ -118,6 +106,15 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     this.unsubscribeViagens = this.viagensService.subscribeToViagens(
       (viagens: Viagem[]) => {
         this.viagens = viagens;
+        this.viagensDisponiveis = viagens;
+
+        if (
+          this.viagemSelecionadaId !== 'todas' &&
+          !viagens.some(viagem => viagem.id === this.viagemSelecionadaId)
+        ) {
+          this.viagemSelecionadaId = 'todas';
+        }
+
         this.viagensCarregadas = true;
         this.atualizarResumo();
       },
@@ -134,9 +131,14 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       return;
     }
 
-    this.custos = this.adicionarCustosDosPOIs(this.custosBase);
+    this.custos = this.filtrarCustosPorViagem(this.adicionarCustosDosPOIs(this.custosBase));
     this.processarCustos();
     this.carregando = false;
+  }
+
+  selecionarViagem(viagemId: string | number | null | undefined): void {
+    this.viagemSelecionadaId = viagemId ? String(viagemId) : 'todas';
+    this.atualizarResumo();
   }
 
   private adicionarCustosDosPOIs(custosBase: Custo[]): Custo[] {
@@ -177,6 +179,14 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     }
 
     return custosComPOIs;
+  }
+
+  private filtrarCustosPorViagem(custos: Custo[]): Custo[] {
+    if (this.viagemSelecionadaId === 'todas') {
+      return custos;
+    }
+
+    return custos.filter(custo => custo.viagemId === this.viagemSelecionadaId);
   }
 
   private limparSubscricoes(): void {
@@ -385,42 +395,6 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       await this.mostrarToast(error?.message || 'Erro ao partilhar PDF de custos.', 'danger');
     } finally {
       this.partilhandoPdf = false;
-    }
-  }
-
-  ehCustoDoPOI(custo: Custo): boolean {
-    return custo.id.startsWith('poi-custo-');
-  }
-
-  async atualizarCategoriaCusto(custoId: string, novaCategoria: string): Promise<void> {
-    if (!novaCategoria) {
-      return;
-    }
-
-    this.atualizandoCustoId = custoId;
-    
-    try {
-      await this.custosService.updateCusto(custoId, { categoria: novaCategoria });
-      
-      const toast = await this.toastController.create({
-        message: 'Categoria atualizada com sucesso',
-        duration: 2000,
-        position: 'bottom',
-        color: 'success'
-      });
-      await toast.present();
-    } catch (erro) {
-      console.error('Erro ao atualizar categoria:', erro);
-      
-      const toast = await this.toastController.create({
-        message: 'Erro ao atualizar categoria',
-        duration: 2000,
-        position: 'bottom',
-        color: 'danger'
-      });
-      await toast.present();
-    } finally {
-      this.atualizandoCustoId = null;
     }
   }
 

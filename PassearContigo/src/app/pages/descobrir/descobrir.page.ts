@@ -30,6 +30,7 @@ interface SugestaoPoi {
   longitude: number;
   descricao?: string;
   fotoUrl?: string;
+  imagemPesquisa?: string;
 }
 
 interface SugestaoDia {
@@ -46,6 +47,7 @@ interface SugestaoViagem {
   duracaoDias: number;
   destaque: string;
   fotoCapaUrl?: string;
+  imagemPesquisa: string;
   dias: SugestaoDia[];
 }
 
@@ -80,6 +82,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
       descricao: 'Um roteiro curto com miradouros, cultura e boa comida no centro da cidade.',
       duracaoDias: 2,
       destaque: 'Cultura, vistas e gastronomia',
+      imagemPesquisa: 'Praça do Comércio Lisboa Portugal',
       dias: [
         {
           titulo: 'Baixa, Chiado e Alfama',
@@ -92,7 +95,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               endereco: 'Praça do Comércio, Lisboa',
               latitude: 38.7076,
               longitude: -9.1366,
-              descricao: 'Bom ponto de partida junto ao Tejo.'
+              descricao: 'Bom ponto de partida junto ao Tejo.',
+              imagemPesquisa: 'Praça do Comércio Lisboa Portugal'
             },
             {
               nome: 'Elevador de Santa Justa',
@@ -100,7 +104,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Rua do Ouro, Lisboa',
               latitude: 38.7121,
-              longitude: -9.1395
+              longitude: -9.1395,
+              imagemPesquisa: 'Elevador de Santa Justa Lisboa'
             },
             {
               nome: 'Miradouro de Santa Luzia',
@@ -108,7 +113,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'natureza',
               endereco: 'Largo de Santa Luzia, Lisboa',
               latitude: 38.7118,
-              longitude: -9.1300
+              longitude: -9.1300,
+              imagemPesquisa: 'Miradouro de Santa Luzia Lisboa'
             }
           ]
         },
@@ -122,7 +128,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Praça do Império, Lisboa',
               latitude: 38.6979,
-              longitude: -9.2068
+              longitude: -9.2068,
+              imagemPesquisa: 'Mosteiro dos Jerónimos Lisboa'
             },
             {
               nome: 'Torre de Belém',
@@ -130,7 +137,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Avenida Brasília, Lisboa',
               latitude: 38.6916,
-              longitude: -9.2160
+              longitude: -9.2160,
+              imagemPesquisa: 'Torre de Belém Lisboa'
             },
             {
               nome: 'Pastéis de Belém',
@@ -138,7 +146,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'gastronomia',
               endereco: 'Rua de Belém 84, Lisboa',
               latitude: 38.6975,
-              longitude: -9.2032
+              longitude: -9.2032,
+              imagemPesquisa: 'Pastéis de Belém Lisboa'
             }
           ]
         }
@@ -151,6 +160,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
       descricao: 'Percurso a pé entre centro histórico, livrarias, pontes e ribeira.',
       duracaoDias: 2,
       destaque: 'Centro histórico e Ribeira',
+      imagemPesquisa: 'Ribeira Porto Ponte Dom Luís I Portugal',
       dias: [
         {
           titulo: 'Centro histórico',
@@ -162,7 +172,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Rua de São Filipe de Nery, Porto',
               latitude: 41.1457,
-              longitude: -8.6147
+              longitude: -8.6147,
+              imagemPesquisa: 'Torre dos Clérigos Porto'
             },
             {
               nome: 'Livraria Lello',
@@ -170,7 +181,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Rua das Carmelitas 144, Porto',
               latitude: 41.1469,
-              longitude: -8.6148
+              longitude: -8.6148,
+              imagemPesquisa: 'Livraria Lello Porto'
             },
             {
               nome: 'Estação de São Bento',
@@ -178,7 +190,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Praça de Almeida Garrett, Porto',
               latitude: 41.1456,
-              longitude: -8.6109
+              longitude: -8.6109,
+              imagemPesquisa: 'Estação de São Bento Porto'
             }
           ]
         },
@@ -192,7 +205,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Cais da Ribeira, Porto',
               latitude: 41.1406,
-              longitude: -8.6110
+              longitude: -8.6110,
+              imagemPesquisa: 'Cais da Ribeira Porto'
             },
             {
               nome: 'Ponte Luís I',
@@ -200,7 +214,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Ponte Luís I, Porto',
               latitude: 41.1398,
-              longitude: -8.6094
+              longitude: -8.6094,
+              imagemPesquisa: 'Ponte Dom Luís I Porto'
             },
             {
               nome: 'Jardim do Morro',
@@ -208,7 +223,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'natureza',
               endereco: 'Jardim do Morro, Vila Nova de Gaia',
               latitude: 41.1383,
-              longitude: -8.6090
+              longitude: -8.6090,
+              imagemPesquisa: 'Jardim do Morro Vila Nova de Gaia Porto'
             }
           ]
         }
@@ -221,6 +237,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
       descricao: 'Uma escapadinha por palácios, jardins e centro histórico.',
       duracaoDias: 1,
       destaque: 'Palácios e natureza',
+      imagemPesquisa: 'Palácio da Pena Sintra Portugal',
       dias: [
         {
           titulo: 'Palácios e centro',
@@ -232,7 +249,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Estrada da Pena, Sintra',
               latitude: 38.7876,
-              longitude: -9.3906
+              longitude: -9.3906,
+              imagemPesquisa: 'Palácio da Pena Sintra'
             },
             {
               nome: 'Quinta da Regaleira',
@@ -240,7 +258,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Rua Barbosa du Bocage, Sintra',
               latitude: 38.7962,
-              longitude: -9.3965
+              longitude: -9.3965,
+              imagemPesquisa: 'Quinta da Regaleira Sintra'
             },
             {
               nome: 'Centro Histórico de Sintra',
@@ -248,7 +267,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
               categoria: 'cultura',
               endereco: 'Sintra',
               latitude: 38.7974,
-              longitude: -9.3904
+              longitude: -9.3904,
+              imagemPesquisa: 'Centro Histórico de Sintra Portugal'
             }
           ]
         }
@@ -420,7 +440,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
 
     try {
       await Promise.all(this.sugestoesViagem.map(async sugestao => {
-        sugestao.fotoCapaUrl = await this.obterImagemWikimedia(`${sugestao.titulo} ${sugestao.local}`);
+        sugestao.fotoCapaUrl = await this.obterImagemWikimedia(sugestao.imagemPesquisa);
 
         const pois = sugestao.dias.reduce<SugestaoPoi[]>(
           (todos, dia) => [...todos, ...dia.pontosInteresse],
@@ -428,7 +448,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
         );
 
         await Promise.all(pois.map(async poi => {
-          poi.fotoUrl = await this.obterImagemWikimedia(`${poi.nome} ${sugestao.local}`);
+          poi.fotoUrl = await this.obterImagemWikimedia(poi.imagemPesquisa || `${poi.nome} ${sugestao.local}`);
         }));
       }));
     } catch (error) {

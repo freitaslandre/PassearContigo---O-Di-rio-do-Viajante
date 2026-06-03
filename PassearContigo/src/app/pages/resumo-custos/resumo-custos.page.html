@@ -24,6 +24,28 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-item
+    *ngIf="!carregando && viagensDisponiveis.length > 0"
+    class="filtro-viagem"
+    lines="none"
+  >
+    <ion-icon slot="start" name="filter-outline"></ion-icon>
+    <ion-select
+      label="Viagem"
+      interface="popover"
+      [value]="viagemSelecionadaId"
+      (ionChange)="selecionarViagem($event.detail.value)"
+    >
+      <ion-select-option value="todas">Todas as viagens</ion-select-option>
+      <ion-select-option
+        *ngFor="let viagem of viagensDisponiveis"
+        [value]="viagem.id"
+      >
+        {{ viagem.titulo }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <!-- A carregar -->
   <ion-card *ngIf="carregando" class="card-loading">
     <ion-card-content>
@@ -50,7 +72,7 @@
     <ion-card-content class="empty-state">
       <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
       <h2>Sem Custos</h2>
-      <p>Nenhum custo registado ainda.</p>
+      <p>{{ viagemSelecionadaId === 'todas' ? 'Nenhum custo registado ainda.' : 'Esta viagem ainda não tem custos registados.' }}</p>
     </ion-card-content>
   </ion-card>
 
@@ -139,45 +161,4 @@
     </ion-card>
   </div>
 
-  <!-- Lista de Custos com Edição de Categoria -->
-  <div *ngIf="!carregando && custos.length > 0" class="custos-lista-section">
-    <ion-card class="card-lista-custos">
-      <ion-card-header>
-        <ion-card-title>Editar Categoria dos Custos</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div class="custos-lista">
-          <div *ngFor="let custo of custos" class="custo-item">
-            <div class="custo-info">
-              <h4>{{ custo.descricao }}</h4>
-              <p class="custo-valor">{{ formatarValor(custo.valor) }} €</p>
-            </div>
-            <div class="custo-categoria-select">
-              <ion-select
-                *ngIf="!ehCustoDoPOI(custo)"
-                [value]="custo.categoria"
-                [disabled]="atualizandoCustoId === custo.id"
-                (ionChange)="atualizarCategoriaCusto(custo.id, $event.detail.value)"
-                placeholder="Sem categoria">
-                <ion-select-option *ngFor="let cat of categoriasDisponiveis" [value]="cat">
-                  {{ cat }}
-                </ion-select-option>
-              </ion-select>
-              <ion-chip *ngIf="ehCustoDoPOI(custo)" color="medium">
-                <ion-label>{{ custo.categoria || 'Sem categoria' }}</ion-label>
-              </ion-chip>
-            </div>
-            <ion-button
-              *ngIf="!ehCustoDoPOI(custo)"
-              fill="clear"
-              size="small"
-              [routerLink]="['/editar-custo', custo.id]"
-              color="primary">
-              <ion-icon slot="icon-only" name="create"></ion-icon>
-            </ion-button>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
 </ion-content>

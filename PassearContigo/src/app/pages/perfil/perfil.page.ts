@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { PushNotificationsService } from '../../services/push-notifications.service';
 
@@ -30,6 +30,7 @@ export class PerfilPage {
   constructor(
     public authService: AuthService,
     private pushNotificationsService: PushNotificationsService,
+    private alertCtrl: AlertController,
     private toastCtrl: ToastController
   ) {}
 
@@ -82,11 +83,33 @@ export class PerfilPage {
     }
   }
 
-  async realizarLogout(): Promise<void> {
+  async confirmarLogout(): Promise<void> {
     if (this.terminandoSessao) {
       return;
     }
 
+    const alert = await this.alertCtrl.create({
+      header: 'Terminar sessão?',
+      message: 'Tem a certeza que pretende sair da sua conta?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Terminar sessão',
+          role: 'destructive',
+          handler: () => {
+            this.realizarLogout();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private async realizarLogout(): Promise<void> {
     this.terminandoSessao = true;
 
     try {
