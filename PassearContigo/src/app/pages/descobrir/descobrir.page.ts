@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
@@ -18,6 +19,32 @@ interface DestinoItinerario {
   viagemId: string;
   diaId: string;
   rotulo: string;
+}
+
+interface SugestaoPoi {
+  nome: string;
+  tipo: string;
+  categoria: string;
+  endereco: string;
+  latitude: number;
+  longitude: number;
+  descricao?: string;
+}
+
+interface SugestaoDia {
+  titulo: string;
+  local: string;
+  pontosInteresse: SugestaoPoi[];
+}
+
+interface SugestaoViagem {
+  id: string;
+  titulo: string;
+  local: string;
+  descricao: string;
+  duracaoDias: number;
+  destaque: string;
+  dias: SugestaoDia[];
 }
 
 /**
@@ -41,6 +68,190 @@ export class DescobrirPage implements OnInit, OnDestroy {
   pesquisou = false;
   erro = '';
   adicionandoPoiId = '';
+  criandoSugestaoId = '';
+  sugestoesViagem: SugestaoViagem[] = [
+    {
+      id: 'lisboa-fim-semana',
+      titulo: 'Fim de semana em Lisboa',
+      local: 'Lisboa, Portugal',
+      descricao: 'Um roteiro curto com miradouros, cultura e boa comida no centro da cidade.',
+      duracaoDias: 2,
+      destaque: 'Cultura, vistas e gastronomia',
+      dias: [
+        {
+          titulo: 'Baixa, Chiado e Alfama',
+          local: 'Lisboa',
+          pontosInteresse: [
+            {
+              nome: 'Praça do Comércio',
+              tipo: 'Praça histórica',
+              categoria: 'cultura',
+              endereco: 'Praça do Comércio, Lisboa',
+              latitude: 38.7076,
+              longitude: -9.1366,
+              descricao: 'Bom ponto de partida junto ao Tejo.'
+            },
+            {
+              nome: 'Elevador de Santa Justa',
+              tipo: 'Miradouro',
+              categoria: 'cultura',
+              endereco: 'Rua do Ouro, Lisboa',
+              latitude: 38.7121,
+              longitude: -9.1395
+            },
+            {
+              nome: 'Miradouro de Santa Luzia',
+              tipo: 'Miradouro',
+              categoria: 'natureza',
+              endereco: 'Largo de Santa Luzia, Lisboa',
+              latitude: 38.7118,
+              longitude: -9.1300
+            }
+          ]
+        },
+        {
+          titulo: 'Belém',
+          local: 'Lisboa',
+          pontosInteresse: [
+            {
+              nome: 'Mosteiro dos Jerónimos',
+              tipo: 'Monumento',
+              categoria: 'cultura',
+              endereco: 'Praça do Império, Lisboa',
+              latitude: 38.6979,
+              longitude: -9.2068
+            },
+            {
+              nome: 'Torre de Belém',
+              tipo: 'Monumento',
+              categoria: 'cultura',
+              endereco: 'Avenida Brasília, Lisboa',
+              latitude: 38.6916,
+              longitude: -9.2160
+            },
+            {
+              nome: 'Pastéis de Belém',
+              tipo: 'Pastelaria',
+              categoria: 'gastronomia',
+              endereco: 'Rua de Belém 84, Lisboa',
+              latitude: 38.6975,
+              longitude: -9.2032
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'porto-ribeira',
+      titulo: 'Porto clássico',
+      local: 'Porto, Portugal',
+      descricao: 'Percurso a pé entre centro histórico, livrarias, pontes e ribeira.',
+      duracaoDias: 2,
+      destaque: 'Centro histórico e Ribeira',
+      dias: [
+        {
+          titulo: 'Centro histórico',
+          local: 'Porto',
+          pontosInteresse: [
+            {
+              nome: 'Torre dos Clérigos',
+              tipo: 'Monumento',
+              categoria: 'cultura',
+              endereco: 'Rua de São Filipe de Nery, Porto',
+              latitude: 41.1457,
+              longitude: -8.6147
+            },
+            {
+              nome: 'Livraria Lello',
+              tipo: 'Livraria',
+              categoria: 'cultura',
+              endereco: 'Rua das Carmelitas 144, Porto',
+              latitude: 41.1469,
+              longitude: -8.6148
+            },
+            {
+              nome: 'Estação de São Bento',
+              tipo: 'Estação histórica',
+              categoria: 'cultura',
+              endereco: 'Praça de Almeida Garrett, Porto',
+              latitude: 41.1456,
+              longitude: -8.6109
+            }
+          ]
+        },
+        {
+          titulo: 'Ribeira e Gaia',
+          local: 'Porto',
+          pontosInteresse: [
+            {
+              nome: 'Cais da Ribeira',
+              tipo: 'Zona histórica',
+              categoria: 'cultura',
+              endereco: 'Cais da Ribeira, Porto',
+              latitude: 41.1406,
+              longitude: -8.6110
+            },
+            {
+              nome: 'Ponte Luís I',
+              tipo: 'Ponte',
+              categoria: 'cultura',
+              endereco: 'Ponte Luís I, Porto',
+              latitude: 41.1398,
+              longitude: -8.6094
+            },
+            {
+              nome: 'Jardim do Morro',
+              tipo: 'Miradouro',
+              categoria: 'natureza',
+              endereco: 'Jardim do Morro, Vila Nova de Gaia',
+              latitude: 41.1383,
+              longitude: -8.6090
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'sintra-romantica',
+      titulo: 'Sintra romântica',
+      local: 'Sintra, Portugal',
+      descricao: 'Uma escapadinha por palácios, jardins e centro histórico.',
+      duracaoDias: 1,
+      destaque: 'Palácios e natureza',
+      dias: [
+        {
+          titulo: 'Palácios e centro',
+          local: 'Sintra',
+          pontosInteresse: [
+            {
+              nome: 'Palácio Nacional da Pena',
+              tipo: 'Palácio',
+              categoria: 'cultura',
+              endereco: 'Estrada da Pena, Sintra',
+              latitude: 38.7876,
+              longitude: -9.3906
+            },
+            {
+              nome: 'Quinta da Regaleira',
+              tipo: 'Palácio e jardim',
+              categoria: 'cultura',
+              endereco: 'Rua Barbosa du Bocage, Sintra',
+              latitude: 38.7962,
+              longitude: -9.3965
+            },
+            {
+              nome: 'Centro Histórico de Sintra',
+              tipo: 'Centro histórico',
+              categoria: 'cultura',
+              endereco: 'Sintra',
+              latitude: 38.7974,
+              longitude: -9.3904
+            }
+          ]
+        }
+      ]
+    }
+  ];
 
   private pesquisaAtual = 0;
   private localizacaoAtual?: { latitude: number; longitude: number };
@@ -51,7 +262,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
     private geolocationService: GeolocationService,
     private viagensService: ViagensService,
     private poiService: POIService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -134,6 +346,82 @@ export class DescobrirPage implements OnInit, OnDestroy {
   pesquisarSugestao(termo: string) {
     this.termoPesquisa = termo;
     this.pesquisar();
+  }
+
+  async criarViagemSugerida(sugestao: SugestaoViagem) {
+    if (this.criandoSugestaoId) {
+      return;
+    }
+
+    this.criandoSugestaoId = sugestao.id;
+
+    try {
+      const dataInicio = new Date();
+      dataInicio.setHours(9, 0, 0, 0);
+      const dataFim = new Date(dataInicio);
+      dataFim.setDate(dataInicio.getDate() + sugestao.duracaoDias - 1);
+
+      const dias = sugestao.dias.map((dia, diaIndex) => {
+        const dataDia = new Date(dataInicio);
+        dataDia.setDate(dataInicio.getDate() + diaIndex);
+
+        return {
+          id: `dia-${Date.now()}-${diaIndex}`,
+          titulo: dia.titulo,
+          data: dataDia,
+          local: dia.local,
+          pontosInteresse: dia.pontosInteresse.map((poi, poiIndex) =>
+            this.criarPoiSugerido(poi, diaIndex, poiIndex)
+          )
+        };
+      });
+
+      const viagemId = await this.viagensService.createViagem({
+        titulo: sugestao.titulo,
+        descricao: sugestao.descricao,
+        local: sugestao.local,
+        dataInicio,
+        dataFim,
+        dias,
+        status: 'planejada'
+      });
+
+      const toast = await this.toastCtrl.create({
+        message: `${sugestao.titulo} criada com POIs sugeridos.`,
+        duration: 2200,
+        color: 'success'
+      });
+      await toast.present();
+      this.router.navigate(['/tabs', 'viagens', viagemId]);
+    } catch (error: any) {
+      const toast = await this.toastCtrl.create({
+        message: error?.message || 'Não foi possível criar a viagem sugerida.',
+        duration: 2500,
+        color: 'danger'
+      });
+      await toast.present();
+    } finally {
+      this.criandoSugestaoId = '';
+    }
+  }
+
+  private criarPoiSugerido(poi: SugestaoPoi, diaIndex: number, poiIndex: number): POI {
+    const poiSugerido: POI = {
+      id: `poi-${Date.now()}-${diaIndex}-${poiIndex}`,
+      nome: poi.nome,
+      tipo: poi.tipo,
+      categoria: poi.categoria,
+      endereco: poi.endereco,
+      latitude: poi.latitude,
+      longitude: poi.longitude,
+      ordem: poiIndex
+    };
+
+    if (poi.descricao?.trim()) {
+      poiSugerido.descricao = poi.descricao.trim();
+    }
+
+    return poiSugerido;
   }
 
   async adicionarAoItinerario(local: ResultadoDescobrir, event?: Event) {

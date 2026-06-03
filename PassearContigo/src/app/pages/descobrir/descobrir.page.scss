@@ -39,6 +39,74 @@ ion-item {
   margin: 0;
 }
 
+.viagens-sugeridas {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-heading {
+  display: grid;
+  gap: 3px;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+}
+
+.viagem-sugerida-card {
+  margin: 0;
+  border-radius: 8px;
+
+  ion-card-title {
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  ion-card-content {
+    display: grid;
+    gap: 10px;
+  }
+
+  ion-card-content p {
+    margin: 0;
+  }
+
+  ion-button {
+    margin: 2px 0 0;
+  }
+}
+
+.viagem-sugerida-topo {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+
+  ion-badge {
+    flex-shrink: 0;
+  }
+}
+
+.poi-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  ion-chip {
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
 .resultado-meta {
   align-items: center;
   display: flex;

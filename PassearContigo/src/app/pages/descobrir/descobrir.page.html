@@ -45,6 +45,62 @@
     </div>
   </div>
 
+  <section class="viagens-sugeridas" *ngIf="!pesquisou && !carregando">
+    <div class="section-heading">
+      <h2>Viagens sugeridas</h2>
+      <p>Roteiros prontos com dias e POIs para começar mais depressa.</p>
+    </div>
+
+    <ion-card *ngFor="let sugestao of sugestoesViagem" class="viagem-sugerida-card">
+      <ion-card-header>
+        <div class="viagem-sugerida-topo">
+          <div>
+            <ion-card-title>{{ sugestao.titulo }}</ion-card-title>
+            <ion-card-subtitle>{{ sugestao.local }}</ion-card-subtitle>
+          </div>
+          <ion-badge color="primary">{{ sugestao.duracaoDias }} dia{{ sugestao.duracaoDias > 1 ? 's' : '' }}</ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>{{ sugestao.descricao }}</p>
+        <ion-note>{{ sugestao.destaque }}</ion-note>
+
+        <div class="poi-preview-list">
+          <ion-chip *ngFor="let dia of sugestao.dias">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <ion-label>{{ dia.titulo }}</ion-label>
+          </ion-chip>
+        </div>
+
+        <div class="poi-preview-list">
+          <ion-chip *ngFor="let poi of sugestao.dias[0].pontosInteresse.slice(0, 3)">
+            <ion-icon name="location-outline"></ion-icon>
+            <ion-label>{{ poi.nome }}</ion-label>
+          </ion-chip>
+        </div>
+
+        <ion-button
+          expand="block"
+          (click)="criarViagemSugerida(sugestao)"
+          [disabled]="!!criandoSugestaoId"
+        >
+          <ion-spinner
+            *ngIf="criandoSugestaoId === sugestao.id"
+            slot="start"
+            name="crescent"
+          ></ion-spinner>
+          <ion-icon
+            *ngIf="criandoSugestaoId !== sugestao.id"
+            slot="start"
+            name="add-circle-outline"
+          ></ion-icon>
+          Criar viagem
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
   <div class="search-state" *ngIf="carregando">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A pesquisar locais...</p>
@@ -98,7 +154,7 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="empty-state" *ngIf="!pesquisou && !carregando">
+  <div class="empty-state" *ngIf="!pesquisou && !carregando && sugestoesViagem.length === 0">
     <ion-icon name="search-outline"></ion-icon>
     <h2>Pesquisar locais</h2>
     <p>Procure cidades, monumentos, restaurantes ou pontos de interesse.</p>
