@@ -13,7 +13,7 @@
       <ion-button (click)="guardar()" [disabled]="guardando">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
-      <ion-button color="danger" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+      <ion-button (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

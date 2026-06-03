@@ -185,12 +185,12 @@ i {
 
 /* Links */
 a {
-  color: #E8823A;
+  color: #B95618;
   text-decoration: none;
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #cd7533;
+    color: #9f4814;
     text-decoration: underline;
   }
 }
@@ -228,6 +228,54 @@ ion-card-subtitle {
   font-family: var(--font-secondary);
   font-size: var(--text-sm);
   color: #7A6C5A;
+}
+
+// ============================================
+// ACCESSIBILITY
+// ============================================
+
+ion-button,
+ion-back-button,
+ion-menu-button,
+ion-tab-button,
+ion-fab-button,
+ion-chip,
+button,
+[role="button"],
+a[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+ion-item[button] {
+  --min-height: 48px;
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+ion-button:focus-visible,
+ion-back-button:focus-visible,
+ion-menu-button:focus-visible,
+ion-tab-button:focus-visible,
+ion-chip:focus-visible,
+ion-input:focus-within,
+ion-textarea:focus-within,
+ion-select:focus-within,
+ion-searchbar:focus-within {
+  outline: 3px solid rgba(185, 86, 24, 0.45);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+ion-card[color="danger"] {
+  --background: var(--ion-color-danger);
+  --color: var(--ion-color-danger-contrast);
+}
+
+ion-toast {
+  --button-color: var(--ion-color-primary-contrast);
 }
 
 // ============================================
