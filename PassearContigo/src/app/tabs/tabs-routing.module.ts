@@ -13,7 +13,7 @@ const routes: Routes = [
       },
       {
         path: 'descobrir',
-        loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescubrirPageModule)
+        loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescobrirPageModule)
       },
       {
         path: 'resumo-custos',

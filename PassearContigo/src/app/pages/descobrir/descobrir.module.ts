@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { DescubrirPage } from './descobrir.page';
+import { DescobrirPage } from './descobrir.page';
 
-import { DescubrirPageRoutingModule } from './descobrir-routing.module';
+import { DescobrirPageRoutingModule } from './descobrir-routing.module';
 
 
 @NgModule({
@@ -12,8 +12,8 @@ import { DescubrirPageRoutingModule } from './descobrir-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    DescubrirPageRoutingModule
+    DescobrirPageRoutingModule
   ],
-  declarations: [DescubrirPage]
+  declarations: [DescobrirPage]
 })
-export class DescubrirPageModule {}
+export class DescobrirPageModule {}

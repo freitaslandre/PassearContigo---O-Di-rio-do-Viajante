@@ -21,7 +21,7 @@ interface DestinoItinerario {
 }
 
 /**
- * DescubrirPage - Página de Descobrir
+ * DescobrirPage - Página de Descobrir
  * Exibe viagens recomendadas e exploração de locais
  */
 @Component({
@@ -30,7 +30,7 @@ interface DestinoItinerario {
   styleUrls: ['descobrir.page.scss'],
   standalone: false,
 })
-export class DescubrirPage implements OnInit, OnDestroy {
+export class DescobrirPage implements OnInit, OnDestroy {
   termoPesquisa = '';
   resultados: ResultadoDescobrir[] = [];
   viagens: Viagem[] = [];
