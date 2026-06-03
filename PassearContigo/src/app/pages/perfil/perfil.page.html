@@ -8,11 +8,11 @@
   <div *ngIf="authService.user$ | async as user; else anonimoTemplate">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Bem-vindo a sua conta</ion-card-title>
+        <ion-card-title>Bem-vindo à sua conta</ion-card-title>
         <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>A sua aplicacao esta ligada ao Firebase Authentication e ao Cloud Firestore.</p>
+        <p>A sua aplicação está ligada ao Firebase Authentication e ao Cloud Firestore.</p>
 
         <ion-button expand="block" color="primary" routerLink="/tabs/perfil/feed" class="ion-margin-top">
           <ion-icon slot="start" name="newspaper-outline"></ion-icon>
@@ -29,7 +29,7 @@
         >
           <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-outline"></ion-icon>
-          Ativar notificacoes push
+          Ativar notificações push
         </ion-button>
 
         <ion-button
@@ -41,7 +41,7 @@
         >
           <ion-spinner *ngIf="terminandoSessao" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!terminandoSessao" slot="start" name="log-out-outline"></ion-icon>
-          Terminar sessao
+          Terminar sessão
         </ion-button>
       </ion-card-content>
     </ion-card>
@@ -49,7 +49,7 @@
 
   <ng-template #anonimoTemplate>
     <div *ngIf="!modoRegisto">
-      <h2 class="ion-padding-start">Iniciar sessao</h2>
+      <h2 class="ion-padding-start">Iniciar sessão</h2>
 
       <form (ngSubmit)="realizarLogin()">
         <ion-input
@@ -84,12 +84,12 @@
         >
           <ion-spinner *ngIf="iniciandoSessao" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!iniciandoSessao" slot="start" name="log-in-outline"></ion-icon>
-          Iniciar sessao
+          Iniciar sessão
         </ion-button>
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Nao tem uma conta?
+        Não tem uma conta?
         <button type="button" class="link-button" (click)="modoRegisto = true" [disabled]="iniciandoSessao">
           Registe-se aqui
         </button>
@@ -150,9 +150,9 @@
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Ja tem uma conta?
+        Já tem uma conta?
         <button type="button" class="link-button" (click)="modoRegisto = false" [disabled]="registando">
-          Inicie sessao aqui
+          Inicie sessão aqui
         </button>
       </p>
     </div>

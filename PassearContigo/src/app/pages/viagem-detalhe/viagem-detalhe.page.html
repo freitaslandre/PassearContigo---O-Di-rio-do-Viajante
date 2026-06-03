@@ -202,7 +202,7 @@
 
       <ion-card *ngIf="dias.length === 0" class="empty-days">
         <ion-card-content>
-          <p>Esta viagem ainda nao tem dias.</p>
+          <p>Esta viagem ainda não tem dias.</p>
           <ion-button expand="block" color="primary" (click)="adicionarDia()">
             Criar primeiro dia
           </ion-button>
@@ -215,7 +215,7 @@
             <div class="dia-info">
               <ion-badge color="medium">Dia {{ i + 1 }}</ion-badge>
               <span class="dia-custo" *ngIf="obterCustoDia(dia) > 0">
-                💰 {{ obterCustoDia(dia) | number: '1.2-2' }}€
+                € {{ obterCustoDia(dia) | number: '1.2-2' }}
               </span>
             </div>
             <ion-button fill="clear" color="danger" (click)="removerDia(i)">
@@ -257,14 +257,14 @@
             <ion-item>
               <ion-label position="stacked">Descrição</ion-label>
               <ion-textarea
-                name="diaDescrição{{ i }}"
+                name="diaDescricao{{ i }}"
                 autoGrow="true"
                 [(ngModel)]="dia.descricao"
               ></ion-textarea>
             </ion-item>
 
             <ion-item>
-              <ion-label position="stacked">Observacoes</ion-label>
+              <ion-label position="stacked">Observações</ion-label>
               <ion-textarea
                 name="diaObservacoes{{ i }}"
                 autoGrow="true"
@@ -353,7 +353,7 @@
                   <ion-item lines="none">
                     <ion-label position="stacked">Endereço</ion-label>
                     <ion-input
-                      name="poiEndereço{{ i }}{{ poiIndex }}"
+                      name="poiEndereco{{ i }}{{ poiIndex }}"
                       type="text"
                       [(ngModel)]="poi.endereco"
                     ></ion-input>

@@ -144,6 +144,10 @@
 .publicacao-card {
   margin: 0;
 
+  ion-card-subtitle {
+    text-transform: none;
+  }
+
   ion-card-content {
     display: grid;
     gap: 1rem;
