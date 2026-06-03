@@ -1,106 +1,151 @@
-:host {
-  --card-bg-color: #ffffff;
-  --card-border-color: #e0e0e0;
-  --card-border-width: 1px;
-  --card-border-style: solid;
-  --card-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --card-border-radius: 8px;
-  --info-card-bg: #f9f9f9;
-  --info-card-border-left: 4px solid #3b82f6;
+.poi-detail-layout {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 920px;
+  margin: 0 auto 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.poi-summary {
+  padding: 0.9rem;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  border-radius: 8px;
+  background: var(--ion-background-color);
+
+  h1 {
+    margin: 0.45rem 0 0.25rem;
+    font-size: 1.65rem;
+    line-height: 1.12;
+  }
+
+  p,
+  small {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    color: var(--ion-color-medium);
+  }
+
+  small {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+  }
+}
+
+.simple-card {
+  margin: 0;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
+  border-radius: 8px;
+  box-shadow: none;
+
+  ion-card-title {
+    font-size: 1.05rem;
+  }
+}
+
+.photo-card ion-card-content,
+.actions-card ion-card-content,
+.notes-card ion-card-content {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.foto-container {
+  display: grid;
+  gap: 0.65rem;
 }
 
 .poi-foto {
   width: 100%;
-  height: 300px;
+  max-height: 320px;
   object-fit: cover;
-  border-radius: var(--card-border-radius);
-  margin-bottom: 15px;
-}
-
-.foto-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
 }
 
 .sem-foto {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  background-color: #f5f5f5;
-  border-radius: var(--card-border-radius);
-  border: 2px dashed #ccc;
-  margin-bottom: 15px;
+  display: grid;
+  place-items: center;
+  min-height: 150px;
+  border: 1px dashed rgba(var(--ion-color-medium-rgb), 0.38);
+  border-radius: 8px;
+  background: rgba(var(--ion-color-medium-rgb), 0.06);
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+.info-card {
+  ion-card-content {
+    padding-top: 0;
+  }
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --min-height: 50px;
+  }
+
+  ion-label {
+    color: var(--ion-color-medium);
+  }
+
+  ion-text[slot='end'] {
+    max-width: 62%;
+    text-align: right;
+    white-space: normal;
+  }
 }
 
 .mapa-poi {
-  height: 280px;
   width: 100%;
-  border-radius: var(--card-border-radius);
+  height: 260px;
   overflow: hidden;
+  border-radius: 8px;
 }
 
-.stars-display {
-  display: flex;
-  gap: 2px;
-
-  ion-icon {
-    font-size: 18px;
-  }
-}
-
+.stars-display,
 .stars-container {
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 
-.nota-card {
-  margin-bottom: 12px;
-  padding: 10px;
-  background-color: var(--info-card-bg);
-  border-left: var(--info-card-border-left);
-  border-radius: 4px;
-
-  .nota-texto {
-    margin-bottom: 4px;
-    color: #333;
-    font-size: 14px;
-    line-height: 1.4;
-  }
-
-  .nota-data {
-    color: #999;
-    font-size: 12px;
-  }
+.stars-display ion-icon {
+  font-size: 18px;
 }
 
 .button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  gap: 0.6rem;
 }
 
-ion-card {
-  margin-bottom: 20px;
-  --background: var(--card-bg-color);
-  --border-color: var(--card-border-color);
-  --border-radius: var(--card-border-radius);
-  border: var(--card-border-style) var(--card-border-width) var(--card-border-color);
-  box-shadow: var(--card-box-shadow);
+.nota-card {
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.14);
+  border-radius: 8px;
+  background: var(--ion-background-color);
+
+  ion-item {
+    --background: transparent;
+  }
 }
 
-ion-item {
-  --inner-padding-start: 0;
-  --inner-padding-end: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  margin-bottom: 1.5rem;
+.nota-texto {
+  margin-bottom: 0.2rem;
+  color: var(--ion-text-color);
+  font-size: 0.95rem;
+  line-height: 1.35;
 }
 
-.poi-author-chip {
-  margin-bottom: 14px;
+.nota-data {
+  color: var(--ion-color-medium);
+  font-size: 0.76rem;
 }
 
-
-
+@media (max-width: 620px) {
+  .info-card ion-text[slot='end'] {
+    max-width: 56%;
+  }
+}

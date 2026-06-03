@@ -1,12 +1,12 @@
 .diario-page {
   min-height: 100%;
-  padding: 16px;
+  padding: 14px;
   background: var(--ion-background-color);
 }
 
 .loading-card,
 .state-card {
-  min-height: 360px;
+  min-height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,261 +17,293 @@
   }
 
   ion-icon {
-    font-size: 56px;
+    font-size: 52px;
     color: var(--ion-color-medium);
   }
 }
 
 .diario-content {
+  display: grid;
+  gap: 0.9rem;
   max-width: 980px;
   margin: 0 auto;
+  padding-bottom: 1rem;
 }
 
 .diario-hero {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
   align-items: end;
-  margin-bottom: 16px;
+  padding: 0.85rem;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  border-radius: 8px;
+  background: var(--ion-background-color);
 
   h1 {
-    margin: 10px 0 8px;
-    font-size: 1.8rem;
-    font-weight: 700;
+    margin: 0.55rem 0 0.35rem;
+    font-size: 1.65rem;
+    line-height: 1.12;
   }
 
   p {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.35rem;
+    max-width: 100%;
     margin: 0;
+    overflow: hidden;
     color: var(--ion-color-medium);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
 .badge-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.45rem;
   flex-wrap: wrap;
 
   ion-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
   }
 }
 
 .diario-date {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+  min-width: 76px;
   text-align: right;
 
   span {
     color: var(--ion-color-medium);
-    font-size: 0.9rem;
+    font-size: 0.82rem;
   }
 
   strong {
     color: var(--ion-color-primary);
+    font-size: 0.95rem;
   }
 }
 
 .day-navigation {
   display: grid;
-  grid-template-columns: 44px 1fr 44px;
-  gap: 12px;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  gap: 0.55rem;
   align-items: center;
-  margin-bottom: 16px;
 
   ion-button {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
+    margin: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+.day-strip {
+  display: flex;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.15rem 0.05rem 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.day-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  min-width: 68px;
+  height: 38px;
+  padding: 0 0.7rem;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.24);
+  border-radius: 8px;
+  background: var(--ion-card-background, #fff);
+  color: var(--ion-color-medium);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 650;
+
+  ion-icon {
+    font-size: 15px;
+  }
+
+  &.active {
+    border-color: var(--ion-color-primary);
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+  }
+
+  &.incomplete:not(.active) {
+    border-color: rgba(var(--ion-color-warning-rgb), 0.75);
+    color: var(--ion-color-dark);
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+
+  ion-button {
+    grid-column: 1 / -1;
+    min-height: 42px;
     margin: 0;
   }
 }
 
-.day-dots {
-  display: flex;
-  justify-content: center;
-  gap: 7px;
-  min-width: 0;
-  overflow-x: auto;
-  padding: 8px 0;
+.stat-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.6rem;
+  min-height: 62px;
+  padding: 0.65rem;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
+  border-radius: 8px;
+  background: var(--ion-card-background, #fff);
 
-  button {
-    width: 9px;
-    height: 9px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: var(--ion-color-medium);
-    opacity: 0.35;
-    flex: 0 0 auto;
+  ion-icon {
+    grid-row: span 2;
+    color: var(--ion-color-primary);
+    font-size: 23px;
   }
 
-  button.active {
-    width: 24px;
-    border-radius: 999px;
-    background: var(--ion-color-primary);
-    opacity: 1;
+  strong {
+    min-width: 0;
+    color: var(--ion-text-color);
+    font-size: 1rem;
+    line-height: 1.15;
   }
 
-  button.incomplete {
-    width: 18px;
-    height: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--ion-color-warning);
-    opacity: 1;
-
-    ion-icon {
-      width: 13px;
-      height: 13px;
-      color: var(--ion-color-warning-contrast);
-    }
-  }
-
-  button.active.incomplete {
-    width: 28px;
-    border-radius: 999px;
+  span {
+    color: var(--ion-color-medium);
+    font-size: 0.78rem;
   }
 }
 
 .diario-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
-  gap: 16px;
-  align-items: start;
+  gap: 0.9rem;
 }
 
 .entry-card,
-.day-summary ion-card {
+.custos-card,
+.empty-pois {
   margin: 0;
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
+  border-radius: 8px;
+  box-shadow: none;
 }
 
-.day-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.summary-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-
-  ion-icon {
-    font-size: 24px;
-    color: var(--ion-color-primary);
+.entry-card {
+  ion-card-title {
+    font-size: 1.08rem;
   }
 
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  ion-card-content {
+    padding-top: 0;
   }
 
-  span {
-    color: var(--ion-color-medium);
-    font-size: 0.85rem;
+  ion-list {
+    padding: 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
   }
 }
 
 .pois-section,
 .custos-section {
-  margin-top: 18px;
+  display: grid;
+  gap: 0.65rem;
 }
 
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 0.75rem;
 
   h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.08rem;
     font-weight: 700;
+  }
+
+  ion-button {
+    margin: 0;
   }
 }
 
 .poi-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
+  gap: 0.7rem;
 }
 
 .poi-card {
   display: grid;
-  grid-template-rows: 120px 1fr;
+  grid-template-columns: 92px minmax(0, 1fr);
   min-width: 0;
-  padding: 0;
-  border: 1px solid var(--ion-color-light-shade);
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
   border-radius: 8px;
-  background: var(--ion-card-background, var(--ion-background-color));
+  background: var(--ion-card-background, #fff);
   overflow: hidden;
-  text-align: left;
 }
 
 .poi-open-area {
   display: block;
   width: 100%;
-  height: 120px;
+  height: 100%;
+  min-height: 128px;
   padding: 0;
   border: 0;
-  background: transparent;
+  background: var(--ion-color-light);
 
   img {
     width: 100%;
-    height: 120px;
+    height: 100%;
+    min-height: 128px;
     object-fit: cover;
-    background: var(--ion-color-light);
   }
 }
 
 .poi-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: grid;
+  gap: 0.35rem;
   min-width: 0;
-  padding: 10px;
+  padding: 0.65rem;
 
   small {
-    color: var(--ion-color-medium);
+    min-width: 0;
     overflow: hidden;
+    color: var(--ion-color-medium);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
-}
-
-.poi-note-input {
-  min-height: 76px;
-  --background: var(--ion-color-light);
-  --border-radius: 8px;
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  font-size: 0.88rem;
 }
 
 .poi-title {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.35rem;
   min-width: 0;
 
   span {
     min-width: 0;
-    font-weight: 650;
-    color: var(--ion-text-color);
     overflow: hidden;
+    color: var(--ion-text-color);
+    font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -282,27 +314,44 @@
   }
 }
 
+.poi-note-input {
+  min-height: 62px;
+  --background: rgba(var(--ion-color-medium-rgb), 0.06);
+  --border-radius: 8px;
+  --padding-start: 0.6rem;
+  --padding-end: 0.6rem;
+  --padding-top: 0.45rem;
+  --padding-bottom: 0.45rem;
+  font-size: 0.86rem;
+}
+
 .poi-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  min-height: 24px;
-  margin-top: auto;
+  margin-top: 0.1rem;
 
   ion-button {
-    min-height: 32px;
-    margin: 0 -6px 0 0;
+    min-height: 30px;
+    margin: 0 -0.35rem 0 0;
   }
 }
 
-.empty-pois {
-  margin: 0;
-}
-
 .custos-card {
-  margin: 0;
+  ion-card-content {
+    padding-top: 0;
+  }
+
+  ion-list {
+    padding: 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 0;
+  }
 
   ion-note {
     font-weight: 700;
@@ -310,9 +359,36 @@
   }
 }
 
-@media (max-width: 760px) {
+.empty-pois {
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+  }
+}
+
+@media (min-width: 760px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 170px)) minmax(160px, 220px);
+  }
+
+  .stats-grid ion-button {
+    grid-column: auto;
+  }
+
+  .poi-strip {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
   .diario-page {
-    padding: 12px;
+    padding: 10px;
+  }
+
+  .diario-content {
+    gap: 0.75rem;
   }
 
   .diario-hero {
@@ -320,10 +396,16 @@
   }
 
   .diario-date {
+    justify-items: start;
     text-align: left;
   }
 
-  .diario-grid {
-    grid-template-columns: 1fr;
+  .poi-card {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+
+  .poi-open-area,
+  .poi-open-area img {
+    min-height: 134px;
   }
 }

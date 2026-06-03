@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/resumo-custos"></ion-back-button>
+      <ion-button (click)="cancelar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>Editar Custo</ion-title>
     <ion-buttons slot="end">

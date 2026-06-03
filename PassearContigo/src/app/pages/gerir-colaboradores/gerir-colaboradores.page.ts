@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-import { Colaborador, NivelAcessoColaborador } from '../../models/viagem.model';
+import { Colaborador, NivelAcessoColaborador, Viagem } from '../../models/viagem.model';
+import { ViagensService } from '../../services/viagens.service';
 
 @Component({
   selector: 'app-gerir-colaboradores',
@@ -9,7 +11,9 @@ import { Colaborador, NivelAcessoColaborador } from '../../models/viagem.model';
   templateUrl: './gerir-colaboradores.page.html',
   styleUrls: ['./gerir-colaboradores.page.scss']
 })
-export class GerirColaboradoresPage {
+export class GerirColaboradoresPage implements OnInit {
+  viagemId = '';
+  viagem: Viagem | null = null;
   convidados: Colaborador[] = [];
 
   novoConvidado: Partial<Colaborador> = {
@@ -21,6 +25,35 @@ export class GerirColaboradoresPage {
   niveisAcesso: NivelAcessoColaborador[] = ['dono', 'editor', 'visualizador'];
   mensagemErro: string | null = null;
   pesquisando: boolean = false;
+  carregando = true;
+  guardando = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private viagensService: ViagensService
+  ) {}
+
+  ngOnInit() {
+    this.viagemId = this.route.snapshot.paramMap.get('id') || this.obterParametroDaRota('id') || '';
+
+    if (!this.viagemId) {
+      this.mensagemErro = 'Viagem não encontrada.';
+      this.carregando = false;
+      return;
+    }
+
+    this.carregarViagem();
+  }
+
+  voltar() {
+    if (this.viagemId) {
+      this.router.navigate(['/tabs', 'viagens', this.viagemId]);
+      return;
+    }
+
+    this.router.navigate(['/tabs', 'viagens']);
+  }
 
   async adicionarConvidado() {
     const email = this.novoConvidado.email?.trim();
@@ -48,8 +81,15 @@ export class GerirColaboradoresPage {
       avatarUrl: usuario.avatarUrl
     };
 
+    const existe = this.convidados.some(item => item.uid === convidado.uid || item.email === convidado.email);
+    if (existe) {
+      this.mensagemErro = 'Este colaborador já foi adicionado.';
+      return;
+    }
+
     this.convidados = [...this.convidados, convidado];
     this.novoConvidado = { nome: '', email: '', nivelAcesso: 'visualizador' };
+    await this.guardarColaboradores();
   }
 
   async obterUtilizadorPorEmail(email: string): Promise<any | null> {
@@ -76,7 +116,55 @@ export class GerirColaboradoresPage {
     }
   }
 
-  removerConvidado(index: number) {
+  async removerConvidado(index: number) {
     this.convidados = this.convidados.filter((_, i) => i !== index);
+    await this.guardarColaboradores();
+  }
+
+  private async carregarViagem() {
+    try {
+      this.viagem = await this.viagensService.getViagemByIdOnce(this.viagemId);
+      this.convidados = this.viagem?.colaboradores || [];
+
+      if (!this.viagem) {
+        this.mensagemErro = 'Viagem não encontrada.';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar colaboradores:', error);
+      this.mensagemErro = 'Erro ao carregar colaboradores.';
+    } finally {
+      this.carregando = false;
+    }
+  }
+
+  private async guardarColaboradores() {
+    if (!this.viagemId || this.guardando) {
+      return;
+    }
+
+    this.guardando = true;
+    this.mensagemErro = null;
+
+    try {
+      await this.viagensService.updateViagem(this.viagemId, {
+        colaboradores: this.convidados
+      });
+    } catch (error) {
+      console.error('Erro ao guardar colaboradores:', error);
+      this.mensagemErro = 'Erro ao guardar colaboradores.';
+    } finally {
+      this.guardando = false;
+    }
+  }
+
+  private obterParametroDaRota(nome: string): string | null {
+    for (const rota of [...this.route.pathFromRoot].reverse()) {
+      const valor = rota.snapshot.paramMap.get(nome);
+      if (valor) {
+        return valor;
+      }
+    }
+
+    return null;
   }
 }

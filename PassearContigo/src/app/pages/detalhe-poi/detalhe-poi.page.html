@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="voltar()"></ion-back-button>
+      <ion-button (click)="voltar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>{{ poi?.nome || 'POI' }}</ion-title>
   </ion-toolbar>
@@ -22,39 +24,21 @@
     </ion-button>
   </div>
 
-  <div *ngIf="poi && !carregando">
-    <div *ngIf="obterColaboradorLabel(poi)" class="poi-author-chip">
-      <ion-chip color="secondary" outline>
-        <ion-label>Adicionado por {{ obterColaboradorLabel(poi) }}</ion-label>
-      </ion-chip>
-    </div>
-    <!-- CARD DE EDIÇÃO -->
-    <ion-card *ngIf="!modoEdicao">
-      <ion-card-content>
-        <ion-button
-          expand="block"
-          color="warning"
-          fill="outline"
-          (click)="iniciarEdicao()"
-        >
-          <ion-icon slot="start" name="pencil-outline"></ion-icon>
-          Editar POI
-        </ion-button>
-        <ion-button
-          expand="block"
-          color="secondary"
-          fill="outline"
-          (click)="restaurarTemaDefault()"
-          style="margin-top: 10px;"
-        >
-          <ion-icon slot="start" name="refresh-outline"></ion-icon>
-          Restaurar Tema
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+  <div *ngIf="poi && !carregando" class="poi-detail-layout">
+    <section class="poi-summary">
+      <div>
+        <ion-badge color="medium" *ngIf="poi.categoria || poi.tipo">{{ poi.categoria || poi.tipo }}</ion-badge>
+        <h1>{{ poi.nome }}</h1>
+        <p *ngIf="poi.endereco">
+          <ion-icon name="location-outline"></ion-icon>
+          {{ poi.endereco }}
+        </p>
+        <small *ngIf="obterColaboradorLabel(poi)">Adicionado por {{ obterColaboradorLabel(poi) }}</small>
+      </div>
+    </section>
 
     <!-- FORMULÁRIO DE EDIÇÃO -->
-    <ion-card *ngIf="modoEdicao">
+    <ion-card *ngIf="modoEdicao" class="simple-card">
       <ion-card-header>
         <ion-card-title>Editar POI</ion-card-title>
       </ion-card-header>
@@ -116,9 +100,9 @@
     </ion-card>
 
     <!-- GALERIA DE FOTOS -->
-    <ion-card>
+    <ion-card class="simple-card photo-card">
       <ion-card-header>
-        <ion-card-title>Galeria de Fotos</ion-card-title>
+        <ion-card-title>Foto</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <div *ngIf="fotoUrl" class="foto-container">
@@ -129,7 +113,6 @@
             fill="outline"
             size="small"
             (click)="partilharFotoPoi()"
-            style="margin-top: 10px;"
           >
             <ion-icon slot="start" name="share-social-outline"></ion-icon>
             Partilhar Foto
@@ -140,7 +123,6 @@
             fill="outline"
             size="small"
             (click)="eliminarFoto()"
-            style="margin-top: 10px;"
           >
             <ion-icon slot="start" name="trash-outline"></ion-icon>
             Eliminar Foto
@@ -157,7 +139,6 @@
           expand="block"
           color="primary"
           (click)="selecionarFoto()"
-          style="margin-top: 10px;"
         >
           <ion-icon slot="start" name="camera-outline"></ion-icon>
           {{ fotoUrl ? 'Alterar Foto' : 'Adicionar Foto' }}
@@ -174,7 +155,7 @@
     </ion-card>
 
     <!-- INFORMAÇÕES DO POI -->
-    <ion-card>
+    <ion-card class="simple-card info-card">
       <ion-card-header>
         <ion-card-title>Informações</ion-card-title>
       </ion-card-header>
@@ -251,7 +232,7 @@
     </ion-card>
 
     <!-- MAPA -->
-    <ion-card *ngIf="temMapaDoDia">
+    <ion-card *ngIf="temMapaDoDia" class="simple-card">
       <ion-card-header>
         <ion-card-title>Mapa do Dia</ion-card-title>
         <ion-card-subtitle>
@@ -265,11 +246,22 @@
     </ion-card>
 
     <!-- AÇÕES RÁPIDAS -->
-    <ion-card>
+    <ion-card class="simple-card actions-card">
       <ion-card-header>
         <ion-card-title>Ações Rápidas</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <ion-button
+          *ngIf="!modoEdicao"
+          expand="block"
+          color="primary"
+          fill="outline"
+          (click)="iniciarEdicao()"
+        >
+          <ion-icon slot="start" name="pencil-outline"></ion-icon>
+          Editar POI
+        </ion-button>
+
         <ion-button
           expand="block"
           color="secondary"
@@ -326,7 +318,7 @@
     </ion-card>
 
     <!-- NOTAS -->
-    <ion-card>
+    <ion-card class="simple-card notes-card">
       <ion-card-header>
         <ion-card-title>Notas Pessoais</ion-card-title>
       </ion-card-header>

@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./../album-viagem/album-viagem.module').then(m => m.AlbumViagemPageModule)
   },
   {
+    path: 'colaboradores',
+    loadChildren: () => import('./../gerir-colaboradores/gerir-colaboradores.module').then(m => m.GerirColaboradoresPageModule)
+  },
+  {
     path: 'dias/:diaId',
     loadChildren: () => import('./../../pages/dia-detalhe/dia-detalhe.module').then(m => m.DiaDetalhePageModule)
   },

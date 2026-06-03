@@ -1,14 +1,27 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Gerir Colaboradores</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div *ngIf="carregando" class="loading-card">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>A carregar colaboradores...</p>
+  </div>
+
+  <section *ngIf="!carregando" class="colaboradores-layout">
   <ion-card>
     <ion-card-header>
       <ion-card-title>Convidar Colaborador</ion-card-title>
-      <ion-card-subtitle>Adicione convidados por email e defina o nível de acesso.</ion-card-subtitle>
+      <ion-card-subtitle>
+        {{ viagem?.titulo || 'Viagem' }} · adicione por email para partilhar a viagem.
+      </ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
@@ -35,8 +48,8 @@
         <p class="ion-padding-start">{{ mensagemErro }}</p>
       </ion-text>
 
-      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando">
-        <ion-spinner *ngIf="pesquisando" name="crescent"></ion-spinner>
+      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando || guardando">
+        <ion-spinner *ngIf="pesquisando || guardando" name="crescent" slot="start"></ion-spinner>
         <span *ngIf="!pesquisando">Adicionar convidado</span>
       </ion-button>
     </ion-card-content>
@@ -56,7 +69,7 @@
         <p>{{ convidado.email }}</p>
         <p class="nivel">Nível: {{ convidado.nivelAcesso | titlecase }}</p>
       </ion-label>
-      <ion-button fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)">
+      <ion-button fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando">
         Remover
       </ion-button>
     </ion-item>
@@ -65,4 +78,5 @@
   <div *ngIf="convidados.length === 0" class="empty-state">
     <p>Não há convidados adicionados.</p>
   </div>
+  </section>
 </ion-content>

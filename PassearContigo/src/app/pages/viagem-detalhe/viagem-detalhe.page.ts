@@ -39,6 +39,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   erro = '';
   fotosPoiAEnviar: Record<string, boolean> = {};
   localizacaoPoiAObter: Record<string, boolean> = {};
+  diaExpandidoId: string | null = null;
 
   titulo = '';
   descricao = '';
@@ -113,6 +114,11 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   abrirAlbum() {
     if (!this.viagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'album']);
+  }
+
+  abrirColaboradores() {
+    if (!this.viagem) return;
+    this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'colaboradores']);
   }
 
   async publicarViagem() {
@@ -199,7 +205,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     const novaData = this.adicionarUmDia(ultimaData || this.dataInicio);
     const numeroDia = this.dias.length + 1;
 
-    this.dias.push({
+    const novoDia: DiaViewModel = {
       id: `dia-${novaData || Date.now()}`,
       titulo: `Dia ${numeroDia}`,
       data: novaData,
@@ -208,11 +214,56 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       observacoes: '',
       pontosInteresse: [],
       custos: []
-    });
+    };
+
+    this.dias.push(novoDia);
+    this.diaExpandidoId = novoDia.id;
   }
 
   removerDia(index: number) {
+    const diaRemovido = this.dias[index];
     this.dias.splice(index, 1);
+
+    if (diaRemovido?.id === this.diaExpandidoId) {
+      this.diaExpandidoId = null;
+    }
+  }
+
+  async confirmarRemoverDia(index: number) {
+    const dia = this.dias[index];
+    if (!dia) {
+      return;
+    }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar dia',
+      message: `Tem a certeza que pretende eliminar "${dia.titulo || `Dia ${index + 1}`}"? Os POIs deste dia também serão removidos.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => this.removerDia(index)
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  alternarDiaExpandido(diaId: string) {
+    this.diaExpandidoId = this.diaExpandidoId === diaId ? null : diaId;
+  }
+
+  diaEstaExpandido(dia: DiaViewModel): boolean {
+    return this.diaExpandidoId === dia.id;
+  }
+
+  trackByDiaId(_index: number, dia: DiaViewModel): string {
+    return dia.id;
   }
 
   obterCustoDia(dia: DiaViewModel): number {

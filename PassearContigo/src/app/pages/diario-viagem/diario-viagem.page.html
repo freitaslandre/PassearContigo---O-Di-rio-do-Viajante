@@ -46,7 +46,7 @@
     </ion-card>
 
     <section *ngIf="!carregando && viagem && diaAtual" class="diario-content">
-      <div class="diario-hero">
+      <section class="diario-hero">
         <div>
           <div class="badge-row">
             <ion-badge color="primary">Dia {{ diaAtualIndex + 1 }}</ion-badge>
@@ -68,28 +68,47 @@
           <span>{{ formatarData(diaAtual.data) }}</span>
           <strong>{{ textoPosicaoDia }}</strong>
         </div>
-      </div>
+      </section>
 
       <div class="day-navigation">
         <ion-button fill="outline" color="medium" (click)="irParaDiaAnterior()" [disabled]="!temDiaAnterior">
           <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
         </ion-button>
 
-        <div class="day-dots">
+        <div class="day-strip" aria-label="Escolher dia">
           <button
             type="button"
             *ngFor="let dia of dias; let i = index"
+            class="day-chip"
             [class.active]="i === diaAtualIndex"
             [class.incomplete]="diaTemRegistosIncompletos(dia)"
             (click)="irParaDia(i)"
             [attr.aria-label]="'Dia ' + (i + 1)"
           >
+            <span>Dia {{ i + 1 }}</span>
             <ion-icon *ngIf="diaTemRegistosIncompletos(dia)" name="warning-outline"></ion-icon>
           </button>
         </div>
 
         <ion-button fill="outline" color="medium" (click)="irParaDiaProximo()" [disabled]="!temDiaProximo">
           <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <ion-icon name="map-outline"></ion-icon>
+          <strong>{{ (diaAtual.pontosInteresse || []).length }}</strong>
+          <span>POIs</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="cash-outline"></ion-icon>
+          <strong>{{ formatarValor(obterCustoDia(diaAtual)) }} €</strong>
+          <span>Custo</span>
+        </div>
+        <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDetalheDia()">
+          <ion-icon slot="start" name="calendar-outline"></ion-icon>
+          Abrir dia
         </ion-button>
       </div>
 
@@ -130,32 +149,6 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
-
-        <aside class="day-summary">
-          <ion-card>
-            <ion-card-content>
-              <div class="summary-row">
-                <ion-icon name="map-outline"></ion-icon>
-                <div>
-                  <strong>{{ (diaAtual.pontosInteresse || []).length }}</strong>
-                  <span>POIs</span>
-                </div>
-              </div>
-              <div class="summary-row">
-                <ion-icon name="cash-outline"></ion-icon>
-                <div>
-                  <strong>{{ formatarValor(obterCustoDia(diaAtual)) }} €</strong>
-                  <span>Custo do dia</span>
-                </div>
-              </div>
-            </ion-card-content>
-          </ion-card>
-
-          <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDetalheDia()">
-            <ion-icon slot="start" name="calendar-outline"></ion-icon>
-            Abrir dia
-          </ion-button>
-        </aside>
       </div>
 
       <section class="pois-section">
@@ -219,10 +212,10 @@
           </ion-badge>
         </div>
 
-        <ion-card *ngIf="obterCustosDia(diaAtual).length > 0" class="custos-card">
+        <ion-card *ngIf="obterLinhasCustosDia(diaAtual).length > 0" class="custos-card">
           <ion-card-content>
             <ion-list lines="full">
-              <ion-item *ngFor="let custo of obterCustosDia(diaAtual); trackBy: trackByCustoId">
+              <ion-item *ngFor="let custo of obterLinhasCustosDia(diaAtual)">
                 <ion-label>
                   <h3>{{ custo.descricao }}</h3>
                   <p>{{ custo.categoria || 'Sem categoria' }}</p>
@@ -233,7 +226,7 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-card *ngIf="obterCustosDia(diaAtual).length === 0" class="empty-pois">
+        <ion-card *ngIf="obterLinhasCustosDia(diaAtual).length === 0" class="empty-pois">
           <ion-card-content>
             <p>Sem custos registados neste dia.</p>
           </ion-card-content>

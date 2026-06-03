@@ -8,6 +8,14 @@ import { DiarioPdfService } from '../../services/diario-pdf.service';
 import { PdfShareService } from '../../services/pdf-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
+interface LinhaCustoDiario {
+  id: string;
+  descricao: string;
+  categoria: string;
+  valor: number;
+  moeda: string;
+}
+
 @Component({
   selector: 'app-diario-viagem',
   standalone: false,
@@ -201,6 +209,44 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
 
   obterCustosPoi(poi: POI): Custo[] {
     return this.custosFirestore.filter(custo => custo.poiId === poi.id);
+  }
+
+  obterLinhasCustosDia(dia: Dia): LinhaCustoDiario[] {
+    const linhas: LinhaCustoDiario[] = [];
+
+    (dia.pontosInteresse || []).forEach((poi, index) => {
+      const custoDireto = Number(poi.custo) || 0;
+
+      if (custoDireto > 0) {
+        linhas.push({
+          id: `poi-${poi.id || index}`,
+          descricao: poi.nome || `POI ${index + 1}`,
+          categoria: poi.tipo || poi.categoria || 'Ponto de interesse',
+          valor: custoDireto,
+          moeda: 'EUR'
+        });
+      }
+    });
+
+    this.obterCustosDia(dia).forEach((custo, index) => {
+      const valor = Number(custo.valor) || 0;
+
+      if (valor <= 0) {
+        return;
+      }
+
+      const poiAssociado = (dia.pontosInteresse || []).find(poi => poi.id === custo.poiId);
+
+      linhas.push({
+        id: custo.id || `custo-${index}`,
+        descricao: custo.descricao || poiAssociado?.nome || 'Custo',
+        categoria: custo.categoria || (poiAssociado ? 'Ponto de interesse' : 'Sem categoria'),
+        valor,
+        moeda: custo.moeda || 'EUR'
+      });
+    });
+
+    return linhas;
   }
 
   obterNotaPoi(poi: POI): string {

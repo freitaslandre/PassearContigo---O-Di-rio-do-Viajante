@@ -16,6 +16,10 @@ const routes: Routes = [
         loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescobrirPageModule)
       },
       {
+        path: 'amigos',
+        loadChildren: () => import('../pages/feed-amigos/feed-amigos.module').then(m => m.FeedAmigosPageModule)
+      },
+      {
         path: 'resumo-custos',
         loadChildren: () => import('../pages/resumo-custos/resumo-custos.module').then(m => m.ResumoCustosPageModule)
       },

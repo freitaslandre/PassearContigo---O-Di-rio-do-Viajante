@@ -6,6 +6,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   providedIn: 'root'
 })
 export class FirebaseStorageService {
+  private readonly poiUploadTimeoutMs = 8000;
+
   async uploadViagemCover(viagemId: string, dataUrl: string, options: { optimize?: boolean } = {}): Promise<string> {
     const uid = getAuth().currentUser?.uid;
 
@@ -42,7 +44,11 @@ export class FirebaseStorageService {
     const path = `users/${uid}/viagens/${viagemId}/dias/${diaId}/pois/${poiId}/${timestamp}.jpg`;
     const photoRef = ref(storage, path);
 
-    await uploadBytes(photoRef, blob, { contentType: 'image/jpeg' });
+    await this.withTimeout(
+      uploadBytes(photoRef, blob, { contentType: 'image/jpeg' }),
+      this.poiUploadTimeoutMs,
+      'Não foi possível guardar a foto do POI agora.'
+    );
     return getDownloadURL(photoRef);
   }
 
@@ -88,5 +94,15 @@ export class FirebaseStorageService {
 
       resolve(new Blob([u8arr], { type: mime }));
     });
+  }
+
+  private withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const timeout = new Promise<T>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
+    });
+
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
   }
 }

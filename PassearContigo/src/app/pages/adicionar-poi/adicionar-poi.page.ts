@@ -291,6 +291,8 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
 
     try {
       const poiId = `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      let fotoNaoGuardada = false;
+      let fotoGuardadaNoPoi = false;
 
       const novoPoi: POI = {
         id: poiId,
@@ -345,7 +347,15 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
           );
           novoPoi.fotoUrl = fotoUrl;
         } catch (error) {
-          console.warn('Aviso: Não foi possível fazer upload da foto, continuando sem imagem', error);
+          console.warn('Aviso: Não foi possível fazer upload da foto para o Storage, a guardar no POI', error);
+
+          const fotoComprimida = await this.storageService.optimizeImage(this.fotoPreview, 720, 0.55);
+          if (fotoComprimida.length <= 700_000) {
+            novoPoi.fotoUrl = fotoComprimida;
+            fotoGuardadaNoPoi = true;
+          } else {
+            fotoNaoGuardada = true;
+          }
         }
       }
 
@@ -361,9 +371,13 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
       await loader.dismiss();
 
       const toast = await this.toastCtrl.create({
-        message: 'POI adicionado com sucesso!',
+        message: fotoNaoGuardada
+          ? 'POI adicionado, mas a foto era demasiado pesada para guardar.'
+          : fotoGuardadaNoPoi
+            ? 'POI adicionado com foto guardada.'
+            : 'POI adicionado com sucesso!',
         duration: 1800,
-        color: 'success'
+        color: fotoNaoGuardada ? 'warning' : 'success'
       });
       await toast.present();
       await toast.onDidDismiss();

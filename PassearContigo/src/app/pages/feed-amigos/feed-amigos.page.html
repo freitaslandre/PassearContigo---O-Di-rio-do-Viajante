@@ -1,11 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="voltar()" aria-label="Voltar">
-        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Feed</ion-title>
+    <ion-title>Amigos</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="carregarFeed()" [disabled]="carregando">
         <ion-spinner *ngIf="carregando" name="crescent" slot="icon-only"></ion-spinner>
@@ -18,8 +13,8 @@
 <ion-content class="ion-padding">
   <section class="feed-header">
     <ion-badge color="secondary">{{ publicacoes.length }} publicações</ion-badge>
-    <h1>Viagens publicadas por amigos</h1>
-    <p>Veja viagens partilhadas consigo ou publicadas no feed.</p>
+    <h1>Feed de amigos</h1>
+    <p>Veja viagens públicas e viagens partilhadas consigo como colaborador.</p>
   </section>
 
   <ion-card *ngIf="carregando" class="state-card">
@@ -42,7 +37,7 @@
     <ion-card-content>
       <ion-icon name="people-outline"></ion-icon>
       <h2>Sem publicações de amigos</h2>
-      <p>Quando amigos partilharem viagens consigo, elas aparecem aqui.</p>
+      <p>Convide alguém como colaborador numa viagem e publique-a para amigos para aparecer aqui.</p>
     </ion-card-content>
   </ion-card>
 

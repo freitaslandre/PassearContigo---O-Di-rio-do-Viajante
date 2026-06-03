@@ -126,7 +126,7 @@
 
 .summary-actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 0.65rem;
 
   ion-button {
@@ -170,15 +170,95 @@
   margin: 0.2rem 0 0;
 }
 
-.dia-card {
-  margin: 0;
+.dias-compact-list {
+  display: grid;
+  gap: 0.5rem;
 }
 
-.dia-info {
+.dia-compact-item {
+  border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+  border-radius: 8px;
+  background: var(--ion-card-background, var(--ion-background-color));
+  overflow: hidden;
+}
+
+.dia-compact-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 58px;
+  padding: 0.55rem 0.55rem 0.55rem 0.75rem;
+}
+
+.dia-summary-main {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 1;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.dia-summary-text {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+
+  strong,
+  small {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: 0.98rem;
+  }
+
+  small {
+    color: var(--ion-color-medium);
+    font-size: 0.78rem;
+  }
+}
+
+.dia-summary-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  min-width: 0;
+
+  ion-button {
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+.dia-pois-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  padding: 0 0.35rem;
+  color: var(--ion-color-medium);
+  font-size: 0.82rem;
+  white-space: nowrap;
+
+  ion-icon {
+    font-size: 15px;
+  }
+}
+
+.dia-expanded-content {
+  padding: 0 0.75rem 0.75rem;
+  border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
 }
 
 .dia-custo {
@@ -192,6 +272,12 @@
   font-weight: 600;
   color: #ff9800;
   white-space: nowrap;
+
+  &.compact {
+    padding: 0.35rem 0.55rem;
+    border-left-width: 2px;
+    font-size: 0.78rem;
+  }
 }
 
 .dia-footer {
@@ -353,5 +439,18 @@ ion-list {
   .poi-row,
   .poi-inline-fields {
     grid-template-columns: 1fr;
+  }
+
+  .dia-compact-summary {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .dia-summary-meta {
+    justify-content: space-between;
+  }
+
+  .dia-summary-main {
+    width: 100%;
   }
 }

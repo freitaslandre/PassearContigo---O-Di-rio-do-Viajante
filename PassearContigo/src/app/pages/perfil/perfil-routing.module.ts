@@ -6,7 +6,8 @@ import { PerfilPage } from './perfil.page';
 const routes: Routes = [
   {
     path: 'feed',
-    loadChildren: () => import('../feed-amigos/feed-amigos.module').then(m => m.FeedAmigosPageModule)
+    redirectTo: '/tabs/amigos',
+    pathMatch: 'full'
   },
   { path: '', component: PerfilPage }
 ];

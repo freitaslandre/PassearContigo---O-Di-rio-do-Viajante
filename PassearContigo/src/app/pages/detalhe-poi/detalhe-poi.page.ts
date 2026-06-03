@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Share } from '@capacitor/share';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -28,14 +28,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   carregando = true;
   erro = '';
   fotoUrl: string | undefined = undefined;
-  fotoInput: any;
-
-  // CSS Custom Properties
-  @HostBinding('style.--card-bg-color') cardBgColor = '#ffffff';
-  @HostBinding('style.--card-border-color') cardBorderColor = '#e0e0e0';
-  @HostBinding('style.--card-border-width') cardBorderWidth = '1px';
-  @HostBinding('style.--info-card-bg') infoCardBg = '#f9f9f9';
-  @HostBinding('style.--info-card-border-left') infoCardBorderLeft = '4px solid #3b82f6';
+  @ViewChild('fotoInput') fotoInput?: ElementRef<HTMLInputElement>;
 
   // Notas
   novaNotaTexto = '';
@@ -141,7 +134,6 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
         this.poi = poiEncontrado;
         this.fotoUrl = this.poi.fotoUrl || undefined;
         this.carregarNotas();
-        this.aplicarTemaPorCategoria();
         this.carregando = false;
         this.agendarAtualizacaoMapa();
       },
@@ -229,7 +221,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selecionarFoto() {
-    this.fotoInput?.click();
+    this.fotoInput?.nativeElement.click();
   }
 
   async onFotoSelecionada(event: any) {
@@ -497,22 +489,20 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    const texto = this.criarTextoPartilhaPoi(this.poi);
+    const url = this.obterUrlPartilhaPoi(this.poi);
+
     try {
       const podePartilhar = await Share.canShare();
       if (!podePartilhar.value) {
-        const toast = await this.toastCtrl.create({
-          message: 'Partilha nativa não disponível neste dispositivo.',
-          duration: 2000,
-          color: 'medium'
-        });
-        await toast.present();
+        await this.copiarPartilhaPoi(texto, url);
         return;
       }
 
       await Share.share({
         title: this.poi.nome,
-        text: this.criarTextoPartilhaPoi(this.poi),
-        url: this.obterUrlPartilhaPoi(this.poi),
+        text: texto,
+        url,
         dialogTitle: 'Partilhar POI'
       });
     } catch (error: any) {
@@ -520,12 +510,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      const toast = await this.toastCtrl.create({
-        message: error?.message || 'Erro ao partilhar POI.',
-        duration: 2000,
-        color: 'danger'
-      });
-      await toast.present();
+      await this.copiarPartilhaPoi(texto, url);
     }
   }
 
@@ -574,6 +559,52 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
 
   private obterUrlMapaPoi(poi: POI | null): string {
     return `https://www.openstreetmap.org/?mlat=${poi?.latitude}&mlon=${poi?.longitude}#map=16/${poi?.latitude}/${poi?.longitude}`;
+  }
+
+  private async copiarPartilhaPoi(texto: string, url?: string): Promise<void> {
+    const textoComLink = url && !texto.includes(url)
+      ? `${texto}\n${url}`
+      : texto;
+
+    try {
+      await this.copiarParaClipboard(textoComLink);
+
+      const toast = await this.toastCtrl.create({
+        message: 'Partilha copiada. Pode colar onde quiser.',
+        duration: 2200,
+        color: 'success'
+      });
+      await toast.present();
+    } catch (error: any) {
+      const toast = await this.toastCtrl.create({
+        message: error?.message || 'Não foi possível partilhar este POI.',
+        duration: 2200,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
+  private async copiarParaClipboard(texto: string): Promise<void> {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(texto);
+      return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    const copiou = document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    if (!copiou) {
+      throw new Error('Não foi possível copiar a partilha.');
+    }
   }
 
   private agendarAtualizacaoMapa() {
@@ -829,72 +860,4 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private aplicarTemaPorCategoria() {
-    if (!this.poi?.categoria) return;
-
-    const temas: { [key: string]: { bg: string; border: string; infoBg: string; infoBorder: string } } = {
-      gastronomia: {
-        bg: '#fff8f0',
-        border: '#ff9800',
-        infoBg: '#ffe0b2',
-        infoBorder: '4px solid #ff9800'
-      },
-      cultura: {
-        bg: '#f0f4ff',
-        border: '#5e35b1',
-        infoBg: '#e8eaf6',
-        infoBorder: '4px solid #5e35b1'
-      },
-      natureza: {
-        bg: '#f1f8e9',
-        border: '#7cb342',
-        infoBg: '#dcedc8',
-        infoBorder: '4px solid #7cb342'
-      },
-      aventura: {
-        bg: '#fff3e0',
-        border: '#d84315',
-        infoBg: '#ffccbc',
-        infoBorder: '4px solid #d84315'
-      },
-      compras: {
-        bg: '#fce4ec',
-        border: '#c2185b',
-        infoBg: '#f8bbd0',
-        infoBorder: '4px solid #c2185b'
-      },
-      hospedagem: {
-        bg: '#e0f2f1',
-        border: '#00796b',
-        infoBg: '#b2dfdb',
-        infoBorder: '4px solid #00796b'
-      },
-      outro: {
-        bg: '#f5f5f5',
-        border: '#757575',
-        infoBg: '#eeeeee',
-        infoBorder: '4px solid #757575'
-      }
-    };
-
-    const tema = temas[this.poi.categoria] || temas['outro'];
-    this.cardBgColor = tema.bg;
-    this.cardBorderColor = tema.border;
-    this.infoCardBg = tema.infoBg;
-    this.infoCardBorderLeft = tema.infoBorder;
-  }
-
-  alterarCorCard(bg: string, border: string, infoBg: string, infoBorder: string) {
-    this.cardBgColor = bg;
-    this.cardBorderColor = border;
-    this.infoCardBg = infoBg;
-    this.infoCardBorderLeft = infoBorder;
-  }
-
-  restaurarTemaDefault() {
-    this.cardBgColor = '#ffffff';
-    this.cardBorderColor = '#e0e0e0';
-    this.infoCardBg = '#f9f9f9';
-    this.infoCardBorderLeft = '4px solid #3b82f6';
-  }
 }

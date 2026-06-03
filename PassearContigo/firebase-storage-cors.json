@@ -1,0 +1,21 @@
+[
+  {
+    "origin": [
+      "http://localhost:8100",
+      "http://localhost:4200"
+    ],
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "OPTIONS"
+    ],
+    "responseHeader": [
+      "Content-Type",
+      "Authorization",
+      "x-goog-*"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/viagens"></ion-back-button>
+      <ion-button (click)="cancelar()" aria-label="Voltar">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>Nova Viagem</ion-title>
   </ion-toolbar>

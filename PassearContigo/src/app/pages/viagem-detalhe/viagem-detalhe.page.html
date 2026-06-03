@@ -84,6 +84,11 @@
           <ion-icon slot="start" name="images-outline"></ion-icon>
           Álbum
         </ion-button>
+
+        <ion-button expand="block" color="primary" fill="outline" (click)="abrirColaboradores()">
+          <ion-icon slot="start" name="people-outline"></ion-icon>
+          Colaboradores
+        </ion-button>
       </div>
     </section>
 
@@ -209,22 +214,49 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card *ngFor="let dia of dias; let i = index" class="dia-card">
-        <ion-card-header>
-          <div class="dia-card-title">
-            <div class="dia-info">
+      <div class="dias-compact-list" *ngIf="dias.length > 0">
+        <article *ngFor="let dia of dias; let i = index; trackBy: trackByDiaId" class="dia-compact-item">
+          <div class="dia-compact-summary">
+            <button
+              type="button"
+              class="dia-summary-main"
+              (click)="alternarDiaExpandido(dia.id)"
+              [attr.aria-expanded]="diaEstaExpandido(dia)"
+            >
               <ion-badge color="medium">Dia {{ i + 1 }}</ion-badge>
-              <span class="dia-custo" *ngIf="obterCustoDia(dia) > 0">
+              <span class="dia-summary-text">
+                <strong>{{ dia.titulo || 'Dia sem título' }}</strong>
+                <small>
+                  {{ formatarData(dia.data) || 'Sem data' }}
+                  <span *ngIf="dia.local"> · {{ dia.local }}</span>
+                </small>
+              </span>
+            </button>
+
+            <div class="dia-summary-meta">
+              <span class="dia-pois-count">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ dia.pontosInteresse.length }}
+              </span>
+              <span class="dia-custo compact" *ngIf="obterCustoDia(dia) > 0">
                 € {{ obterCustoDia(dia) | number: '1.2-2' }}
               </span>
+              <ion-button fill="clear" size="small" (click)="irParaDia(dia.id)" aria-label="Ver detalhe">
+                <ion-icon slot="icon-only" name="open-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)" aria-label="Itinerário">
+                <ion-icon slot="icon-only" name="map-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" aria-label="Remover dia">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" aria-label="Editar dia">
+                <ion-icon slot="icon-only" [name]="diaEstaExpandido(dia) ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+              </ion-button>
             </div>
-            <ion-button fill="clear" color="danger" (click)="removerDia(i)">
-              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button>
           </div>
-        </ion-card-header>
 
-        <ion-card-content>
+          <div class="dia-expanded-content" *ngIf="diaEstaExpandido(dia)">
           <ion-list lines="full">
             <ion-item>
               <ion-label position="stacked">Título do dia</ion-label>
@@ -396,8 +428,9 @@
               <ion-icon slot="end" name="map-outline"></ion-icon>
             </ion-button>
           </div>
-        </ion-card-content>
-      </ion-card>
+          </div>
+        </article>
+      </div>
     </section>
 
     <ion-button expand="block" color="primary" (click)="guardar()" [disabled]="guardando">

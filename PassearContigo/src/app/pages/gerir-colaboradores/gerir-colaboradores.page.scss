@@ -1,3 +1,18 @@
+.colaboradores-layout {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.loading-card {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.75rem;
+  color: var(--ion-color-medium);
+  text-align: center;
+}
+
 .empty-state {
   text-align: center;
   color: var(--ion-color-medium);
