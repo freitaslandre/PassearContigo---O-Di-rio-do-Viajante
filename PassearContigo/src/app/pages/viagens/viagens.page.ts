@@ -114,6 +114,14 @@ export class ViagensPage implements OnInit, OnDestroy {
     return Math.floor(differenceMs / (1000 * 60 * 60 * 24)) + 1;
   }
 
+  obterTotalPois(viagem: Viagem): number {
+    return (viagem.dias || []).reduce((total, dia) => total + (dia.pontosInteresse?.length || 0), 0);
+  }
+
+  obterFotoCapa(viagem: Viagem): string {
+    return viagem.fotoCapaUrl?.trim() || '';
+  }
+
   private converterParaDate(data: Date | string | any): Date {
     if (data instanceof Date) {
       return data;

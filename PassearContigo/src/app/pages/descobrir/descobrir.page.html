@@ -52,6 +52,18 @@
     </div>
 
     <ion-card *ngFor="let sugestao of sugestoesViagem" class="viagem-sugerida-card">
+      <img
+        *ngIf="sugestao.fotoCapaUrl; else capaPlaceholder"
+        class="viagem-sugerida-capa"
+        [src]="sugestao.fotoCapaUrl"
+        [alt]="sugestao.titulo"
+      />
+      <ng-template #capaPlaceholder>
+        <div class="viagem-sugerida-capa placeholder-capa">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+      </ng-template>
+
       <ion-card-header>
         <div class="viagem-sugerida-topo">
           <div>
@@ -74,10 +86,21 @@
         </div>
 
         <div class="poi-preview-list">
-          <ion-chip *ngFor="let poi of sugestao.dias[0].pontosInteresse.slice(0, 3)">
-            <ion-icon name="location-outline"></ion-icon>
-            <ion-label>{{ poi.nome }}</ion-label>
-          </ion-chip>
+          <button
+            type="button"
+            class="poi-preview"
+            *ngFor="let poi of sugestao.dias[0].pontosInteresse.slice(0, 3)"
+          >
+            <img
+              *ngIf="poi.fotoUrl"
+              [src]="poi.fotoUrl"
+              [alt]="poi.nome"
+            />
+            <span *ngIf="!poi.fotoUrl" class="poi-preview-placeholder">
+              <ion-icon name="image-outline"></ion-icon>
+            </span>
+            <span>{{ poi.nome }}</span>
+          </button>
         </div>
 
         <ion-button

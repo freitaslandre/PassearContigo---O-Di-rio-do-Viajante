@@ -29,6 +29,7 @@ interface SugestaoPoi {
   latitude: number;
   longitude: number;
   descricao?: string;
+  fotoUrl?: string;
 }
 
 interface SugestaoDia {
@@ -44,6 +45,7 @@ interface SugestaoViagem {
   descricao: string;
   duracaoDias: number;
   destaque: string;
+  fotoCapaUrl?: string;
   dias: SugestaoDia[];
 }
 
@@ -69,6 +71,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
   erro = '';
   adicionandoPoiId = '';
   criandoSugestaoId = '';
+  carregandoImagensSugestoes = false;
   sugestoesViagem: SugestaoViagem[] = [
     {
       id: 'lisboa-fim-semana',
@@ -267,6 +270,8 @@ export class DescobrirPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.carregarImagensDasSugestoes();
+
     this.viagensSubscription = this.viagensService.getViagens().subscribe({
       next: viagens => {
         this.viagens = viagens;
@@ -380,6 +385,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
         titulo: sugestao.titulo,
         descricao: sugestao.descricao,
         local: sugestao.local,
+        fotoCapaUrl: sugestao.fotoCapaUrl,
         dataInicio,
         dataFim,
         dias,
@@ -405,6 +411,70 @@ export class DescobrirPage implements OnInit, OnDestroy {
     }
   }
 
+  private async carregarImagensDasSugestoes(): Promise<void> {
+    if (this.carregandoImagensSugestoes) {
+      return;
+    }
+
+    this.carregandoImagensSugestoes = true;
+
+    try {
+      await Promise.all(this.sugestoesViagem.map(async sugestao => {
+        sugestao.fotoCapaUrl = await this.obterImagemWikimedia(`${sugestao.titulo} ${sugestao.local}`);
+
+        const pois = sugestao.dias.reduce<SugestaoPoi[]>(
+          (todos, dia) => [...todos, ...dia.pontosInteresse],
+          []
+        );
+
+        await Promise.all(pois.map(async poi => {
+          poi.fotoUrl = await this.obterImagemWikimedia(`${poi.nome} ${sugestao.local}`);
+        }));
+      }));
+    } catch (error) {
+      console.warn('Não foi possível carregar imagens das sugestões:', error);
+    } finally {
+      this.carregandoImagensSugestoes = false;
+    }
+  }
+
+  private async obterImagemWikimedia(termo: string): Promise<string | undefined> {
+    const params = new URLSearchParams({
+      action: 'query',
+      format: 'json',
+      origin: '*',
+      generator: 'search',
+      gsrnamespace: '6',
+      gsrlimit: '1',
+      gsrsearch: termo,
+      prop: 'imageinfo',
+      iiprop: 'url',
+      iiurlwidth: '900'
+    });
+
+    const response = await fetch(`https://commons.wikimedia.org/w/api.php?${params.toString()}`);
+
+    if (!response.ok) {
+      return undefined;
+    }
+
+    const data = await response.json() as {
+      query?: {
+        pages?: Record<string, {
+          imageinfo?: Array<{
+            thumburl?: string;
+            url?: string;
+          }>;
+        }>;
+      };
+    };
+
+    const pages = Object.values(data.query?.pages || {});
+    const imageInfo = pages[0]?.imageinfo?.[0];
+
+    return imageInfo?.thumburl || imageInfo?.url;
+  }
+
   private criarPoiSugerido(poi: SugestaoPoi, diaIndex: number, poiIndex: number): POI {
     const poiSugerido: POI = {
       id: `poi-${Date.now()}-${diaIndex}-${poiIndex}`,
@@ -419,6 +489,10 @@ export class DescobrirPage implements OnInit, OnDestroy {
 
     if (poi.descricao?.trim()) {
       poiSugerido.descricao = poi.descricao.trim();
+    }
+
+    if (poi.fotoUrl?.trim()) {
+      poiSugerido.fotoUrl = poi.fotoUrl.trim();
     }
 
     return poiSugerido;

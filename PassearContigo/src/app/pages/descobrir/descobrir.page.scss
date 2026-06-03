@@ -65,6 +65,26 @@ ion-item {
 .viagem-sugerida-card {
   margin: 0;
   border-radius: 8px;
+  overflow: hidden;
+
+  .viagem-sugerida-capa {
+    display: block;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    background: var(--ion-color-light);
+  }
+
+  .placeholder-capa {
+    align-items: center;
+    color: var(--ion-color-medium);
+    display: flex;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 32px;
+    }
+  }
 
   ion-card-title {
     font-size: 18px;
@@ -104,6 +124,47 @@ ion-item {
   ion-chip {
     margin: 0;
     max-width: 100%;
+  }
+}
+
+.poi-preview {
+  align-items: center;
+  background: var(--ion-color-light);
+  border: 1px solid var(--ion-color-light-shade);
+  border-radius: 8px;
+  color: var(--ion-text-color);
+  display: inline-flex;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 4px 9px 4px 4px;
+
+  img {
+    border-radius: 6px;
+    flex-shrink: 0;
+    height: 36px;
+    object-fit: cover;
+    width: 46px;
+  }
+
+  .poi-preview-placeholder {
+    align-items: center;
+    background: var(--ion-color-medium);
+    border-radius: 6px;
+    color: var(--ion-color-medium-contrast);
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 36px;
+    justify-content: center;
+    width: 46px;
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
