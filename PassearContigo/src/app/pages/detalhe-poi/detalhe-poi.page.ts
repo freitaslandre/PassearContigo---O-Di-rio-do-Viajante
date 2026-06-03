@@ -22,7 +22,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   poi: POI | null = null;
   viagem: Viagem | null = null;
   diaAtual: Dia | null = null;
-  poiEditavel: Partial<POI> = {};
+  poiEditavel: Omit<Partial<POI>, 'custo'> & { custo?: string | number } = {};
   modoEdicao = false;
   viagemId: string | null = null;
   diaId: string | null = null;
@@ -370,6 +370,10 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     this.modoEdicao = true;
   }
 
+  normalizarCustoEditavel(event: CustomEvent<{ value?: string | null }>) {
+    this.poiEditavel.custo = this.normalizarDecimal(event.detail?.value);
+  }
+
   async guardarEdicao() {
     if (!this.poi || !this.viagemId || !this.diaId || !this.poiId || !this.podeEditarViagem) {
       return;
@@ -412,6 +416,19 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   cancelarEdicao() {
     this.modoEdicao = false;
     this.poiEditavel = {};
+  }
+
+  private normalizarDecimal(valor: unknown): string {
+    const texto = String(valor ?? '').replace(',', '.');
+    const limpo = texto.replace(/[^\d.]/g, '');
+    const [inteiro, ...partesDecimais] = limpo.split('.');
+    const decimal = partesDecimais.join('').slice(0, 2);
+
+    if (partesDecimais.length > 0) {
+      return `${inteiro}.${decimal}`;
+    }
+
+    return inteiro;
   }
 
   async eliminarPoi() {

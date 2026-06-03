@@ -197,20 +197,35 @@
           <ion-input
             name="telefone"
             [(ngModel)]="poi.telefone"
+            (ionInput)="normalizarTelefonePoi($event)"
             type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
             placeholder="Telefone"
           ></ion-input>
         </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">Horário</ion-label>
-          <ion-input
-            name="horario"
-            [(ngModel)]="poi.horario"
-            type="text"
-            placeholder="Horário de abertura"
-          ></ion-input>
-        </ion-item>
+        <div class="horario-grid">
+          <ion-item>
+            <ion-label position="stacked">Abre</ion-label>
+            <ion-input
+              name="horarioAbertura"
+              [(ngModel)]="horarioAbertura"
+              (ionChange)="atualizarHorarioPoi()"
+              type="time"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Fecha</ion-label>
+            <ion-input
+              name="horarioFecho"
+              [(ngModel)]="horarioFecho"
+              (ionChange)="atualizarHorarioPoi()"
+              type="time"
+            ></ion-input>
+          </ion-item>
+        </div>
 
         <ion-item>
           <ion-label position="stacked">URL</ion-label>
@@ -237,7 +252,9 @@
           <ion-input
             name="custo"
             [(ngModel)]="poi.custo"
-            type="number"
+            (ionInput)="normalizarCustoPoi($event)"
+            type="text"
+            inputmode="decimal"
             step="0.01"
             placeholder="Custo em euros"
           ></ion-input>

@@ -57,7 +57,9 @@
           <ion-input
             [(ngModel)]="poiEditavel.custo"
             placeholder="Custo em euros"
-            type="number"
+            (ionInput)="normalizarCustoEditavel($event)"
+            type="text"
+            inputmode="decimal"
             step="0.01"
           ></ion-input>
         </ion-item>

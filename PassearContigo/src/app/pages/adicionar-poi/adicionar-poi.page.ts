@@ -18,7 +18,7 @@ import * as L from 'leaflet';
   styleUrls: ['./adicionar-poi.page.scss']
 })
 export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
-  poi: Partial<POI> & { latitude?: string | number; longitude?: string | number } = {
+  poi: Omit<Partial<POI>, 'custo'> & { latitude?: string | number; longitude?: string | number; custo?: string | number } = {
     nome: '',
     descricao: '',
     tipo: '',
@@ -44,6 +44,8 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   obtendoLocalizacaoAtual = false;
   localizacaoAtualDetetada = false;
   erroLocalizacaoAtual = '';
+  horarioAbertura = '';
+  horarioFecho = '';
   private pesquisaSugestaoAtual = 0;
 
   fotoPreview: string | null = null;
@@ -382,6 +384,46 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     this.fotoInput.nativeElement.value = '';
   }
 
+  normalizarTelefonePoi(event: CustomEvent<{ value?: string | null }>) {
+    this.poi.telefone = this.apenasDigitos(event.detail?.value);
+  }
+
+  normalizarCustoPoi(event: CustomEvent<{ value?: string | null }>) {
+    this.poi.custo = this.normalizarDecimal(event.detail?.value);
+  }
+
+  atualizarHorarioPoi() {
+    this.poi.horario = this.montarHorario();
+  }
+
+  private apenasDigitos(valor: unknown): string {
+    return String(valor ?? '').replace(/\D/g, '');
+  }
+
+  private normalizarDecimal(valor: unknown): string {
+    const texto = String(valor ?? '').replace(',', '.');
+    const limpo = texto.replace(/[^\d.]/g, '');
+    const [inteiro, ...partesDecimais] = limpo.split('.');
+    const decimal = partesDecimais.join('').slice(0, 2);
+
+    if (partesDecimais.length > 0) {
+      return `${inteiro}.${decimal}`;
+    }
+
+    return inteiro;
+  }
+
+  private montarHorario(): string {
+    const abertura = this.horarioAbertura.trim();
+    const fecho = this.horarioFecho.trim();
+
+    if (abertura && fecho) {
+      return `${abertura} - ${fecho}`;
+    }
+
+    return abertura || fecho;
+  }
+
   async adicionarPoi() {
     if (!this.podeEditarViagem) {
       const toast = await this.toastCtrl.create({
@@ -416,6 +458,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
       const poiId = `poi-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       let fotoNaoGuardada = false;
       let fotoGuardadaNoPoi = false;
+      this.poi.horario = this.montarHorario();
 
       const novoPoi: POI = {
         id: poiId,

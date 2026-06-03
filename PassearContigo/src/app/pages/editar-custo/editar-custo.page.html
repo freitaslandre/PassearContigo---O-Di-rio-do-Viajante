@@ -53,7 +53,9 @@
             <ion-input
               [(ngModel)]="custo.valor"
               [disabled]="salvando"
+              (ionInput)="normalizarValorCusto($event)"
               type="number"
+              inputmode="decimal"
               step="0.01"
               placeholder="0.00"
               clearInput>

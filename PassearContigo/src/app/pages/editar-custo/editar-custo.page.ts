@@ -195,6 +195,17 @@ export class EditarCustoPage implements OnInit {
     this.router.navigate(['/resumo-custos']);
   }
 
+  normalizarValorCusto(event: CustomEvent<{ value?: string | null }>): void {
+    if (!this.custo) {
+      return;
+    }
+
+    const valorNormalizado = this.normalizarDecimal(event.detail?.value);
+    this.custo.valor = valorNormalizado === '' || valorNormalizado === '.'
+      ? 0
+      : Number(valorNormalizado);
+  }
+
   /** Garante que os campos obrigatórios do custo estão preenchidos. */
   private validarFormulario(): boolean {
     if (!this.custo) {
@@ -218,6 +229,19 @@ export class EditarCustoPage implements OnInit {
     }
 
     return true;
+  }
+
+  private normalizarDecimal(valor: unknown): string {
+    const texto = String(valor ?? '').replace(',', '.');
+    const limpo = texto.replace(/[^\d.]/g, '');
+    const [inteiro, ...partesDecimais] = limpo.split('.');
+    const decimal = partesDecimais.join('').slice(0, 2);
+
+    if (partesDecimais.length > 0) {
+      return `${inteiro}.${decimal}`;
+    }
+
+    return inteiro;
   }
 
   /** Mostra um alerta simples com uma mensagem informativa. */
