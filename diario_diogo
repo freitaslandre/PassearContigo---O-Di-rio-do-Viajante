@@ -1,359 +1,311 @@
-Sessão 1 — 22 de maio de 2026
+Sessão 1 - 22 de maio de 2026
+
 Objetivo:
-Configurar o Capacitor no projeto e preparar algumas funcionalidades nativas necessárias para a aplicação Android.
+Configurar o Capacitor no projeto e preparar funcionalidades nativas para Android.
 
 Atividades realizadas:
-
-Instalei e configurei o Capacitor no projeto Ionic/Angular;
-Adicionei e configurei a plataforma Android;
-Configurei o ficheiro capacitor.config.ts com o nome da aplicação, appId e webDir;
-Instalei o plugin Screen Orientation;
-Bloqueei a orientação landscape, deixando a aplicação em modo portrait, para cumprir o requisito 12;
-Criei um serviço para gerir o bloqueio da orientação;
-Instalei os plugins Camera e Geolocation;
-Configurei as permissões de câmara e geolocalização no AndroidManifest.xml;
-Criei serviços base para usar câmara e localização no futuro.
-
-Atividades não realizadas:
-
-Não criei nem configurei ainda o ícone da app e a splash screen personalizados (req. 4 adicional), porque é melhor fazer isso quando o logo final da aplicação estiver decidido;
-Não testei ainda a build num dispositivo físico Android (req. 2), porque esse teste faz mais sentido no fim, quando a aplicação estiver mais completa e estável.
+Configurei o Capacitor no projeto Ionic/Angular.
+Adicionei a plataforma Android.
+Configurei o ficheiro capacitor.config.ts com o nome da aplicação, appId e webDir.
+Instalei e configurei o plugin Screen Orientation.
+Bloqueei a orientação em portrait, evitando landscape.
+Instalei os plugins Camera e Geolocation.
+Configurei permissões de câmara e geolocalização no AndroidManifest.xml.
+Criei serviços base para orientação, câmara e localização.
 
 Problemas:
-
-Foi necessário garantir que o Capacitor ficava corretamente ligado ao projeto Ionic;
-Após instalar plugins nativos, foi necessário atualizar a configuração Android;
-As permissões tinham de ser configuradas manualmente no AndroidManifest.xml para evitar problemas futuros em dispositivo real.
+Foi necessário garantir que os plugins nativos ficavam corretamente ligados ao projeto.
+As permissões Android tiveram de ser configuradas manualmente.
 
 Solução:
-
-Configurei o Capacitor e sincronizei a estrutura Android;
-Criei serviços separados para orientação, câmara e geolocalização;
-Adicionei as permissões necessárias no AndroidManifest.xml.
+Sincronizei o Capacitor com a estrutura Android e separei a lógica nativa em serviços.
 
 Decisões:
-
-Usar Capacitor para aceder às funcionalidades nativas do dispositivo;
-Bloquear a orientação em portrait logo no arranque da aplicação;
-Deixar o ícone, splash screen e teste em dispositivo físico para uma fase mais avançada do projeto.
-
+Usar Capacitor para funcionalidades nativas.
+Manter a orientação portrait desde o arranque.
+Deixar ícone, splash screen e testes físicos para uma fase mais avançada.
 
 
-Criação do logo e alteração de caminhos e do favicon
 
-Sessão 2 — 27 de maio de 2026
+Sessão 2 - 27 de maio de 2026
 
 Objetivo:
-Criar o modelo principal de dados da aplicação para representar as viagens e a respetiva informação associada.
+Criar o modelo principal de dados da aplicação.
+
 Atividades realizadas:
-Criei o ficheiro viagem.model.ts;
-Defini a interface Viagem para guardar os dados gerais de cada viagem;
-Defini a interface Dia para organizar o roteiro por dias;
-Defini a interface POI para representar os pontos de interesse associados à viagem;
-Defini a interface Custo para registar despesas e valores relacionados com a viagem;
-Defini a interface Colaborador para suportar a participação de vários utilizadores numa viagem;
-Confirmei a estrutura e a nomenclatura das interfaces criadas.
+Criei o ficheiro viagem.model.ts.
+Defini as interfaces Viagem, Dia, POI, Custo e Colaborador.
+Organizei os dados principais para suportar viagens, dias, pontos de interesse, custos e colaboração.
+Confirmei a nomenclatura das interfaces.
 
 Problemas:
-Foi necessário garantir que os nomes das interfaces eram claros e coerentes com o domínio da aplicação;
-Foi necessário preparar o modelo para suportar funcionalidades futuras, como roteiros, custos e colaboração.
+Foi necessário preparar o modelo para funcionalidades futuras sem duplicar estruturas.
 
 Solução:
-Organizei as entidades principais num único ficheiro de modelo;
-Separei a informação por interfaces específicas para facilitar a manutenção e reutilização no projeto.
+Centralizei as entidades principais num único ficheiro de modelo.
 
 Decisões:
-Usar interfaces TypeScript para tipar os dados principais da aplicação;
-Manter o ficheiro viagem.model.ts como base para futuras ligações a serviços, páginas e base de dados;
-Deixar a criação de um possível ficheiro models/index.ts para uma fase posterior, caso seja necessário centralizar as exportações.
-
-Sessao 3 - 31 de maio de 2026
-
-Objetivo:
-Criar a pagina de detalhe de uma viagem e permitir consultar e editar os dias associados a essa viagem usando apenas ngModel.
-
-Atividades realizadas:
-Criei/atualizei a pagina Detalhe Viagem;
-Configurei a leitura do id da viagem atraves do ActivatedRoute;
-Carreguei os dados da viagem selecionada a partir do servico de viagens;
-Mostrei os dados principais da viagem, como titulo, destino, descricao, estado e datas;
-Criei a lista de dias da viagem;
-Adicionei campos editaveis para cada dia usando [(ngModel)];
-Permiti alterar titulo, data, local, descricao e observacoes de cada dia;
-Adicionei a possibilidade de adicionar e remover dias na pagina de detalhe;
-Listei os pontos de interesse de cada dia;
-Mostrei uma foto miniatura para cada ponto de interesse quando existe fotoUrl;
-Adicionei campos editaveis para os pontos de interesse, como nome, tipo e endereco;
-Garanti que, ao guardar a viagem, tambem sao guardadas as alteracoes feitas nos dias e nos pontos de interesse;
-Corrigi a passagem do id da viagem para a pagina de detalhe do dia;
-Atualizei o servico de viagens para guardar as alteracoes no Firestore;
-Removi valores undefined antes de enviar dados para o Firestore, evitando erros ao guardar;
-Confirmei que a build do projeto continuava a funcionar depois das alteracoes.
-
-Problemas:
-Foi necessario garantir que o id da viagem era lido corretamente a partir da rota;
-O detalhe do dia precisava de conseguir obter o id da viagem vindo de uma rota pai;
-O Firestore podia falhar ao receber campos com valor undefined;
-Foi necessario evitar misturar chamadas modulares do Firebase com o AngularFirestore usado no servico;
-O botao de guardar no canto superior direito estava a duplicar a acao de guardar.
-
-Solucao:
-Usei ActivatedRoute para obter o id da viagem;
-Usei ngModel nos campos da viagem, dos dias e dos pontos de interesse;
-Guardei os dias como um array dentro do documento da viagem;
-Substitui valores undefined por strings vazias ou arrays vazios;
-Adicionei uma limpeza dos dados antes do update no Firestore;
-Mantive o update da viagem concentrado no ViagensService;
-Removi o botao duplicado de guardar no topo, deixando apenas o botao principal de guardar viagem.
-
-Decisoes:
-Usar apenas ngModel nesta pagina, em vez de formularios reativos;
-Guardar os detalhes dos dias dentro do proprio documento da viagem;
-Mostrar os pontos de interesse diretamente dentro de cada dia;
-Usar fotoUrl como imagem miniatura dos pontos de interesse;
-Manter a pagina de detalhe da viagem como o local principal para editar a estrutura da viagem e dos seus dias.
+Usar interfaces TypeScript para tipar os dados da aplicação.
+Manter viagem.model.ts como base principal dos dados.
 
 
-Sessao 4 - 1 de junho de 2026
+
+Sessão 3 - 31 de maio de 2026
 
 Objetivo:
-Concluir funcionalidades de edicao, eliminacao, fotografia, localizacao e persistencia dos Pontos de Interesse, mantendo a arquitetura NgModules e a ligacao ao Firebase.
+Criar e melhorar a página de detalhe de viagem.
 
 Atividades realizadas:
-Implementei o metodo de atualizacao de viagens no ViagensService usando updateDoc do Firestore;
-Corrigi o erro NG0203 relacionado com inject() ao substituir chamadas fora do contexto de injecao por chamadas modulares do Firebase;
-Garanti que o botao Guardar Alteracoes grava realmente as alteracoes da viagem, dos dias e dos POIs na base de dados;
-Implementei a eliminacao de viagens com confirmacao atraves de IonAlert;
-Adicionei a navegacao automatica para o dashboard/lista de viagens depois de eliminar uma viagem;
-Integrei o plugin Capacitor Camera para capturar fotografias a partir da camara;
-Implementei tambem a selecao de fotografias a partir da galeria;
-Criei um servico dedicado para a camara, evitando usar diretamente o plugin nas paginas;
-Adicionei upload de fotografias dos POIs para o Firebase Storage;
-Associei o URL devolvido pelo Firebase Storage ao campo fotoUrl do POI;
-Mostrei uma galeria de miniaturas dos POIs no formulario usando IonGrid;
-Integrei o plugin Capacitor Geolocation para obter coordenadas GPS;
-Implementei a obtencao de latitude e longitude ao abrir o formulario de POI;
-Guardei as coordenadas latitude e longitude no modelo do POI e no Firestore;
-Integrei a API externa OpenStreetMap Nominatim para reverse geocoding;
-Usei a resposta da API para obter uma sugestao de endereco e nome do POI;
-Implementei o pre-preenchimento do nome do POI quando existe uma sugestao da API e o campo ainda esta vazio;
-Validei a compilacao do projeto com npm run build.
+Criei/atualizei a página Detalhe Viagem.
+Configurei a leitura do id da viagem através do ActivatedRoute.
+Mostrei título, destino, descrição, estado, datas, dias e POIs.
+Permiti editar dados da viagem, dias e POIs com ngModel.
+Adicionei criação e remoção de dias.
+Listei pontos de interesse por dia.
+Mostrei miniaturas dos POIs quando existe foto.
+Guardei alterações da viagem, dias e POIs no Firestore.
+Removi valores undefined antes de enviar dados para o Firestore.
 
 Problemas:
-Ao guardar e eliminar viagens apareceu o erro NG0203 porque algumas funcoes do AngularFire estavam a ser chamadas fora do contexto correto de injecao;
-Foi necessario garantir que a eliminacao nao acontecia sem confirmacao do utilizador;
-No navegador do computador, a captura pela camara pode falhar por falta de permissao, ambiente emulado ou ausencia de camara disponivel;
-Era necessario guardar as imagens em Firebase Storage em vez de manter apenas dados temporarios no formulario;
-As coordenadas GPS precisavam de ser guardadas no Firestore para nao se perderem ao recarregar a pagina;
-A API Nominatim precisava de ser usada com cuidado para evitar chamadas repetidas desnecessarias.
+O Firestore podia falhar com campos undefined.
+Foi necessário garantir a passagem correta do id da viagem para páginas filhas.
 
-Solucao:
-Atualizei o ViagensService para usar funcoes modulares do Firebase, como getFirestore, updateDoc, getDoc e deleteDoc;
-Mantive a logica de atualizacao e eliminacao concentrada no servico de viagens;
-Usei AlertController para pedir confirmacao antes de eliminar uma viagem;
-Usei NavController para voltar a lista de viagens depois da eliminacao;
-Criei servicos separados para camara, geolocalizacao, Firebase Storage e Nominatim;
-Converto as fotografias escolhidas ou capturadas para dados utilizaveis no upload para Firebase Storage;
-Depois do upload, guardo o downloadURL no campo fotoUrl do POI;
-Ao obter coordenadas GPS, atualizo latitude e longitude no POI e chamo a persistencia dos dias para gravar no Firestore;
-Usei reverse geocoding para preencher endereco e sugerir nome do POI quando os campos ainda nao tinham dados;
-Confirmei que a aplicacao continua a compilar com sucesso.
+Solução:
+Usei ActivatedRoute para ler parâmetros.
+Limpei os dados antes de gravar.
+Mantive a gravação concentrada no ViagensService.
 
-Decisoes:
-Manter a aplicacao em NgModules, sem usar componentes standalone;
-Guardar os POIs dentro dos dias da viagem, mantendo a estrutura ja existente;
-Guardar apenas o URL publico da fotografia no Firestore e deixar o ficheiro real no Firebase Storage;
-Usar servicos dedicados para funcionalidades externas ou nativas, deixando as paginas mais organizadas;
-Preencher automaticamente dados do POI apenas quando os campos estao vazios, para nao substituir informacao escrita pelo utilizador;
-Usar OpenStreetMap Nominatim como requisito adicional de API externa para obter informacao a partir das coordenadas GPS.
+Decisões:
+Usar ngModel nesta página.
+Guardar dias e POIs dentro do documento da viagem.
+Usar a página de detalhe como ponto principal de edição da viagem.
 
 
-Sessao 5 - 1 de junho de 2026
+
+Sessão 4 - 1 de junho de 2026
 
 Objetivo:
-Implementar persistencia offline dos Pontos de Interesse e permitir que a aplicacao continue a funcionar quando o utilizador fica sem rede.
+Concluir funcionalidades de edição, eliminação, fotografia, localização e persistência dos POIs.
 
 Atividades realizadas:
-
-Ativei a persistencia offline do Firestore com enableIndexedDbPersistence;
-Configurei a inicializacao da persistencia no app.module.ts atraves de APP_INITIALIZER;
-Mantive a arquitetura da aplicacao em NgModules, sem usar componentes standalone;
-Atualizei o POIService para guardar POIs localmente quando nao existe ligacao a internet;
-Usei Ionic Storage para manter uma lista de POIs pendentes de sincronizacao;
-Criei um estado de sincronizacao com informacao sobre online, offline, sincronizacao em curso e numero de POIs pendentes;
-Adicionei deteccao dos eventos online e offline do navegador;
-Implementei a sincronizacao automatica dos POIs locais com o Firestore quando a ligacao e recuperada;
-Adicionei um indicador global de estado offline usando IonBadge;
-Mostrei no badge os estados Offline, A sincronizar e quantidade de POIs por sincronizar;
-Garanti que a adicao de POIs continua a funcionar mesmo em modo offline;
-Validei a compilacao do projeto com npm run build.
+Implementei atualização de viagens no ViagensService.
+Corrigi erros relacionados com chamadas Firebase fora do contexto correto.
+Implementei eliminação de viagens com confirmação por IonAlert.
+Adicionei navegação para a lista de viagens após eliminação.
+Integrei captura e seleção de fotografias com Capacitor Camera.
+Criei serviço dedicado para câmara.
+Implementei upload de fotos dos POIs para Firebase Storage.
+Guardei o URL da foto no campo fotoUrl do POI.
+Integrei Geolocation para obter latitude e longitude.
+Guardei coordenadas dos POIs no Firestore.
+Integrei OpenStreetMap Nominatim para reverse geocoding.
+Usei sugestões da API para preencher nome e endereço quando os campos estavam vazios.
 
 Problemas:
+As fotos temporárias não podiam ficar apenas no formulário.
+As coordenadas tinham de persistir no Firestore.
+A API Nominatim precisava de ser usada sem excesso de pedidos.
 
-Era necessario garantir que os POIs criados sem rede nao se perdiam;
-O Firestore podia falhar quando a aplicacao estivesse offline ou com ligacao instavel;
-Era necessario informar visualmente o utilizador de que existiam dados pendentes de sincronizacao;
-Foi necessario evitar que a sincronizacao duplicasse POIs ja existentes no Firestore.
+Solução:
+Criei serviços separados para câmara, geolocalização, storage e Nominatim.
+Depois do upload, guardei o downloadURL no POI.
+Preenchi dados automáticos apenas quando não havia informação escrita pelo utilizador.
 
-Solucao:
-
-Configurei a persistencia IndexedDB do Firestore no arranque da aplicacao;
-Criei uma fila local de POIs pendentes usando Ionic Storage;
-No POIService, quando nao existe rede, o POI e guardado localmente em vez de ser enviado diretamente para o Firestore;
-Quando a rede volta, o servico percorre os POIs pendentes e envia-os para o Firestore;
-Depois da sincronizacao, os POIs sincronizados sao removidos da lista local;
-Adicionei verificacao por id para impedir duplicacao de POIs;
-Usei um BehaviorSubject para expor o estado de sincronizacao ao AppComponent.
-
-Decisoes:
-
-Usar Ionic Storage para guardar dados locais simples e pendentes;
-Manter o Firestore como origem principal dos dados quando existe internet;
-Guardar localmente apenas os POIs criados offline e sincronizar depois;
-Mostrar o estado offline de forma global para o utilizador perceber o comportamento da aplicacao;
-Manter a implementacao dentro de servicos para evitar duplicar logica nas paginas.
+Decisões:
+Manter a aplicação em NgModules.
+Guardar os POIs dentro dos dias da viagem.
+Guardar no Firestore apenas o URL público da fotografia.
 
 
-Sessao 6 - 1 de junho de 2026
+
+Sessão 5 - 1 de junho de 2026
 
 Objetivo:
-Criar a pagina Itinerario do Dia e permitir organizar os POIs de cada dia numa lista ordenada.
+Implementar persistência offline dos Pontos de Interesse.
 
 Atividades realizadas:
-
-Criei a pagina Itinerario do Dia com modulo, routing, template, controlador e estilos;
-Configurei a rota para abrir o itinerario de um dia especifico a partir da viagem;
-Usei ActivatedRoute para obter o id da viagem e o id do dia;
-Carreguei os dados da viagem e do dia selecionado;
-Listei os POIs do dia em ordem definida pelo campo ordem;
-Adicionei botoes para navegar para o dia anterior e para o proximo dia;
-Implementei a reordenacao dos POIs com IonReorder e IonReorderGroup;
-Guardei a nova ordem dos POIs no Firestore;
-Atualizei o modelo POI para incluir o campo ordem;
-Integrei os POIs pendentes locais na listagem do itinerario;
-Calculei uma estimativa simples de distancia entre locais consecutivos;
-Mostrei o tempo estimado entre locais com base numa velocidade media a pe;
-Adicionei acessos para abrir o itinerario a partir da pagina de detalhe da viagem e da pagina de detalhe do dia;
-Validei a compilacao do projeto com npm run build.
+Ativei a persistência offline do Firestore.
+Configurei a inicialização através de APP_INITIALIZER.
+Atualizei o POIService para guardar POIs localmente quando não há internet.
+Usei Ionic Storage para guardar POIs pendentes.
+Criei estado de sincronização com informação online/offline.
+Adicionei deteção dos eventos online e offline.
+Implementei sincronização automática quando a ligação volta.
+Adicionei badge global de estado offline/sincronização.
 
 Problemas:
+Era necessário impedir perda de POIs criados sem rede.
+Era necessário evitar duplicação ao sincronizar.
 
-Era necessario manter a ordem dos POIs mesmo depois de recarregar a aplicacao;
-A lista precisava de aceitar POIs vindos do Firestore e tambem POIs pendentes locais;
-Foi necessario atualizar a viagem inteira no Firestore para guardar a ordem dentro dos dias;
-Era necessario navegar entre dias sem perder o contexto da viagem;
-Alguns POIs podiam nao ter coordenadas, impedindo o calculo de distancia.
+Solução:
+Criei uma fila local de POIs pendentes.
+Quando a ligação volta, os POIs são enviados para o Firestore e removidos da fila.
+Adicionei verificação por id.
 
-Solucao:
-
-Adicionei o campo ordem aos POIs e usei esse campo para ordenar a lista;
-Ao terminar o drag-and-drop, atualizo as posicoes dos POIs e guardo os dias atualizados no Firestore;
-Usei ActivatedRoute para ler os parametros da rota e identificar viagem e dia;
-Usei os dados da viagem para descobrir o dia anterior e o dia seguinte;
-Quando existem coordenadas em dois POIs consecutivos, calculo a distancia com a formula ja existente no GeolocationService;
-Quando nao existem coordenadas suficientes, nao mostro estimativa para esse intervalo.
-
-Decisoes:
-
-Guardar a ordem diretamente no POI para manter a estrutura simples;
-Usar IonReorder por ser o componente Ionic adequado para drag-and-drop em listas;
-Manter a pagina de itinerario focada apenas na organizacao diaria dos POIs;
-Usar um calculo simples de distancia e tempo, suficiente para o requisito pedido;
-Continuar a guardar os POIs dentro dos dias da viagem.
+Decisões:
+Usar Ionic Storage para dados pendentes.
+Manter Firestore como fonte principal quando existe internet.
+Mostrar o estado offline de forma global.
 
 
-Sessao 7 - 1 de junho de 2026
+
+Sessão 6 - 1 de junho de 2026
 
 Objetivo:
-Melhorar a navegacao mobile e criar a pagina Descobrir com pesquisa de locais atraves da API OpenStreetMap Nominatim.
+Criar a página Itinerário do Dia.
 
 Atividades realizadas:
-
-Corrigi a falta da seta de voltar no canto superior esquerdo em modo mobile na pagina de detalhe da viagem;
-Substitui o ion-back-button por um botao explicito com icone de voltar e chamada ao metodo voltar;
-Criei a pagina Descobrir com IonSearchbar para pesquisa de locais;
-Implementei a pesquisa de locais usando a API OpenStreetMap Nominatim;
-Criei/atualizei o NominatimService para centralizar chamadas de pesquisa e reverse geocoding;
-Adicionei cache simples para evitar chamadas repetidas a API;
-Respeitei um intervalo minimo entre pedidos ao Nominatim;
-Mostrei os resultados em IonList com nome, categoria, endereco e distancia;
-Usei a localizacao atual do utilizador para calcular a distancia ate cada resultado;
-Ordenei os resultados pela distancia quando a localizacao esta disponivel;
-Mantive a pesquisa funcional mesmo quando a distancia nao esta disponivel;
-Adicionei sugestoes de locais no formulario de adicionar POI;
-Ao selecionar uma sugestao, preencho automaticamente nome, tipo, endereco, latitude e longitude;
-Substitui chamadas diretas de reverse geocoding por chamadas ao NominatimService;
-Validei a compilacao do projeto com npm run build.
+Criei a página Itinerário do Dia com módulo, routing, HTML, SCSS e TypeScript.
+Configurei rota para abrir o itinerário de um dia específico.
+Usei ActivatedRoute para obter viagemId e diaId.
+Listei POIs ordenados pelo campo ordem.
+Implementei navegação entre dia anterior e próximo dia.
+Implementei reordenação dos POIs com IonReorder.
+Guardei a nova ordem no Firestore.
+Integrei POIs pendentes locais na listagem.
+Calculei distância e tempo estimado entre locais quando existem coordenadas.
 
 Problemas:
+A ordem tinha de persistir após recarregar a aplicação.
+Nem todos os POIs tinham coordenadas.
 
-Era necessario evitar chamadas duplicadas ou demasiado frequentes a API Nominatim;
-A distancia so pode ser calculada quando o utilizador autoriza a localizacao;
-No formulario de POI, os dados da sugestao nao deviam apagar informacao escrita manualmente sem necessidade;
-Foi necessario manter a pagina Descobrir em NgModules e evitar qualquer uso de standalone;
-No mobile, o comportamento automatico do ion-back-button nao mostrava a seta pretendida.
+Solução:
+Adicionei campo ordem ao POI.
+Atualizei a ordem depois do drag-and-drop.
+Mostrei estimativas apenas quando havia coordenadas suficientes.
 
-Solucao:
-
-Centralizei a comunicacao com o Nominatim num servico dedicado;
-Adicionei cache por termo pesquisado e por coordenadas;
-Usei debounce nos campos de pesquisa;
-Usei o GeolocationService para obter a posicao atual e calcular distancias;
-Quando nao existe permissao de localizacao, a lista mostra a distancia como indisponivel;
-No detalhe da viagem, implementei um botao de voltar proprio, com icone e metodo de navegacao;
-No formulario de adicionar POI, a selecao de uma sugestao preenche os principais campos do POI.
-
-Decisoes:
-
-Usar OpenStreetMap Nominatim como API externa para pesquisa e sugestoes de locais;
-Manter a logica da API fora das paginas, dentro do NominatimService;
-Mostrar resultados em IonList para manter consistencia com o Ionic;
-Calcular distancia apenas no cliente, usando coordenadas dos resultados e localizacao atual;
-Continuar a usar NgModules em todas as paginas.
+Decisões:
+Guardar a ordem diretamente no POI.
+Usar IonReorder por ser o componente Ionic adequado.
+Manter o itinerário focado na organização diária dos POIs.
 
 
-Sessao 8 - 1 de junho de 2026
+
+Sessão 7 - 1 de junho de 2026
 
 Objetivo:
-Permitir adicionar locais pesquisados diretamente ao itinerario de um dia e apresentar sugestoes automaticas com base nos POIs ja criados.
+Melhorar a navegação mobile e criar a página Descobrir.
 
 Atividades realizadas:
-
-Adicionei um seletor na pagina Descobrir para escolher a viagem e o dia de destino;
-Carreguei as viagens do utilizador atraves do ViagensService;
-Gerei a lista de destinos possiveis a partir dos dias de cada viagem;
-Adicionei um botao de adicionar em cada resultado da pesquisa;
-Ao clicar no botao, o local pesquisado e convertido num POI;
-Guardei o POI diretamente no dia selecionado usando o POIService;
-Mantive o suporte ao fluxo offline, pois a adicao passa pelo mesmo servico de POIs;
-Defini automaticamente a proxima ordem do POI no itinerario;
-Mostrei feedback ao utilizador atraves de ToastController;
-Criei sugestoes automaticas com base nas categorias e tipos dos POIs ja adicionados;
-Mostrei as sugestoes automaticas em IonChip;
-Ao clicar numa sugestao, a pesquisa e executada automaticamente;
-Validei a compilacao do projeto com npm run build.
+Corrigi a seta de voltar no detalhe da viagem em mobile.
+Criei a página Descobrir com IonSearchbar.
+Implementei pesquisa de locais com OpenStreetMap Nominatim.
+Centralizei chamadas no NominatimService.
+Adicionei cache e intervalo mínimo entre pedidos.
+Mostrei resultados com nome, categoria, endereço e distância.
+Usei a localização atual para ordenar resultados por distância.
+Adicionei sugestões de locais no formulário de adicionar POI.
+Ao selecionar uma sugestão, preencho nome, tipo, endereço, latitude e longitude.
 
 Problemas:
+Era necessário evitar chamadas repetidas à API.
+A distância só pode ser calculada com permissão de localização.
 
-Era necessario escolher claramente em que viagem e dia o resultado seria guardado;
-A pagina Descobrir precisava de conhecer as viagens do utilizador sem duplicar logica do servico;
-Foi necessario garantir que o POI criado a partir da pesquisa tinha os campos principais preenchidos;
-O projeto nao suportava flatMap no alvo TypeScript configurado, causando erro de build;
-As sugestoes automaticas precisavam de ser uteis sem criar uma funcionalidade demasiado complexa.
+Solução:
+Usei cache, debounce e GeolocationService.
+Quando a localização não existe, a distância aparece como indisponível.
 
-Solucao:
+Decisões:
+Usar Nominatim como API externa.
+Manter a lógica da API dentro de um serviço.
+Continuar a usar NgModules.
 
-Usei o ViagensService para subscrever as viagens do utilizador;
-Criei uma lista de destinos no formato viagem + dia para o ion-select;
-Usei o POIService.adicionarPOI para guardar o resultado como POI, mantendo o suporte offline;
-Calculei a ordem seguinte com base nos POIs ja existentes no dia;
-Substitui flatMap por reduce para manter compatibilidade com a configuracao TypeScript do projeto;
-Gerei sugestoes simples a partir dos campos categoria e tipo dos POIs existentes.
 
-Decisoes:
 
-Adicionar locais ao itinerario diretamente a partir da pagina Descobrir, evitando obrigar o utilizador a copiar dados manualmente;
-Reutilizar o POIService para preservar a mesma regra de persistencia online/offline;
-Usar categorias e tipos dos POIs existentes como base para sugestoes automaticas;
-Mostrar as sugestoes como chips por serem pequenas acoes de pesquisa rapida;
-Manter a experiencia simples: escolher dia, pesquisar local e adicionar ao itinerario.
+Sessão 8 - 1 de junho de 2026
+
+Objetivo:
+Permitir adicionar locais pesquisados diretamente ao itinerário.
+
+Atividades realizadas:
+Adicionei seletor de viagem e dia na página Descobrir.
+Carreguei viagens do utilizador através do ViagensService.
+Gerei destinos possíveis a partir dos dias de cada viagem.
+Adicionei botão para inserir cada resultado no itinerário.
+Converti resultados pesquisados em POIs.
+Guardei o POI no dia selecionado usando o POIService.
+Mantive suporte offline.
+Defini automaticamente a próxima ordem do POI.
+Mostrei feedback com ToastController.
+Criei sugestões automáticas com base em categorias e tipos de POIs existentes.
+
+Problemas:
+Era necessário escolher claramente o destino do POI.
+O projeto não suportava flatMap no alvo TypeScript configurado.
+
+Solução:
+Usei uma lista viagem + dia no ion-select.
+Substituí flatMap por reduce.
+
+Decisões:
+Permitir adicionar locais sem copiar dados manualmente.
+Reutilizar o POIService para manter suporte online/offline.
+Mostrar sugestões rápidas com IonChip.
+
+
+
+Sessão 9 - 2 de junho de 2026
+
+Objetivo:
+Melhorar a rastreabilidade dos POIs em contexto colaborativo.
+
+Atividades realizadas:
+Adicionei campos de colaborador ao modelo POI.
+Guardei uid, nome e email do utilizador que cria o POI.
+Mostrei badges com iniciais dos colaboradores no detalhe do dia e no itinerário.
+Adicionei chip "Adicionado por" no detalhe do POI.
+Implementei métodos auxiliares para obter nome e iniciais do colaborador.
+Atualizei estilos para os badges e chips.
+
+Problemas:
+Era necessário mostrar autoria sem ocupar demasiado espaço.
+Era necessário ter fallback caso o nome do colaborador não estivesse disponível.
+
+Solução:
+Usei iniciais visuais e tooltip com nome completo.
+Usei fallback por nome, email ou dados do próprio POI.
+
+Decisões:
+Guardar metadados de colaborador diretamente no POI.
+Usar badges pequenos para preservar a leitura da lista.
+
+
+
+Sessão 10 - 3 de junho de 2026
+
+Objetivo:
+Melhorar a interface, acessibilidade, feedback visual e consistência geral da aplicação.
+
+Atividades realizadas:
+Corrigi o gráfico de distribuição de custos para separar categorias por cores.
+Adicionei ícone à categoria compras no resumo de custos.
+Melhorei botões e barra superior do detalhe da viagem.
+Removi o botão de publicar da toolbar e mantive a publicação dentro do conteúdo.
+Centrei o título "Detalhe Viagem" na barra superior.
+Adicionei seta de voltar no ecrã de detalhe do dia.
+Ativei escolha/captura de foto no ecrã Adicionar POI.
+Melhorei feedback visual no Perfil com toasts, spinners e estados disabled.
+Corrigi warnings da build relacionados com CommonJS e budgets.
+Melhorei cores, contraste, foco visível e tamanho mínimo de toque.
+Corrigi o ícone de apagar da toolbar para ficar visível.
+Corrigi textos visíveis para português de Portugal.
+Corrigi "Descubrir" para "Descobrir" em classes, módulos e rotas.
+Analisei a aplicação com base nas heurísticas de Jakob Nielsen aplicáveis ao código.
+
+Problemas:
+Alguns ícones ficavam pouco visíveis após alterações de contraste.
+Alguns textos apareciam sem acentos ou com português pouco consistente.
+O nome "Descubrir" estava incoerente com "Descobrir".
+Alguns botões precisavam de melhor feedback durante ações assíncronas.
+
+Solução:
+Atualizei SCSS local e global para melhorar contraste, foco e toque.
+Corrigi textos nos templates principais.
+Renomeei referências de Descubrir para Descobrir.
+Validei as alterações com npm run build.
+
+Decisões:
+Manter a arquitetura em NgModules.
+Não alterar funcionalidades durante correções visuais e de texto.
+Aplicar melhorias globais apenas quando reduzem repetição e mantêm consistência.
+Continuar a validar alterações com npm run build.
