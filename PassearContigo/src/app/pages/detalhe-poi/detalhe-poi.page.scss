@@ -110,11 +110,38 @@
 .stars-display,
 .stars-container {
   display: flex;
-  gap: 2px;
+  gap: 0.35rem;
+}
+
+.stars-container ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  height: 40px;
+  margin: 0;
+  width: 40px;
+}
+
+.stars-container ion-icon {
+  font-size: 1.45rem;
 }
 
 .stars-display ion-icon {
   font-size: 18px;
+}
+
+.rating-field {
+  border-bottom: 1px solid var(--ion-color-light-shade);
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+
+  ion-label {
+    color: var(--ion-text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
 }
 
 .button-group {

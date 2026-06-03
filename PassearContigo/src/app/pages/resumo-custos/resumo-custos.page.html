@@ -132,33 +132,4 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Custos por Categoria -->
-  <div *ngIf="!carregando && custosPorCategoria.length > 0">
-    <ion-card *ngFor="let categoria of custosPorCategoria" [class.card-categoria]="true">
-      <ion-card-content>
-        <div class="categoria-header">
-          <div class="categoria-info">
-            <ion-icon [name]="categoria.icone" [color]="categoria.cor"></ion-icon>
-            <div>
-              <h3>{{ categoria.categoria }}</h3>
-              <p class="valor-categoria">{{ formatarValor(categoria.total) }} €</p>
-            </div>
-          </div>
-          <div class="percentual">
-            <span class="percentual-texto">{{ categoria.percentual.toFixed(1) }}%</span>
-          </div>
-        </div>
-
-        <!-- Barra de Progresso -->
-        <div class="progress-bar">
-          <div 
-            class="progress-fill" 
-            [class]="'progress-' + categoria.cor"
-            [style.width]="obterLarguraPercentual(categoria.percentual)"
-          ></div>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
 </ion-content>

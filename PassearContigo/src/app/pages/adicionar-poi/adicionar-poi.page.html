@@ -277,20 +277,22 @@
           </ion-select>
         </ion-item>
 
-        <ion-item>
-          <ion-label>Avaliação (Estrelas)</ion-label>
-          <div slot="end" class="stars-container">
+        <div class="rating-field">
+          <ion-label>Avaliação</ion-label>
+          <div class="stars-container" aria-label="Avaliação por estrelas">
             <ion-button
               *ngFor="let star of [1, 2, 3, 4, 5]"
               fill="clear"
               size="small"
+              type="button"
               (click)="poi.avaliacao = star"
               [color]="star <= (poi.avaliacao || 0) ? 'warning' : 'medium'"
+              [attr.aria-label]="star + ' estrela' + (star > 1 ? 's' : '')"
             >
               <ion-icon slot="icon-only" name="star"></ion-icon>
             </ion-button>
           </div>
-        </ion-item>
+        </div>
       </ion-card-content>
     </ion-card>
 
