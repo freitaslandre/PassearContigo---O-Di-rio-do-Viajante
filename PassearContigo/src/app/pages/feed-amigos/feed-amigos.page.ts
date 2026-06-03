@@ -18,6 +18,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
   comentarioNovo: Record<string, string> = {};
   comentando: Record<string, boolean> = {};
   reagindo: Record<string, boolean> = {};
+  comentariosExpandidos: Record<string, boolean> = {};
   carregando = true;
   erro = '';
 
@@ -82,6 +83,20 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
 
   obterComentarios(publicacao: Publicacao): ComentarioPublicacao[] {
     return this.comentariosPorPublicacao[publicacao.id] || [];
+  }
+
+  obterComentariosVisiveis(publicacao: Publicacao): ComentarioPublicacao[] {
+    const comentarios = this.obterComentarios(publicacao);
+    return this.comentariosExpandidos[publicacao.id] ? comentarios.slice(0, 3) : [];
+  }
+
+  temComentariosOcultos(publicacao: Publicacao): boolean {
+    return this.obterComentarios(publicacao).length > 0;
+  }
+
+  alternarComentarios(publicacao: Publicacao, event?: Event): void {
+    event?.stopPropagation();
+    this.comentariosExpandidos[publicacao.id] = !this.comentariosExpandidos[publicacao.id];
   }
 
   obterReacoes(publicacao: Publicacao): ReacaoPublicacao[] {
@@ -155,6 +170,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
         this.comentariosSubs[publicacaoId]();
         delete this.comentariosSubs[publicacaoId];
         delete this.comentariosPorPublicacao[publicacaoId];
+        delete this.comentariosExpandidos[publicacaoId];
       }
     });
 

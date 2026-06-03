@@ -97,6 +97,16 @@
             {{ totalReacoes(publicacao) }}
           </ion-button>
 
+          <ion-button
+            fill="clear"
+            size="small"
+            color="medium"
+            (click)="alternarComentarios(publicacao, $event)"
+          >
+            <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
+            {{ totalComentarios(publicacao) }}
+          </ion-button>
+
           <span class="reaction-users" *ngIf="obterReacoes(publicacao).length > 0">
             {{ obterReacoes(publicacao)[0].autorNome || 'Utilizador' }}
             <ng-container *ngIf="obterReacoes(publicacao).length > 1">
@@ -105,32 +115,36 @@
           </span>
         </div>
 
-        <div class="comments-list" *ngIf="obterComentarios(publicacao).length > 0">
-          <div class="comment-item" *ngFor="let comentario of obterComentarios(publicacao)">
+        <div class="comments-list" *ngIf="comentariosExpandidos[publicacao.id]">
+          <div class="comment-item" *ngFor="let comentario of obterComentariosVisiveis(publicacao)">
             <strong>{{ comentario.autorNome || 'Utilizador' }}</strong>
             <span>{{ comentario.texto }}</span>
           </div>
-        </div>
 
-        <form class="comment-form" (ngSubmit)="adicionarComentario(publicacao)">
-          <ion-item lines="none">
-            <ion-input
-              name="comentario{{ publicacao.id }}"
-              type="text"
-              [(ngModel)]="comentarioNovo[publicacao.id]"
-              placeholder="Adicionar comentário"
-            ></ion-input>
-          </ion-item>
-          <ion-button
-            type="submit"
-            fill="clear"
-            size="small"
-            [disabled]="comentando[publicacao.id] || !comentarioNovo[publicacao.id]?.trim()"
-          >
-            <ion-spinner *ngIf="comentando[publicacao.id]" name="crescent" slot="icon-only"></ion-spinner>
-            <ion-icon *ngIf="!comentando[publicacao.id]" slot="icon-only" name="send-outline"></ion-icon>
-          </ion-button>
-        </form>
+          <ion-note *ngIf="obterComentarios(publicacao).length > 3">
+            A mostrar 3 de {{ totalComentarios(publicacao) }} comentários
+          </ion-note>
+
+          <form class="comment-form" (ngSubmit)="adicionarComentario(publicacao)">
+            <ion-item lines="none">
+              <ion-input
+                name="comentario{{ publicacao.id }}"
+                type="text"
+                [(ngModel)]="comentarioNovo[publicacao.id]"
+                placeholder="Adicionar comentário"
+              ></ion-input>
+            </ion-item>
+            <ion-button
+              type="submit"
+              fill="clear"
+              size="small"
+              [disabled]="comentando[publicacao.id] || !comentarioNovo[publicacao.id]?.trim()"
+            >
+              <ion-spinner *ngIf="comentando[publicacao.id]" name="crescent" slot="icon-only"></ion-spinner>
+              <ion-icon *ngIf="!comentando[publicacao.id]" slot="icon-only" name="send-outline"></ion-icon>
+            </ion-button>
+          </form>
+        </div>
       </div>
     </article>
   </section>
