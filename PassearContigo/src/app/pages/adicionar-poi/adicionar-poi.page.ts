@@ -6,7 +6,7 @@ import { POIService } from '../../services/poi.service';
 import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
-import { POI } from '../../models/viagem.model';
+import { POI, Viagem } from '../../models/viagem.model';
 import { getAuth } from 'firebase/auth';
 import * as L from 'leaflet';
 
@@ -36,6 +36,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   viagemId: string | null = null;
   diaId: string | null = null;
   diaTitulo = '';
+  viagem: Viagem | null = null;
   sugestoesLocais: NominatimSearchResult[] = [];
   carregandoSugestoes = false;
   erroSugestoes = '';
@@ -126,12 +127,26 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const viagem = await this.viagensService.getViagemByIdOnce(this.viagemId);
+    this.viagem = viagem;
     if (!viagem || !viagem.dias) {
       return;
     }
 
     const dia = viagem.dias.find(d => d.id === this.diaId);
     this.diaTitulo = dia?.titulo || '';
+
+    if (!this.podeEditarViagem) {
+      const toast = await this.toastCtrl.create({
+        message: 'Tem acesso apenas de visualização nesta viagem.',
+        duration: 2200,
+        color: 'warning'
+      });
+      await toast.present();
+    }
+  }
+
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
   }
 
   async atualizarNomePorGeolocalizacao() {
@@ -270,6 +285,16 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async adicionarPoi() {
+    if (!this.podeEditarViagem) {
+      const toast = await this.toastCtrl.create({
+        message: 'Não tem permissão para adicionar POIs nesta viagem.',
+        duration: 2200,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+
     if (!this.poi.nome?.trim()) {
       const alert = await this.alertCtrl.create({
         header: 'Formulário Inválido',

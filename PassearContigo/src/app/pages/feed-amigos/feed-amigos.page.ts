@@ -52,7 +52,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Erro ao carregar feed:', error);
-        this.erro = error?.message || 'Erro ao carregar feed de amigos.';
+        this.erro = error?.message || 'Erro ao carregar feed.';
         this.carregando = false;
       }
     );
@@ -73,7 +73,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
   }
 
   obterTextoVisibilidade(publicacao: Publicacao): string {
-    return publicacao.visibilidade === 'publica' ? 'Público' : 'Amigos';
+    return publicacao.visibilidade === 'publica' ? 'Público' : 'Apenas eu';
   }
 
   obterCorVisibilidade(publicacao: Publicacao): string {

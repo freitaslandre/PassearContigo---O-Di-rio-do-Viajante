@@ -204,6 +204,10 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     return this.fotosVisiveis.length < this.fotos.length;
   }
 
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
+  }
+
   carregarMaisFotos() {
     this.quantidadeVisivel = Math.min(this.quantidadeVisivel + this.tamanhoLote, this.fotos.length);
     this.atualizarFotosVisiveis();
@@ -211,7 +215,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   async importarFotosDoRolo() {
-    if (!this.viagem || this.importando) return;
+    if (!this.viagem || this.importando || !this.podeEditarViagem) return;
 
     this.importando = true;
     this.cdr.markForCheck();
@@ -254,6 +258,8 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   async confirmarEliminarFotosSelecionadas() {
+    if (!this.podeEditarViagem) return;
+
     const fotosEditaveis = this.obterFotosEditaveisSelecionadas();
 
     if (!this.viagem || fotosEditaveis.length === 0) {
@@ -283,6 +289,8 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   async reatribuirFotosSelecionadas() {
+    if (!this.podeEditarViagem) return;
+
     const fotosEditaveis = this.obterFotosEditaveisSelecionadas();
 
     if (!this.viagem || fotosEditaveis.length === 0) {
@@ -400,7 +408,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   private async eliminarFotosSelecionadas(fotos: FotoAlbum[]) {
-    if (!this.viagem) return;
+    if (!this.viagem || !this.podeEditarViagem) return;
 
     try {
       const ids = new Set(fotos.map(foto => foto.id));
@@ -417,7 +425,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   }
 
   private async guardarReatribuicaoFotos(fotos: FotoAlbum[], poi?: PoiOpcao) {
-    if (!this.viagem) return;
+    if (!this.viagem || !this.podeEditarViagem) return;
 
     try {
       const ids = new Set(fotos.map(foto => foto.id));

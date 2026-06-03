@@ -16,7 +16,7 @@
   </div>
 
   <section *ngIf="!carregando" class="colaboradores-layout">
-  <ion-card>
+  <ion-card *ngIf="podeGerirViagem">
     <ion-card-header>
       <ion-card-title>Convidar Colaborador</ion-card-title>
       <ion-card-subtitle>
@@ -48,7 +48,7 @@
         <p class="ion-padding-start">{{ mensagemErro }}</p>
       </ion-text>
 
-      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando || guardando">
+      <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando || guardando || !podeGerirViagem">
         <ion-spinner *ngIf="pesquisando || guardando" name="crescent" slot="start"></ion-spinner>
         <span *ngIf="!pesquisando">Adicionar convidado</span>
       </ion-button>
@@ -69,13 +69,17 @@
         <p>{{ convidado.email }}</p>
         <p class="nivel">Nível: {{ convidado.nivelAcesso | titlecase }}</p>
       </ion-label>
-      <ion-button fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando">
+      <ion-button *ngIf="podeGerirViagem" fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando">
         Remover
       </ion-button>
     </ion-item>
   </ion-list>
 
-  <div *ngIf="convidados.length === 0" class="empty-state">
+  <div *ngIf="!podeGerirViagem" class="empty-state">
+    <p>Apenas o dono da viagem pode gerir colaboradores.</p>
+  </div>
+
+  <div *ngIf="convidados.length === 0 && podeGerirViagem" class="empty-state">
     <p>Não há convidados adicionados.</p>
   </div>
   </section>

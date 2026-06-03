@@ -38,7 +38,7 @@
     </section>
 
     <!-- FORMULÁRIO DE EDIÇÃO -->
-    <ion-card *ngIf="modoEdicao" class="simple-card">
+    <ion-card *ngIf="modoEdicao && podeEditarViagem" class="simple-card">
       <ion-card-header>
         <ion-card-title>Editar POI</ion-card-title>
       </ion-card-header>
@@ -123,6 +123,7 @@
             fill="outline"
             size="small"
             (click)="eliminarFoto()"
+            *ngIf="podeEditarViagem"
           >
             <ion-icon slot="start" name="trash-outline"></ion-icon>
             Eliminar Foto
@@ -136,6 +137,7 @@
         </div>
 
         <ion-button
+          *ngIf="podeEditarViagem"
           expand="block"
           color="primary"
           (click)="selecionarFoto()"
@@ -252,7 +254,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-button
-          *ngIf="!modoEdicao"
+          *ngIf="!modoEdicao && podeEditarViagem"
           expand="block"
           color="primary"
           fill="outline"
@@ -306,6 +308,7 @@
         </ion-button>
 
         <ion-button
+          *ngIf="podeEditarViagem"
           expand="block"
           color="danger"
           fill="outline"

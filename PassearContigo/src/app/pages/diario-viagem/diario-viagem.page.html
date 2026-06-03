@@ -15,7 +15,7 @@
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="guardarDiario()" [disabled]="guardando">
+      <ion-button *ngIf="podeEditarViagem" (click)="guardarDiario()" [disabled]="guardando">
         <ion-spinner *ngIf="guardando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!guardando" slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
@@ -121,12 +121,12 @@
             <ion-list lines="full">
               <ion-item>
                 <ion-label position="stacked">Título</ion-label>
-                <ion-input [(ngModel)]="diaAtual.titulo" name="tituloDia"></ion-input>
+                <ion-input [(ngModel)]="diaAtual.titulo" name="tituloDia" [readonly]="!podeEditarViagem"></ion-input>
               </ion-item>
 
               <ion-item>
                 <ion-label position="stacked">Local</ion-label>
-                <ion-input [(ngModel)]="diaAtual.local" name="localDia"></ion-input>
+                <ion-input [(ngModel)]="diaAtual.local" name="localDia" [readonly]="!podeEditarViagem"></ion-input>
               </ion-item>
 
               <ion-item>
@@ -135,6 +135,7 @@
                   [(ngModel)]="diaAtual.descricao"
                   name="descricaoDia"
                   autoGrow="true"
+                  [readonly]="!podeEditarViagem"
                 ></ion-textarea>
               </ion-item>
 
@@ -144,6 +145,7 @@
                   [(ngModel)]="diaAtual.observacoes"
                   name="observacoesDia"
                   autoGrow="true"
+                  [readonly]="!podeEditarViagem"
                 ></ion-textarea>
               </ion-item>
             </ion-list>
@@ -154,7 +156,7 @@
       <section class="pois-section">
         <div class="section-header">
           <h2>Pontos de interesse</h2>
-          <ion-button fill="clear" size="small" [routerLink]="['/tabs', 'viagens', viagemId, 'dias', diaAtual.id, 'adicionar-poi']">
+          <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" [routerLink]="['/tabs', 'viagens', viagemId, 'dias', diaAtual.id, 'adicionar-poi']">
             <ion-icon slot="start" name="add-circle-outline"></ion-icon>
             Adicionar
           </ion-button>
@@ -180,6 +182,7 @@
                 [name]="'notaPoi' + poi.id"
                 autoGrow="true"
                 placeholder="Adicionar nota tardia"
+                [readonly]="!podeEditarViagem"
               ></ion-textarea>
               <div class="poi-card-footer">
                 <ion-badge color="success" *ngIf="obterTotalCustoPoi(poi) > 0">
@@ -188,7 +191,7 @@
                 <ion-badge color="medium" *ngIf="obterTotalCustoPoi(poi) === 0">
                   Sem custo
                 </ion-badge>
-                <ion-button fill="clear" size="small" (click)="guardarNotaPoi(poi)" [disabled]="guardando">
+                <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" (click)="guardarNotaPoi(poi)" [disabled]="guardando">
                   <ion-icon slot="start" name="save-outline"></ion-icon>
                   Guardar nota
                 </ion-button>

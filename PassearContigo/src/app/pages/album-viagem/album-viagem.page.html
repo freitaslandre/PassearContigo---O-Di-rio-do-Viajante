@@ -10,23 +10,23 @@
     </ion-buttons>
     <ion-title>{{ modoSelecao ? totalSelecionadas + ' selecionadas' : 'Álbum' }}</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && fotos.length > 0">
-      <ion-button *ngIf="!modoSelecao" (click)="importarFotosDoRolo()" [disabled]="importando">
+      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="importarFotosDoRolo()" [disabled]="importando">
         <ion-spinner *ngIf="importando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!importando" slot="icon-only" name="cloud-upload-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!modoSelecao" (click)="ativarSelecao()">
+      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="ativarSelecao()">
         <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0">
         <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
         <ion-icon slot="icon-only" name="swap-horizontal-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length">
         <ion-icon slot="icon-only" name="checkbox-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -56,7 +56,7 @@
           {{ viagem.local }}
         </p>
       </div>
-      <ion-button color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
+      <ion-button *ngIf="podeEditarViagem" color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
         <ion-spinner *ngIf="importando" name="crescent" slot="start"></ion-spinner>
         <ion-icon *ngIf="!importando" slot="start" name="cloud-upload-outline"></ion-icon>
         Importar do rolo

@@ -102,6 +102,10 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
     return `${this.diaAtualIndex + 1} de ${this.dias.length}`;
   }
 
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
+  }
+
   irParaDiaAnterior() {
     if (!this.temDiaAnterior) return;
     this.diaAtualIndex -= 1;
@@ -128,7 +132,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async guardarNotaPoi(poi: POI) {
-    if (!this.viagem || !this.diaAtual || this.guardando) return;
+    if (!this.viagem || !this.diaAtual || this.guardando || !this.podeEditarViagem) return;
 
     poi.nota = poi.nota?.trim() || '';
     await this.guardarDiario();
@@ -289,7 +293,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async guardarDiario() {
-    if (!this.viagem || this.guardando) return;
+    if (!this.viagem || this.guardando || !this.podeEditarViagem) return;
 
     this.guardando = true;
 

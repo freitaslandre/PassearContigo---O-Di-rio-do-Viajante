@@ -84,7 +84,7 @@ export class PublicacoesService {
   }
 
   /**
-   * Obtem publicacoes publicas e publicacoes do utilizador autenticado.
+   * Obtem publicacoes publicas do feed.
    */
   getFeedPublicacoes(): Observable<Publicacao[]> {
     return this.afAuth.authState.pipe(
@@ -100,7 +100,7 @@ export class PublicacoesService {
                 id: action.payload.doc.id,
                 ...action.payload.doc.data()
               }))
-              .filter(publicacao => this.utilizadorPodeVerPublicacao(publicacao, user.uid, user.email || ''))
+              .filter(publicacao => publicacao.visibilidade === 'publica')
               .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm))
           )
         );
@@ -138,7 +138,7 @@ export class PublicacoesService {
                 id: item.id,
                 ...item.data() as PublicacaoPayload
               }))
-              .filter(publicacao => this.utilizadorPodeVerPublicacao(publicacao, user.uid, user.email || ''))
+              .filter(publicacao => publicacao.visibilidade === 'publica')
               .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm));
 
             onData(publicacoes);
@@ -432,6 +432,13 @@ export class PublicacoesService {
     return this.createPublicacao(publicacao);
   }
 
+  async despublicarViagem(viagemId: string): Promise<void> {
+    const publicacaoExistente = await this.getMinhaPublicacaoByViagemIdOnce(viagemId);
+    if (publicacaoExistente) {
+      await this.deletePublicacao(publicacaoExistente.id);
+    }
+  }
+
   /**
    * Atualiza uma publicacao existente do utilizador autenticado.
    */
@@ -616,11 +623,6 @@ export class PublicacoesService {
 
     if (publicacao.visibilidade === 'publica') {
       return true;
-    }
-
-    if (publicacao.visibilidade === 'amigos') {
-      return (publicacao.colaboradorUids || []).includes(uid)
-        || (!!email && (publicacao.colaboradorEmails || []).includes(email));
     }
 
     return false;

@@ -47,7 +47,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   dataInicio = '';
   dataFim = '';
   status: Viagem['status'] = 'planejada';
-  visibilidadePublicacao: VisibilidadePublicacao = 'amigos';
+  visibilidadePublicacao: VisibilidadePublicacao = 'privada';
   textoPublicacao = '';
 
   private routeSub: Subscription | null = null;
@@ -102,7 +102,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   editarViagem() {
-    if (!this.viagem) return;
+    if (!this.viagem || !this.podeEditarViagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'editar']);
   }
 
@@ -117,12 +117,12 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   abrirColaboradores() {
-    if (!this.viagem) return;
+    if (!this.viagem || !this.podeGerirViagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagem.id, 'colaboradores']);
   }
 
   async publicarViagem() {
-    if (!this.viagem || this.publicando) return;
+    if (!this.viagem || this.publicando || !this.podeGerirViagem) return;
 
     if (!this.titulo.trim() || !this.local.trim() || !this.dataInicio || !this.dataFim) {
       await this.mostrarToast('Preencha título, destino e datas antes de publicar.', 'warning');
@@ -147,25 +147,17 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         status: this.status,
         dias: this.dias.map((dia, index) => this.converterDiaParaModel(dia, index))
       };
-      const publicacaoId = await this.publicacoesService.publicarViagem(
-        viagemAtualizada,
-        this.textoPublicacao.trim() || this.descricao.trim(),
-        this.visibilidadePublicacao
-      );
+      const texto = this.textoPublicacao.trim() || this.descricao.trim();
+      const publicacaoId = await this.publicacoesService.publicarViagem(viagemAtualizada, texto, 'publica');
 
       await this.viagensService.updateViagem(this.viagem.id, {
         publicada: true,
         publicacaoId,
-        visibilidadePublicacao: this.visibilidadePublicacao,
-        textoPublicacao: this.textoPublicacao.trim() || this.descricao.trim()
+        visibilidadePublicacao: 'publica',
+        textoPublicacao: texto
       });
 
-      await this.mostrarToast(
-        this.visibilidadePublicacao === 'publica'
-          ? 'Viagem publicada como pública.'
-          : 'Viagem publicada para amigos.',
-        'success'
-      );
+      await this.mostrarToast('Viagem publicada no feed público.', 'success');
     } catch (error: any) {
       console.error('Erro ao publicar viagem:', error);
       await this.mostrarToast(error?.message || 'Erro ao publicar viagem.', 'danger');
@@ -174,8 +166,33 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     }
   }
 
+  async removerDoFeed() {
+    if (!this.viagem || this.publicando || !this.podeGerirViagem) return;
+
+    this.publicando = true;
+
+    try {
+      const texto = this.textoPublicacao.trim() || this.descricao.trim();
+      await this.publicacoesService.despublicarViagem(this.viagem.id);
+      await this.viagensService.updateViagem(this.viagem.id, {
+        publicada: false,
+        publicacaoId: null as any,
+        visibilidadePublicacao: 'privada',
+        textoPublicacao: texto
+      });
+
+      this.visibilidadePublicacao = 'privada';
+      await this.mostrarToast('Viagem removida do feed.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao remover viagem do feed:', error);
+      await this.mostrarToast(error?.message || 'Erro ao remover viagem do feed.', 'danger');
+    } finally {
+      this.publicando = false;
+    }
+  }
+
   async confirmarEliminarViagem() {
-    if (!this.viagem || this.eliminando) return;
+    if (!this.viagem || this.eliminando || !this.podeGerirViagem) return;
 
     const alert = await this.alertCtrl.create({
       header: 'Eliminar viagem',
@@ -199,6 +216,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   adicionarDia() {
+    if (!this.podeEditarViagem) return;
+
     const ultimaData = this.dias.length > 0
       ? this.dias[this.dias.length - 1].data
       : this.dataInicio;
@@ -221,6 +240,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   removerDia(index: number) {
+    if (!this.podeEditarViagem) return;
+
     const diaRemovido = this.dias[index];
     this.dias.splice(index, 1);
 
@@ -230,6 +251,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   async confirmarRemoverDia(index: number) {
+    if (!this.podeEditarViagem) return;
+
     const dia = this.dias[index];
     if (!dia) {
       return;
@@ -274,7 +297,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
   }
 
   async guardar() {
-    if (!this.viagem) return;
+    if (!this.viagem || !this.podeEditarViagem) return;
 
     if (!this.titulo.trim() || !this.local.trim() || !this.dataInicio || !this.dataFim) {
       await this.mostrarToast('Preencha título, destino e datas da viagem.', 'warning');
@@ -446,6 +469,14 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
   get totalDias(): number {
     return this.dias.length;
+  }
+
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
+  }
+
+  get podeGerirViagem(): boolean {
+    return this.viagensService.podeGerirViagemAtual(this.viagem);
   }
 
   private carregarViagem(id: string) {
@@ -620,7 +651,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.dataInicio = this.formatarDataInput(viagem.dataInicio);
     this.dataFim = this.formatarDataInput(viagem.dataFim);
     this.status = viagem.status || 'planejada';
-    this.visibilidadePublicacao = viagem.visibilidadePublicacao || 'amigos';
+    this.visibilidadePublicacao = viagem.visibilidadePublicacao || (viagem.publicada ? 'publica' : 'privada');
     this.textoPublicacao = viagem.textoPublicacao || viagem.descricao || '';
     this.dias = (viagem.dias || []).map((dia, index) => ({
       id: dia.id || `dia-${index + 1}`,

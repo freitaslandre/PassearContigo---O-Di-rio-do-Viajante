@@ -16,8 +16,13 @@ const routes: Routes = [
         loadChildren: () => import('../pages/descobrir/descobrir.module').then(m => m.DescobrirPageModule)
       },
       {
-        path: 'amigos',
+        path: 'feed',
         loadChildren: () => import('../pages/feed-amigos/feed-amigos.module').then(m => m.FeedAmigosPageModule)
+      },
+      {
+        path: 'amigos',
+        redirectTo: '/tabs/feed',
+        pathMatch: 'full'
       },
       {
         path: 'resumo-custos',

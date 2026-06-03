@@ -61,8 +61,17 @@ export class ViagensPage implements OnInit, OnDestroy {
     this.router.navigate(['/tabs', 'viagens', id]);
   }
 
+  podeGerirViagem(viagem: Viagem): boolean {
+    return this.viagensService.podeGerirViagemAtual(viagem);
+  }
+
   async confirmarEliminarViagem(event: Event, viagem: Viagem) {
     event.stopPropagation();
+
+    if (!this.podeGerirViagem(viagem)) {
+      await this.mostrarToast('Apenas o dono pode eliminar esta viagem.', 'danger');
+      return;
+    }
 
     const alert = await this.alertCtrl.create({
       header: 'Eliminar viagem',

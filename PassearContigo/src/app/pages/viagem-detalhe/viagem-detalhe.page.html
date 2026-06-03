@@ -7,13 +7,13 @@
     </ion-buttons>
     <ion-title class="toolbar-titulo">Detalhe Viagem</ion-title>
     <ion-buttons class="toolbar-acoes" slot="end" *ngIf="!carregando && viagem">
-      <ion-button (click)="editarViagem()">
+      <ion-button *ngIf="podeEditarViagem" (click)="editarViagem()">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="guardar()" [disabled]="guardando">
+      <ion-button *ngIf="podeEditarViagem" (click)="guardar()" [disabled]="guardando">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+      <ion-button *ngIf="podeGerirViagem" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -85,37 +85,28 @@
           Álbum
         </ion-button>
 
-        <ion-button expand="block" color="primary" fill="outline" (click)="abrirColaboradores()">
+        <ion-button *ngIf="podeGerirViagem" expand="block" color="primary" fill="outline" (click)="abrirColaboradores()">
           <ion-icon slot="start" name="people-outline"></ion-icon>
           Colaboradores
         </ion-button>
       </div>
     </section>
 
-    <ion-card class="publicacao-card">
+    <ion-card *ngIf="podeGerirViagem" class="publicacao-card">
       <ion-card-header>
         <div class="publicacao-header">
           <div>
-            <ion-card-title>Publicação da viagem</ion-card-title>
+            <ion-card-title>Partilha da viagem</ion-card-title>
             <ion-card-subtitle>
-              {{ viagem.publicada ? 'Já publicada' : 'Ainda não publicada' }}
+              {{ viagem.publicada ? 'Publicada no feed' : 'Ainda não está no feed' }}
             </ion-card-subtitle>
           </div>
-          <ion-badge [color]="visibilidadePublicacao === 'publica' ? 'success' : 'secondary'">
-            {{ visibilidadePublicacao === 'publica' ? 'Público' : 'Amigos' }}
+          <ion-badge [color]="viagem.publicada ? 'success' : 'medium'">
+            {{ viagem.publicada ? 'No feed' : 'Não publicada' }}
           </ion-badge>
         </div>
       </ion-card-header>
       <ion-card-content>
-        <ion-segment [(ngModel)]="visibilidadePublicacao" name="visibilidadePublicacao">
-          <ion-segment-button value="amigos">
-            <ion-label>Amigos</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="publica">
-            <ion-label>Público</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-
         <ion-item lines="full">
           <ion-label position="stacked">Texto da publicação</ion-label>
           <ion-textarea
@@ -129,7 +120,13 @@
         <ion-button expand="block" color="secondary" (click)="publicarViagem()" [disabled]="publicando || guardando">
           <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!publicando" slot="start" name="megaphone-outline"></ion-icon>
-          {{ viagem.publicada ? 'Atualizar publicação' : 'Publicar viagem' }}
+          {{ viagem.publicada ? 'Atualizar publicação' : 'Partilhar no feed' }}
+        </ion-button>
+
+        <ion-button *ngIf="viagem.publicada" expand="block" color="medium" fill="outline" (click)="removerDoFeed()" [disabled]="publicando || guardando">
+          <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!publicando" slot="start" name="remove-circle-outline"></ion-icon>
+          Remover do feed
         </ion-button>
       </ion-card-content>
     </ion-card>
@@ -146,6 +143,7 @@
               name="titulo"
               type="text"
               [(ngModel)]="titulo"
+              [disabled]="!podeEditarViagem"
               placeholder="Ex: Lisboa 2026"
             ></ion-input>
           </ion-item>
@@ -156,6 +154,7 @@
               name="local"
               type="text"
               [(ngModel)]="local"
+              [disabled]="!podeEditarViagem"
               placeholder="Ex: Lisboa"
             ></ion-input>
           </ion-item>
@@ -166,13 +165,14 @@
               name="descricao"
               autoGrow="true"
               [(ngModel)]="descricao"
+              [disabled]="!podeEditarViagem"
               placeholder="Notas gerais da viagem"
             ></ion-textarea>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Estado</ion-label>
-            <ion-select name="status" [(ngModel)]="status" interface="popover">
+            <ion-select name="status" [(ngModel)]="status" interface="popover" [disabled]="!podeEditarViagem">
               <ion-select-option value="planejada">Planeada</ion-select-option>
               <ion-select-option value="em-andamento">Em curso</ion-select-option>
               <ion-select-option value="concluida">Concluída</ion-select-option>
@@ -182,12 +182,12 @@
 
           <ion-item>
             <ion-label position="stacked">Data de início</ion-label>
-            <ion-input name="dataInicio" type="date" [(ngModel)]="dataInicio"></ion-input>
+            <ion-input name="dataInicio" type="date" [(ngModel)]="dataInicio" [disabled]="!podeEditarViagem"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Data de fim</ion-label>
-            <ion-input name="dataFim" type="date" [(ngModel)]="dataFim"></ion-input>
+            <ion-input name="dataFim" type="date" [(ngModel)]="dataFim" [disabled]="!podeEditarViagem"></ion-input>
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -199,7 +199,7 @@
           <h2>Lista de dias</h2>
           <p>Organize o itinerário dia a dia.</p>
         </div>
-        <ion-button fill="clear" color="primary" (click)="adicionarDia()">
+        <ion-button *ngIf="podeEditarViagem" fill="clear" color="primary" (click)="adicionarDia()">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar
         </ion-button>
@@ -208,7 +208,7 @@
       <ion-card *ngIf="dias.length === 0" class="empty-days">
         <ion-card-content>
           <p>Esta viagem ainda não tem dias.</p>
-          <ion-button expand="block" color="primary" (click)="adicionarDia()">
+          <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarDia()">
             Criar primeiro dia
           </ion-button>
         </ion-card-content>
@@ -247,7 +247,7 @@
               <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)" aria-label="Itinerário">
                 <ion-icon slot="icon-only" name="map-outline"></ion-icon>
               </ion-button>
-              <ion-button fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" aria-label="Remover dia">
+              <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" aria-label="Remover dia">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
               <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" aria-label="Editar dia">
@@ -264,6 +264,7 @@
                 name="diaTitulo{{ i }}"
                 type="text"
                 [(ngModel)]="dia.titulo"
+                [disabled]="!podeEditarViagem"
               ></ion-input>
             </ion-item>
 
@@ -273,6 +274,7 @@
                 name="diaData{{ i }}"
                 type="date"
                 [(ngModel)]="dia.data"
+                [disabled]="!podeEditarViagem"
               ></ion-input>
             </ion-item>
 
@@ -282,6 +284,7 @@
                 name="diaLocal{{ i }}"
                 type="text"
                 [(ngModel)]="dia.local"
+                [disabled]="!podeEditarViagem"
                 placeholder="Ex: Alfama"
               ></ion-input>
             </ion-item>
@@ -292,6 +295,7 @@
                 name="diaDescricao{{ i }}"
                 autoGrow="true"
                 [(ngModel)]="dia.descricao"
+                [disabled]="!podeEditarViagem"
               ></ion-textarea>
             </ion-item>
 
@@ -301,6 +305,7 @@
                 name="diaObservacoes{{ i }}"
                 autoGrow="true"
                 [(ngModel)]="dia.observacoes"
+                [disabled]="!podeEditarViagem"
               ></ion-textarea>
             </ion-item>
           </ion-list>
@@ -345,7 +350,7 @@
                     size="small"
                     color="primary"
                     (click)="tirarFotoPoi(dia, poi)"
-                    [disabled]="fotoPoiAEnviar(dia.id, poi)"
+                    [disabled]="fotoPoiAEnviar(dia.id, poi) || !podeEditarViagem"
                   >
                     <ion-spinner *ngIf="fotoPoiAEnviar(dia.id, poi)" name="crescent" slot="icon-only"></ion-spinner>
                     <ion-icon *ngIf="!fotoPoiAEnviar(dia.id, poi)" slot="icon-only" name="camera-outline"></ion-icon>
@@ -355,7 +360,7 @@
                     size="small"
                     color="medium"
                     (click)="escolherFotoPoiDaGaleria(dia, poi)"
-                    [disabled]="fotoPoiAEnviar(dia.id, poi)"
+                    [disabled]="fotoPoiAEnviar(dia.id, poi) || !podeEditarViagem"
                   >
                     <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                   </ion-button>
@@ -369,6 +374,7 @@
                     name="poiNome{{ i }}{{ poiIndex }}"
                     type="text"
                     [(ngModel)]="poi.nome"
+                    [disabled]="!podeEditarViagem"
                   ></ion-input>
                 </ion-item>
 
@@ -379,6 +385,7 @@
                       name="poiTipo{{ i }}{{ poiIndex }}"
                       type="text"
                       [(ngModel)]="poi.tipo"
+                      [disabled]="!podeEditarViagem"
                     ></ion-input>
                   </ion-item>
 
@@ -388,6 +395,7 @@
                       name="poiEndereco{{ i }}{{ poiIndex }}"
                       type="text"
                       [(ngModel)]="poi.endereco"
+                      [disabled]="!podeEditarViagem"
                     ></ion-input>
                   </ion-item>
                 </div>
@@ -398,7 +406,7 @@
                     size="small"
                     color="primary"
                     (click)="usarLocalizacaoAtualNoPoi(dia, poi)"
-                    [disabled]="localizacaoPoiAEnviar(dia.id, poi)"
+                    [disabled]="localizacaoPoiAEnviar(dia.id, poi) || !podeEditarViagem"
                   >
                     <ion-spinner *ngIf="localizacaoPoiAEnviar(dia.id, poi)" name="crescent" slot="start"></ion-spinner>
                     <ion-icon *ngIf="!localizacaoPoiAEnviar(dia.id, poi)" slot="start" name="locate-outline"></ion-icon>
@@ -433,13 +441,13 @@
       </div>
     </section>
 
-    <ion-button expand="block" color="primary" (click)="guardar()" [disabled]="guardando">
+    <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="guardar()" [disabled]="guardando">
       <ion-spinner *ngIf="guardando" name="crescent" slot="start"></ion-spinner>
       <ion-icon *ngIf="!guardando" slot="start" name="save-outline"></ion-icon>
       Guardar detalhes
     </ion-button>
 
-    <ion-button expand="block" color="danger" fill="outline" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+    <ion-button *ngIf="podeGerirViagem" expand="block" color="danger" fill="outline" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
       <ion-spinner *ngIf="eliminando" name="crescent" slot="start"></ion-spinner>
       <ion-icon *ngIf="!eliminando" slot="start" name="trash-outline"></ion-icon>
       Eliminar viagem

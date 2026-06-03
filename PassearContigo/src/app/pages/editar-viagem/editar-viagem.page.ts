@@ -55,6 +55,8 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   }
 
   onFotoCapaSelected(event: Event) {
+    if (!this.podeEditarViagem) return;
+
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
@@ -68,10 +70,14 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   }
 
   removerFotoCapa() {
+    if (!this.podeEditarViagem) return;
+
     this.fotoCapaPreview = null;
   }
 
   async tirarFotoCapa() {
+    if (!this.podeEditarViagem) return;
+
     const foto = await this.cameraService.takePicture();
     if (foto) {
       this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
@@ -82,6 +88,8 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   }
 
   async escolherFotoCapaDaGaleria() {
+    if (!this.podeEditarViagem) return;
+
     const foto = await this.cameraService.selectPictureFromGallery();
     if (foto) {
       this.fotoCapaPreview = await this.firebaseStorageService.optimizeImage(foto, 1280, 0.72);
@@ -92,6 +100,11 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   }
 
   async guardar() {
+    if (!this.podeEditarViagem) {
+      await this.mostrarToast('Sem permissao para editar esta viagem.', 'warning');
+      return;
+    }
+
     if (!this.viagem || this.form.invalid) {
       this.form.markAllAsTouched();
       await this.mostrarToast('Preencha corretamente os campos obrigatorios.', 'warning');
@@ -159,6 +172,10 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     return this.form.get('dataFim');
   }
 
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
+  }
+
   private inicializarFormulario() {
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
@@ -190,6 +207,12 @@ export class EditarViagemPage implements OnInit, OnDestroy {
 
         this.viagem = viagem;
         this.preencherFormulario(viagem);
+
+        if (!this.podeEditarViagem) {
+          this.form.disable({ emitEvent: false });
+        } else {
+          this.form.enable({ emitEvent: false });
+        }
       },
       error: (error) => {
         this.carregando = false;

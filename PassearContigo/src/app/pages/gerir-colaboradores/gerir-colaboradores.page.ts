@@ -22,7 +22,7 @@ export class GerirColaboradoresPage implements OnInit {
     nivelAcesso: 'visualizador'
   };
 
-  niveisAcesso: NivelAcessoColaborador[] = ['dono', 'editor', 'visualizador'];
+  niveisAcesso: NivelAcessoColaborador[] = ['editor', 'visualizador'];
   mensagemErro: string | null = null;
   pesquisando: boolean = false;
   carregando = true;
@@ -55,7 +55,16 @@ export class GerirColaboradoresPage implements OnInit {
     this.router.navigate(['/tabs', 'viagens']);
   }
 
+  get podeGerirViagem(): boolean {
+    return this.viagensService.podeGerirViagemAtual(this.viagem);
+  }
+
   async adicionarConvidado() {
+    if (!this.podeGerirViagem) {
+      this.mensagemErro = 'Apenas o dono da viagem pode gerir colaboradores.';
+      return;
+    }
+
     const email = this.novoConvidado.email?.trim();
     if (!email || !this.novoConvidado.nivelAcesso) {
       return;
@@ -117,6 +126,11 @@ export class GerirColaboradoresPage implements OnInit {
   }
 
   async removerConvidado(index: number) {
+    if (!this.podeGerirViagem) {
+      this.mensagemErro = 'Apenas o dono da viagem pode gerir colaboradores.';
+      return;
+    }
+
     this.convidados = this.convidados.filter((_, i) => i !== index);
     await this.guardarColaboradores();
   }
@@ -138,7 +152,7 @@ export class GerirColaboradoresPage implements OnInit {
   }
 
   private async guardarColaboradores() {
-    if (!this.viagemId || this.guardando) {
+    if (!this.viagemId || this.guardando || !this.podeGerirViagem) {
       return;
     }
 

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
-import { Dia, POI, Colaborador } from '../../models/viagem.model';
+import { Dia, POI, Colaborador, Viagem } from '../../models/viagem.model';
 
 @Component({
   selector: 'app-dia-detalhe',
@@ -16,6 +16,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   dias: Dia[] = [];
   diaAtualIndex = -1;
   viagemId: string | null = null;
+  viagem: Viagem | null = null;
   colaboradores: Colaborador[] = [];
   carregando = true;
   erro = '';
@@ -57,6 +58,7 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
             return;
           }
 
+          this.viagem = viagem;
           this.colaboradores = viagem.colaboradores || [];
           this.dias = [...(viagem.dias || [])].sort((a, b) => {
             return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);
@@ -96,6 +98,10 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   abrirItinerario() {
     if (!this.viagemId || !this.dia) return;
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.dia.id, 'itinerario']);
+  }
+
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
   }
 
   obterCustoDia(dia: Dia): number {

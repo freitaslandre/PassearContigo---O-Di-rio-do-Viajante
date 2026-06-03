@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Itinerário do Dia</ion-title>
-    <ion-buttons slot="end" *ngIf="!carregando && dia">
+    <ion-buttons slot="end" *ngIf="!carregando && dia && podeEditarViagem">
       <ion-button (click)="adicionarPoi()">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
@@ -65,7 +65,7 @@
 
     <ion-reorder-group
       *ngIf="pontosOrdenados.length > 0"
-      [disabled]="guardandoOrdem"
+      [disabled]="guardandoOrdem || !podeEditarViagem"
       (ionItemReorder)="reordenarPois($event)"
       class="timeline-list"
     >
@@ -112,7 +112,7 @@
         <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)">
           <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
         </ion-button>
-        <ion-reorder slot="end"></ion-reorder>
+        <ion-reorder *ngIf="podeEditarViagem" slot="end"></ion-reorder>
       </ion-item>
     </ion-reorder-group>
 
@@ -121,7 +121,7 @@
         <ion-icon name="map-outline"></ion-icon>
         <h2>Sem POIs neste dia</h2>
         <p>Adicione pontos de interesse para montar o itinerário.</p>
-        <ion-button expand="block" color="primary" (click)="adicionarPoi()">
+        <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarPoi()">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar POI
         </ion-button>

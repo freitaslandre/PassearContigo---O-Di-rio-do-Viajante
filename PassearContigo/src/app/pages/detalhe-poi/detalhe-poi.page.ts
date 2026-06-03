@@ -7,7 +7,7 @@ import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
 import { MapCacheService } from '../../services/map-cache.service';
 import { PhotoShareService } from '../../services/photo-share.service';
-import { POI, Dia } from '../../models/viagem.model';
+import { POI, Dia, Viagem } from '../../models/viagem.model';
 
 @Component({
   selector: 'app-detalhe-poi',
@@ -19,6 +19,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapaPoi') mapaPoi?: ElementRef<HTMLDivElement>;
 
   poi: POI | null = null;
+  viagem: Viagem | null = null;
   diaAtual: Dia | null = null;
   poiEditavel: Partial<POI> = {};
   modoEdicao = false;
@@ -130,6 +131,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
         }
 
         console.log('POI carregado:', poiEncontrado);
+        this.viagem = viagem;
         this.diaAtual = dia;
         this.poi = poiEncontrado;
         this.fotoUrl = this.poi.fotoUrl || undefined;
@@ -221,10 +223,13 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selecionarFoto() {
+    if (!this.podeEditarViagem) return;
     this.fotoInput?.nativeElement.click();
   }
 
   async onFotoSelecionada(event: any) {
+    if (!this.podeEditarViagem) return;
+
     const file = event.target.files[0];
     if (!file) return;
 
@@ -263,6 +268,8 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async eliminarFoto() {
+    if (!this.podeEditarViagem) return;
+
     const alert = await this.alertCtrl.create({
       header: 'Eliminar foto?',
       message: 'Tem a certeza que quer eliminar esta foto?',
@@ -345,7 +352,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   iniciarEdicao() {
-    if (!this.poi) return;
+    if (!this.poi || !this.podeEditarViagem) return;
     this.poiEditavel = {
       nota: this.poi.nota || '',
       custo: this.poi.custo || undefined,
@@ -355,7 +362,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async guardarEdicao() {
-    if (!this.poi || !this.viagemId || !this.diaId || !this.poiId) {
+    if (!this.poi || !this.viagemId || !this.diaId || !this.poiId || !this.podeEditarViagem) {
       return;
     }
 
@@ -399,6 +406,10 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async eliminarPoi() {
+    if (!this.podeEditarViagem) {
+      return;
+    }
+
     const alert = await this.alertCtrl.create({
       header: 'Eliminar POI?',
       message: `Tem a certeza que quer eliminar "${this.poi?.nome}"? Esta ação não pode ser desfeita.`,
@@ -454,6 +465,10 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
 
   get temLocalizacao(): boolean {
     return typeof this.poi?.latitude === 'number' && typeof this.poi?.longitude === 'number';
+  }
+
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
   }
 
   get poisDoDiaComLocalizacao(): POI[] {

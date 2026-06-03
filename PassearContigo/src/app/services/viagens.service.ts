@@ -9,12 +9,13 @@ import { Observable, firstValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc, updateDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { Dia, Viagem } from '../models/viagem.model';
+import { Dia, NivelAcessoColaborador, Viagem } from '../models/viagem.model';
 
 type ViagemPayload = Omit<Viagem, 'id'>;
 type NovaViagem = ViagemPayload & Partial<Pick<Viagem, 'id'>>;
 type DataViagem = Date | string;
 type DataOrdenavel = Date | string | { toDate: () => Date };
+type NivelAcessoEfetivo = NivelAcessoColaborador | null;
 
 /**
  * ViagensService
@@ -44,10 +45,7 @@ export class ViagensService {
           return of([]);
         }
 
-        return this.afs.collection<ViagemPayload>(
-          this.collectionName,
-          ref => ref.where('uidUtilizador', '==', user.uid)
-        ).snapshotChanges().pipe(
+        return this.afs.collection<ViagemPayload>(this.collectionName).snapshotChanges().pipe(
           map(actions =>
             actions
               .map(action => {
@@ -56,6 +54,7 @@ export class ViagensService {
 
                 return { id, ...data };
               })
+              .filter(viagem => this.utilizadorTemAcessoDiretoViagem(viagem, user.uid, user.email || ''))
               .sort((a, b) => this.compararDatas(a.dataInicio, b.dataInicio))
           )
         );
@@ -79,16 +78,16 @@ export class ViagensService {
       try {
         const db = getFirestore();
         const viagensRef = collection(db, this.collectionName);
-        const q = query(viagensRef, where('uidUtilizador', '==', user.uid));
 
         unsubscribeSnapshot = onSnapshot(
-          q,
+          viagensRef,
           (snapshot) => {
             const viagens: Viagem[] = snapshot.docs
               .map(doc => ({
                 id: doc.id,
                 ...doc.data() as ViagemPayload
               }))
+              .filter(viagem => this.utilizadorTemAcessoDiretoViagem(viagem, user.uid, user.email || ''))
               .sort((a, b) => this.compararDatas(a.dataInicio, b.dataInicio));
 
             onData(viagens);
@@ -190,7 +189,7 @@ export class ViagensService {
 
             const data = snapshot.data() as ViagemPayload;
 
-            if (!this.utilizadorPodeVerViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
+            if (!this.utilizadorPodeAbrirViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
               onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
               return;
             }
@@ -239,7 +238,7 @@ export class ViagensService {
 
           const data = snapshot.data() as ViagemPayload;
 
-          if (!this.utilizadorPodeVerViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
+          if (!this.utilizadorPodeAbrirViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
             observer.error(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
             return;
           }
@@ -345,7 +344,7 @@ export class ViagensService {
    * Atualiza os dados de uma viagem existente.
    */
   async updateViagem(id: string, viagem: Partial<Viagem>): Promise<void> {
-    await this.garantirViagemDoUtilizadorAtual(id);
+    await this.garantirPodeEditarViagem(id, viagem);
 
     const { id: _id, uidUtilizador: _uidUtilizador, criadoEm: _criadoEm, ...payload } = viagem;
     const payloadLimpo = this.removerUndefined(payload);
@@ -368,6 +367,35 @@ export class ViagensService {
     const viagemRef = doc(db, this.collectionName, id);
 
     await deleteDoc(viagemRef);
+  }
+
+  obterNivelAcessoAtual(viagem: Viagem | null | undefined): NivelAcessoEfetivo {
+    const user = getAuth().currentUser;
+    if (!user || !viagem) {
+      return null;
+    }
+
+    if (viagem.uidUtilizador === user.uid) {
+      return 'dono';
+    }
+
+    const emailAtual = user.email?.toLowerCase() || '';
+    const colaborador = (viagem.colaboradores || []).find(item => {
+      const emailColaborador = item.email?.toLowerCase() || '';
+      return item.uid === user.uid || (!!emailAtual && emailColaborador === emailAtual);
+    });
+
+    return colaborador?.nivelAcesso || null;
+  }
+
+  podeEditarViagemAtual(viagem: Viagem | null | undefined): boolean {
+    const nivel = this.obterNivelAcessoAtual(viagem);
+    return nivel === 'dono' || nivel === 'editor';
+  }
+
+  podeGerirViagemAtual(viagem: Viagem | null | undefined): boolean {
+    const user = getAuth().currentUser;
+    return !!user && !!viagem && viagem.uidUtilizador === user.uid;
   }
 
   private adicionarDiasSeNecessario(viagem: ViagemPayload): ViagemPayload {
@@ -464,6 +492,53 @@ export class ViagensService {
     }
   }
 
+  private async garantirPodeEditarViagem(id: string, alteracoes: Partial<Viagem>): Promise<void> {
+    const user = getAuth().currentUser;
+
+    if (!user) {
+      throw new Error('E necessario iniciar sessao para gerir viagens.');
+    }
+
+    const db = getFirestore();
+    const viagemRef = doc(db, this.collectionName, id);
+    const viagemSnapshot = await getDoc(viagemRef);
+
+    if (!viagemSnapshot.exists()) {
+      throw new Error('Viagem nao encontrada.');
+    }
+
+    const viagem = {
+      id: viagemSnapshot.id,
+      ...viagemSnapshot.data() as ViagemPayload
+    };
+
+    if (viagem.uidUtilizador === user.uid) {
+      return;
+    }
+
+    const emailAtual = user.email?.toLowerCase() || '';
+    const colaborador = (viagem.colaboradores || []).find(item => {
+      const emailColaborador = item.email?.toLowerCase() || '';
+      return item.uid === user.uid || (!!emailAtual && emailColaborador === emailAtual);
+    });
+
+    if (colaborador?.nivelAcesso !== 'editor' && colaborador?.nivelAcesso !== 'dono') {
+      throw new Error('Nao tem permissao para editar esta viagem.');
+    }
+
+    const camposSoDono: Array<keyof Viagem> = [
+      'colaboradores',
+      'publicada',
+      'publicacaoId',
+      'visibilidadePublicacao',
+      'textoPublicacao'
+    ];
+
+    if (camposSoDono.some(campo => campo in alteracoes)) {
+      throw new Error('Apenas o dono pode gerir colaboradores ou publicar a viagem.');
+    }
+  }
+
   private compararDatas(dataA: DataOrdenavel, dataB: DataOrdenavel): number {
     return this.converterParaTimestamp(dataA) - this.converterParaTimestamp(dataB);
   }
@@ -499,13 +574,24 @@ export class ViagensService {
   }
 
   private utilizadorPodeVerViagem(viagem: Viagem, uid: string, email: string): boolean {
+    return this.utilizadorPodeAbrirViagem(viagem, uid, email);
+  }
+
+  private utilizadorTemAcessoDiretoViagem(viagem: Viagem, uid: string, email: string): boolean {
     return viagem.uidUtilizador === uid || this.utilizadorEColaborador(viagem, uid, email);
+  }
+
+  private utilizadorPodeAbrirViagem(viagem: Viagem, uid: string, email: string): boolean {
+    return this.utilizadorTemAcessoDiretoViagem(viagem, uid, email)
+      || (viagem.publicada === true && viagem.visibilidadePublicacao === 'publica');
   }
 
   private utilizadorEColaborador(viagem: Viagem, uid: string, email: string): boolean {
     const colaboradores = viagem.colaboradores || [];
+    const emailNormalizado = email.toLowerCase();
+
     return colaboradores.some(colaborador =>
-      colaborador.uid === uid || (!!email && colaborador.email === email)
+      colaborador.uid === uid || (!!emailNormalizado && colaborador.email?.toLowerCase() === emailNormalizado)
     );
   }
 }

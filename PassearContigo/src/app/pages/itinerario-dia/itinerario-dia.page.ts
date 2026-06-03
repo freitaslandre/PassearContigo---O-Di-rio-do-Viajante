@@ -17,6 +17,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   viagemId = '';
   diaId = '';
   dia: Dia | null = null;
+  viagem: Viagem | null = null;
   dias: Dia[] = [];
   diaAtualIndex = -1;
   colaboradores: Colaborador[] = [];
@@ -68,8 +69,12 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   }
 
   adicionarPoi() {
-    if (!this.viagemId || !this.diaId) return;
+    if (!this.viagemId || !this.diaId || !this.podeEditarViagem) return;
     this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', this.diaId, 'adicionar-poi']);
+  }
+
+  get podeEditarViagem(): boolean {
+    return this.viagensService.podeEditarViagemAtual(this.viagem);
   }
 
   get temDiaAnterior(): boolean {
@@ -124,7 +129,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   }
 
   async reordenarPois(event: CustomEvent<ItemReorderEventDetail>) {
-    if (!this.dia || this.guardandoOrdem) {
+    if (!this.dia || this.guardandoOrdem || !this.podeEditarViagem) {
       event.detail.complete();
       return;
     }
@@ -236,6 +241,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
           return;
         }
 
+        this.viagem = viagem;
         this.colaboradores = viagem.colaboradores || [];
         this.dias = [...(viagem.dias || [])].sort((a, b) => {
           return this.obterTimestampData(a.data) - this.obterTimestampData(b.data);

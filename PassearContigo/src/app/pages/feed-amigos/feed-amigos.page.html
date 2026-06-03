@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Amigos</ion-title>
+    <ion-title>Feed</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="carregarFeed()" [disabled]="carregando">
         <ion-spinner *ngIf="carregando" name="crescent" slot="icon-only"></ion-spinner>
@@ -13,8 +13,8 @@
 <ion-content class="ion-padding">
   <section class="feed-header">
     <ion-badge color="secondary">{{ publicacoes.length }} publicações</ion-badge>
-    <h1>Feed de amigos</h1>
-    <p>Veja viagens públicas e viagens partilhadas consigo como colaborador.</p>
+    <h1>Feed público</h1>
+    <p>Veja viagens publicadas pela comunidade em modo visualização.</p>
   </section>
 
   <ion-card *ngIf="carregando" class="state-card">
@@ -36,8 +36,8 @@
   <ion-card *ngIf="!carregando && !erro && publicacoes.length === 0" class="state-card">
     <ion-card-content>
       <ion-icon name="people-outline"></ion-icon>
-      <h2>Sem publicações de amigos</h2>
-      <p>Convide alguém como colaborador numa viagem e publique-a para amigos para aparecer aqui.</p>
+      <h2>Sem publicações</h2>
+      <p>Quando alguém publicar uma viagem no feed público, ela aparece aqui.</p>
     </ion-card-content>
   </ion-card>
 

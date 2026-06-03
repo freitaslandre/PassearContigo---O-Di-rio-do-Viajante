@@ -253,7 +253,7 @@
       <ion-button
         expand="block"
         type="submit"
-        [disabled]="!poiForm.form.valid"
+        [disabled]="!poiForm.form.valid || !podeEditarViagem"
       >
         <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
         Adicionar POI
