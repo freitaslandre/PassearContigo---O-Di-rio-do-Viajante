@@ -21,6 +21,7 @@ interface NominatimSearchResponse {
 export interface NominatimReverseResult {
   endereco: string;
   nomeSugerido: string;
+  categoria: string;
 }
 
 export interface NominatimSearchResult {
@@ -120,12 +121,13 @@ export class NominatimService {
     const data = await response.json() as NominatimReverseResponse;
     const endereco = this.formatarEndereco(data);
     const nomeSugerido = this.obterNomeSugerido(data);
+    const categoria = this.formatarCategoria(data);
 
-    if (!endereco && !nomeSugerido) {
+    if (!endereco && !nomeSugerido && !categoria) {
       throw new Error('Dados não encontrados para estas coordenadas.');
     }
 
-    const resultado = { endereco, nomeSugerido };
+    const resultado = { endereco, nomeSugerido, categoria };
     this.cache.set(cacheKey, resultado);
     return resultado;
   }
@@ -161,7 +163,7 @@ export class NominatimService {
     };
   }
 
-  private formatarCategoria(data: NominatimSearchResponse): string {
+  private formatarCategoria(data: NominatimReverseResponse): string {
     const partes = [data.category, data.type]
       .filter(Boolean)
       .map(valor => valor!.replace(/_/g, ' '));

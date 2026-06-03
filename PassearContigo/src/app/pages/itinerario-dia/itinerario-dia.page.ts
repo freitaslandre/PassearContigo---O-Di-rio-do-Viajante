@@ -1,11 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemReorderEventDetail, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Colaborador, Dia, POI, Viagem } from '../../models/viagem.model';
 import { GeolocationService } from '../../services/geolocation.service';
+import { MapCacheService } from '../../services/map-cache.service';
 import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-itinerario-dia',
@@ -13,7 +15,9 @@ import { ViagensService } from '../../services/viagens.service';
   templateUrl: './itinerario-dia.page.html',
   styleUrls: ['./itinerario-dia.page.scss']
 })
-export class ItinerarioDiaPage implements OnInit, OnDestroy {
+export class ItinerarioDiaPage implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('mapaItinerario') mapaItinerario?: ElementRef<HTMLDivElement>;
+
   viagemId = '';
   diaId = '';
   dia: Dia | null = null;
@@ -24,15 +28,22 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
   carregando = true;
   guardandoOrdem = false;
   erro = '';
+  mapaOfflineDisponivel = false;
 
   private routeSub: Subscription | null = null;
   private viagemSub: Subscription | null = null;
+  private mapaLeaflet: L.Map | null = null;
+  private tileLayerLeaflet: L.TileLayer | null = null;
+  private marcadoresLeaflet: L.Marker[] = [];
+  private rotaLeaflet: L.Polyline | null = null;
+  private viewInicializada = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private viagensService: ViagensService,
     private geolocationService: GeolocationService,
+    private mapCacheService: MapCacheService,
     private poiService: POIService,
     private toastCtrl: ToastController
   ) {}
@@ -54,9 +65,15 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    this.viewInicializada = true;
+    this.atualizarMapaItinerarioEmBreve();
+  }
+
   ngOnDestroy() {
     this.routeSub?.unsubscribe();
     this.viagemSub?.unsubscribe();
+    this.destruirMapa();
   }
 
   voltar() {
@@ -126,6 +143,10 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
       return (a.nome || '').localeCompare(b.nome || '', 'pt-PT', { sensitivity: 'base' });
     });
+  }
+
+  get pontosOrdenadosComLocalizacao(): POI[] {
+    return this.pontosOrdenados.filter(poi => this.temCoordenadas(poi));
   }
 
   async reordenarPois(event: CustomEvent<ItemReorderEventDetail>) {
@@ -257,6 +278,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
         this.dia = await this.juntarPoisLocaisPendentes(diaEncontrado);
         this.carregando = false;
+        this.atualizarMapaItinerarioEmBreve();
       },
       error: (err) => {
         this.erro = err?.message || 'Erro ao carregar itinerário.';
@@ -354,6 +376,209 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
 
   private temCoordenadas(poi: POI): boolean {
     return typeof poi.latitude === 'number' && typeof poi.longitude === 'number';
+  }
+
+  private atualizarMapaItinerarioEmBreve(): void {
+    setTimeout(() => this.atualizarMapaItinerario(), 120);
+  }
+
+  private atualizarMapaItinerario(): void {
+    if (!this.viewInicializada || !this.mapaItinerario?.nativeElement) {
+      return;
+    }
+
+    const poisComLocalizacao = this.pontosOrdenadosComLocalizacao;
+
+    if (poisComLocalizacao.length === 0) {
+      this.destruirMapa();
+      return;
+    }
+
+    const centro: L.LatLngExpression = [poisComLocalizacao[0].latitude!, poisComLocalizacao[0].longitude!];
+
+    if (!this.mapaLeaflet) {
+      this.mapaLeaflet = L.map(this.mapaItinerario.nativeElement, {
+        zoomControl: true
+      }).setView(centro, 15);
+      this.tileLayerLeaflet = this.criarTileLayerComCache().addTo(this.mapaLeaflet);
+    }
+
+    this.destruirCamadasMapa();
+
+    const pontos: L.LatLngExpression[] = [];
+
+    poisComLocalizacao.forEach((poi, index) => {
+      const posicao: L.LatLngExpression = [poi.latitude!, poi.longitude!];
+      const marcador = L.marker(posicao, {
+        icon: this.criarIconePoi(poi, index)
+      }).addTo(this.mapaLeaflet!);
+
+      marcador.bindPopup(this.criarPopupPoi(poi, index));
+      marcador.on('click', () => this.abrirPoi(poi));
+      this.marcadoresLeaflet.push(marcador);
+      pontos.push(posicao);
+    });
+
+    if (pontos.length > 1) {
+      this.rotaLeaflet = L.polyline(pontos, {
+        color: '#2c7a6e',
+        dashArray: '8 8',
+        lineCap: 'round',
+        lineJoin: 'round',
+        opacity: 0.86,
+        weight: 4
+      }).addTo(this.mapaLeaflet);
+
+      this.mapaLeaflet.fitBounds(L.latLngBounds(pontos), {
+        maxZoom: 16,
+        padding: [28, 28]
+      });
+    } else {
+      this.mapaLeaflet.setView(centro, 16);
+    }
+
+    this.mapaOfflineDisponivel = true;
+    setTimeout(() => this.mapaLeaflet?.invalidateSize(), 100);
+  }
+
+  private criarTileLayerComCache(): L.TileLayer {
+    const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19
+    });
+
+    const originalGetTileUrl = tileLayer.getTileUrl.bind(tileLayer);
+    tileLayer.getTileUrl = (coords: L.Coords) => {
+      const url = originalGetTileUrl(coords);
+      this.cachearTileEmBackground(url);
+      return url;
+    };
+
+    const tileLayerComCreateTile = tileLayer as any;
+    const originalCreateTile = tileLayerComCreateTile.createTile.bind(tileLayerComCreateTile);
+    tileLayerComCreateTile.createTile = (coords: L.Coords, done: L.DoneCallback) => {
+      const tile = originalCreateTile(coords, done) as HTMLImageElement;
+      const url = tileLayer.getTileUrl(coords);
+
+      tile.onerror = async () => {
+        const cacheBlob = await this.mapCacheService.obterTile(url);
+        tile.src = cacheBlob ? URL.createObjectURL(cacheBlob) : this.criarTileOffline();
+      };
+
+      return tile;
+    };
+
+    return tileLayer;
+  }
+
+  private cachearTileEmBackground(url: string): void {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      return;
+    }
+
+    fetch(url)
+      .then(res => res.ok ? res.blob() : null)
+      .then(blob => {
+        if (blob) {
+          this.mapCacheService.cachearTile(url, blob);
+        }
+      })
+      .catch(() => {});
+  }
+
+  private criarTileOffline(): string {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    if (ctx) {
+      ctx.fillStyle = '#f0f0f0';
+      ctx.fillRect(0, 0, 256, 256);
+      ctx.fillStyle = '#8a8a8a';
+      ctx.font = '600 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Offline', 128, 128);
+    }
+
+    return canvas.toDataURL('image/png');
+  }
+
+  private destruirMapa(): void {
+    if (this.mapaLeaflet) {
+      this.mapaLeaflet.remove();
+      this.mapaLeaflet = null;
+    }
+
+    this.tileLayerLeaflet = null;
+    this.marcadoresLeaflet = [];
+    this.rotaLeaflet = null;
+  }
+
+  private destruirCamadasMapa(): void {
+    this.marcadoresLeaflet.forEach(marcador => marcador.remove());
+    this.marcadoresLeaflet = [];
+
+    if (this.rotaLeaflet) {
+      this.rotaLeaflet.remove();
+      this.rotaLeaflet = null;
+    }
+  }
+
+  private criarIconePoi(poi: POI, index: number): L.DivIcon {
+    const numero = String(index + 1);
+    const cor = this.obterCorPin(poi.categoria);
+
+    return L.divIcon({
+      className: '',
+      html: `
+        <span style="
+          align-items:center;background:${cor};border:2px solid #fff;border-radius:50% 50% 50% 0;
+          box-shadow:0 3px 8px rgba(0, 0, 0, 0.28);color:#fff;display:flex;font-size:12px;
+          font-weight:700;height:30px;justify-content:center;line-height:1;transform:rotate(-45deg);width:30px;">
+          <span style="transform:rotate(45deg);">${numero}</span>
+        </span>
+      `,
+      iconAnchor: [15, 34],
+      iconSize: [30, 34],
+      popupAnchor: [0, -30]
+    });
+  }
+
+  private criarPopupPoi(poi: POI, index: number): string {
+    const nome = this.escapeHtml(poi.nome || `POI ${index + 1}`);
+    const tipo = poi.tipo || poi.categoria;
+    const endereco = poi.endereco;
+
+    return [
+      `<strong>${index + 1}. ${nome}</strong>`,
+      tipo ? `<br><span>${this.escapeHtml(tipo)}</span>` : '',
+      endereco ? `<br><small>${this.escapeHtml(endereco)}</small>` : ''
+    ].join('');
+  }
+
+  private escapeHtml(valor: string): string {
+    return valor
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  private obterCorPin(categoria?: string): string {
+    const cores: Record<string, string> = {
+      gastronomia: '#e8823a',
+      cultura: '#5e35b1',
+      natureza: '#2c7a6e',
+      aventura: '#d84315',
+      compras: '#c2185b',
+      hospedagem: '#00796b',
+      outro: '#607d8b'
+    };
+
+    return cores[categoria || 'outro'] || cores['outro'];
   }
 
   private formatarDistancia(distanciaKm: number): string {

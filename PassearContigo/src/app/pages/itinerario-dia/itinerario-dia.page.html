@@ -63,6 +63,17 @@
       </ion-button>
     </div>
 
+    <section *ngIf="pontosOrdenadosComLocalizacao.length > 0" class="itinerary-map-section">
+      <div class="itinerary-map-header">
+        <div>
+          <h2>Mapa do itinerário</h2>
+          <p>{{ pontosOrdenadosComLocalizacao.length }} POIs com localização</p>
+        </div>
+        <ion-badge color="success" *ngIf="mapaOfflineDisponivel">Offline pronto</ion-badge>
+      </div>
+      <div #mapaItinerario class="itinerary-map"></div>
+    </section>
+
     <ion-reorder-group
       *ngIf="pontosOrdenados.length > 0"
       [disabled]="guardandoOrdem || !podeEditarViagem"

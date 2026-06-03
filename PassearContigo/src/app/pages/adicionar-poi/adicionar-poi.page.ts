@@ -5,6 +5,7 @@ import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
 import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
+import { GeolocationService } from '../../services/geolocation.service';
 import { NominatimSearchResult, NominatimService } from '../../services/nominatim.service';
 import { POI, Viagem } from '../../models/viagem.model';
 import { getAuth } from 'firebase/auth';
@@ -40,6 +41,9 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   sugestoesLocais: NominatimSearchResult[] = [];
   carregandoSugestoes = false;
   erroSugestoes = '';
+  obtendoLocalizacaoAtual = false;
+  localizacaoAtualDetetada = false;
+  erroLocalizacaoAtual = '';
   private pesquisaSugestaoAtual = 0;
 
   fotoPreview: string | null = null;
@@ -60,6 +64,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private nominatimService: NominatimService,
+    private geolocationService: GeolocationService,
     private storageService: FirebaseStorageService,
     private cameraService: CameraService
   ) {}
@@ -72,6 +77,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.inicializarMapa();
+    this.preencherComLocalizacaoAtual(true);
   }
 
   ngOnDestroy() {
@@ -118,7 +124,56 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     this.poi.latitude = lat;
     this.poi.longitude = lng;
     this.adicionarMarcador(lat, lng);
-    this.atualizarNomePorGeolocalizacao();
+    this.atualizarNomePorGeolocalizacao(true);
+  }
+
+  async preencherComLocalizacaoAtual(silencioso = false) {
+    if (this.obtendoLocalizacaoAtual) {
+      return;
+    }
+
+    this.obtendoLocalizacaoAtual = true;
+    this.erroLocalizacaoAtual = '';
+
+    try {
+      const position = await this.geolocationService.getCurrentPosition();
+
+      if (!position) {
+        this.localizacaoAtualDetetada = false;
+        this.erroLocalizacaoAtual = 'Não foi possível obter a localização atual.';
+
+        if (!silencioso) {
+          await this.mostrarToast(this.erroLocalizacaoAtual, 'warning');
+        }
+        return;
+      }
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      this.poi.latitude = lat;
+      this.poi.longitude = lng;
+      this.localizacaoAtualDetetada = true;
+      this.sugestoesLocais = [];
+      this.erroSugestoes = '';
+
+      this.adicionarMarcador(lat, lng);
+      await this.atualizarNomePorGeolocalizacao(true);
+
+      if (!silencioso) {
+        await this.mostrarToast('Localização atual aplicada ao POI.', 'success');
+      }
+    } catch (error) {
+      console.debug('Erro ao preencher localização atual:', error);
+      this.localizacaoAtualDetetada = false;
+      this.erroLocalizacaoAtual = 'Não foi possível obter a localização atual.';
+
+      if (!silencioso) {
+        await this.mostrarToast(this.erroLocalizacaoAtual, 'warning');
+      }
+    } finally {
+      this.obtendoLocalizacaoAtual = false;
+    }
   }
 
   private async carregarDiaTitulo() {
@@ -149,7 +204,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     return this.viagensService.podeEditarViagemAtual(this.viagem);
   }
 
-  async atualizarNomePorGeolocalizacao() {
+  async atualizarNomePorGeolocalizacao(sobrescrever = false) {
     const latitude = this.poi.latitude;
     const longitude = this.poi.longitude;
 
@@ -169,17 +224,60 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
 
       const detalhes = await this.nominatimService.obterDetalhesPorCoordenadas(lat, lng);
 
-      if (!this.poi.nome?.trim() && detalhes.nomeSugerido) {
+      if ((sobrescrever || !this.poi.nome?.trim()) && detalhes.nomeSugerido) {
         this.poi.nome = detalhes.nomeSugerido.trim();
       }
 
-      if (!this.poi.endereco?.trim() && detalhes.endereco) {
+      if ((sobrescrever || !this.poi.endereco?.trim()) && detalhes.endereco) {
         this.poi.endereco = detalhes.endereco;
+      }
+
+      if ((sobrescrever || !this.poi.tipo?.trim()) && detalhes.categoria) {
+        this.poi.tipo = detalhes.categoria;
+      }
+
+      const categoriaApp = this.inferirCategoriaApp(detalhes.categoria, detalhes.nomeSugerido, detalhes.endereco);
+      if ((sobrescrever || !this.poi.categoria?.trim()) && categoriaApp) {
+        this.poi.categoria = categoriaApp;
       }
     } catch (error) {
       // Silenciosamente ignorar erros de geolocalização
       console.debug('Erro ao obter geolocalização:', error);
     }
+  }
+
+  private inferirCategoriaApp(...valores: Array<string | undefined>): string | undefined {
+    const texto = valores.filter(Boolean).join(' ').toLowerCase();
+
+    if (!texto) {
+      return undefined;
+    }
+
+    if (/(restaurant|cafe|bar|pub|food|fast food|bakery|confectionery|gastronomia|restaurante|café|pastelaria)/.test(texto)) {
+      return 'gastronomia';
+    }
+
+    if (/(museum|gallery|art|theatre|cinema|historic|monument|castle|church|cultura|museu|galeria|teatro|igreja|monumento)/.test(texto)) {
+      return 'cultura';
+    }
+
+    if (/(park|garden|beach|viewpoint|nature|forest|waterfall|natureza|jardim|praia|miradouro|floresta)/.test(texto)) {
+      return 'natureza';
+    }
+
+    if (/(adventure|sports|climbing|trail|hiking|cycling|aventura|trilho|caminhada|desporto)/.test(texto)) {
+      return 'aventura';
+    }
+
+    if (/(shop|mall|market|supermarket|compras|loja|mercado|centro comercial)/.test(texto)) {
+      return 'compras';
+    }
+
+    if (/(hotel|hostel|guest house|apartment|accommodation|hospedagem|alojamento)/.test(texto)) {
+      return 'hospedagem';
+    }
+
+    return 'outro';
   }
 
   async pesquisarSugestoesLocais() {
@@ -223,7 +321,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     this.sugestoesLocais = [];
     this.erroSugestoes = '';
 
-    if (this.map && this.marker) {
+    if (this.map) {
       this.adicionarMarcador(local.latitude, local.longitude);
     }
   }
@@ -425,5 +523,14 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.router.navigate(['/tabs', 'viagens']);
     }
+  }
+
+  private async mostrarToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color
+    });
+    await toast.present();
   }
 }

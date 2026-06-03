@@ -150,16 +150,44 @@
           <ion-card-header>
             <ion-card-title>Localização no Mapa</ion-card-title>
             <ion-card-subtitle *ngIf="poi.latitude && poi.longitude">
-              📍 Clique no mapa ou selecione uma sugestão acima
+              Localização definida. Pode ajustar no mapa se necessário.
             </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <div id="map" class="map-container"></div>
+
+            <div class="localizacao-atual-acoes">
+              <ion-button
+                class="botao-localizacao-atual"
+                expand="block"
+                type="button"
+                fill="solid"
+                color="primary"
+                (click)="preencherComLocalizacaoAtual()"
+                [disabled]="obtendoLocalizacaoAtual"
+              >
+                <ion-spinner
+                  *ngIf="obtendoLocalizacaoAtual"
+                  slot="start"
+                  name="crescent"
+                ></ion-spinner>
+                <ion-icon
+                  *ngIf="!obtendoLocalizacaoAtual"
+                  slot="start"
+                  name="locate-outline"
+                ></ion-icon>
+                {{ obtendoLocalizacaoAtual ? 'A detetar...' : 'Usar localização atual' }}
+              </ion-button>
+              <ion-note color="success" *ngIf="localizacaoAtualDetetada">
+                Localização atual aplicada.
+              </ion-note>
+              <ion-text color="warning" *ngIf="erroLocalizacaoAtual">
+                <small>{{ erroLocalizacaoAtual }}</small>
+              </ion-text>
+            </div>
+
             <div *ngIf="poi.latitude && poi.longitude" class="coordenadas-info">
               <small>Coordenadas: {{ poi.latitude | number:'1.4-4' }}, {{ poi.longitude | number:'1.4-4' }}</small>
-            </div>
-            <div *ngIf="!poi.latitude || !poi.longitude" class="coordenadas-info-empty">
-              <small>Selecione uma sugestão acima ou clique no mapa para definir a localização</small>
             </div>
           </ion-card-content>
         </ion-card>
