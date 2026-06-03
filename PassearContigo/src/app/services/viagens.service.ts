@@ -70,8 +70,11 @@ export class ViagensService {
     let unsubscribeSnapshot: Unsubscribe | null = null;
 
     const authUnsubscribe = this.afAuth.authState.subscribe(user => {
+      unsubscribeSnapshot?.();
+      unsubscribeSnapshot = null;
+
       if (!user) {
-        onError?.(new Error('É necessário iniciar sessão para gerir viagens.'));
+        onData([]);
         return;
       }
 
