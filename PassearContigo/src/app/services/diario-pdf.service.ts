@@ -43,7 +43,7 @@ export class DiarioPdfService extends PdfDocumentBase {
       viagem.local ? `Local: ${viagem.local}` : '',
       `Período: ${this.formatarData(viagem.dataInicio, 'Sem data')} - ${this.formatarData(viagem.dataFim, 'Sem data')}`,
       viagem.status ? `Estado: ${this.formatarStatus(viagem.status)}` : '',
-      `Dias no diario: ${dias.length}`,
+      `Dias no diário: ${dias.length}`,
       `POIs registados: ${dias.reduce((total, dia) => total + (dia.pontosInteresse || []).length, 0)}`,
       `Custo total: ${this.formatarValor(this.obterCustoTotal(dias, custos))} EUR`
     ].filter(Boolean).join('\n'), 11);
@@ -118,8 +118,8 @@ export class DiarioPdfService extends PdfDocumentBase {
       const detalhes = [
         poi.tipo || poi.categoria ? `Tipo: ${poi.tipo || poi.categoria}` : '',
         poi.endereco ? `Endereço: ${poi.endereco}` : '',
-        poi.horario ? `Horario: ${poi.horario}` : '',
-        poi.avaliacao ? `Avaliacao: ${poi.avaliacao}/5` : '',
+        poi.horario ? `Horário: ${poi.horario}` : '',
+        poi.avaliacao ? `Avaliação: ${poi.avaliacao}/5` : '',
         poi.url ? `Site: ${poi.url}` : '',
         this.temLocalização(poi) ? `Localização: ${poi.latitude}, ${poi.longitude}` : '',
         poi.descricao ? `Descrição: ${poi.descricao}` : '',

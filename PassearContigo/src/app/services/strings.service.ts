@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * StringsService
- * Gerencia todas as strings da aplicação
+ * Gere todas as strings da aplicação
  * Suporta múltiplos idiomas e interpolação de variáveis
  */
 @Injectable({
@@ -137,9 +137,9 @@ export class StringsService {
   }
 
   /**
-   * Obtém todas as strings de uma seção
-   * @param section - Nome da seção (ex: 'app', 'tabs', 'auth')
-   * @returns Objeto com todas as strings da seção
+   * Obtém todas as strings de uma secção
+   * @param section - Nome da secção (ex: 'app', 'tabs', 'auth')
+   * @returns Objeto com todas as strings da secção
    */
   getSection(section: string): Record<string, string> {
     return this.strings[section] || {};

@@ -3,7 +3,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 /**
  * CameraService
- * Gerencia funcionalidades de câmera do dispositivo
+ * Gere funcionalidades de câmara do dispositivo
  * Permite capturar fotos da câmera ou galeria
  */
 @Injectable({

@@ -72,7 +72,7 @@ export class NominatimService {
     });
 
     if (!response.ok) {
-      throw new Error('Nao foi possivel pesquisar locais pelo OpenStreetMap.');
+      throw new Error('Não foi possível pesquisar locais pelo OpenStreetMap.');
     }
 
     const data = await response.json() as NominatimSearchResponse[];
@@ -114,7 +114,7 @@ export class NominatimService {
     });
 
     if (!response.ok) {
-      throw new Error('Nao foi possivel obter o endereco pelo OpenStreetMap.');
+      throw new Error('Não foi possível obter o endereço pelo OpenStreetMap.');
     }
 
     const data = await response.json() as NominatimReverseResponse;
@@ -122,7 +122,7 @@ export class NominatimService {
     const nomeSugerido = this.obterNomeSugerido(data);
 
     if (!endereco && !nomeSugerido) {
-      throw new Error('Dados nao encontrados para estas coordenadas.');
+      throw new Error('Dados não encontrados para estas coordenadas.');
     }
 
     const resultado = { endereco, nomeSugerido };

@@ -274,7 +274,7 @@ export class POIService {
         try {
           await this.adicionarPoiNoFirestore(item.viagemId, item.diaId, item.poi);
         } catch (error) {
-          console.warn('Nao foi possivel sincronizar POI local:', error);
+          console.warn('Não foi possível sincronizar POI local:', error);
           aindaPendentes.push(item);
         }
       }
@@ -294,12 +294,12 @@ export class POIService {
     const viagem = await this.viagensService.getViagemByIdOnce(viagemId);
 
     if (!viagem || !viagem.dias) {
-      throw new Error('Viagem nao encontrada.');
+      throw new Error('Viagem não encontrada.');
     }
 
     const dia = viagem.dias.find(d => d.id === diaId);
     if (!dia) {
-      throw new Error('Dia nao encontrado.');
+      throw new Error('Dia não encontrado.');
     }
 
     const poiJaExiste = (dia.pontosInteresse || []).some(item => item.id === poi.id);

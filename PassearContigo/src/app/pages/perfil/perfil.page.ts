@@ -55,9 +55,9 @@ export class PerfilPage {
 
     try {
       await this.authService.login(email, password);
-      await this.mostrarToast('Sessao iniciada com sucesso.', 'success');
+      await this.mostrarToast('Sessão iniciada com sucesso.', 'success');
     } catch (error: any) {
-      await this.mostrarToast(error?.message || 'Erro ao iniciar sessao.', 'danger');
+      await this.mostrarToast(error?.message || 'Erro ao iniciar sessão.', 'danger');
     } finally {
       this.iniciandoSessao = false;
     }
@@ -91,9 +91,9 @@ export class PerfilPage {
 
     try {
       await this.authService.logout();
-      await this.mostrarToast('Sessao terminada.', 'success');
+      await this.mostrarToast('Sessão terminada.', 'success');
     } catch (error: any) {
-      await this.mostrarToast(error?.message || 'Erro ao terminar sessao.', 'danger');
+      await this.mostrarToast(error?.message || 'Erro ao terminar sessão.', 'danger');
     } finally {
       this.terminandoSessao = false;
     }
@@ -108,10 +108,10 @@ export class PerfilPage {
 
     try {
       await this.pushNotificationsService.ativarNotificacoes();
-      await this.mostrarToast('Notificacoes push ativadas.', 'success');
+      await this.mostrarToast('Notificações ativadas.', 'success');
     } catch (error: any) {
-      console.error('Erro ao ativar notificacoes push:', error);
-      await this.mostrarToast(error?.message || 'Erro ao ativar notificacoes.', 'danger');
+      console.error('Erro ao ativar notificações:', error);
+      await this.mostrarToast(error?.message || 'Erro ao ativar notificações.', 'danger');
     } finally {
       this.ativandoNotificacoes = false;
     }

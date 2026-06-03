@@ -40,7 +40,7 @@ type ReacaoPublicacaoPayload = Omit<ReacaoPublicacao, 'id'>;
 /**
  * PublicacoesService
  * Servico responsavel pelo CRUD de publicacoes no feed social.
- * Req. 15: Gerenciar publicacoes de viagens.
+ * Req. 15: Gerir publicações de viagens.
  */
 @Injectable({
   providedIn: 'root'
@@ -122,7 +122,7 @@ export class PublicacoesService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para ver publicacoes.'));
+        onError?.(new Error('É necessário iniciar sessão para ver publicações.'));
         return;
       }
 
@@ -144,12 +144,12 @@ export class PublicacoesService {
             onData(publicacoes);
           },
           (error) => {
-            console.error('Erro ao subscrever publicacoes:', error);
+            console.error('Erro ao subscrever publicações:', error);
             onError?.(error);
           }
         );
       } catch (error) {
-        console.error('Erro ao configurar subscricao de publicacoes:', error);
+        console.error('Erro ao configurar subscrição de publicações:', error);
         onError?.(error);
       }
     });
@@ -174,7 +174,7 @@ export class PublicacoesService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para gerir publicacoes.'));
+        onError?.(new Error('É necessário iniciar sessão para gerir publicações.'));
         return;
       }
 
@@ -196,12 +196,12 @@ export class PublicacoesService {
             onData(publicacoes);
           },
           (error) => {
-            console.error('Erro ao subscrever publicacoes do utilizador:', error);
+            console.error('Erro ao subscrever publicações do utilizador:', error);
             onError?.(error);
           }
         );
       } catch (error) {
-        console.error('Erro ao configurar subscricao de publicacoes:', error);
+        console.error('Erro ao configurar subscrição de publicações:', error);
         onError?.(error);
       }
     });
@@ -227,7 +227,7 @@ export class PublicacoesService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para ver publicacoes.'));
+        onError?.(new Error('É necessário iniciar sessão para ver publicações.'));
         return;
       }
 
@@ -250,12 +250,12 @@ export class PublicacoesService {
             onData(publicacoes);
           },
           (error) => {
-            console.error('Erro ao subscrever publicacoes da viagem:', error);
+            console.error('Erro ao subscrever publicações da viagem:', error);
             onError?.(error);
           }
         );
       } catch (error) {
-        console.error('Erro ao configurar subscricao de publicacoes da viagem:', error);
+        console.error('Erro ao configurar subscrição de publicações da viagem:', error);
         onError?.(error);
       }
     });
@@ -294,7 +294,7 @@ export class PublicacoesService {
               };
 
               if (!this.utilizadorPodeVerPublicacao(publicacao, user.uid, user.email || '')) {
-                observer.error(new Error('Nao tem permissao para ver esta publicacao.'));
+                observer.error(new Error('Não tem permissão para ver esta publicação.'));
                 return;
               }
 
@@ -336,12 +336,12 @@ export class PublicacoesService {
           onData(comentarios);
         },
         (error) => {
-          console.error('Erro ao subscrever comentarios da publicacao:', error);
+          console.error('Erro ao subscrever comentários da publicação:', error);
           onError?.(error);
         }
       );
     } catch (error) {
-      console.error('Erro ao configurar comentarios da publicacao:', error);
+      console.error('Erro ao configurar comentários da publicação:', error);
       onError?.(error);
       return null;
     }
@@ -367,12 +367,12 @@ export class PublicacoesService {
           onData(reacoes);
         },
         (error) => {
-          console.error('Erro ao subscrever reacoes da publicacao:', error);
+          console.error('Erro ao subscrever reações da publicação:', error);
           onError?.(error);
         }
       );
     } catch (error) {
-      console.error('Erro ao configurar reacoes da publicacao:', error);
+      console.error('Erro ao configurar reações da publicação:', error);
       onError?.(error);
       return null;
     }
@@ -477,7 +477,7 @@ export class PublicacoesService {
   async incrementarGostos(id: string): Promise<void> {
     const publicacao = await this.getPublicacaoByIdOnce(id);
     if (!publicacao) {
-      throw new Error('Publicacao nao encontrada.');
+      throw new Error('Publicação não encontrada.');
     }
 
     const db = getFirestore();
@@ -494,7 +494,7 @@ export class PublicacoesService {
     const textoLimpo = texto.trim();
 
     if (!textoLimpo) {
-      throw new Error('Escreva um comentario antes de enviar.');
+      throw new Error('Escreva um comentário antes de enviar.');
     }
 
     await this.garantirPodeInteragirComPublicacao(publicacaoId, user.uid, user.email || '');
@@ -553,7 +553,7 @@ export class PublicacoesService {
     const user = getAuth().currentUser;
 
     if (!user) {
-      throw new Error('E necessario iniciar sessao para gerir publicacoes.');
+      throw new Error('É necessário iniciar sessão para gerir publicações.');
     }
 
     return user;
@@ -566,12 +566,12 @@ export class PublicacoesService {
     const publicacaoSnapshot = await getDoc(publicacaoRef);
 
     if (!publicacaoSnapshot.exists()) {
-      throw new Error('Publicacao nao encontrada.');
+      throw new Error('Publicação não encontrada.');
     }
 
     const publicacao = publicacaoSnapshot.data() as PublicacaoPayload;
     if (publicacao.uidUtilizador !== user.uid) {
-      throw new Error('Esta publicacao nao pertence ao utilizador autenticado.');
+      throw new Error('Esta publicação não pertence ao utilizador autenticado.');
     }
   }
 
@@ -581,7 +581,7 @@ export class PublicacoesService {
     const publicacaoSnapshot = await getDoc(publicacaoRef);
 
     if (!publicacaoSnapshot.exists()) {
-      throw new Error('Publicacao nao encontrada.');
+      throw new Error('Publicação não encontrada.');
     }
 
     const publicacao = {
@@ -590,7 +590,7 @@ export class PublicacoesService {
     };
 
     if (!this.utilizadorPodeVerPublicacao(publicacao, uid, email)) {
-      throw new Error('Nao tem permissao para interagir com esta publicacao.');
+      throw new Error('Não tem permissão para interagir com esta publicação.');
     }
   }
 

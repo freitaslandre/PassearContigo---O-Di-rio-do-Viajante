@@ -29,7 +29,7 @@ export class PushNotificationsService {
       }
 
       this.registarTokenDoUtilizador(user.uid).catch(error => {
-        console.warn('Nao foi possivel registar token FCM:', error);
+        console.warn('Não foi possível registar token FCM:', error);
       });
     });
 
@@ -40,7 +40,7 @@ export class PushNotificationsService {
     const user = await this.afAuth.currentUser;
 
     if (!user) {
-      throw new Error('E necessario iniciar sessao para ativar notificacoes.');
+      throw new Error('É necessário iniciar sessão para ativar notificações.');
     }
 
     await this.registarTokenDoUtilizador(user.uid, true);
@@ -108,7 +108,7 @@ export class PushNotificationsService {
 
       const toast = await this.toastCtrl.create({
         header: notification.title || 'PassearContigo',
-        message: notification.body || 'Tem uma nova notificacao.',
+        message: notification.body || 'Tem uma nova notificação.',
         duration: 3500,
         position: 'top',
         color: 'secondary'

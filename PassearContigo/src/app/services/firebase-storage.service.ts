@@ -6,7 +6,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   providedIn: 'root'
 })
 export class FirebaseStorageService {
-  private readonly poiUploadTimeoutMs = 8000;
+  private readonly photoUploadTimeoutMs = 8000;
+  private readonly fallbackMaxLength = 700_000;
 
   async uploadViagemCover(viagemId: string, dataUrl: string, options: { optimize?: boolean } = {}): Promise<string> {
     const uid = getAuth().currentUser?.uid;
@@ -25,8 +26,17 @@ export class FirebaseStorageService {
     const path = `users/${uid}/viagens/${viagemId}/capa/${timestamp}.jpg`;
     const photoRef = ref(storage, path);
 
-    await uploadBytes(photoRef, blob, { contentType: 'image/jpeg' });
-    return getDownloadURL(photoRef);
+    try {
+      await this.withTimeout(
+        uploadBytes(photoRef, blob, { contentType: 'image/jpeg' }),
+        this.photoUploadTimeoutMs,
+        'Não foi possível guardar a capa no Storage agora.'
+      );
+      return getDownloadURL(photoRef);
+    } catch (error) {
+      console.warn('Upload da capa falhou; a usar foto local comprimida.', error);
+      return this.criarFallbackDataUrl(compressedDataUrl);
+    }
   }
 
   async uploadPoiPhoto(viagemId: string, diaId: string, poiId: string, dataUrl: string): Promise<string> {
@@ -36,7 +46,7 @@ export class FirebaseStorageService {
       throw new Error('É necessário iniciar sessão para guardar fotos.');
     }
 
-    const compressedDataUrl = await this.optimizeImage(dataUrl);
+    const compressedDataUrl = await this.optimizeImage(dataUrl, 720, 0.55);
     const blob = await this.dataUrlToBlob(compressedDataUrl);
 
     const storage = getStorage();
@@ -44,12 +54,17 @@ export class FirebaseStorageService {
     const path = `users/${uid}/viagens/${viagemId}/dias/${diaId}/pois/${poiId}/${timestamp}.jpg`;
     const photoRef = ref(storage, path);
 
-    await this.withTimeout(
-      uploadBytes(photoRef, blob, { contentType: 'image/jpeg' }),
-      this.poiUploadTimeoutMs,
-      'Não foi possível guardar a foto do POI agora.'
-    );
-    return getDownloadURL(photoRef);
+    try {
+      await this.withTimeout(
+        uploadBytes(photoRef, blob, { contentType: 'image/jpeg' }),
+        this.photoUploadTimeoutMs,
+        'Não foi possível guardar a foto do POI agora.'
+      );
+      return getDownloadURL(photoRef);
+    } catch (error) {
+      console.warn('Upload da foto do POI falhou; a usar foto local comprimida.', error);
+      return this.criarFallbackDataUrl(compressedDataUrl);
+    }
   }
 
   async optimizeImage(dataUrl: string, maxWidth = 1024, quality = 0.7): Promise<string> {
@@ -104,5 +119,19 @@ export class FirebaseStorageService {
     });
 
     return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+  }
+
+  private async criarFallbackDataUrl(dataUrl: string): Promise<string> {
+    let fallback = dataUrl;
+
+    if (fallback.length > this.fallbackMaxLength) {
+      fallback = await this.optimizeImage(fallback, 640, 0.48);
+    }
+
+    if (fallback.length > this.fallbackMaxLength) {
+      throw new Error('A foto é demasiado pesada para guardar offline. Escolha uma foto mais leve.');
+    }
+
+    return fallback;
   }
 }

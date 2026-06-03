@@ -74,6 +74,19 @@
         </div>
       </div>
 
+      <div class="status-control" *ngIf="podeEditarViagem">
+        <ion-item lines="none">
+          <ion-icon slot="start" name="flag-outline"></ion-icon>
+          <ion-label>Estado da viagem</ion-label>
+          <ion-select name="status" [(ngModel)]="status" interface="popover" aria-label="Estado da viagem">
+            <ion-select-option value="planejada">Planeada</ion-select-option>
+            <ion-select-option value="em-andamento">Em curso</ion-select-option>
+            <ion-select-option value="concluida">Concluída</ion-select-option>
+            <ion-select-option value="cancelada">Cancelada</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
       <div class="summary-actions">
         <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDiario()">
           <ion-icon slot="start" name="book-outline"></ion-icon>
@@ -92,106 +105,42 @@
       </div>
     </section>
 
-    <ion-card *ngIf="podeGerirViagem" class="publicacao-card">
-      <ion-card-header>
-        <div class="publicacao-header">
-          <div>
-            <ion-card-title>Partilha da viagem</ion-card-title>
-            <ion-card-subtitle>
-              {{ viagem.publicada ? 'Publicada no feed' : 'Ainda não está no feed' }}
-            </ion-card-subtitle>
-          </div>
-          <ion-badge [color]="viagem.publicada ? 'success' : 'medium'">
-            {{ viagem.publicada ? 'No feed' : 'Não publicada' }}
-          </ion-badge>
+    <section *ngIf="podeGerirViagem" class="feed-share-panel">
+      <div class="feed-share-top">
+        <div class="feed-share-icon">
+          <ion-icon name="megaphone-outline"></ion-icon>
         </div>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item lines="full">
-          <ion-label position="stacked">Texto da publicação</ion-label>
-          <ion-textarea
-            name="textoPublicacao"
-            autoGrow="true"
-            [(ngModel)]="textoPublicacao"
-            placeholder="Escreva uma pequena descrição para o feed"
-          ></ion-textarea>
-        </ion-item>
+        <div class="feed-share-text">
+          <h2>Feed</h2>
+          <p>{{ viagem.publicada ? 'Esta viagem está visível para todos.' : 'Partilhe esta viagem no feed público.' }}</p>
+        </div>
+        <ion-badge [color]="viagem.publicada ? 'success' : 'medium'">
+          {{ viagem.publicada ? 'Publicado' : 'Fora do feed' }}
+        </ion-badge>
+      </div>
 
-        <ion-button expand="block" color="secondary" (click)="publicarViagem()" [disabled]="publicando || guardando">
+      <ion-textarea
+        name="textoPublicacao"
+        class="feed-share-note"
+        autoGrow="true"
+        rows="2"
+        [(ngModel)]="textoPublicacao"
+        placeholder="Texto opcional para o feed"
+      ></ion-textarea>
+
+      <div class="feed-share-actions">
+        <ion-button color="secondary" (click)="publicarViagem()" [disabled]="publicando || guardando">
           <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
-          <ion-icon *ngIf="!publicando" slot="start" name="megaphone-outline"></ion-icon>
-          {{ viagem.publicada ? 'Atualizar publicação' : 'Partilhar no feed' }}
+          <ion-icon *ngIf="!publicando" slot="start" name="send-outline"></ion-icon>
+          {{ viagem.publicada ? 'Atualizar' : 'Partilhar no feed' }}
         </ion-button>
 
-        <ion-button *ngIf="viagem.publicada" expand="block" color="medium" fill="outline" (click)="removerDoFeed()" [disabled]="publicando || guardando">
-          <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
-          <ion-icon *ngIf="!publicando" slot="start" name="remove-circle-outline"></ion-icon>
-          Remover do feed
+        <ion-button *ngIf="viagem.publicada" color="medium" fill="outline" (click)="removerDoFeed()" [disabled]="publicando || guardando">
+          <ion-icon slot="start" name="remove-circle-outline"></ion-icon>
+          Remover
         </ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Dados da viagem</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list lines="full">
-          <ion-item>
-            <ion-label position="stacked">Título</ion-label>
-            <ion-input
-              name="titulo"
-              type="text"
-              [(ngModel)]="titulo"
-              [disabled]="!podeEditarViagem"
-              placeholder="Ex: Lisboa 2026"
-            ></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Destino</ion-label>
-            <ion-input
-              name="local"
-              type="text"
-              [(ngModel)]="local"
-              [disabled]="!podeEditarViagem"
-              placeholder="Ex: Lisboa"
-            ></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Descrição</ion-label>
-            <ion-textarea
-              name="descricao"
-              autoGrow="true"
-              [(ngModel)]="descricao"
-              [disabled]="!podeEditarViagem"
-              placeholder="Notas gerais da viagem"
-            ></ion-textarea>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Estado</ion-label>
-            <ion-select name="status" [(ngModel)]="status" interface="popover" [disabled]="!podeEditarViagem">
-              <ion-select-option value="planejada">Planeada</ion-select-option>
-              <ion-select-option value="em-andamento">Em curso</ion-select-option>
-              <ion-select-option value="concluida">Concluída</ion-select-option>
-              <ion-select-option value="cancelada">Cancelada</ion-select-option>
-            </ion-select>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Data de início</ion-label>
-            <ion-input name="dataInicio" type="date" [(ngModel)]="dataInicio" [disabled]="!podeEditarViagem"></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="stacked">Data de fim</ion-label>
-            <ion-input name="dataFim" type="date" [(ngModel)]="dataFim" [disabled]="!podeEditarViagem"></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+      </div>
+    </section>
 
     <section class="dias-section">
       <div class="section-header">
@@ -199,7 +148,7 @@
           <h2>Lista de dias</h2>
           <p>Organize o itinerário dia a dia.</p>
         </div>
-        <ion-button *ngIf="podeEditarViagem" fill="clear" color="primary" (click)="adicionarDia()">
+        <ion-button *ngIf="podeEditarViagem" fill="clear" color="primary" (click)="adicionarDia()" [disabled]="guardando">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar
         </ion-button>
@@ -208,7 +157,7 @@
       <ion-card *ngIf="dias.length === 0" class="empty-days">
         <ion-card-content>
           <p>Esta viagem ainda não tem dias.</p>
-          <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarDia()">
+          <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarDia()" [disabled]="guardando">
             Criar primeiro dia
           </ion-button>
         </ion-card-content>
@@ -247,7 +196,7 @@
               <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)" aria-label="Itinerário">
                 <ion-icon slot="icon-only" name="map-outline"></ion-icon>
               </ion-button>
-              <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" aria-label="Remover dia">
+              <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" [disabled]="guardando" aria-label="Remover dia">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
               <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" aria-label="Editar dia">

@@ -90,7 +90,7 @@
       <small *ngIf="dataFim?.hasError('required')">Data de fim e obrigatoria</small>
     </ion-text>
     <ion-text color="danger" *ngIf="form.hasError('datasInvalidas')">
-      <small>A data de fim nao pode ser anterior a data de inicio</small>
+      <small>A data de fim não pode ser anterior à data de início</small>
     </ion-text>
 
     <ion-note color="medium" class="dias-note" *ngIf="numeroDias > 0">

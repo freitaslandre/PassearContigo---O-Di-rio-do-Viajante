@@ -42,7 +42,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
 
     this.viagemId = this.route.snapshot.paramMap.get('id') || this.obterParametroDaRota('id') || '';
     if (!this.viagemId) {
-      this.erro = 'ID de viagem invalido.';
+      this.erro = 'ID de viagem inválido.';
       this.carregando = false;
       return;
     }
@@ -84,7 +84,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
       return;
     }
 
-    await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
+    await this.mostrarToast('Não foi possível capturar a foto.', 'warning');
   }
 
   async escolherFotoCapaDaGaleria() {
@@ -96,12 +96,12 @@ export class EditarViagemPage implements OnInit, OnDestroy {
       return;
     }
 
-    await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
+    await this.mostrarToast('Não foi possível selecionar a foto.', 'warning');
   }
 
   async guardar() {
     if (!this.podeEditarViagem) {
-      await this.mostrarToast('Sem permissao para editar esta viagem.', 'warning');
+      await this.mostrarToast('Sem permissão para editar esta viagem.', 'warning');
       return;
     }
 
@@ -201,7 +201,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
         this.carregando = false;
 
         if (!viagem) {
-          this.erro = 'Viagem nao encontrada.';
+          this.erro = 'Viagem não encontrada.';
           return;
         }
 

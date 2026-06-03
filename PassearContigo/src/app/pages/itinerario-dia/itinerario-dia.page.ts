@@ -43,7 +43,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
       const diaId = params.get('diaId');
 
       if (!viagemId || !diaId) {
-        this.erro = 'ID de viagem ou dia invalido.';
+        this.erro = 'ID de viagem ou dia inválido.';
         this.carregando = false;
         return;
       }
@@ -213,7 +213,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     const atual = pois[index];
 
     if (!this.temCoordenadas(anterior) || !this.temCoordenadas(atual)) {
-      return 'Distancia indisponivel';
+      return 'Distância indisponível';
     }
 
     const distanciaKm = this.geolocationService.calculateDistance(
@@ -224,7 +224,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     );
     const minutos = Math.max(1, Math.round((distanciaKm / 5) * 60));
 
-    return `${this.formatarDistancia(distanciaKm)} · ${this.formatarDuracao(minutos)} a pe`;
+    return `${this.formatarDistancia(distanciaKm)} · ${this.formatarDuracao(minutos)} a pé`;
   }
 
   private carregarDia() {
@@ -236,7 +236,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
     this.viagemSub = this.viagensService.getViagemById(this.viagemId).subscribe({
       next: async (viagem) => {
         if (!viagem) {
-          this.erro = 'Viagem nao encontrada.';
+          this.erro = 'Viagem não encontrada.';
           this.carregando = false;
           return;
         }
@@ -250,7 +250,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
         const diaEncontrado = this.dias[this.diaAtualIndex];
 
         if (!diaEncontrado) {
-          this.erro = 'Dia nao encontrado.';
+          this.erro = 'Dia não encontrado.';
           this.carregando = false;
           return;
         }
@@ -259,9 +259,9 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
         this.carregando = false;
       },
       error: (err) => {
-        this.erro = err?.message || 'Erro ao carregar itinerario.';
+        this.erro = err?.message || 'Erro ao carregar itinerário.';
         this.carregando = false;
-        console.error('Erro ao carregar itinerario do dia:', err);
+        console.error('Erro ao carregar itinerário do dia:', err);
       }
     });
   }
@@ -292,7 +292,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
       const viagem = await this.viagensService.getViagemByIdOnce(this.viagemId);
 
       if (!viagem?.dias) {
-        throw new Error('Viagem nao encontrada.');
+        throw new Error('Viagem não encontrada.');
       }
 
       const dias = viagem.dias.map(dia => {
@@ -307,7 +307,7 @@ export class ItinerarioDiaPage implements OnInit, OnDestroy {
       });
 
       await this.viagensService.updateViagem(this.viagemId, { dias } as Partial<Viagem>);
-      await this.mostrarToast('Ordem do itinerario guardada.', 'success');
+      await this.mostrarToast('Ordem do itinerário guardada.', 'success');
     } catch (error: any) {
       console.error('Erro ao guardar ordem dos POIs:', error);
       await this.mostrarToast(error?.message || 'Erro ao guardar ordem.', 'danger');

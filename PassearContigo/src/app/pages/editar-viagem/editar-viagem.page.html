@@ -22,7 +22,7 @@
     </ion-card-content>
   </ion-card>
 
-  <form *ngIf="!carregando && !erro" [formGroup]="form" (ngSubmit)="guardar()">
+  <form *ngIf="!carregando && !erro" class="editar-viagem-form" [formGroup]="form" (ngSubmit)="guardar()">
     <div class="foto-capa-section">
       <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
         <img [src]="fotoCapaPreview" alt="Foto de capa">
@@ -63,7 +63,7 @@
 
     <ion-item>
       <ion-label position="stacked">Descrição</ion-label>
-      <ion-textarea formControlName="descricao" autoGrow="true"></ion-textarea>
+      <ion-textarea formControlName="descricao" rows="3" autoGrow="true"></ion-textarea>
     </ion-item>
 
     <ion-item>
@@ -76,21 +76,27 @@
       </ion-select>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Data de Início *</ion-label>
-      <ion-input formControlName="dataInicio" type="date"></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="dataInicio?.invalid && dataInicio?.touched">
-      <small *ngIf="dataInicio?.hasError('required')">Data de início é obrigatória</small>
-    </ion-text>
+    <div class="date-grid">
+      <div>
+        <ion-item>
+          <ion-label position="stacked">Data de Início *</ion-label>
+          <ion-input formControlName="dataInicio" type="date"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="dataInicio?.invalid && dataInicio?.touched">
+          <small *ngIf="dataInicio?.hasError('required')">Data de início é obrigatória</small>
+        </ion-text>
+      </div>
 
-    <ion-item>
-      <ion-label position="stacked">Data de Fim *</ion-label>
-      <ion-input formControlName="dataFim" type="date"></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="dataFim?.invalid && dataFim?.touched">
-      <small *ngIf="dataFim?.hasError('required')">Data de fim é obrigatória</small>
-    </ion-text>
+      <div>
+        <ion-item>
+          <ion-label position="stacked">Data de Fim *</ion-label>
+          <ion-input formControlName="dataFim" type="date"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="dataFim?.invalid && dataFim?.touched">
+          <small *ngIf="dataFim?.hasError('required')">Data de fim é obrigatória</small>
+        </ion-text>
+      </div>
+    </div>
     <ion-text color="danger" *ngIf="form.hasError('datasInvalidas')">
       <small>A data de fim não pode ser anterior à data de início</small>
     </ion-text>

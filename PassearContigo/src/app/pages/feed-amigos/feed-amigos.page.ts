@@ -109,8 +109,8 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
     try {
       await this.publicacoesService.alternarReacao(publicacao.id);
     } catch (error: any) {
-      console.error('Erro ao reagir a publicacao:', error);
-      this.erro = error?.message || 'Erro ao reagir a publicacao.';
+      console.error('Erro ao reagir à publicação:', error);
+      this.erro = error?.message || 'Erro ao reagir à publicação.';
     } finally {
       this.reagindo[publicacao.id] = false;
     }
@@ -128,8 +128,8 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
       await this.publicacoesService.adicionarComentario(publicacao.id, texto);
       this.comentarioNovo[publicacao.id] = '';
     } catch (error: any) {
-      console.error('Erro ao comentar publicacao:', error);
-      this.erro = error?.message || 'Erro ao comentar publicacao.';
+      console.error('Erro ao comentar publicação:', error);
+      this.erro = error?.message || 'Erro ao comentar publicação.';
     } finally {
       this.comentando[publicacao.id] = false;
     }
@@ -171,7 +171,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
         const unsubscribe = this.publicacoesService.subscribeToComentariosPublicacao(
           publicacao.id,
           comentarios => this.comentariosPorPublicacao[publicacao.id] = comentarios,
-          error => console.warn('Não foi possível carregar comentarios:', error)
+          error => console.warn('Não foi possível carregar comentários:', error)
         );
 
         if (unsubscribe) {
@@ -183,7 +183,7 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
         const unsubscribe = this.publicacoesService.subscribeToReacoesPublicacao(
           publicacao.id,
           reacoes => this.reacoesPorPublicacao[publicacao.id] = reacoes,
-          error => console.warn('Não foi possível carregar reacoes:', error)
+          error => console.warn('Não foi possível carregar reações:', error)
         );
 
         if (unsubscribe) {

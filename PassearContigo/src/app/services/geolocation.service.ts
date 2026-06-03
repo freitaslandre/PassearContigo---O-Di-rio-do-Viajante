@@ -3,7 +3,7 @@ import { Geolocation, GeolocationPosition } from '@capacitor/geolocation';
 
 /**
  * GeolocationService
- * Gerencia funcionalidades de geolocalização do dispositivo
+ * Gere funcionalidades de geolocalização do dispositivo
  * Permite obter coordenadas GPS em tempo real
  */
 @Injectable({

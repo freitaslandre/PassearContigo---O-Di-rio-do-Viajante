@@ -33,7 +33,7 @@ export class AuthService {
       const user = credential.user;
 
       if (!user) {
-        throw new Error('Erro interno: nao foi possivel obter o utilizador apos o registo.');
+        throw new Error('Erro interno: não foi possível obter o utilizador após o registo.');
       }
 
       const userDoc = firebase.firestore().doc(`users/${user.uid}`);

@@ -72,7 +72,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     this.routeSub = this.route.paramMap.subscribe(params => {
       const id = params.get('id') || this.obterParametroDaRota('id');
       if (!id) {
-        this.erro = 'ID de viagem invalido.';
+        this.erro = 'ID de viagem inválido.';
         this.carregando = false;
         return;
       }
@@ -215,8 +215,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  adicionarDia() {
-    if (!this.podeEditarViagem) return;
+  async adicionarDia() {
+    if (!this.podeEditarViagem || this.guardando) return;
 
     const ultimaData = this.dias.length > 0
       ? this.dias[this.dias.length - 1].data
@@ -237,16 +237,51 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
 
     this.dias.push(novoDia);
     this.diaExpandidoId = novoDia.id;
+
+    this.guardando = true;
+
+    try {
+      await this.persistirDias();
+      await this.mostrarToast('Dia adicionado à viagem.', 'success');
+    } catch (error: any) {
+      this.dias = this.dias.filter(dia => dia.id !== novoDia.id);
+      this.diaExpandidoId = null;
+      console.error('Erro ao adicionar dia:', error);
+      await this.mostrarToast(error?.message || 'Erro ao adicionar dia.', 'danger');
+    } finally {
+      this.guardando = false;
+    }
   }
 
-  removerDia(index: number) {
-    if (!this.podeEditarViagem) return;
+  async removerDia(index: number) {
+    if (!this.podeEditarViagem || this.guardando) return;
 
     const diaRemovido = this.dias[index];
+    const diasAntes = [...this.dias];
+    const diaExpandidoAntes = this.diaExpandidoId;
+
+    if (!diaRemovido) {
+      return;
+    }
+
     this.dias.splice(index, 1);
 
     if (diaRemovido?.id === this.diaExpandidoId) {
       this.diaExpandidoId = null;
+    }
+
+    this.guardando = true;
+
+    try {
+      await this.persistirDias();
+      await this.mostrarToast('Dia removido da viagem.', 'success');
+    } catch (error: any) {
+      this.dias = diasAntes;
+      this.diaExpandidoId = diaExpandidoAntes;
+      console.error('Erro ao remover dia:', error);
+      await this.mostrarToast(error?.message || 'Erro ao remover dia.', 'danger');
+    } finally {
+      this.guardando = false;
     }
   }
 
@@ -493,7 +528,7 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
         this.carregando = false;
 
         if (!viagem) {
-          this.erro = 'Viagem nao encontrada ou nao pertence ao utilizador.';
+          this.erro = 'Viagem não encontrada ou não pertence ao utilizador.';
           return;
         }
 

@@ -19,16 +19,16 @@ export function ativarPersistenciaOfflineFirestore(_app: FirebaseApp): () => Pro
       await enableIndexedDbPersistence(getFirestore());
     } catch (error: any) {
       if (error?.code === 'failed-precondition') {
-        console.warn('Persistencia offline do Firestore ja esta ativa noutra aba.');
+        console.warn('Persistência offline do Firestore já está ativa noutra aba.');
         return;
       }
 
       if (error?.code === 'unimplemented') {
-        console.warn('Este browser nao suporta persistencia offline do Firestore.');
+        console.warn('Este browser não suporta persistência offline do Firestore.');
         return;
       }
 
-      console.warn('Nao foi possivel ativar a persistencia offline do Firestore:', error);
+      console.warn('Não foi possível ativar a persistência offline do Firestore:', error);
     }
   };
 }

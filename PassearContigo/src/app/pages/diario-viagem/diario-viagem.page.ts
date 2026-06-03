@@ -55,7 +55,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
     const viagemId = this.route.snapshot.paramMap.get('id') || this.obterParametroDaRota('id');
 
     if (!viagemId) {
-      this.erro = 'ID de viagem invalido.';
+      this.erro = 'ID de viagem inválido.';
       this.carregando = false;
       return;
     }
@@ -357,15 +357,15 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
       await this.pdfShareService.sharePdf(pdf, {
         title: this.viagem.titulo || 'Diário da viagem',
         text: 'PDF do diario completo da viagem.',
-        dialogTitle: 'Partilhar diario'
+        dialogTitle: 'Partilhar diário'
       });
     } catch (error: any) {
       if (error?.message?.toLowerCase().includes('cancel')) {
         return;
       }
 
-      console.error('Erro ao partilhar PDF do diario:', error);
-      await this.mostrarToast(error?.message || 'Erro ao partilhar PDF do diario.', 'danger');
+      console.error('Erro ao partilhar PDF do diário:', error);
+      await this.mostrarToast(error?.message || 'Erro ao partilhar PDF do diário.', 'danger');
     } finally {
       this.partilhandoPdf = false;
     }
@@ -383,7 +383,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
         this.viagem = viagem;
 
         if (!viagem) {
-          this.erro = 'Viagem nao encontrada.';
+          this.erro = 'Viagem não encontrada.';
           this.dias = [];
           return;
         }
@@ -401,8 +401,8 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
       },
       (error) => {
         this.carregando = false;
-        this.erro = error?.message || 'Erro ao carregar diario.';
-        console.error('Erro ao carregar diario:', error);
+        this.erro = error?.message || 'Erro ao carregar diário.';
+        console.error('Erro ao carregar diário:', error);
       }
     );
 
@@ -413,7 +413,7 @@ export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
         this.custosFirestore = custos;
       },
       (error) => {
-        console.warn('Não foi possível carregar custos do diario:', error);
+        console.warn('Não foi possível carregar custos do diário:', error);
         this.custosFirestore = [];
       }
     );

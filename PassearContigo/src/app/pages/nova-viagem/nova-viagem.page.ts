@@ -113,7 +113,7 @@ export class NovaViagemPage implements OnInit {
       return;
     }
 
-    await this.mostrarToast('Nao foi possivel capturar a foto.', 'warning');
+    await this.mostrarToast('Não foi possível capturar a foto.', 'warning');
   }
 
   async escolherFotoCapaDaGaleria() {
@@ -124,7 +124,7 @@ export class NovaViagemPage implements OnInit {
       return;
     }
 
-    await this.mostrarToast('Nao foi possivel selecionar a foto.', 'warning');
+    await this.mostrarToast('Não foi possível selecionar a foto.', 'warning');
   }
 
   async criarViagem() {

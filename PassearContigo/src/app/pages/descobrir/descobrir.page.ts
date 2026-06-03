@@ -62,7 +62,7 @@ export class DescobrirPage implements OnInit, OnDestroy {
         this.atualizarSugestoesAutomaticas();
       },
       error: error => {
-        console.warn('Nao foi possivel carregar viagens para descobrir:', error);
+        console.warn('Não foi possível carregar viagens para descobrir:', error);
       }
     });
   }
@@ -175,14 +175,14 @@ export class DescobrirPage implements OnInit, OnDestroy {
       await this.poiService.adicionarPOI(destino.viagemId, destino.diaId, poi);
 
       const toast = await this.toastCtrl.create({
-        message: `${local.nome} adicionado ao itinerario.`,
+        message: `${local.nome} adicionado ao itinerário.`,
         duration: 1800,
         color: 'success'
       });
       await toast.present();
     } catch (error: any) {
       const toast = await this.toastCtrl.create({
-        message: error?.message || 'Nao foi possivel adicionar o local ao itinerario.',
+        message: error?.message || 'Não foi possível adicionar o local ao itinerário.',
         duration: 2500,
         color: 'danger'
       });

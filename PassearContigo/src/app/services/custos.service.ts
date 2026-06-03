@@ -17,7 +17,7 @@ type NovoCusto = CustoPayload & Partial<Pick<Custo, 'id'>>;
 /**
  * CustosService
  * Servico responsavel pelo CRUD de custos na colecao "custos" do Firestore.
- * Req. 15: Gerenciar custos de viagens
+ * Req. 15: Gerir custos de viagens
  */
 @Injectable({
   providedIn: 'root'
@@ -180,7 +180,7 @@ export class CustosService {
 
     const authUnsubscribe = this.afAuth.authState.subscribe(user => {
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para gerir custos.'));
+        onError?.(new Error('É necessário iniciar sessão para gerir custos.'));
         return;
       }
 
@@ -227,7 +227,7 @@ export class CustosService {
     const user = auth.currentUser;
 
     if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir custos.'));
+      onError?.(new Error('É necessário iniciar sessão para gerir custos.'));
       return null;
     }
 
@@ -276,7 +276,7 @@ export class CustosService {
     const user = auth.currentUser;
 
     if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir custos.'));
+      onError?.(new Error('É necessário iniciar sessão para gerir custos.'));
       return null;
     }
 
@@ -325,7 +325,7 @@ export class CustosService {
     const user = auth.currentUser;
 
     if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir custos.'));
+      onError?.(new Error('É necessário iniciar sessão para gerir custos.'));
       return null;
     }
 
@@ -376,7 +376,7 @@ export class CustosService {
     const user = auth.currentUser;
 
     if (!user) {
-      onError?.(new Error('E necessario iniciar sessao para gerir custos.'));
+      onError?.(new Error('É necessário iniciar sessão para gerir custos.'));
       return null;
     }
 
@@ -452,7 +452,7 @@ export class CustosService {
           const data = snapshot.data() as CustoPayload;
 
           if (data.uidUtilizador !== user.uid) {
-            observer.error(new Error('Este custo nao pertence ao utilizador autenticado.'));
+            observer.error(new Error('Este custo não pertence ao utilizador autenticado.'));
             return;
           }
 
@@ -680,7 +680,7 @@ export class CustosService {
     const user = getAuth().currentUser;
 
     if (!user) {
-      throw new Error('E necessario iniciar sessao para gerir custos.');
+      throw new Error('É necessário iniciar sessão para gerir custos.');
     }
 
     return user.uid;
@@ -693,13 +693,13 @@ export class CustosService {
     const custoSnapshot = await getDoc(custoRef);
 
     if (!custoSnapshot.exists()) {
-      throw new Error('Custo nao encontrado.');
+      throw new Error('Custo não encontrado.');
     }
 
     const custoDoc = custoSnapshot.data() as CustoPayload;
 
     if (custoDoc.uidUtilizador !== uid) {
-      throw new Error('Este custo nao pertence ao utilizador autenticado.');
+      throw new Error('Este custo não pertence ao utilizador autenticado.');
     }
   }
 

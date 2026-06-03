@@ -205,7 +205,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     } catch (error) {
       if (pesquisaId === this.pesquisaSugestaoAtual) {
         this.sugestoesLocais = [];
-        this.erroSugestoes = 'Nao foi possivel carregar sugestoes agora.';
+        this.erroSugestoes = 'Não foi possível carregar sugestões agora.';
       }
     } finally {
       if (pesquisaId === this.pesquisaSugestaoAtual) {
@@ -241,7 +241,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const toast = await this.toastCtrl.create({
-      message: 'Nao foi possivel capturar a foto.',
+      message: 'Não foi possível capturar a foto.',
       duration: 2000,
       color: 'warning'
     });
@@ -257,7 +257,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const toast = await this.toastCtrl.create({
-      message: 'Nao foi possivel selecionar a foto.',
+      message: 'Não foi possível selecionar a foto.',
       duration: 2000,
       color: 'warning'
     });
@@ -297,8 +297,8 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
 
     if (!this.poi.nome?.trim()) {
       const alert = await this.alertCtrl.create({
-        header: 'Formulário Inválido',
-        message: 'Por favor preencha o nome do ponto de interesse.',
+        header: 'Formulário inválido',
+        message: 'Preencha o nome do ponto de interesse.',
         buttons: ['OK']
       });
       await alert.present();
@@ -310,7 +310,7 @@ export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const loader = await this.loadingCtrl.create({
-      message: 'Adicionando ponto de interesse...'
+      message: 'A adicionar ponto de interesse...'
     });
     await loader.present();
 

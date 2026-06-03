@@ -84,7 +84,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     const viagemId = this.route.snapshot.paramMap.get('id') || this.obterParametroDaRota('id');
 
     if (!viagemId) {
-      this.erro = 'ID de viagem invalido.';
+      this.erro = 'ID de viagem inválido.';
       this.carregando = false;
       return;
     }
@@ -250,7 +250,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
 
       await this.viagensService.updateViagem(this.viagem.id, { fotosAlbum });
     } catch (error: any) {
-      console.warn('Importacao de fotos cancelada ou falhou:', error);
+      console.warn('Importação de fotos cancelada ou falhou:', error);
     } finally {
       this.importando = false;
       this.cdr.markForCheck();
@@ -263,13 +263,13 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     const fotosEditaveis = this.obterFotosEditaveisSelecionadas();
 
     if (!this.viagem || fotosEditaveis.length === 0) {
-      await this.mostrarToast('Selecione fotos importadas para o album.', 'warning');
+      await this.mostrarToast('Selecione fotos importadas para o álbum.', 'warning');
       return;
     }
 
     const alert = await this.alertCtrl.create({
       header: 'Eliminar fotos',
-      message: `Eliminar ${fotosEditaveis.length} foto(s) do album? Esta acao nao pode ser anulada.`,
+      message: `Eliminar ${fotosEditaveis.length} foto(s) do álbum? Esta ação não pode ser anulada.`,
       buttons: [
         {
           text: 'Cancelar',
@@ -294,13 +294,13 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     const fotosEditaveis = this.obterFotosEditaveisSelecionadas();
 
     if (!this.viagem || fotosEditaveis.length === 0) {
-      await this.mostrarToast('Selecione fotos importadas para o album.', 'warning');
+      await this.mostrarToast('Selecione fotos importadas para o álbum.', 'warning');
       return;
     }
 
     const pois = this.obterOpcoesPoi(this.viagem);
     if (pois.length === 0) {
-      await this.mostrarToast('Esta viagem ainda nao tem POIs para associar.', 'warning');
+      await this.mostrarToast('Esta viagem ainda não tem POIs para associar.', 'warning');
       return;
     }
 
@@ -358,7 +358,7 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
         this.viagem = viagem;
 
         if (!viagem) {
-          this.erro = 'Viagem nao encontrada.';
+          this.erro = 'Viagem não encontrada.';
           this.atualizarFotos([]);
           return;
         }
@@ -369,8 +369,8 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
       },
       (error) => {
         this.carregando = false;
-        this.erro = error?.message || 'Erro ao carregar album.';
-        console.error('Erro ao carregar album:', error);
+        this.erro = error?.message || 'Erro ao carregar álbum.';
+        console.error('Erro ao carregar álbum:', error);
         this.cdr.markForCheck();
       }
     );
@@ -417,9 +417,9 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
       await this.viagensService.updateViagem(this.viagem.id, { fotosAlbum });
       ids.forEach(id => this.fotosSelecionadas.delete(id));
       this.cancelarSelecao();
-      await this.mostrarToast('Fotos eliminadas do album.', 'success');
+      await this.mostrarToast('Fotos eliminadas do álbum.', 'success');
     } catch (error: any) {
-      console.error('Erro ao eliminar fotos do album:', error);
+      console.error('Erro ao eliminar fotos do álbum:', error);
       await this.mostrarToast(error?.message || 'Erro ao eliminar fotos.', 'danger');
     }
   }

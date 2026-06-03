@@ -71,7 +71,7 @@ export class ViagensService {
 
     const authUnsubscribe = this.afAuth.authState.subscribe(user => {
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+        onError?.(new Error('É necessário iniciar sessão para gerir viagens.'));
         return;
       }
 
@@ -121,7 +121,7 @@ export class ViagensService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para ver o feed.'));
+        onError?.(new Error('É necessário iniciar sessão para ver o feed.'));
         return;
       }
 
@@ -171,7 +171,7 @@ export class ViagensService {
       unsubscribeSnapshot = null;
 
       if (!user) {
-        onError?.(new Error('E necessario iniciar sessao para gerir viagens.'));
+        onError?.(new Error('É necessário iniciar sessão para gerir viagens.'));
         return;
       }
 
@@ -190,7 +190,7 @@ export class ViagensService {
             const data = snapshot.data() as ViagemPayload;
 
             if (!this.utilizadorPodeAbrirViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
-              onError?.(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
+              onError?.(new Error('Esta viagem não pertence ao utilizador autenticado.'));
               return;
             }
 
@@ -217,41 +217,42 @@ export class ViagensService {
    * Obtem uma viagem pelo ID em tempo real, apenas se pertencer ao utilizador autenticado.
    */
   getViagemById(id: string): Observable<Viagem | undefined> {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      return of(undefined);
-    }
-
-    const db = getFirestore();
-    const docRef = doc(db, this.collectionName, id);
-
-    return new Observable(observer => {
-      const unsubscribe = onSnapshot(
-        docRef,
-        (snapshot) => {
-          if (!snapshot.exists()) {
-            observer.next(undefined);
-            return;
-          }
-
-          const data = snapshot.data() as ViagemPayload;
-
-          if (!this.utilizadorPodeAbrirViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
-            observer.error(new Error('Esta viagem nao pertence ao utilizador autenticado.'));
-            return;
-          }
-
-          observer.next({ id: snapshot.id, ...data });
-        },
-        (error) => {
-          observer.error(error);
+    return this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (!user) {
+          return of(undefined);
         }
-      );
 
-      return () => unsubscribe();
-    });
+        const db = getFirestore();
+        const docRef = doc(db, this.collectionName, id);
+
+        return new Observable<Viagem | undefined>(observer => {
+          const unsubscribe = onSnapshot(
+            docRef,
+            (snapshot) => {
+              if (!snapshot.exists()) {
+                observer.next(undefined);
+                return;
+              }
+
+              const data = snapshot.data() as ViagemPayload;
+
+              if (!this.utilizadorPodeAbrirViagem({ id: snapshot.id, ...data }, user.uid, user.email || '')) {
+                observer.error(new Error('Esta viagem não pertence ao utilizador autenticado.'));
+                return;
+              }
+
+              observer.next({ id: snapshot.id, ...data });
+            },
+            (error) => {
+              observer.error(error);
+            }
+          );
+
+          return () => unsubscribe();
+        });
+      })
+    );
   }
 
   /**
@@ -291,7 +292,7 @@ export class ViagensService {
     const fim = this.normalizarData(dataFim);
 
     if (fim < inicio) {
-      throw new Error('A data de fim nao pode ser anterior a data de inicio.');
+      throw new Error('A data de fim não pode ser anterior à data de início.');
     }
 
     const dias: Dia[] = [];
@@ -442,7 +443,7 @@ export class ViagensService {
       const partesData = data.split('-').map(Number);
 
       if (partesData.length !== 3 || partesData.some(parte => Number.isNaN(parte))) {
-        throw new Error('Data invalida. Use o formato YYYY-MM-DD.');
+        throw new Error('Data inválida. Use o formato YYYY-MM-DD.');
       }
 
       const [ano, mes, dia] = partesData;
@@ -454,7 +455,7 @@ export class ViagensService {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
-    throw new Error('Data invalida. Use o formato YYYY-MM-DD.');
+    throw new Error('Data inválida. Use o formato YYYY-MM-DD.');
   }
 
   private formatarDataId(data: Date): string {
@@ -469,7 +470,7 @@ export class ViagensService {
     const user = getAuth().currentUser;
 
     if (!user) {
-      throw new Error('E necessario iniciar sessao para gerir viagens.');
+      throw new Error('É necessário iniciar sessão para gerir viagens.');
     }
 
     return user.uid;
@@ -482,13 +483,13 @@ export class ViagensService {
     const viagemSnapshot = await getDoc(viagemRef);
 
     if (!viagemSnapshot.exists()) {
-      throw new Error('Viagem nao encontrada.');
+      throw new Error('Viagem não encontrada.');
     }
 
     const viagemDoc = viagemSnapshot.data() as ViagemPayload;
 
     if (viagemDoc.uidUtilizador !== uid) {
-      throw new Error('Esta viagem nao pertence ao utilizador autenticado.');
+      throw new Error('Esta viagem não pertence ao utilizador autenticado.');
     }
   }
 
@@ -496,7 +497,7 @@ export class ViagensService {
     const user = getAuth().currentUser;
 
     if (!user) {
-      throw new Error('E necessario iniciar sessao para gerir viagens.');
+      throw new Error('É necessário iniciar sessão para gerir viagens.');
     }
 
     const db = getFirestore();
@@ -504,7 +505,7 @@ export class ViagensService {
     const viagemSnapshot = await getDoc(viagemRef);
 
     if (!viagemSnapshot.exists()) {
-      throw new Error('Viagem nao encontrada.');
+      throw new Error('Viagem não encontrada.');
     }
 
     const viagem = {
@@ -523,7 +524,7 @@ export class ViagensService {
     });
 
     if (colaborador?.nivelAcesso !== 'editor' && colaborador?.nivelAcesso !== 'dono') {
-      throw new Error('Nao tem permissao para editar esta viagem.');
+      throw new Error('Não tem permissão para editar esta viagem.');
     }
 
     const camposSoDono: Array<keyof Viagem> = [

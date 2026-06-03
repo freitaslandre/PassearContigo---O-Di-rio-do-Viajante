@@ -7,6 +7,7 @@ import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
 import { MapCacheService } from '../../services/map-cache.service';
 import { PhotoShareService } from '../../services/photo-share.service';
+import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { POI, Dia, Viagem } from '../../models/viagem.model';
 
 @Component({
@@ -49,7 +50,8 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private mapCacheService: MapCacheService,
-    private photoShareService: PhotoShareService
+    private photoShareService: PhotoShareService,
+    private firebaseStorageService: FirebaseStorageService
   ) {}
 
   ngOnInit() {
@@ -233,19 +235,26 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Converter para base64 e guardar
     const reader = new FileReader();
     reader.onload = async (e: any) => {
-      this.fotoUrl = e.target.result;
+      const dataUrl = String(e.target.result || '');
 
-      // Guardar no Firestore
       if (this.poi && this.viagemId && this.diaId && this.poiId) {
         try {
+          const fotoUrl = await this.firebaseStorageService.uploadPoiPhoto(
+            this.viagemId,
+            this.diaId,
+            this.poiId,
+            dataUrl
+          );
+
+          this.fotoUrl = fotoUrl;
+
           await this.poiService.atualizarPOI(
             this.viagemId,
             this.diaId,
             this.poiId,
-            { fotoUrl: this.fotoUrl }
+            { fotoUrl }
           );
 
           const toast = await this.toastCtrl.create({
@@ -635,7 +644,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     const leaflet = (window as any).L;
 
     if (!leaflet) {
-      console.warn('Leaflet nao foi carregado pelo CDN.');
+      console.warn('Leaflet não foi carregado pelo CDN.');
       return;
     }
 

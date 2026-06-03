@@ -5,14 +5,17 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="authService.user$ | async as user; else anonimoTemplate">
-    <ion-card>
+  <div *ngIf="authService.user$ | async as user; else anonimoTemplate" class="perfil-layout">
+    <ion-card class="account-card">
       <ion-card-header>
-        <ion-card-title>Bem-vindo à sua conta</ion-card-title>
+        <div class="account-avatar">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <ion-card-title>Bem-vindo</ion-card-title>
         <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>A sua aplicação está ligada ao Firebase Authentication e ao Cloud Firestore.</p>
+        <p>Gira a sua conta e escolha como quer receber novidades das suas viagens.</p>
 
         <ion-button
           expand="block"
@@ -24,7 +27,7 @@
         >
           <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-outline"></ion-icon>
-          Ativar notificações push
+          Ativar notificações
         </ion-button>
 
         <ion-button

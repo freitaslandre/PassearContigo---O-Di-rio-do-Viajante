@@ -58,7 +58,7 @@ export class PhotoShareService {
     }
 
     if (!response.ok) {
-      throw new Error('Nao foi possivel carregar a foto para partilha.');
+      throw new Error('Não foi possível carregar a foto para partilha.');
     }
 
     const blob = await response.blob();
@@ -74,7 +74,7 @@ export class PhotoShareService {
   private prepareDataUrl(dataUrl: string): PreparedPhoto {
     const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
     if (!match) {
-      throw new Error('Formato de foto invalido para partilha.');
+      throw new Error('Formato de foto inválido para partilha.');
     }
 
     return {
@@ -87,7 +87,7 @@ export class PhotoShareService {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result || ''));
-      reader.onerror = () => reject(new Error('Nao foi possivel preparar a foto para partilha.'));
+      reader.onerror = () => reject(new Error('Não foi possível preparar a foto para partilha.'));
       reader.readAsDataURL(blob);
     });
   }

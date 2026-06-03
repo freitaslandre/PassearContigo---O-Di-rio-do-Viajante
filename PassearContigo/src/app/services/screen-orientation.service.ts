@@ -3,7 +3,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 /**
  * ScreenOrientationService
- * Gerencia a orientação de tela da aplicação
+ * Gere a orientação do ecrã da aplicação
  * Responsável por bloquear a orientação em portrait (req. 12)
  */
 @Injectable({
@@ -24,13 +24,13 @@ export class ScreenOrientationService {
       console.log('✓ Orientação bloqueada em PORTRAIT');
     } catch (error) {
       console.warn('⚠ Não foi possível bloquear orientação:', error);
-      // A falha não crítica - a app continua funcionando
+      // A falha não é crítica - a aplicação continua a funcionar
     }
   }
 
   /**
    * Desbloqueia a orientação (permite rotação livre)
-   * Útil se precisar permitir landscape em alguma seção específica
+   * Útil se for necessário permitir landscape numa secção específica
    */
   async unlockOrientation(): Promise<void> {
     try {
@@ -42,7 +42,7 @@ export class ScreenOrientationService {
   }
 
   /**
-   * Obtém a orientação atual da tela
+   * Obtém a orientação atual do ecrã
    */
   async getCurrentOrientation(): Promise<string> {
     try {

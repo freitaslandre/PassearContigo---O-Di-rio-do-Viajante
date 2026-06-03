@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "PassearContigo - Diario do Viajante",
+    "title": "PassearContigo - Diário do Viajante",
     "subtitle": "Partilhe os seus momentos de viagem",
-    "description": "Aplicacao para registar e partilhar viagens com amigos"
+    "description": "Aplicação para registar e partilhar viagens"
   },
   "common": {
     "ok": "OK",
@@ -19,17 +19,17 @@
     "error": "Erro",
     "success": "Sucesso",
     "warning": "Aviso",
-    "info": "Informacao",
+    "info": "Informação",
     "confirm": "Confirmar",
     "yes": "Sim",
-    "no": "Nao",
+    "no": "Não",
     "more": "Mais",
     "less": "Menos",
     "search": "Pesquisar",
     "clear": "Limpar",
-    "logout": "Terminar sessao",
-    "login": "Iniciar sessao",
-    "select": "Seleccionar"
+    "logout": "Terminar sessão",
+    "login": "Iniciar sessão",
+    "select": "Selecionar"
   },
   "tabs": {
     "viagens": "Viagens",
@@ -40,10 +40,10 @@
     "title": "As minhas viagens",
     "noTrips": "Nenhuma viagem registada",
     "createNew": "Criar nova viagem",
-    "startDate": "Data de inicio",
+    "startDate": "Data de início",
     "endDate": "Data de fim",
-    "location": "Localizacao",
-    "description": "Descricao",
+    "location": "Localização",
+    "description": "Descrição",
     "photos": "Fotografias",
     "viewDetails": "Ver detalhes",
     "deleteTrip": "Eliminar viagem",
@@ -52,11 +52,11 @@
     "takePhoto": "Tirar fotografia",
     "chooseFromGallery": "Escolher da galeria",
     "coordinates": "Coordenadas",
-    "distance": "Distancia"
+    "distance": "Distância"
   },
   "custos": {
     "categorias": {
-      "alimentacao": "Alimentacao",
+      "alimentacao": "Alimentação",
       "transporte": "Transporte",
       "alojamento": "Alojamento",
       "compras": "Compras",
@@ -69,18 +69,18 @@
     "editar": {
       "aGuardar": "A guardar...",
       "categoriaSelecionada": "Categoria seleccionada",
-      "guardarAlteracoes": "Guardar alteracoes",
-      "informacoes": "Informacoes do custo",
+      "guardarAlteracoes": "Guardar alterações",
+      "informacoes": "Informações do custo",
       "loading": "A carregar custo...",
       "campos": {
         "categoria": "Categoria",
         "data": "Data",
-        "descricao": "Descricao",
+        "descricao": "Descrição",
         "valor": "Valor (EUR)"
       },
       "confirmarEliminar": {
-        "mensagem": "Tem a certeza de que pretende eliminar este custo? Esta accao nao pode ser anulada.",
-        "titulo": "Confirmar eliminacao"
+        "mensagem": "Tem a certeza de que pretende eliminar este custo? Esta ação não pode ser anulada.",
+        "titulo": "Confirmar eliminação"
       },
       "logs": {
         "erroCarregar": "Erro ao carregar custo:",
@@ -90,27 +90,27 @@
       "mensagens": {
         "custoAtualizado": "Custo actualizado com sucesso",
         "custoEliminado": "Custo eliminado com sucesso",
-        "custoNaoEncontrado": "Custo nao encontrado",
-        "dadosNaoCarregados": "Dados do custo nao carregados",
+        "custoNaoEncontrado": "Custo não encontrado",
+        "dadosNaoCarregados": "Dados do custo não carregados",
         "erroCarregar": "Erro ao carregar custo",
         "erroEliminar": "Erro ao eliminar custo",
-        "erroGuardar": "Erro ao guardar alteracoes",
-        "semAlteracoes": "Nao foram feitas alteracoes"
+        "erroGuardar": "Erro ao guardar alterações",
+        "semAlteracoes": "Não foram feitas alterações"
       },
       "placeholders": {
-        "categoria": "Seleccione uma categoria",
-        "descricao": "Introduza a descricao"
+        "categoria": "Selecione uma categoria",
+        "descricao": "Introduza a descrição"
       },
       "validacao": {
-        "dataObrigatoria": "A data e obrigatoria",
-        "descricaoObrigatoria": "A descricao e obrigatoria",
+        "dataObrigatoria": "A data é obrigatória",
+        "descricaoObrigatoria": "A descrição é obrigatória",
         "valorMaiorZero": "O valor deve ser maior do que zero"
       }
     }
   },
   "descobrir": {
     "title": "Descobrir",
-    "noTripsAvailable": "Nenhuma viagem disponivel",
+    "noTripsAvailable": "Nenhuma viagem disponível",
     "exploreTrips": "Explorar viagens de outros utilizadores",
     "filter": "Filtrar",
     "sort": "Ordenar",
@@ -123,70 +123,70 @@
   "perfil": {
     "title": "O meu perfil",
     "profile": "Perfil",
-    "settings": "Definicoes",
+    "settings": "Definições",
     "editProfile": "Editar perfil",
     "changePassword": "Alterar palavra-passe",
-    "logout": "Terminar sessao",
+    "logout": "Terminar sessão",
     "firstName": "Primeiro nome",
-    "lastName": "Ultimo nome",
+    "lastName": "Último nome",
     "email": "Email",
     "phone": "Telefone",
     "bio": "Biografia",
     "profilePhoto": "Fotografia de perfil",
     "myTrips": "As minhas viagens",
-    "preferences": "Preferencias",
-    "notifications": "Notificacoes",
+    "preferences": "Preferências",
+    "notifications": "Notificações",
     "privacy": "Privacidade",
     "about": "Sobre",
-    "version": "Versao"
+    "version": "Versão"
   },
   "auth": {
-    "login": "Iniciar sessao",
+    "login": "Iniciar sessão",
     "signup": "Criar conta",
     "email": "Email",
     "password": "Palavra-passe",
     "confirmPassword": "Confirmar palavra-passe",
     "forgotPassword": "Esqueceu-se da palavra-passe?",
-    "rememberMe": "Manter sessao iniciada",
-    "loginFailed": "Falha ao iniciar sessao",
+    "rememberMe": "Manter sessão iniciada",
+    "loginFailed": "Falha ao iniciar sessão",
     "signupFailed": "Falha ao criar conta",
-    "invalidEmail": "Email invalido",
-    "passwordMismatch": "As palavras-passe nao coincidem",
+    "invalidEmail": "Email inválido",
+    "passwordMismatch": "As palavras-passe não coincidem",
     "passwordTooShort": "A palavra-passe deve ter pelo menos 8 caracteres",
-    "userExists": "O utilizador ja existe",
-    "noAccount": "Nao tem conta?",
-    "haveAccount": "Ja tem conta?"
+    "userExists": "O utilizador já existe",
+    "noAccount": "Não tem conta?",
+    "haveAccount": "Já tem conta?"
   },
   "validation": {
-    "required": "Este campo e obrigatorio",
-    "invalidEmail": "Email invalido",
-    "invalidPhone": "Telefone invalido",
-    "minLength": "Minimo de {count} caracteres",
-    "maxLength": "Maximo de {count} caracteres",
-    "pattern": "Formato invalido",
-    "passwordStrength": "A palavra-passe deve conter letras, numeros e caracteres especiais"
+    "required": "Este campo é obrigatório",
+    "invalidEmail": "Email inválido",
+    "invalidPhone": "Telefone inválido",
+    "minLength": "Mínimo de {count} caracteres",
+    "maxLength": "Máximo de {count} caracteres",
+    "pattern": "Formato inválido",
+    "passwordStrength": "A palavra-passe deve conter letras, números e caracteres especiais"
   },
   "errors": {
-    "networkError": "Erro de ligacao. Verifique a sua ligacao a internet",
+    "networkError": "Erro de ligação. Verifique a sua ligação à internet",
     "serverError": "Erro do servidor. Tente novamente mais tarde",
-    "notFound": "Recurso nao encontrado",
-    "unauthorized": "Nao autorizado",
+    "notFound": "Recurso não encontrado",
+    "unauthorized": "Não autorizado",
     "forbidden": "Acesso proibido",
     "conflict": "Conflito de dados",
     "unknownError": "Erro desconhecido"
   },
   "camera": {
-    "title": "Camara",
+    "title": "Câmara",
     "take": "Tirar fotografia",
     "cancel": "Cancelar",
-    "error": "Erro ao aceder a camara",
-    "permissionDenied": "Permissao negada para aceder a camara"
+    "error": "Erro ao aceder à câmara",
+    "permissionDenied": "Permissão negada para aceder à câmara"
   },
   "geolocation": {
-    "title": "Localizacao",
-    "current": "Localizacao actual",
-    "error": "Erro ao obter localizacao",
-    "permissionDenied": "Permissao negada para aceder a localizacao"
+    "title": "Localização",
+    "current": "Localização atual",
+    "error": "Erro ao obter localização",
+    "permissionDenied": "Permissão negada para aceder à localização"
   },
   "storage": {
     "title": "Armazenamento",
@@ -200,8 +200,8 @@
     "goodbye": "Ate breve!",
     "confirmDelete": "Tem a certeza de que pretende eliminar?",
     "confirmAction": "Confirme a accao",
-    "operationInProgress": "Operacao em curso...",
-    "operationComplete": "Operacao concluida com sucesso",
+    "operationInProgress": "Operação em curso...",
+    "operationComplete": "Operação concluída com sucesso",
     "tryAgain": "Tente novamente"
   },
   "placeholders": {
@@ -209,8 +209,8 @@
     "enterEmail": "Introduza o seu email",
     "enterPassword": "Introduza a sua palavra-passe",
     "enterName": "Introduza o seu nome",
-    "enterDescription": "Introduza uma descricao",
-    "enterLocation": "Introduza a localizacao",
+    "enterDescription": "Introduza uma descrição",
+    "enterLocation": "Introduza a localização",
     "enterBio": "Introduza a sua biografia"
   }
 }
