@@ -1,16 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="detalhe-toolbar">
     <ion-buttons slot="start">
       <ion-button class="back-button" (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Detalhe Viagem</ion-title>
-    <ion-buttons slot="end" *ngIf="!carregando && viagem">
-      <ion-button (click)="publicarViagem()" [disabled]="publicando || guardando">
-        <ion-spinner *ngIf="publicando" name="crescent" slot="icon-only"></ion-spinner>
-        <ion-icon *ngIf="!publicando" slot="icon-only" name="megaphone-outline"></ion-icon>
-      </ion-button>
+    <ion-title class="toolbar-titulo">Detalhe Viagem</ion-title>
+    <ion-buttons class="toolbar-acoes" slot="end" *ngIf="!carregando && viagem">
       <ion-button (click)="editarViagem()">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>

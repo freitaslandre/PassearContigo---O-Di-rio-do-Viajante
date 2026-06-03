@@ -1,3 +1,9 @@
+.back-button {
+  --color: var(--ion-color-primary-contrast);
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
 .day-navigation {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
