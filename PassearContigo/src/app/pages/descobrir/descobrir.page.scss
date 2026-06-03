@@ -1,5 +1,12 @@
+ion-content {
+  --padding-bottom: 16px;
+  --padding-end: 16px;
+  --padding-start: 16px;
+  --padding-top: 16px;
+}
+
 ion-searchbar {
-  padding-inline: 12px;
+  padding: 0 16px 12px;
 }
 
 ion-list {

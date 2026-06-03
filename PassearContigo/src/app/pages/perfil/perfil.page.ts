@@ -20,8 +20,11 @@ export class PerfilPage {
     email: '',
     password: ''
   };
-  
-  modoRegisto: boolean = false;
+
+  modoRegisto = false;
+  iniciandoSessao = false;
+  registando = false;
+  terminandoSessao = false;
   ativandoNotificacoes = false;
 
   constructor(
@@ -42,57 +45,83 @@ export class PerfilPage {
     );
   }
 
-  private emailValido(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
+  async realizarLogin(): Promise<void> {
+    if (!this.loginValido() || this.iniciandoSessao) {
+      return;
+    }
 
-  async realizarLogin() {
-    if (this.loginValido()) {
-      const { email, password } = this.login;
-      try {
-        await this.authService.login(email, password);
-        alert('Sessão iniciada com sucesso!');
-      } catch (error: any) {
-        alert('Erro ao iniciar sessão: ' + error.message);
-      }
+    const { email, password } = this.login;
+    this.iniciandoSessao = true;
+
+    try {
+      await this.authService.login(email, password);
+      await this.mostrarToast('Sessao iniciada com sucesso.', 'success');
+    } catch (error: any) {
+      await this.mostrarToast(error?.message || 'Erro ao iniciar sessao.', 'danger');
+    } finally {
+      this.iniciandoSessao = false;
     }
   }
 
-  async realizarRegisto() {
-    if (this.registoValido()) {
-      const { email, password, nome } = this.registo;
-      try {
-        await this.authService.registo(email, password, nome);
-        alert('Utilizador registado e guardado.');
-        this.modoRegisto = false;
-      } catch (error: any) {
-        alert('Erro ao registar: ' + error.message);
-      }
+  async realizarRegisto(): Promise<void> {
+    if (!this.registoValido() || this.registando) {
+      return;
+    }
+
+    const { email, password, nome } = this.registo;
+    this.registando = true;
+
+    try {
+      await this.authService.registo(email, password, nome);
+      await this.mostrarToast('Conta criada com sucesso.', 'success');
+      this.modoRegisto = false;
+    } catch (error: any) {
+      await this.mostrarToast(error?.message || 'Erro ao criar conta.', 'danger');
+    } finally {
+      this.registando = false;
     }
   }
 
-  async realizarLogout() {
-    await this.authService.logout();
-    alert('Sessão terminada.');
+  async realizarLogout(): Promise<void> {
+    if (this.terminandoSessao) {
+      return;
+    }
+
+    this.terminandoSessao = true;
+
+    try {
+      await this.authService.logout();
+      await this.mostrarToast('Sessao terminada.', 'success');
+    } catch (error: any) {
+      await this.mostrarToast(error?.message || 'Erro ao terminar sessao.', 'danger');
+    } finally {
+      this.terminandoSessao = false;
+    }
   }
 
-  async ativarNotificacoesPush() {
-    if (this.ativandoNotificacoes) return;
+  async ativarNotificacoesPush(): Promise<void> {
+    if (this.ativandoNotificacoes) {
+      return;
+    }
 
     this.ativandoNotificacoes = true;
 
     try {
       await this.pushNotificationsService.ativarNotificacoes();
-      await this.mostrarToast('Notificações push ativadas.', 'success');
+      await this.mostrarToast('Notificacoes push ativadas.', 'success');
     } catch (error: any) {
-      console.error('Erro ao ativar notificações push:', error);
-      await this.mostrarToast(error?.message || 'Erro ao ativar notificações.', 'danger');
+      console.error('Erro ao ativar notificacoes push:', error);
+      await this.mostrarToast(error?.message || 'Erro ao ativar notificacoes.', 'danger');
     } finally {
       this.ativandoNotificacoes = false;
     }
   }
 
-  private async mostrarToast(message: string, color: string = 'primary') {
+  private emailValido(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  private async mostrarToast(message: string, color: string = 'primary'): Promise<void> {
     const toast = await this.toastCtrl.create({
       message,
       duration: 2500,

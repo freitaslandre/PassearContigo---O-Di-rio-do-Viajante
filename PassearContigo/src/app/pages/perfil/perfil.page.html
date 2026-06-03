@@ -5,26 +5,43 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <div *ngIf="authService.user$ | async as user; else anonimoTemplate">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Bem-vindo à sua conta!</ion-card-title>
+        <ion-card-title>Bem-vindo a sua conta</ion-card-title>
         <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>A sua aplicação está conectada ao Firebase Authentication e à base de dados Cloud Firestore.</p>
+        <p>A sua aplicacao esta ligada ao Firebase Authentication e ao Cloud Firestore.</p>
+
         <ion-button expand="block" color="primary" routerLink="/tabs/perfil/feed" class="ion-margin-top">
           <ion-icon slot="start" name="newspaper-outline"></ion-icon>
-          Ver Feed de Amigos
+          Ver feed de amigos
         </ion-button>
-        <ion-button expand="block" color="secondary" fill="outline" class="ion-margin-top" (click)="ativarNotificacoesPush()" [disabled]="ativandoNotificacoes">
+
+        <ion-button
+          expand="block"
+          color="secondary"
+          fill="outline"
+          class="ion-margin-top"
+          (click)="ativarNotificacoesPush()"
+          [disabled]="ativandoNotificacoes"
+        >
           <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-outline"></ion-icon>
-          Ativar notificações push
+          Ativar notificacoes push
         </ion-button>
-        <ion-button expand="block" color="danger" class="ion-margin-top" (click)="realizarLogout()">
-          Terminar Sessão
+
+        <ion-button
+          expand="block"
+          color="danger"
+          class="ion-margin-top"
+          (click)="realizarLogout()"
+          [disabled]="terminandoSessao"
+        >
+          <ion-spinner *ngIf="terminandoSessao" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!terminandoSessao" slot="start" name="log-out-outline"></ion-icon>
+          Terminar sessao
         </ion-button>
       </ion-card-content>
     </ion-card>
@@ -32,7 +49,8 @@
 
   <ng-template #anonimoTemplate>
     <div *ngIf="!modoRegisto">
-      <h2 class="ion-padding-start">Iniciar Sessão</h2>
+      <h2 class="ion-padding-start">Iniciar sessao</h2>
+
       <form (ngSubmit)="realizarLogin()">
         <ion-input
           class="form-input"
@@ -42,9 +60,10 @@
           type="email"
           name="loginEmail"
           autocomplete="email"
-          [(ngModel)]="login.email">
-        </ion-input>
-        
+          [(ngModel)]="login.email"
+          [disabled]="iniciandoSessao"
+        ></ion-input>
+
         <ion-input
           class="form-input"
           label="Palavra-passe"
@@ -53,33 +72,45 @@
           type="password"
           name="loginPassword"
           autocomplete="current-password"
-          [(ngModel)]="login.password">
-        </ion-input>
+          [(ngModel)]="login.password"
+          [disabled]="iniciandoSessao"
+        ></ion-input>
 
-        <ion-button expand="block" type="submit" [disabled]="!loginValido()" class="ion-margin-top">
-          Iniciar sessão
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="!loginValido() || iniciandoSessao"
+          class="ion-margin-top"
+        >
+          <ion-spinner *ngIf="iniciandoSessao" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!iniciandoSessao" slot="start" name="log-in-outline"></ion-icon>
+          Iniciar sessao
         </ion-button>
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Não tem uma conta?
-        <button type="button" class="link-button" (click)="modoRegisto = true">Registe-se aqui</button>
+        Nao tem uma conta?
+        <button type="button" class="link-button" (click)="modoRegisto = true" [disabled]="iniciandoSessao">
+          Registe-se aqui
+        </button>
       </p>
     </div>
 
     <div *ngIf="modoRegisto">
-      <h2 class="ion-padding-start">Criar Nova Conta</h2>
+      <h2 class="ion-padding-start">Criar conta</h2>
+
       <form (ngSubmit)="realizarRegisto()">
         <ion-input
           class="form-input"
-          label="Nome Completo"
+          label="Nome completo"
           labelPlacement="floating"
           fill="outline"
           type="text"
           name="registoNome"
           autocomplete="name"
-          [(ngModel)]="registo.nome">
-        </ion-input>
+          [(ngModel)]="registo.nome"
+          [disabled]="registando"
+        ></ion-input>
 
         <ion-input
           class="form-input"
@@ -89,30 +120,41 @@
           type="email"
           name="registoEmail"
           autocomplete="email"
-          [(ngModel)]="registo.email">
-        </ion-input>
-        
+          [(ngModel)]="registo.email"
+          [disabled]="registando"
+        ></ion-input>
+
         <ion-input
           class="form-input"
-          label="Palavra-passe (mín. 6 carateres)"
+          label="Palavra-passe (min. 6 caracteres)"
           labelPlacement="floating"
           fill="outline"
           type="password"
           name="registoPassword"
           autocomplete="new-password"
-          [(ngModel)]="registo.password">
-        </ion-input>
+          [(ngModel)]="registo.password"
+          [disabled]="registando"
+        ></ion-input>
 
-        <ion-button expand="block" color="success" type="submit" [disabled]="!registoValido()" class="ion-margin-top">
-          Registar e Gravar no Firestore
+        <ion-button
+          expand="block"
+          color="success"
+          type="submit"
+          [disabled]="!registoValido() || registando"
+          class="ion-margin-top"
+        >
+          <ion-spinner *ngIf="registando" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!registando" slot="start" name="person-add-outline"></ion-icon>
+          Criar conta
         </ion-button>
       </form>
 
       <p class="ion-text-center ion-margin-top">
-        Já tem uma conta?
-        <button type="button" class="link-button" (click)="modoRegisto = false">Inicie sessão aqui</button>
+        Ja tem uma conta?
+        <button type="button" class="link-button" (click)="modoRegisto = false" [disabled]="registando">
+          Inicie sessao aqui
+        </button>
       </p>
     </div>
   </ng-template>
-
 </ion-content>

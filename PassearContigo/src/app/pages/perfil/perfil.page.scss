@@ -39,3 +39,9 @@ form {
   padding: 0;
   text-decoration: underline;
 }
+
+.link-button:disabled {
+  color: #7a6c5a;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
