@@ -58,7 +58,7 @@ export class PerfilPage {
       await this.authService.login(email, password);
       await this.mostrarToast('Sessão iniciada com sucesso.', 'success');
     } catch (error: any) {
-      await this.mostrarToast(error?.message || 'Erro ao iniciar sessão.', 'danger');
+      await this.mostrarErroLogin(error);
     } finally {
       this.iniciandoSessao = false;
     }
@@ -142,6 +142,55 @@ export class PerfilPage {
 
   private emailValido(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  private async mostrarErroLogin(error: any): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: 'Não foi possível iniciar sessão',
+      subHeader: this.obterTituloErroLogin(error),
+      message: this.obterMensagemErroLogin(error),
+      buttons: ['Tentar novamente']
+    });
+
+    await alert.present();
+  }
+
+  private obterTituloErroLogin(error: any): string {
+    const code = error?.code || '';
+
+    switch (code) {
+      case 'auth/invalid-credential':
+      case 'auth/invalid-login-credentials':
+      case 'auth/wrong-password':
+      case 'auth/user-not-found':
+        return 'Dados de acesso incorretos';
+      case 'auth/too-many-requests':
+        return 'Demasiadas tentativas';
+      case 'auth/network-request-failed':
+        return 'Ligação indisponível';
+      default:
+        return 'Erro de autenticação';
+    }
+  }
+
+  private obterMensagemErroLogin(error: any): string {
+    const code = error?.code || '';
+
+    switch (code) {
+      case 'auth/invalid-credential':
+      case 'auth/invalid-login-credentials':
+      case 'auth/wrong-password':
+      case 'auth/user-not-found':
+        return 'O e-mail ou a palavra-passe não estão corretos. Verifique os dados introduzidos e tente novamente.';
+      case 'auth/invalid-email':
+        return 'O e-mail introduzido não parece válido. Confirme o endereço e tente novamente.';
+      case 'auth/too-many-requests':
+        return 'Por segurança, o acesso foi temporariamente limitado. Aguarde alguns minutos antes de tentar outra vez.';
+      case 'auth/network-request-failed':
+        return 'Não foi possível contactar o servidor. Verifique a ligação à internet e tente novamente.';
+      default:
+        return 'Ocorreu um problema ao validar a sua conta. Tente novamente daqui a pouco.';
+    }
   }
 
   private async mostrarToast(message: string, color: string = 'primary'): Promise<void> {
