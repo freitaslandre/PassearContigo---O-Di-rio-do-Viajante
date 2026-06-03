@@ -52,7 +52,7 @@
         <div class="card-header-row">
           <div>
             <ion-card-title>{{ dia.titulo }}</ion-card-title>
-            <ion-card-subtitle>{{ formatarData(dia.data) }}</ion-card-subtitle>
+            <ion-card-subtitle>{{ formatarDataDia(dia) }}</ion-card-subtitle>
           </div>
           <div class="custo-badge" *ngIf="obterCustoDia(dia) > 0">
             <span class="custo-label">Custo:</span>

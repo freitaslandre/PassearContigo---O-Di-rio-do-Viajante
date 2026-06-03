@@ -13,8 +13,8 @@ import { Dia, NivelAcessoColaborador, Viagem } from '../models/viagem.model';
 
 type ViagemPayload = Omit<Viagem, 'id'>;
 type NovaViagem = ViagemPayload & Partial<Pick<Viagem, 'id'>>;
-type DataViagem = Date | string;
-type DataOrdenavel = Date | string | { toDate: () => Date };
+type DataViagem = Date | string | { toDate?: () => Date; seconds?: number; _seconds?: number };
+type DataOrdenavel = Date | string | { toDate?: () => Date; seconds?: number; _seconds?: number };
 type NivelAcessoEfetivo = NivelAcessoColaborador | null;
 
 /**
@@ -455,6 +455,12 @@ export class ViagensService {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
+    const segundos = data?.seconds ?? data?._seconds;
+    if (typeof segundos === 'number') {
+      const date = new Date(segundos * 1000);
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
     throw new Error('Data inválida. Use o formato YYYY-MM-DD.');
   }
 
@@ -557,7 +563,16 @@ export class ViagensService {
       return this.normalizarData(data).getTime();
     }
 
-    return data.toDate().getTime();
+    if (data && typeof data.toDate === 'function') {
+      return data.toDate().getTime();
+    }
+
+    const segundos = data?.seconds ?? data?._seconds;
+    if (typeof segundos === 'number') {
+      return segundos * 1000;
+    }
+
+    return 0;
   }
 
   private viagemApareceNoFeed(viagem: Viagem, uid: string, email: string): boolean {

@@ -159,16 +159,13 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   }
 
   formatarData(data: Date | string | any): string {
-    if (typeof data === 'string') {
-      return new Date(data).toLocaleDateString('pt-PT');
-    }
-    if (data instanceof Date) {
-      return data.toLocaleDateString('pt-PT');
-    }
-    if (data && typeof data === 'object' && 'toDate' in data) {
-      return (data as any).toDate().toLocaleDateString('pt-PT');
-    }
-    return String(data);
+    const date = this.converterParaDate(data);
+    return Number.isNaN(date.getTime()) ? 'Sem data' : date.toLocaleDateString('pt-PT');
+  }
+
+  formatarDataDia(dia: Dia): string {
+    const dataSequencial = this.obterDataSequencialDia(dia);
+    return this.formatarData(dataSequencial || dia.data);
   }
 
   obterResumoCustos(custos: any[]): string {
@@ -235,19 +232,42 @@ export class DiaDetalhePage implements OnInit, OnDestroy {
   }
 
   private obterTimestampData(data: Date | string | any): number {
+    const date = this.converterParaDate(data);
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+  }
+
+  private obterDataSequencialDia(dia: Dia): Date | null {
+    const indiceDia = this.dias.findIndex(item => item.id === dia.id);
+    const dataInicio = this.converterParaDate(this.viagem?.dataInicio);
+
+    if (indiceDia < 0 || Number.isNaN(dataInicio.getTime())) {
+      return null;
+    }
+
+    const data = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
+    data.setDate(data.getDate() + indiceDia);
+    return data;
+  }
+
+  private converterParaDate(data: Date | string | any): Date {
     if (data instanceof Date) {
-      return data.getTime();
+      return data;
     }
 
     if (typeof data === 'string') {
-      return new Date(data).getTime();
+      return new Date(data);
     }
 
     if (data && typeof data === 'object' && 'toDate' in data) {
-      return (data as any).toDate().getTime();
+      return (data as any).toDate();
     }
 
-    return 0;
+    const segundos = data?.seconds ?? data?._seconds;
+    if (typeof segundos === 'number') {
+      return new Date(segundos * 1000);
+    }
+
+    return new Date(data);
   }
 
   private obterParametroDaRota(nome: string): string | null {

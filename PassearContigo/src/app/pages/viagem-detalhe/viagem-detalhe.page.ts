@@ -763,6 +763,10 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     if (data && typeof data === 'object' && 'toDate' in data) {
       return (data as any).toDate();
     }
+    const segundos = data?.seconds ?? data?._seconds;
+    if (typeof segundos === 'number') {
+      return new Date(segundos * 1000);
+    }
     return new Date(data);
   }
 
@@ -785,7 +789,10 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       return this.formatarDataInput(new Date());
     }
 
-    const date = new Date(data);
+    const [ano, mes, dia] = data.split('-').map(Number);
+    const date = Number.isFinite(ano) && Number.isFinite(mes) && Number.isFinite(dia)
+      ? new Date(ano, mes - 1, dia)
+      : new Date(data);
     date.setDate(date.getDate() + 1);
     return this.formatarDataInput(date);
   }
