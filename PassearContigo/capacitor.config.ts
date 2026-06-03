@@ -12,7 +12,8 @@ const config: CapacitorConfig = {
       launchShowDuration: 0
     },
     CapacitorHttp: {
-      enabled: true
+      // Mudar para false resolve o bloqueio de WebSockets/Firestore no Android
+      enabled: false 
     },
     ScreenOrientation: {
       // Plugin será gerenciado via código (veja screen-orientation.service.ts)
