@@ -219,6 +219,37 @@ ion-header h3 {
   margin: 0;
 }
 
+/* Toolbars: evita que títulos longos passem por cima dos botões de ação. */
+ion-toolbar {
+  ion-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  ion-buttons[slot="end"] {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  ion-toolbar {
+    ion-title {
+      padding-inline: 4px;
+      font-size: 1rem;
+    }
+
+    ion-buttons[slot="end"] ion-button {
+      --padding-start: 4px;
+      --padding-end: 4px;
+      min-width: 34px;
+    }
+  }
+}
+
 ion-card-title {
   font-family: var(--font-primary);
   font-weight: 600;
@@ -445,5 +476,3 @@ ion-toast {
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* @import "@ionic/angular/css/palettes/dark.system.css"; */
-
-

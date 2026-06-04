@@ -19,16 +19,15 @@
 }
 
 .toolbar-titulo {
-  position: absolute;
-  inset: 0;
-  padding: 0 112px 0 56px;
-  text-align: center;
-  pointer-events: none;
+  padding-inline: 0.5rem;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .toolbar-acoes {
   justify-content: flex-end;
-  margin-left: auto;
 
   ion-button {
     --padding-start: 6px;

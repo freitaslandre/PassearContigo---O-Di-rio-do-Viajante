@@ -160,12 +160,12 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>{{ fotoAberta?.titulo || 'Foto' }}</ion-title>
-          <ion-buttons slot="end">
+          <ion-buttons slot="start">
             <ion-button (click)="fecharFoto()" aria-label="Fechar">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
+          <ion-title>{{ fotoAberta?.titulo || 'Foto' }}</ion-title>
         </ion-toolbar>
       </ion-header>
 
