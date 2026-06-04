@@ -10,6 +10,8 @@ import { CameraService } from '../../services/camera.service';
 import { FirebaseStorageService } from '../../services/firebase-storage.service';
 import { GeolocationService } from '../../services/geolocation.service';
 import { NominatimService } from '../../services/nominatim.service';
+import { ItinerarioPdfService } from '../../services/itinerario-pdf.service';
+import { PdfShareService } from '../../services/pdf-share.service';
 
 interface DiaViewModel {
   id: string;
@@ -63,6 +65,8 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
     private firebaseStorageService: FirebaseStorageService,
     private geolocationService: GeolocationService,
     private nominatimService: NominatimService,
+    private itinerarioPdfService: ItinerarioPdfService,
+    private pdfShareService: PdfShareService,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private toastCtrl: ToastController
@@ -812,6 +816,80 @@ export class ViagemDetalhePage implements OnInit, OnDestroy {
       color
     });
     await toast.present();
+  }
+
+  async compartilharItinerarioPdf() {
+    if (!this.viagem || !this.dias || this.dias.length === 0) {
+      await this.mostrarToast('Impossível gerar PDF. Sem dias no itinerário.', 'warning');
+      return;
+    }
+
+    try {
+      const diasCompletas: Dia[] = this.dias.map(dia => ({
+        id: dia.id,
+        titulo: dia.titulo,
+        descricao: dia.descricao,
+        data: this.converterParaDate(dia.data),
+        local: dia.local,
+        pontosInteresse: dia.pontosInteresse || [],
+        custos: dia.custos,
+        observacoes: dia.observacoes
+      }));
+
+      const pdf = this.itinerarioPdfService.criarItinerarioPdf({
+        viagem: this.viagem,
+        dias: diasCompletas
+      });
+
+      const podeCompartilhar = await this.pdfShareService.canShare();
+      if (podeCompartilhar) {
+        await this.pdfShareService.sharePdf(pdf, {
+          title: `Itinerário - ${this.viagem.titulo}`,
+          text: `Compartilhando o itinerário de "${this.viagem.titulo}"`,
+          dialogTitle: 'Partilhar Itinerário em PDF'
+        });
+        await this.mostrarToast('Itinerário partilhado com sucesso!', 'success');
+      } else {
+        // Se não conseguir compartilhar, faz download
+        this.itinerarioPdfService.gerarItinerarioDownload({
+          viagem: this.viagem,
+          dias: diasCompletas
+        });
+        await this.mostrarToast('PDF transferido para download.', 'success');
+      }
+    } catch (error) {
+      console.error('Erro ao gerar PDF do itinerário:', error);
+      await this.mostrarToast('Erro ao gerar PDF do itinerário.', 'danger');
+    }
+  }
+
+  exportarItinerarioPdf() {
+    if (!this.viagem || !this.dias || this.dias.length === 0) {
+      this.mostrarToast('Impossível gerar PDF. Sem dias no itinerário.', 'warning');
+      return;
+    }
+
+    try {
+      const diasCompletas: Dia[] = this.dias.map(dia => ({
+        id: dia.id,
+        titulo: dia.titulo,
+        descricao: dia.descricao,
+        data: this.converterParaDate(dia.data),
+        local: dia.local,
+        pontosInteresse: dia.pontosInteresse || [],
+        custos: dia.custos,
+        observacoes: dia.observacoes
+      }));
+
+      this.itinerarioPdfService.gerarItinerarioDownload({
+        viagem: this.viagem,
+        dias: diasCompletas
+      });
+      this.mostrarToast('Itinerário exportado em PDF!', 'success');
+    } catch (error) {
+      console.error('Erro ao gerar PDF do itinerário:', error);
+      this.mostrarToast('Erro ao gerar PDF do itinerário.', 'danger');
+    }
   }
 
   private obterParametroDaRota(nome: string): string | null {

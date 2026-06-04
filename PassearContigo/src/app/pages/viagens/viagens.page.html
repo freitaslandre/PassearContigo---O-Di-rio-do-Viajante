@@ -48,7 +48,7 @@
 
   <!-- Destaque: viagem em curso -->
   <div *ngIf="!carregando && viagemEmCurso" class="viagem-destaque-wrapper">
-    <h2 class="section-title">Viagem em curso</h2>
+    <h2 class="section-title">Viagens</h2>
     <ion-card class="viagem-card destaque" (click)="irParaDetalhes(viagemEmCurso.id)">
       <div class="viagem-cover">
         <img *ngIf="obterFotoCapa(viagemEmCurso); else capaCursoPlaceholder" [src]="obterFotoCapa(viagemEmCurso)" [alt]="viagemEmCurso.titulo">
@@ -89,7 +89,7 @@
           </div>
           <div class="info-badge" *ngIf="viagemEmCurso.colaboradores && viagemEmCurso.colaboradores.length > 0">
             <ion-icon name="people-outline"></ion-icon>
-            <span>{{ viagemEmCurso.colaboradores.length }} pessoas</span>
+            <span>{{ obterTotalPessoas(viagemEmCurso) }} pessoas</span>
           </div>
         </div>
       </ion-card-content>
@@ -138,7 +138,7 @@
           </div>
           <div class="info-badge" *ngIf="viagem.colaboradores && viagem.colaboradores.length > 0">
             <ion-icon name="people-outline"></ion-icon>
-            <span>{{ viagem.colaboradores.length }} pessoas</span>
+            <span>{{ obterTotalPessoas(viagem) }} pessoas</span>
           </div>
         </div>
       </ion-card-content>

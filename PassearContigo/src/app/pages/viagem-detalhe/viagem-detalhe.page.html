@@ -7,6 +7,12 @@
     </ion-buttons>
     <ion-title class="toolbar-titulo">Detalhe Viagem</ion-title>
     <ion-buttons class="toolbar-acoes" slot="end" *ngIf="!carregando && viagem">
+      <ion-button (click)="compartilharItinerarioPdf()" aria-label="Partilhar itinerário em PDF">
+        <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="exportarItinerarioPdf()" aria-label="Exportar itinerário em PDF">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
       <ion-button *ngIf="podeEditarViagem" (click)="editarViagem()">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>

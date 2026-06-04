@@ -98,13 +98,21 @@ export class ViagensPage implements OnInit, OnDestroy {
     if (typeof data === 'string') {
       return new Date(data).toLocaleDateString('pt-PT');
     }
+
     if (data instanceof Date) {
       return data.toLocaleDateString('pt-PT');
     }
+
     if (data && typeof data === 'object' && 'toDate' in data) {
-      return (data as any).toDate().toLocaleDateString('pt-PT');
+      return data.toDate().toLocaleDateString('pt-PT');
     }
-    return String(data);
+
+    return '';
+  }
+
+  obterTotalPessoas(viagem: Viagem): number {
+    // 1 (proprietário) + número de colaboradores
+    return 1 + (viagem.colaboradores?.length || 0);
   }
 
   obterNumDias(dataInicio: Date | string | any, dataFim: Date | string | any): number {

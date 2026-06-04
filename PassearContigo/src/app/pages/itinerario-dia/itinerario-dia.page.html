@@ -6,8 +6,14 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Itinerário do Dia</ion-title>
-    <ion-buttons slot="end" *ngIf="!carregando && dia && podeEditarViagem">
-      <ion-button (click)="adicionarPoi()">
+    <ion-buttons slot="end" *ngIf="!carregando && dia">
+      <ion-button (click)="compartilharDiaEmPdf()" aria-label="Partilhar dia em PDF">
+        <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="exportarDiaEmPdf()" aria-label="Exportar dia em PDF">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="podeEditarViagem" (click)="adicionarPoi()">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
