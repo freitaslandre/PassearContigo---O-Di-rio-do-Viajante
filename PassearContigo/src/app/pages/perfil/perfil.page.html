@@ -81,12 +81,20 @@
           label="Palavra-passe"
           labelPlacement="floating"
           fill="outline"
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           name="loginPassword"
           autocomplete="current-password"
           [(ngModel)]="login.password"
           [disabled]="iniciandoSessao"
         ></ion-input>
+
+        <div class="show-password-item">
+          <span>Mostrar palavra-passe</span>
+          <ion-checkbox
+            [(ngModel)]="showPassword"
+            name="showPassword"
+          ></ion-checkbox>
+        </div>
 
         <ion-button
           expand="block"
@@ -141,12 +149,20 @@
           label="Palavra-passe (min. 6 caracteres)"
           labelPlacement="floating"
           fill="outline"
-          type="password"
+          [type]="showRegistoPassword ? 'text' : 'password'"
           name="registoPassword"
           autocomplete="new-password"
           [(ngModel)]="registo.password"
           [disabled]="registando"
         ></ion-input>
+
+        <div class="show-password-item">
+          <span>Mostrar palavra-passe</span>
+          <ion-checkbox
+            [(ngModel)]="showRegistoPassword"
+            name="showRegistoPassword"
+          ></ion-checkbox>
+        </div>
 
         <ion-button
           expand="block"

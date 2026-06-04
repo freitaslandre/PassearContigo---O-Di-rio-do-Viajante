@@ -28,6 +28,8 @@ export class PerfilPage implements OnInit {
   terminandoSessao = false;
   ativandoNotificacoes = false;
   notificacoesAtivas = false;
+  showPassword = false;
+  showRegistoPassword = false;
 
   constructor(
     public authService: AuthService,

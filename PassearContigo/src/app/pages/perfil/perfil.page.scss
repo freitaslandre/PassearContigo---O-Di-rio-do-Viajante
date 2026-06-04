@@ -81,6 +81,32 @@ form {
   box-shadow: 0 0 0 3px rgba(232, 130, 58, 0.16);
 }
 
+.show-password-item {
+  --background: transparent;
+  --inner-padding-top: 0;
+  --inner-padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  min-height: 32px;
+  margin-top: 6px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.show-password-item span {
+  font-size: 0.88rem;
+  color: var(--ion-color-medium);
+  white-space: nowrap;
+  margin: 0;
+  cursor: default;
+}
+
+.show-password-item ion-checkbox {
+  margin: 0;
+}
+
 .link-button {
   border: 0;
   background: transparent;
