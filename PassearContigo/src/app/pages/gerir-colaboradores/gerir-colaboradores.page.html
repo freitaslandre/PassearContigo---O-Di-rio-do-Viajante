@@ -70,7 +70,7 @@
         <p>{{ convidado.email }}</p>
         <p class="nivel">Nível: {{ convidado.nivelAcesso | titlecase }}</p>
       </ion-label>
-      <ion-button *ngIf="podeGerirViagem" fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando">
+      <ion-button *ngIf="podeGerirViagem" fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando" aria-label="Remover colaborador">
         Remover
       </ion-button>
     </ion-item>

@@ -14,7 +14,7 @@
       <ion-button (click)="exportarDiaEmPdf()" aria-label="Exportar dia em PDF">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="podeEditarViagem" (click)="adicionarPoi()">
+      <ion-button *ngIf="podeEditarViagem" (click)="adicionarPoi()" aria-label="Adicionar ponto de interesse">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -127,7 +127,7 @@
           </ion-note>
         </ion-label>
 
-        <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)">
+        <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)" aria-label="Abrir ponto de interesse">
           <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
         </ion-button>
         <ion-reorder *ngIf="podeEditarViagem" slot="end"></ion-reorder>

@@ -11,31 +11,31 @@
     </ion-buttons>
     <ion-title>{{ modoSelecao ? totalSelecionadas + ' selecionadas' : 'Álbum' }}</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && fotos.length > 0">
-      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="compartilharAlbumPdf()" [disabled]="partilhandoPdf || gerandoPdf">
+      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="compartilharAlbumPdf()" [disabled]="partilhandoPdf || gerandoPdf" aria-label="Partilhar álbum em PDF">
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf">
+      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf" aria-label="Exportar álbum em PDF">
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="importarFotosDoRolo()" [disabled]="importando">
+      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="importarFotosDoRolo()" [disabled]="importando" aria-label="Importar fotos">
         <ion-spinner *ngIf="importando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!importando" slot="icon-only" name="cloud-upload-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="ativarSelecao()">
+      <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="ativarSelecao()" aria-label="Selecionar fotos">
         <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0" aria-label="Limpar seleção">
         <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0" aria-label="Reatribuir fotos selecionadas">
         <ion-icon slot="icon-only" name="swap-horizontal-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao && podeEditarViagem" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0" aria-label="Eliminar fotos selecionadas">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length">
+      <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length" aria-label="Selecionar todas as fotos">
         <ion-icon slot="icon-only" name="checkbox-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

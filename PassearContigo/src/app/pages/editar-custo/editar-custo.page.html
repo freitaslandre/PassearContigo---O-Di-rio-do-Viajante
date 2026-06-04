@@ -6,12 +6,13 @@
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Editar Custo</ion-title>
+    <ion-title>Editar custo</ion-title>
     <ion-buttons slot="end">
       <ion-button 
         (click)="eliminarCusto()" 
         [disabled]="salvando"
-        color="danger">
+        color="danger"
+        aria-label="Eliminar custo">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>
     </ion-buttons>

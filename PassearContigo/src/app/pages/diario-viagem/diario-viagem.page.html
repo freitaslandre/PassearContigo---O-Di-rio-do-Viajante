@@ -8,15 +8,15 @@
     </ion-buttons>
     <ion-title>Diário da Viagem</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && viagem && dias.length > 0">
-      <ion-button (click)="partilharPdfDiario()" [disabled]="partilhandoPdf || gerandoPdf || guardando">
+      <ion-button (click)="partilharPdfDiario()" [disabled]="partilhandoPdf || gerandoPdf || guardando" aria-label="Partilhar diário em PDF">
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="gerarPdfDiario()" [disabled]="gerandoPdf || partilhandoPdf || guardando">
+      <ion-button (click)="gerarPdfDiario()" [disabled]="gerandoPdf || partilhandoPdf || guardando" aria-label="Exportar diário em PDF">
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="podeEditarViagem" (click)="guardarDiario()" [disabled]="guardando">
+      <ion-button *ngIf="podeEditarViagem" (click)="guardarDiario()" [disabled]="guardando" aria-label="Guardar diário">
         <ion-spinner *ngIf="guardando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!guardando" slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>

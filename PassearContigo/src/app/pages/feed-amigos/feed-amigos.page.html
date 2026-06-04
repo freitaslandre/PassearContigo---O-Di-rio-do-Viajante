@@ -3,7 +3,7 @@
   <ion-toolbar>
     <ion-title>Feed</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="carregarFeed()" [disabled]="carregando">
+      <ion-button (click)="carregarFeed()" [disabled]="carregando" aria-label="Recarregar feed">
         <ion-spinner *ngIf="carregando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!carregando" slot="icon-only" name="refresh-outline"></ion-icon>
       </ion-button>
@@ -140,6 +140,7 @@
               fill="clear"
               size="small"
               [disabled]="comentando[publicacao.id] || !comentarioNovo[publicacao.id]?.trim()"
+              aria-label="Enviar comentário"
             >
               <ion-spinner *ngIf="comentando[publicacao.id]" name="crescent" slot="icon-only"></ion-spinner>
               <ion-icon *ngIf="!comentando[publicacao.id]" slot="icon-only" name="send-outline"></ion-icon>

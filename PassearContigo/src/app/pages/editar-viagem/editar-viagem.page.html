@@ -27,7 +27,7 @@
     <div class="foto-capa-section">
       <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
         <img [src]="fotoCapaPreview" alt="Foto de capa">
-        <ion-button *ngIf="podeEditarViagem" color="danger" size="small" type="button" (click)="removerFotoCapa()">
+        <ion-button *ngIf="podeEditarViagem" color="danger" size="small" type="button" (click)="removerFotoCapa()" aria-label="Remover foto de capa">
           <ion-icon slot="start" name="trash-outline"></ion-icon>
           Remover
         </ion-button>

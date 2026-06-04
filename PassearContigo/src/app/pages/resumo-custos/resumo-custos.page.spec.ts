@@ -53,7 +53,7 @@ describe('ResumoCustosPage', () => {
     const categorias = [
       { categoria: 'Alimentação', icone: 'restaurant' },
       { categoria: 'Transporte', icone: 'car' },
-      { categoria: 'Hospedagem', icone: 'bed' }
+      { categoria: 'Alojamento', icone: 'bed' }
     ];
 
     categorias.forEach(cat => {
