@@ -5,6 +5,8 @@ import { Capacitor } from '@capacitor/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Unsubscribe } from 'firebase/firestore';
 import { Dia, FotoAlbumViagem, POI, Viagem } from '../../models/viagem.model';
+import { AlbumPdfService } from '../../services/album-pdf.service';
+import { PdfShareService } from '../../services/pdf-share.service';
 import { PhotoShareService } from '../../services/photo-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
@@ -60,6 +62,8 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
   fotosSelecionadas = new Set<string>();
   carregando = true;
   importando = false;
+  gerandoPdf = false;
+  partilhandoPdf = false;
   erro = '';
   fotosIgnoradasPorTamanho = 0;
   fotoAberta: FotoAlbum | null = null;
@@ -77,7 +81,9 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private photoShareService: PhotoShareService
+    private photoShareService: PhotoShareService,
+    private albumPdfService: AlbumPdfService,
+    private pdfShareService: PdfShareService
   ) {}
 
   ngOnInit() {
@@ -118,12 +124,14 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
     this.fotoAberta = null;
   }
 
-  abrirOrigemFoto(foto: FotoAlbum | null = this.fotoAberta) {
+  async abrirOrigemFoto(foto: FotoAlbum | null = this.fotoAberta) {
     if (!foto) {
       return;
     }
 
     this.fecharFoto();
+    this.cdr.markForCheck();
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     if (foto.diaId && foto.poiId) {
       this.router.navigate(['/tabs', 'viagens', this.viagemId, 'dias', foto.diaId, 'poi', foto.poiId]);
@@ -155,6 +163,67 @@ export class AlbumViagemPage implements OnInit, OnDestroy {
       }
 
       await this.mostrarToast(error?.message || 'Erro ao partilhar foto.', 'danger');
+    }
+  }
+
+  async compartilharAlbumPdf() {
+    if (!this.viagem || this.fotos.length === 0) {
+      await this.mostrarToast('Não há fotos no álbum para gerar o PDF.', 'warning');
+      return;
+    }
+
+    if (this.partilhandoPdf || this.gerandoPdf) {
+      return;
+    }
+
+    this.partilhandoPdf = true;
+
+    try {
+      const pdf = await this.albumPdfService.criarAlbumPdf({
+        viagem: this.viagem,
+        fotos: this.fotos
+      });
+
+      const podeCompartilhar = await this.pdfShareService.canShare();
+      if (podeCompartilhar) {
+        await this.pdfShareService.sharePdf(pdf, {
+          title: `Álbum - ${this.viagem.titulo || 'Viagem'}`,
+          text: `Partilhando o álbum de fotos de ${this.viagem.titulo || 'viagem'}.`,
+          dialogTitle: 'Partilhar Álbum em PDF'
+        });
+        await this.mostrarToast('Álbum partilhado em PDF!', 'success');
+      } else {
+        await this.albumPdfService.gerarAlbumDownload({ viagem: this.viagem, fotos: this.fotos });
+        await this.mostrarToast('PDF do álbum transferido para download.', 'success');
+      }
+    } catch (error: any) {
+      console.error('Erro ao gerar PDF do álbum:', error);
+      await this.mostrarToast(error?.message || 'Erro ao gerar PDF do álbum.', 'danger');
+    } finally {
+      this.partilhandoPdf = false;
+    }
+  }
+
+  async exportarAlbumPdf() {
+    if (!this.viagem || this.fotos.length === 0) {
+      await this.mostrarToast('Não há fotos no álbum para gerar o PDF.', 'warning');
+      return;
+    }
+
+    if (this.gerandoPdf || this.partilhandoPdf) {
+      return;
+    }
+
+    this.gerandoPdf = true;
+
+    try {
+      await this.albumPdfService.gerarAlbumDownload({ viagem: this.viagem, fotos: this.fotos });
+      await this.mostrarToast('PDF do álbum exportado com sucesso!', 'success');
+    } catch (error: any) {
+      console.error('Erro ao exportar PDF do álbum:', error);
+      await this.mostrarToast(error?.message || 'Erro ao exportar PDF do álbum.', 'danger');
+    } finally {
+      this.gerandoPdf = false;
     }
   }
 

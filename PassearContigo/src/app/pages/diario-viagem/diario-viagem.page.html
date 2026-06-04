@@ -9,7 +9,7 @@
     <ion-buttons slot="end" *ngIf="!carregando && viagem && dias.length > 0">
       <ion-button (click)="partilharPdfDiario()" [disabled]="partilhandoPdf || gerandoPdf || guardando">
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
-        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-outline"></ion-icon>
+        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="gerarPdfDiario()" [disabled]="gerandoPdf || partilhandoPdf || guardando">
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>

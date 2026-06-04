@@ -10,6 +10,14 @@
     </ion-buttons>
     <ion-title>{{ modoSelecao ? totalSelecionadas + ' selecionadas' : 'Álbum' }}</ion-title>
     <ion-buttons slot="end" *ngIf="!carregando && fotos.length > 0">
+      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="compartilharAlbumPdf()" [disabled]="partilhandoPdf || gerandoPdf">
+        <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf">
+        <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
+        <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
+      </ion-button>
       <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="importarFotosDoRolo()" [disabled]="importando">
         <ion-spinner *ngIf="importando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!importando" slot="icon-only" name="cloud-upload-outline"></ion-icon>
@@ -56,11 +64,18 @@
           {{ viagem.local }}
         </p>
       </div>
-      <ion-button *ngIf="podeEditarViagem" color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
-        <ion-spinner *ngIf="importando" name="crescent" slot="start"></ion-spinner>
-        <ion-icon *ngIf="!importando" slot="start" name="cloud-upload-outline"></ion-icon>
-        Importar do rolo
-      </ion-button>
+      <div class="album-header-actions">
+        <ion-button *ngIf="fotos.length > 0" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf">
+          <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!gerandoPdf" slot="start" name="download-outline"></ion-icon>
+          Descarregar álbum
+        </ion-button>
+        <ion-button *ngIf="podeEditarViagem" color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
+          <ion-spinner *ngIf="importando" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!importando" slot="start" name="cloud-upload-outline"></ion-icon>
+          Importar do rolo
+        </ion-button>
+      </div>
     </div>
 
     <ion-note *ngIf="fotosIgnoradasPorTamanho > 0" color="warning" class="album-warning">
@@ -126,7 +141,7 @@
                 aria-label="Partilhar foto"
                 (click)="partilharFoto(foto)"
               >
-                <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+                <ion-icon name="share-social-outline" aria-hidden="true"></ion-icon>
               </button>
             </div>
           </ion-col>

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Share } from '@capacitor/share';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, IonContent, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ViagensService } from '../../services/viagens.service';
 import { POIService } from '../../services/poi.service';
@@ -17,7 +17,9 @@ import { POI, Dia, Viagem } from '../../models/viagem.model';
   styleUrls: ['./detalhe-poi.page.scss']
 })
 export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(IonContent) content?: IonContent;
   @ViewChild('mapaPoi') mapaPoi?: ElementRef<HTMLDivElement>;
+  @ViewChild('editSection') editSection?: ElementRef<HTMLElement>;
 
   poi: POI | null = null;
   viagem: Viagem | null = null;
@@ -360,7 +362,7 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  iniciarEdicao() {
+  async iniciarEdicao() {
     if (!this.poi || !this.podeEditarViagem) return;
     this.poiEditavel = {
       nota: this.poi.nota || '',
@@ -368,6 +370,10 @@ export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
       avaliacao: this.poi.avaliacao || 0
     };
     this.modoEdicao = true;
+
+    await new Promise(resolve => setTimeout(resolve, 50));
+    const top = this.editSection?.nativeElement.offsetTop ?? 0;
+    await this.content?.scrollToPoint(0, top, 500);
   }
 
   normalizarCustoEditavel(event: CustomEvent<{ value?: string | null }>) {

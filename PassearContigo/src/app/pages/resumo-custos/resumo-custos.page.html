@@ -7,7 +7,7 @@
         [disabled]="carregando || partilhandoPdf || gerandoPdf || custos.length === 0"
       >
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
-        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-outline"></ion-icon>
+        <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
       <ion-button
         (click)="gerarPdfCustosPorCategoria()"

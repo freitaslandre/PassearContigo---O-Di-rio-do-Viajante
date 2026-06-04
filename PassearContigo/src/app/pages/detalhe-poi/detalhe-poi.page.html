@@ -38,7 +38,7 @@
     </section>
 
     <!-- FORMULÁRIO DE EDIÇÃO -->
-    <ion-card *ngIf="modoEdicao && podeEditarViagem" class="simple-card">
+    <ion-card #editSection *ngIf="modoEdicao && podeEditarViagem" class="simple-card">
       <ion-card-header>
         <ion-card-title>Editar POI</ion-card-title>
       </ion-card-header>
