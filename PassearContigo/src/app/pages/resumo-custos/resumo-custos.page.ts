@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { CustosService } from '../../services/custos.service';
 import { CustosPdfService } from '../../services/custos-pdf.service';
 import { PdfShareService } from '../../services/pdf-share.service';
@@ -61,10 +62,12 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   
   private unsubscribeCustos: Unsubscribe | null = null;
   private unsubscribeViagens: Unsubscribe | null = null;
+  private unsubscribeAuth: any = null;
   private custosBase: Custo[] = [];
   private viagens: Viagem[] = [];
   private custosCarregados = false;
   private viagensCarregadas = false;
+  private ultimoUsuario: any = null;
 
   constructor(
     private custosService: CustosService,
@@ -72,15 +75,24 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     private pdfShareService: PdfShareService,
     private viagensService: ViagensService,
     private toastController: ToastController,
+    private afAuth: AngularFireAuth,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.carregarCustos();
+    // Subscrever ao estado de autenticação e recarregar custos quando mudar
+    this.unsubscribeAuth = this.afAuth.authState.subscribe(user => {
+      // Se o utilizador mudou (fez login, logout, ou muda de conta)
+      if (user?.uid !== this.ultimoUsuario?.uid) {
+        this.ultimoUsuario = user;
+        this.carregarCustos();
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.limparSubscricoes();
+    this.unsubscribeAuth?.unsubscribe?.();
   }
 
   private carregarCustos(): void {
