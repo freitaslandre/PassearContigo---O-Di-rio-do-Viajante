@@ -87,24 +87,16 @@ export class PublicacoesService {
    * Obtem publicacoes publicas do feed.
    */
   getFeedPublicacoes(): Observable<Publicacao[]> {
-    return this.afAuth.authState.pipe(
-      switchMap(user => {
-        if (!user) {
-          return of([]);
-        }
-
-        return this.afs.collection<PublicacaoPayload>(this.collectionName).snapshotChanges().pipe(
-          map(actions =>
-            actions
-              .map(action => ({
-                id: action.payload.doc.id,
-                ...action.payload.doc.data()
-              }))
-              .filter(publicacao => publicacao.visibilidade === 'publica')
-              .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm))
-          )
-        );
-      })
+    return this.afs.collection<PublicacaoPayload>(this.collectionName).snapshotChanges().pipe(
+      map(actions =>
+        actions
+          .map(action => ({
+            id: action.payload.doc.id,
+            ...action.payload.doc.data()
+          }))
+          .filter(publicacao => publicacao.visibilidade === 'publica')
+          .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm))
+      )
     );
   }
 
@@ -115,49 +107,35 @@ export class PublicacoesService {
     onData: (publicacoes: Publicacao[]) => void,
     onError?: (error: any) => void
   ): Unsubscribe | null {
-    let unsubscribeSnapshot: Unsubscribe | null = null;
+    try {
+      const db = getFirestore();
+      const publicacoesRef = collection(db, this.collectionName);
 
-    const authUnsubscribe = this.afAuth.authState.subscribe(user => {
-      unsubscribeSnapshot?.();
-      unsubscribeSnapshot = null;
+      const unsubscribeSnapshot = onSnapshot(
+        publicacoesRef,
+        (snapshot) => {
+          const publicacoes: Publicacao[] = snapshot.docs
+            .map(item => ({
+              id: item.id,
+              ...item.data() as PublicacaoPayload
+            }))
+            .filter(publicacao => publicacao.visibilidade === 'publica')
+            .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm));
 
-      if (!user) {
-        onData([]);
-        return;
-      }
+          onData(publicacoes);
+        },
+        (error) => {
+          console.error('Erro ao subscrever publicações:', error);
+          onError?.(error);
+        }
+      );
 
-      try {
-        const db = getFirestore();
-        const publicacoesRef = collection(db, this.collectionName);
-
-        unsubscribeSnapshot = onSnapshot(
-          publicacoesRef,
-          (snapshot) => {
-            const publicacoes: Publicacao[] = snapshot.docs
-              .map(item => ({
-                id: item.id,
-                ...item.data() as PublicacaoPayload
-              }))
-              .filter(publicacao => publicacao.visibilidade === 'publica')
-              .sort((a, b) => this.compararDatasDesc(a.criadoEm, b.criadoEm));
-
-            onData(publicacoes);
-          },
-          (error) => {
-            console.error('Erro ao subscrever publicações:', error);
-            onError?.(error);
-          }
-        );
-      } catch (error) {
-        console.error('Erro ao configurar subscrição de publicações:', error);
-        onError?.(error);
-      }
-    });
-
-    return () => {
-      authUnsubscribe.unsubscribe();
-      unsubscribeSnapshot?.();
-    };
+      return unsubscribeSnapshot;
+    } catch (error) {
+      console.error('Erro ao configurar subscrição de publicações:', error);
+      onError?.(error);
+      return null;
+    }
   }
 
   /**

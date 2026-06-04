@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Unsubscribe } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { ComentarioPublicacao, Publicacao, ReacaoPublicacao } from '../../models/viagem.model';
@@ -28,7 +29,8 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
 
   constructor(
     private publicacoesService: PublicacoesService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +122,12 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
   async alternarReacao(publicacao: Publicacao): Promise<void> {
     if (this.reagindo[publicacao.id]) return;
 
+    const currentUser = getAuth().currentUser;
+    if (!currentUser) {
+      await this.mostrarToast('Inicie sessão para dar gosto nesta publicação.');
+      return;
+    }
+
     this.reagindo[publicacao.id] = true;
 
     try {
@@ -135,6 +143,12 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
   async adicionarComentario(publicacao: Publicacao): Promise<void> {
     if (this.comentando[publicacao.id]) return;
 
+    const currentUser = getAuth().currentUser;
+    if (!currentUser) {
+      await this.mostrarToast('Inicie sessão para comentar esta publicação.');
+      return;
+    }
+
     const texto = (this.comentarioNovo[publicacao.id] || '').trim();
     if (!texto) return;
 
@@ -149,6 +163,17 @@ export class FeedAmigosPage implements OnInit, OnDestroy {
     } finally {
       this.comentando[publicacao.id] = false;
     }
+  }
+
+  private async mostrarToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      position: 'top',
+      color: 'warning'
+    });
+
+    await toast.present();
   }
 
   private converterParaDate(data: Date | string | any): Date {
