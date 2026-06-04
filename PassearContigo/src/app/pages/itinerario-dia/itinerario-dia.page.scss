@@ -1,223 +1,376 @@
 /* app/pages/itinerario-dia/itinerario-dia.page.scss | Estilos da pagina itinerario dia, com regras visuais especificas deste ecra. */
 .loading-card,
+/* Define estilos para este seletor. */
 .empty-pois ion-card-content {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 14px;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 }
 
+/* Define estilos para este seletor. */
 .loading-card {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 220px;
 }
 
+/* Define estilos para este seletor. */
 .itinerario-layout {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 16px;
 }
 
+/* Define estilos para este seletor. */
 .day-summary {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 6px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 2px 2px 8px;
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     justify-self: start;
   }
 
+  /* Define estilos para este seletor. */
   h1 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 24px;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 800;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     gap: 6px;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }
 
+/* Define estilos para este seletor. */
 .day-navigation {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 1fr auto 1fr;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px;
 
+  /* Define estilos para este seletor. */
   ion-button:last-child {
+    /* Define uma propriedade visual deste elemento. */
     justify-self: end;
   }
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 13px;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 700;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 }
 
+/* Define estilos para este seletor. */
 .itinerary-map-section {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px;
 }
 
+/* Define estilos para este seletor. */
 .itinerary-map-header {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 18px;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 800;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 2px 0 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 13px;
   }
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     flex-shrink: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .itinerary-map {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   height: 320px;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 320px;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid var(--ion-color-light-shade);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-light);
 }
 
+/* Define estilos para este seletor. */
 .timeline-list {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px;
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
 }
 
+/* Define estilos para este seletor. */
 .timeline-item {
+  /* Define uma propriedade visual deste elemento. */
   --background: var(--ion-color-light);
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-end: 10px;
+  /* Define uma propriedade visual deste elemento. */
   --min-height: 96px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 
+  /* Define estilos para este seletor. */
   ion-thumbnail {
+    /* Define uma propriedade visual deste elemento. */
     --border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     width: 64px;
+    /* Define uma propriedade visual deste elemento. */
     height: 64px;
+    /* Define uma propriedade visual deste elemento. */
     margin-inline-end: 12px;
   }
 }
 
+/* Define estilos para este seletor. */
 .timeline-marker {
+  /* Define uma propriedade visual deste elemento. */
   width: 32px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 32px;
+  /* Define uma propriedade visual deste elemento. */
   height: 32px;
+  /* Define uma propriedade visual deste elemento. */
   margin-inline-end: 10px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 50%;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-primary);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   place-items: center;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 13px;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 800;
 }
 
+/* Define estilos para este seletor. */
 .poi-heading {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 8px;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 16px;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 750;
   }
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     flex-shrink: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .poi-collaborator-badge {
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 999px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 32px;
+  /* Define uma propriedade visual deste elemento. */
   width: 32px;
+  /* Define uma propriedade visual deste elemento. */
   height: 32px;
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.8rem;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   text-transform: uppercase;
 }
 
+/* Define estilos para este seletor. */
 .poi-badges {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: flex-end;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
 }
 
+/* Define estilos para este seletor. */
 .poi-address {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
 }
 
+/* Define estilos para este seletor. */
 .travel-estimate {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 420px) {
+  /* Define estilos para este seletor. */
   .day-navigation {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: 1fr 1fr;
 
+    /* Define estilos para este seletor. */
     span {
+      /* Define uma propriedade visual deste elemento. */
       grid-column: 1 / -1;
+      /* Define uma propriedade visual deste elemento. */
       grid-row: 1;
+      /* Define uma propriedade visual deste elemento. */
       justify-self: center;
     }
   }
 
+  /* Define estilos para este seletor. */
   .timeline-item {
+    /* Define uma propriedade visual deste elemento. */
     --min-height: 88px;
 
+    /* Define estilos para este seletor. */
     ion-thumbnail {
+      /* Define uma propriedade visual deste elemento. */
       width: 54px;
+      /* Define uma propriedade visual deste elemento. */
       height: 54px;
+      /* Define uma propriedade visual deste elemento. */
       margin-inline-end: 8px;
     }
   }
 
+  /* Define estilos para este seletor. */
   .timeline-marker {
+    /* Define uma propriedade visual deste elemento. */
     width: 28px;
+    /* Define uma propriedade visual deste elemento. */
     min-width: 28px;
+    /* Define uma propriedade visual deste elemento. */
     height: 28px;
+    /* Define uma propriedade visual deste elemento. */
     margin-inline-end: 8px;
   }
 
+  /* Define estilos para este seletor. */
   .itinerary-map {
+    /* Define uma propriedade visual deste elemento. */
     height: 280px;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 280px;
   }
 
+  /* Define estilos para este seletor. */
   .poi-heading {
+    /* Define uma propriedade visual deste elemento. */
     flex-direction: column;
+    /* Define uma propriedade visual deste elemento. */
     gap: 4px;
   }
 }

@@ -1,32 +1,53 @@
 /* app/pages/gerir-colaboradores/gerir-colaboradores.page.scss | Estilos da pagina gerir colaboradores, com regras visuais especificas deste ecra. */
 .colaboradores-layout {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 760px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .loading-card {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 260px;
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   place-items: center;
+  /* Define uma propriedade visual deste elemento. */
   align-content: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 }
 
+/* Define estilos para este seletor. */
 .empty-state {
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 2rem;
 }
 
+/* Define estilos para este seletor. */
 ion-list ion-item {
+  /* Define uma propriedade visual deste elemento. */
   --border-style: solid;
+  /* Define uma propriedade visual deste elemento. */
   --border-width: 1px;
+  /* Define uma propriedade visual deste elemento. */
   --border-color: rgba(0, 0, 0, 0.08);
 }
 
+/* Define estilos para este seletor. */
 .nivel {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.9rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
 }

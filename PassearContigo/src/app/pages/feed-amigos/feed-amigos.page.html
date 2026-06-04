@@ -1,8 +1,12 @@
 <!-- app/pages/feed-amigos/feed-amigos.page.html | Template da pagina feed amigos, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Feed</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="carregarFeed()" [disabled]="carregando" aria-label="Recarregar feed">
         <ion-spinner *ngIf="carregando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!carregando" slot="icon-only" name="refresh-outline"></ion-icon>
@@ -11,30 +15,39 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <section class="feed-header">
     <ion-badge color="secondary">{{ publicacoes.length }} publicações</ion-badge>
     <h1>Feed público</h1>
     <p>Veja viagens publicadas pela comunidade em modo visualização.</p>
   </section>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="carregando" class="state-card">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <ion-spinner name="crescent"></ion-spinner>
       <p>A carregar feed...</p>
     </ion-card-content>
   </ion-card>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro" class="state-card">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <ion-icon name="alert-circle-outline"></ion-icon>
       <h2>Não foi possível carregar</h2>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="carregarFeed()">Tentar novamente</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && !erro && publicacoes.length === 0" class="state-card">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <ion-icon name="people-outline"></ion-icon>
       <h2>Sem publicações</h2>
@@ -42,16 +55,21 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <section *ngIf="!carregando && !erro && publicacoes.length > 0" class="feed-list">
+    <!-- Bloco estrutural do template. -->
     <article *ngFor="let publicacao of publicacoes" class="feed-card">
       <button type="button" class="feed-card-main" (click)="abrirPublicacao(publicacao)">
+        <!-- Bloco estrutural do template. -->
         <div class="feed-cover" [class.has-photo]="publicacao.viagemFotoUrl" [style.backgroundImage]="publicacao.viagemFotoUrl ? 'url(' + publicacao.viagemFotoUrl + ')' : ''">
           <ion-badge [color]="obterCorVisibilidade(publicacao)">
             {{ obterTextoVisibilidade(publicacao) }}
           </ion-badge>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="feed-body">
+          <!-- Bloco estrutural do template. -->
           <div class="feed-author">
             <ion-icon name="person-circle-outline"></ion-icon>
             <span>Publicado por {{ publicacao.autorNome || 'Amigo' }}</span>
@@ -60,6 +78,7 @@
           <h2>{{ publicacao.viagemTitulo || 'Viagem publicada' }}</h2>
           <p *ngIf="publicacao.texto" class="feed-description">{{ publicacao.texto }}</p>
 
+          <!-- Bloco estrutural do template. -->
           <div class="feed-meta">
             <span *ngIf="publicacao.viagemLocal">
               <ion-icon name="location-outline"></ion-icon>
@@ -71,6 +90,7 @@
             </span>
           </div>
 
+          <!-- Bloco estrutural do template. -->
           <div class="feed-stats">
             <span>
               <strong>{{ totalReacoes(publicacao) }}</strong>
@@ -84,8 +104,11 @@
         </div>
       </button>
 
+      <!-- Bloco estrutural do template. -->
       <div class="feed-social">
+        <!-- Bloco estrutural do template. -->
         <div class="feed-actions">
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             fill="clear"
             size="small"
@@ -98,6 +121,7 @@
             {{ totalReacoes(publicacao) }}
           </ion-button>
 
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             fill="clear"
             size="small"
@@ -116,7 +140,9 @@
           </span>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="comments-list" *ngIf="comentariosExpandidos[publicacao.id]">
+          <!-- Bloco estrutural do template. -->
           <div class="comment-item" *ngFor="let comentario of obterComentariosVisiveis(publicacao)">
             <strong>{{ comentario.autorNome || 'Utilizador' }}</strong>
             <span>{{ comentario.texto }}</span>
@@ -126,8 +152,11 @@
             A mostrar 3 de {{ totalComentarios(publicacao) }} comentários
           </ion-note>
 
+          <!-- Formulario usado para recolher dados. -->
           <form class="comment-form" (ngSubmit)="adicionarComentario(publicacao)">
+            <!-- Linha de formulario ou lista. -->
             <ion-item lines="none">
+              <!-- Campo de entrada de texto ou valor. -->
               <ion-input
                 name="comentario{{ publicacao.id }}"
                 type="text"
@@ -135,6 +164,7 @@
                 placeholder="Adicionar comentário"
               ></ion-input>
             </ion-item>
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button
               type="submit"
               fill="clear"

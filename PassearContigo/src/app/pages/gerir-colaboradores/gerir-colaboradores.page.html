@@ -1,44 +1,63 @@
 <!-- app/pages/gerir-colaboradores/gerir-colaboradores.page.html | Template da pagina gerir colaboradores, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Gerir Colaboradores</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar colaboradores...</p>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <section *ngIf="!carregando" class="colaboradores-layout">
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="podeGerirViagem">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-title>Convidar Colaborador</ion-card-title>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-subtitle>
         {{ viagem?.titulo || 'Viagem' }} · adicione por email para partilhar a viagem.
       </ion-card-subtitle>
     </ion-card-header>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
+      <!-- Linha de formulario ou lista. -->
       <ion-item>
         <ion-label position="stacked">Nome</ion-label>
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input [(ngModel)]="novoConvidado.nome" placeholder="Nome do colaborador"></ion-input>
       </ion-item>
 
+      <!-- Linha de formulario ou lista. -->
       <ion-item>
         <ion-label position="stacked">Email</ion-label>
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input [(ngModel)]="novoConvidado.email" type="email" placeholder="email@exemplo.com"></ion-input>
       </ion-item>
 
+      <!-- Linha de formulario ou lista. -->
       <ion-item>
         <ion-label position="stacked">Nível de Acesso</ion-label>
+        <!-- Campo de selecao de opcoes. -->
         <ion-select [(ngModel)]="novoConvidado.nivelAcesso">
+          <!-- Campo de selecao de opcoes. -->
           <ion-select-option *ngFor="let nivel of niveisAcesso" [value]="nivel">
             {{ nivel | titlecase }}
           </ion-select-option>
@@ -49,6 +68,7 @@
         <p class="ion-padding-start">{{ mensagemErro }}</p>
       </ion-text>
 
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="full" class="ion-margin-top" (click)="adicionarConvidado()" [disabled]="!novoConvidado.email?.trim() || pesquisando || guardando || !podeGerirViagem">
         <ion-spinner *ngIf="pesquisando || guardando" name="crescent" slot="start"></ion-spinner>
         <span *ngIf="!pesquisando">Adicionar convidado</span>
@@ -61,6 +81,7 @@
       <ion-label>Lista de convidados</ion-label>
     </ion-list-header>
 
+    <!-- Linha de formulario ou lista. -->
     <ion-item *ngFor="let convidado of convidados; let i = index">
       <ion-avatar slot="start">
         <ion-icon name="person-circle-outline"></ion-icon>
@@ -70,16 +91,19 @@
         <p>{{ convidado.email }}</p>
         <p class="nivel">Nível: {{ convidado.nivelAcesso | titlecase }}</p>
       </ion-label>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeGerirViagem" fill="clear" color="danger" slot="end" size="small" (click)="removerConvidado(i)" [disabled]="guardando" aria-label="Remover colaborador">
         Remover
       </ion-button>
     </ion-item>
   </ion-list>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!podeGerirViagem" class="empty-state">
     <p>Apenas o dono da viagem pode gerir colaboradores.</p>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="convidados.length === 0 && podeGerirViagem" class="empty-state">
     <p>Não há convidados adicionados.</p>
   </div>

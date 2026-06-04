@@ -1,84 +1,137 @@
 /* app/pages/editar-custo/editar-custo.page.scss | Estilos da pagina editar custo, com regras visuais especificas deste ecra. */
 .formulario-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1.5rem;
 }
 
+/* Define estilos para este seletor. */
 .card-formulario {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 1rem;
 }
 
+/* Define estilos para este seletor. */
 ion-list {
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   --ion-item-background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   --ion-item-border-bottom-color: #f0f0f0;
 }
 
+/* Define estilos para este seletor. */
 ion-item {
+  /* Define uma propriedade visual deste elemento. */
   --background: white;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid #e0e0e0;
 
+  /* Define estilos para este seletor. */
   ion-label {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 600;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.9rem;
   }
 
   ion-input,
   ion-select,
+  /* Define estilos para este seletor. */
   ion-datetime {
+    /* Define uma propriedade visual deste elemento. */
     --color: #1c1c1e;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 500;
   }
 }
 
+/* Define estilos para este seletor. */
 .categoria-preview {
+  /* Define uma propriedade visual deste elemento. */
   border: 2px solid var(--ion-color-primary);
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 0.75rem;
 
+  /* Define estilos para este seletor. */
   .categoria-badge {
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
 
+    /* Define estilos para este seletor. */
     ion-badge {
+      /* Define uma propriedade visual deste elemento. */
       font-size: 0.9rem;
+      /* Define uma propriedade visual deste elemento. */
       padding: 0.5rem 1rem;
+      /* Define uma propriedade visual deste elemento. */
       font-weight: 600;
     }
   }
 }
 
+/* Define estilos para este seletor. */
 .botoes-acao {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 1fr 1fr;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 2rem;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 2rem;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     --border-radius: 0.5rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .loading-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 2rem;
 
+  /* Define estilos para este seletor. */
   ion-spinner {
+    /* Define uma propriedade visual deste elemento. */
     --color: var(--ion-color-primary);
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }

@@ -5,76 +5,132 @@
 // SCSS COLOR PALETTE — PassearContigo
 // ============================================
 
+/* Define estilos para este seletor. */
 :root {
   /* Brand colors inspired by PassearContigo — Diário do Viajante */
   --ion-color-primary: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-primary-rgb: 185, 86, 24;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-primary-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-primary-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-primary-shade: #9f4814;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-primary-tint: #d06f2c;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary: #2C7A6E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary-rgb: 44, 122, 110;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary-shade: #25695e;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-secondary-tint: #4c9388;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary: #F2C94C;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary-rgb: 242, 201, 76;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary-contrast: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary-contrast-rgb: 28, 28, 30;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary-shade: #d9b242;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-tertiary-tint: #f5d26d;
 
   /* Semantic colors */
   --ion-color-success: #2C7A6E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-success-rgb: 44, 122, 110;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-success-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-success-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-success-shade: #24635a;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-success-tint: #4c9388;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning: #F2C94C;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning-rgb: 242, 201, 76;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning-contrast: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning-contrast-rgb: 28, 28, 30;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning-shade: #d9b242;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-warning-tint: #f5d26d;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger: #C74A0E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger-rgb: 199, 74, 14;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger-shade: #b23f0d;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-danger-tint: #d7682a;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark-rgb: 28, 28, 30;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark-shade: #171718;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-dark-tint: #3d3d40;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium: #7A6C5A;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium-rgb: 122, 108, 90;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium-contrast: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium-contrast-rgb: 255, 255, 255;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium-shade: #695b4b;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-medium-tint: #8d7f6f;
 
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light: #FAF7F2;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light-rgb: 250, 247, 242;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light-contrast: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light-contrast-rgb: 28, 28, 30;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light-shade: #e1d9cd;
+  /* Define uma propriedade visual deste elemento. */
   --ion-color-light-tint: #fbf8f4;
 
   /* Custom app tokens */
   --app-color-background: #FAF7F2;
+  /* Define uma propriedade visual deste elemento. */
   --app-color-surface: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   --app-color-text: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --app-color-muted: #7A6C5A;
 }
 
@@ -84,43 +140,65 @@
 
 // Button styles
 ion-button {
+  /* Define uma propriedade visual deste elemento. */
   --background: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --color: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 24px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 24px;
 
   &:hover,
+  /* Define estilos para este seletor. */
   &:focus {
+    /* Define uma propriedade visual deste elemento. */
     --background: #9f4814;
   }
 
+  /* Define estilos para este seletor. */
   &.secondary {
+    /* Define uma propriedade visual deste elemento. */
     --background: #2C7A6E;
 
     &:hover,
+    /* Define estilos para este seletor. */
     &:focus {
+      /* Define uma propriedade visual deste elemento. */
       --background: #1d4d47;
     }
   }
 
+  /* Define estilos para este seletor. */
   &.tertiary {
+    /* Define uma propriedade visual deste elemento. */
     --background: #F2C94C;
+    /* Define uma propriedade visual deste elemento. */
     --color: #1C1C1E;
 
     &:hover,
+    /* Define estilos para este seletor. */
     &:focus {
+      /* Define uma propriedade visual deste elemento. */
       --background: #d9b242;
     }
   }
 
+  /* Define estilos para este seletor. */
   &.danger {
+    /* Define uma propriedade visual deste elemento. */
     --background: #C74A0E;
 
     &:hover,
+    /* Define estilos para este seletor. */
     &:focus {
+      /* Define uma propriedade visual deste elemento. */
       --background: #b23f0d;
     }
   }
@@ -128,118 +206,180 @@ ion-button {
 
 // Card styles
 ion-card {
+  /* Define uma propriedade visual deste elemento. */
   --background: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --box-shadow: 0 2px 8px rgba(28, 28, 30, 0.1);
+  /* Define uma propriedade visual deste elemento. */
   margin: 16px 0;
 }
 
 // Input styles
 ion-input,
+/* Define estilos para este seletor. */
 ion-textarea {
+  /* Define uma propriedade visual deste elemento. */
   --background: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --placeholder-color: #7A6C5A;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 8px;
 
+  /* Define estilos para este seletor. */
   &:focus {
+    /* Define uma propriedade visual deste elemento. */
     --background: #FAF7F2;
+    /* Define uma propriedade visual deste elemento. */
     --border-color: #B95618;
   }
 }
 
 // Toolbar styles
 ion-toolbar {
+  /* Define uma propriedade visual deste elemento. */
   --background: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --color: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --ion-toolbar-text-color: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --border-bottom: 1px solid rgba(185, 86, 24, 0.24);
 }
 
 // Header styles
 ion-header {
+  /* Define uma propriedade visual deste elemento. */
   --background: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --color: #ffffff;
 }
 
 // Footer styles
 ion-footer {
+  /* Define uma propriedade visual deste elemento. */
   --background: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --border-top: 1px solid #e5dcd0;
 }
 
 // Tab styles
 ion-tab-bar {
+  /* Define uma propriedade visual deste elemento. */
   --background: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   --color: #7A6C5A;
+  /* Define uma propriedade visual deste elemento. */
   --color-selected: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --border-top: 1px solid #e5dcd0;
 }
 
 // List styles
 ion-list {
+  /* Define uma propriedade visual deste elemento. */
   --background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 16px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 16px;
 }
 
+/* Define estilos para este seletor. */
 ion-list-header {
+  /* Define uma propriedade visual deste elemento. */
   --color: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --background: transparent;
 }
 
 // Badge styles
 ion-badge {
+  /* Define uma propriedade visual deste elemento. */
   --background: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --color: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 6px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 10px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 10px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 6px;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 6px;
 }
 
 // Modal styles
 ion-modal {
+  /* Define uma propriedade visual deste elemento. */
   --background: #FAF7F2;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 16px;
 }
 
 // Alert styles
 ion-alert {
+  /* Define uma propriedade visual deste elemento. */
   --background: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   --button-color: #B95618;
 }
 
 // Spinner styles
 ion-spinner {
+  /* Define uma propriedade visual deste elemento. */
   --color: #B95618;
 }
 
 // Segment styles
 ion-segment {
+  /* Define uma propriedade visual deste elemento. */
   --background: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   --color: #7A6C5A;
+  /* Define uma propriedade visual deste elemento. */
   --indicator-color: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --indicator-box-shadow: none;
 }
 
+/* Define estilos para este seletor. */
 ion-segment-button {
+  /* Define uma propriedade visual deste elemento. */
   --background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   --color: #7A6C5A;
+  /* Define uma propriedade visual deste elemento. */
   --color-checked: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   --border-bottom: 2px solid transparent;
 
+  /* Define estilos para este seletor. */
   &.segment-button-checked {
+    /* Define uma propriedade visual deste elemento. */
     --color: #B95618;
+    /* Define uma propriedade visual deste elemento. */
     --border-bottom: 2px solid #B95618;
   }
 }
@@ -250,76 +390,125 @@ ion-segment-button {
 
 // Font families
 $font-primary: 'Poppins', sans-serif;
+/* Define uma propriedade visual deste elemento. */
 $font-secondary: 'Inter', sans-serif;
+/* Define uma propriedade visual deste elemento. */
 $font-mono: 'Courier New', monospace;
 
 // Font sizes
 $text-xs: 12px;
+/* Define uma propriedade visual deste elemento. */
 $text-sm: 14px;
+/* Define uma propriedade visual deste elemento. */
 $text-base: 16px;
+/* Define uma propriedade visual deste elemento. */
 $text-lg: 18px;
+/* Define uma propriedade visual deste elemento. */
 $text-xl: 20px;
+/* Define uma propriedade visual deste elemento. */
 $text-2xl: 24px;
+/* Define uma propriedade visual deste elemento. */
 $text-3xl: 30px;
+/* Define uma propriedade visual deste elemento. */
 $text-4xl: 36px;
 
 // Font weights
 $font-light: 300;
+/* Define uma propriedade visual deste elemento. */
 $font-normal: 400;
+/* Define uma propriedade visual deste elemento. */
 $font-medium: 500;
+/* Define uma propriedade visual deste elemento. */
 $font-semibold: 600;
+/* Define uma propriedade visual deste elemento. */
 $font-bold: 700;
+/* Define uma propriedade visual deste elemento. */
 $font-extrabold: 800;
 
 // Line heights
 $line-height-tight: 1.2;
+/* Define uma propriedade visual deste elemento. */
 $line-height-normal: 1.5;
+/* Define uma propriedade visual deste elemento. */
 $line-height-relaxed: 1.75;
+/* Define uma propriedade visual deste elemento. */
 $line-height-loose: 2;
 
 // Letter spacing
 $letter-spacing-tight: -0.02em;
+/* Define uma propriedade visual deste elemento. */
 $letter-spacing-normal: 0;
+/* Define uma propriedade visual deste elemento. */
 $letter-spacing-wide: 0.02em;
+/* Define uma propriedade visual deste elemento. */
 $letter-spacing-wider: 0.05em;
 
 // Mixins for typography
 @mixin heading-1 {
+  /* Define uma propriedade visual deste elemento. */
   font-family: $font-primary;
+  /* Define uma propriedade visual deste elemento. */
   font-size: $text-4xl;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: $font-bold;
+  /* Define uma propriedade visual deste elemento. */
   line-height: $line-height-tight;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: $letter-spacing-tight;
 }
 
+/* Regra especial de CSS/SCSS. */
 @mixin heading-2 {
+  /* Define uma propriedade visual deste elemento. */
   font-family: $font-primary;
+  /* Define uma propriedade visual deste elemento. */
   font-size: $text-3xl;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: $font-bold;
+  /* Define uma propriedade visual deste elemento. */
   line-height: $line-height-tight;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: $letter-spacing-tight;
 }
 
+/* Regra especial de CSS/SCSS. */
 @mixin heading-3 {
+  /* Define uma propriedade visual deste elemento. */
   font-family: $font-primary;
+  /* Define uma propriedade visual deste elemento. */
   font-size: $text-2xl;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: $font-semibold;
+  /* Define uma propriedade visual deste elemento. */
   line-height: $line-height-normal;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: $letter-spacing-normal;
 }
 
+/* Regra especial de CSS/SCSS. */
 @mixin body-text {
+  /* Define uma propriedade visual deste elemento. */
   font-family: $font-secondary;
+  /* Define uma propriedade visual deste elemento. */
   font-size: $text-base;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: $font-normal;
+  /* Define uma propriedade visual deste elemento. */
   line-height: $line-height-normal;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: $letter-spacing-normal;
 }
 
+/* Regra especial de CSS/SCSS. */
 @mixin small-text {
+  /* Define uma propriedade visual deste elemento. */
   font-family: $font-secondary;
+  /* Define uma propriedade visual deste elemento. */
   font-size: $text-sm;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: $font-normal;
+  /* Define uma propriedade visual deste elemento. */
   line-height: $line-height-normal;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: $letter-spacing-normal;
 }

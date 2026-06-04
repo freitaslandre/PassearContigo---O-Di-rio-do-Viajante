@@ -1,8 +1,11 @@
 <!-- app/pages/descobrir/descobrir.page.html | Template da pagina descobrir, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Descobrir</ion-title>
   </ion-toolbar>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
     <ion-searchbar
       [(ngModel)]="termoPesquisa"
@@ -15,14 +18,18 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content>
+  <!-- Linha de formulario ou lista. -->
   <ion-item class="destino-itinerario" *ngIf="destinosItinerario.length > 0">
     <ion-label>Adicionar a</ion-label>
+    <!-- Campo de selecao de opcoes. -->
     <ion-select
       [(ngModel)]="destinoSelecionado"
       interface="popover"
       placeholder="Escolha um dia"
     >
+      <!-- Campo de selecao de opcoes. -->
       <ion-select-option
         *ngFor="let destino of destinosItinerario"
         [value]="destino.valor"
@@ -32,8 +39,10 @@
     </ion-select>
   </ion-item>
 
+  <!-- Bloco estrutural do template. -->
   <div class="sugestoes-automaticas" *ngIf="!pesquisou && sugestoesAutomaticas.length > 0">
     <ion-note>Sugestões com base nos seus POIs</ion-note>
+    <!-- Bloco estrutural do template. -->
     <div class="sugestoes-chips">
       <ion-chip
         button
@@ -46,12 +55,15 @@
     </div>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <section class="viagens-sugeridas" *ngIf="!pesquisou && !carregando">
+    <!-- Bloco estrutural do template. -->
     <div class="section-heading">
       <h2>Viagens sugeridas</h2>
       <p>Roteiros prontos com dias e POIs para começar mais depressa.</p>
     </div>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngFor="let sugestao of sugestoesViagem" class="viagem-sugerida-card">
       <img
         *ngIf="sugestao.fotoCapaUrl; else capaPlaceholder"
@@ -59,26 +71,35 @@
         [src]="sugestao.fotoCapaUrl"
         [alt]="sugestao.titulo"
       />
+      <!-- Template alternativo usado pelo Angular. -->
       <ng-template #capaPlaceholder>
+        <!-- Bloco estrutural do template. -->
         <div class="viagem-sugerida-capa placeholder-capa">
           <ion-icon name="image-outline"></ion-icon>
         </div>
       </ng-template>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Bloco estrutural do template. -->
         <div class="viagem-sugerida-topo">
+          <!-- Bloco estrutural do template. -->
           <div>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-title>{{ sugestao.titulo }}</ion-card-title>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-subtitle>{{ sugestao.local }}</ion-card-subtitle>
           </div>
           <ion-badge color="primary">{{ sugestao.duracaoDias }} dia{{ sugestao.duracaoDias > 1 ? 's' : '' }}</ion-badge>
         </div>
       </ion-card-header>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <p>{{ sugestao.descricao }}</p>
         <ion-note>{{ sugestao.destaque }}</ion-note>
 
+        <!-- Bloco estrutural do template. -->
         <div class="poi-preview-list">
           <ion-chip *ngFor="let dia of sugestao.dias">
             <ion-icon name="calendar-outline"></ion-icon>
@@ -86,6 +107,7 @@
           </ion-chip>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="poi-preview-list">
           <button
             type="button"
@@ -104,6 +126,7 @@
           </button>
         </div>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           (click)="criarViagemSugerida(sugestao)"
@@ -125,18 +148,22 @@
     </ion-card>
   </section>
 
+  <!-- Bloco estrutural do template. -->
   <div class="search-state" *ngIf="carregando">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A pesquisar locais...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="erro && !carregando">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <ion-text color="danger">{{ erro }}</ion-text>
     </ion-card-content>
   </ion-card>
 
   <ion-list *ngIf="!carregando && resultados.length > 0" lines="full">
+    <!-- Linha de formulario ou lista. -->
     <ion-item
       button
       detail="true"
@@ -152,6 +179,7 @@
         </p>
         <p>{{ local.endereco }}</p>
       </ion-label>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         slot="end"
         fill="clear"
@@ -172,12 +200,15 @@
     </ion-item>
   </ion-list>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="pesquisou && !carregando && !erro && resultados.length === 0">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>Nenhum local encontrado.</p>
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <div class="empty-state" *ngIf="!pesquisou && !carregando && sugestoesViagem.length === 0">
     <ion-icon name="search-outline"></ion-icon>
     <h2>Pesquisar locais</h2>

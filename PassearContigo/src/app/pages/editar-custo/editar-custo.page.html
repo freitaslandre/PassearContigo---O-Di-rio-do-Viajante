@@ -1,13 +1,19 @@
 <!-- app/pages/editar-custo/editar-custo.page.html | Template da pagina editar custo, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="cancelar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Editar custo</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button 
         (click)="eliminarCusto()" 
         [disabled]="salvando"
@@ -19,10 +25,13 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
     <!-- Estado de carregamento do custo. -->
   <ion-card *ngIf="carregando" class="card-loading">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
+      <!-- Bloco estrutural do template. -->
       <div class="loading-container">
         <ion-spinner name="crescent"></ion-spinner>
         <p>{{ strings.get('custos.editar.loading') }}</p>
@@ -32,15 +41,20 @@
 
   <!-- Formulário de edição do custo. -->
   <div *ngIf="!carregando && custo" class="formulario-container">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card class="card-formulario">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>{{ strings.get('custos.editar.informacoes') }}</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <ion-list>
           <!-- Campo da descrição do custo. -->
           <ion-item>
             <ion-label position="floating">{{ strings.get('custos.editar.campos.descricao') }}</ion-label>
+            <!-- Campo de entrada de texto ou valor. -->
             <ion-input
               [(ngModel)]="custo.descricao"
               [disabled]="salvando"
@@ -52,6 +66,7 @@
           <!-- Campo do valor do custo. -->
           <ion-item>
             <ion-label position="floating">{{ strings.get('custos.editar.campos.valor') }}</ion-label>
+            <!-- Campo de entrada de texto ou valor. -->
             <ion-input
               [(ngModel)]="custo.valor"
               [disabled]="salvando"
@@ -77,12 +92,14 @@
           <!-- Selector da categoria do custo. -->
           <ion-item>
             <ion-label position="floating">{{ strings.get('custos.editar.campos.categoria') }}</ion-label>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select
               [(ngModel)]="custo.categoria"
               [disabled]="salvando"
               [placeholder]="strings.get('custos.editar.placeholders.categoria')"
               [cancelText]="strings.get('common.cancel')"
               [okText]="strings.get('common.select')">
+              <!-- Campo de selecao de opcoes. -->
               <ion-select-option *ngFor="let cat of categoriasDisponiveis" [value]="cat">
                 {{ obterNomeCategoria(cat) }}
               </ion-select-option>
@@ -102,6 +119,7 @@
 
     <!-- Botões principais da edição. -->
     <div class="botoes-acao">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         fill="clear"
@@ -109,6 +127,7 @@
         [disabled]="salvando">
         {{ strings.get('common.cancel') }}
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         color="primary"

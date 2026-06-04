@@ -1,25 +1,35 @@
 <!-- app/pages/viagem-detalhe/viagem-detalhe.page.html | Template da pagina viagem detalhe, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar class="detalhe-toolbar">
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button class="back-button" (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title class="toolbar-titulo">Detalhe da viagem</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons class="toolbar-acoes" slot="end" *ngIf="!carregando && viagem">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="compartilharItinerarioPdf()" aria-label="Partilhar itinerário em PDF">
         <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="exportarItinerarioPdf()" aria-label="Exportar itinerário em PDF">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeEditarViagem" (click)="editarViagem()" aria-label="Editar viagem">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeEditarViagem" (click)="guardar()" [disabled]="guardando" aria-label="Guardar viagem">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeGerirViagem" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando" aria-label="Eliminar viagem">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
@@ -27,22 +37,31 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar viagem...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && viagem" class="detalhe-layout">
+    <!-- Bloco estrutural do template. -->
     <section class="resumo-section">
+      <!-- Bloco estrutural do template. -->
       <div class="resumo-heading">
+        <!-- Bloco estrutural do template. -->
         <div>
           <ion-badge [color]="obterCorStatus(status)">
             {{ obterTextoStatus(status) }}
@@ -55,25 +74,31 @@
         </div>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="summary-grid">
+        <!-- Bloco estrutural do template. -->
         <div class="summary-item">
           <strong>{{ totalDias }}</strong>
           <span>dias</span>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="summary-item">
           <strong>{{ totalPois }}</strong>
           <span>POIs</span>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="summary-item">
           <ion-icon name="calendar-outline"></ion-icon>
           <span>Início</span>
           <strong>{{ formatarData(dataInicio) }}</strong>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="summary-item">
           <ion-icon name="time-outline"></ion-icon>
           <span>Duração</span>
           <strong>{{ obterNumDias(dataInicio, dataFim) }} dias</strong>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="summary-item">
           <ion-icon name="flag-outline"></ion-icon>
           <span>Fim</span>
@@ -81,30 +106,41 @@
         </div>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="status-control" *ngIf="podeEditarViagem">
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="none">
           <ion-icon slot="start" name="flag-outline"></ion-icon>
           <ion-label>Estado da viagem</ion-label>
+          <!-- Campo de selecao de opcoes. -->
           <ion-select name="status" [(ngModel)]="status" interface="popover" aria-label="Estado da viagem">
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="planejada">Planeada</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="em-andamento">Em curso</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="concluida">Concluída</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="cancelada">Cancelada</ion-select-option>
           </ion-select>
         </ion-item>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="summary-actions">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDiario()">
           <ion-icon slot="start" name="book-outline"></ion-icon>
           Diário
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="tertiary" fill="outline" (click)="abrirAlbum()">
           <ion-icon slot="start" name="images-outline"></ion-icon>
           Álbum
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="podeGerirViagem" expand="block" color="primary" fill="outline" (click)="abrirColaboradores()">
           <ion-icon slot="start" name="people-outline"></ion-icon>
           Colaboradores
@@ -112,11 +148,15 @@
       </div>
     </section>
 
+    <!-- Bloco estrutural do template. -->
     <section *ngIf="podeGerirViagem" class="feed-share-panel">
+      <!-- Bloco estrutural do template. -->
       <div class="feed-share-top">
+        <!-- Bloco estrutural do template. -->
         <div class="feed-share-icon">
           <ion-icon name="megaphone-outline"></ion-icon>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="feed-share-text">
           <h2>Feed</h2>
           <p>{{ viagem.publicada ? 'Esta viagem está visível para todos.' : 'Partilhe esta viagem no feed público.' }}</p>
@@ -135,13 +175,16 @@
         placeholder="Texto opcional para o feed"
       ></ion-textarea>
 
+      <!-- Bloco estrutural do template. -->
       <div class="feed-share-actions">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button color="secondary" (click)="publicarViagem()" [disabled]="publicando || guardando">
           <ion-spinner *ngIf="publicando" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!publicando" slot="start" name="send-outline"></ion-icon>
           {{ viagem.publicada ? 'Atualizar' : 'Partilhar no feed' }}
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="viagem.publicada" color="medium" fill="outline" (click)="removerDoFeed()" [disabled]="publicando || guardando">
           <ion-icon slot="start" name="remove-circle-outline"></ion-icon>
           Remover
@@ -149,29 +192,39 @@
       </div>
     </section>
 
+    <!-- Bloco estrutural do template. -->
     <section class="dias-section">
+      <!-- Bloco estrutural do template. -->
       <div class="section-header">
+        <!-- Bloco estrutural do template. -->
         <div>
           <h2>Lista de dias</h2>
           <p>Organize o itinerário dia a dia.</p>
         </div>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="podeEditarViagem" fill="clear" color="primary" (click)="adicionarDia()" [disabled]="guardando">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar
         </ion-button>
       </div>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card *ngIf="dias.length === 0" class="empty-days">
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-content>
           <p>Esta viagem ainda não tem dias.</p>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarDia()" [disabled]="guardando">
             Criar primeiro dia
           </ion-button>
         </ion-card-content>
       </ion-card>
 
+      <!-- Bloco estrutural do template. -->
       <div class="dias-compact-list" *ngIf="dias.length > 0">
+        <!-- Bloco estrutural do template. -->
         <article *ngFor="let dia of dias; let i = index; trackBy: trackByDiaId" class="dia-compact-item">
+          <!-- Bloco estrutural do template. -->
           <div class="dia-compact-summary">
             <button
               type="button"
@@ -189,6 +242,7 @@
               </span>
             </button>
 
+            <!-- Bloco estrutural do template. -->
             <div class="dia-summary-meta">
               <span class="dia-pois-count">
                 <ion-icon name="location-outline"></ion-icon>
@@ -197,25 +251,32 @@
               <span class="dia-custo compact" *ngIf="obterCustoDia(dia) > 0">
                 € {{ obterCustoDia(dia) | number: '1.2-2' }}
               </span>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button fill="clear" size="small" (click)="irParaDia(dia.id)" aria-label="Ver detalhe">
                 <ion-icon slot="icon-only" name="open-outline"></ion-icon>
               </ion-button>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)" aria-label="Itinerário">
                 <ion-icon slot="icon-only" name="map-outline"></ion-icon>
               </ion-button>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" [disabled]="guardando" aria-label="Remover dia">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" [attr.aria-label]="diaEstaExpandido(dia) ? 'Recolher dia' : 'Expandir dia'">
                 <ion-icon slot="icon-only" [name]="diaEstaExpandido(dia) ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
               </ion-button>
             </div>
           </div>
 
+          <!-- Bloco estrutural do template. -->
           <div class="dia-expanded-content" *ngIf="diaEstaExpandido(dia)">
           <ion-list lines="full">
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-label position="stacked">Título do dia</ion-label>
+              <!-- Campo de entrada de texto ou valor. -->
               <ion-input
                 name="diaTitulo{{ i }}"
                 type="text"
@@ -224,8 +285,10 @@
               ></ion-input>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-label position="stacked">Data</ion-label>
+              <!-- Campo de entrada de texto ou valor. -->
               <ion-input
                 name="diaData{{ i }}"
                 type="date"
@@ -234,8 +297,10 @@
               ></ion-input>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-label position="stacked">Local</ion-label>
+              <!-- Campo de entrada de texto ou valor. -->
               <ion-input
                 name="diaLocal{{ i }}"
                 type="text"
@@ -245,6 +310,7 @@
               ></ion-input>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-label position="stacked">Descrição</ion-label>
               <ion-textarea
@@ -255,6 +321,7 @@
               ></ion-textarea>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-label position="stacked">Observações</ion-label>
               <ion-textarea
@@ -266,6 +333,7 @@
             </ion-item>
           </ion-list>
 
+          <!-- Bloco estrutural do template. -->
           <div class="pois-section" *ngIf="dia.pontosInteresse.length > 0">
             <h3>Pontos de interesse</h3>
 
@@ -293,14 +361,18 @@
               </ion-row>
             </ion-grid>
 
+            <!-- Bloco estrutural do template. -->
             <div class="poi-row" *ngFor="let poi of dia.pontosInteresse; let poiIndex = index">
+              <!-- Bloco estrutural do template. -->
               <div class="poi-photo-tools">
                 <img
                   class="poi-thumbnail"
                   [src]="obterFotoPoi(poi)"
                   [alt]="poi.nome || 'Ponto de interesse'"
                 >
+                <!-- Bloco estrutural do template. -->
                 <div class="poi-photo-actions">
+                  <!-- Botao de acao disponivel ao utilizador. -->
                   <ion-button
                     fill="clear"
                     size="small"
@@ -312,6 +384,7 @@
                     <ion-spinner *ngIf="fotoPoiAEnviar(dia.id, poi)" name="crescent" slot="icon-only"></ion-spinner>
                     <ion-icon *ngIf="!fotoPoiAEnviar(dia.id, poi)" slot="icon-only" name="camera-outline"></ion-icon>
                   </ion-button>
+                  <!-- Botao de acao disponivel ao utilizador. -->
                   <ion-button
                     fill="clear"
                     size="small"
@@ -325,9 +398,12 @@
                 </div>
               </div>
 
+              <!-- Bloco estrutural do template. -->
               <div class="poi-fields">
+                <!-- Linha de formulario ou lista. -->
                 <ion-item lines="none">
                   <ion-label position="stacked">Nome</ion-label>
+                  <!-- Campo de entrada de texto ou valor. -->
                   <ion-input
                     name="poiNome{{ i }}{{ poiIndex }}"
                     type="text"
@@ -336,9 +412,12 @@
                   ></ion-input>
                 </ion-item>
 
+                <!-- Bloco estrutural do template. -->
                 <div class="poi-inline-fields">
+                  <!-- Linha de formulario ou lista. -->
                   <ion-item lines="none">
                     <ion-label position="stacked">Tipo</ion-label>
+                    <!-- Campo de entrada de texto ou valor. -->
                     <ion-input
                       name="poiTipo{{ i }}{{ poiIndex }}"
                       type="text"
@@ -347,8 +426,10 @@
                     ></ion-input>
                   </ion-item>
 
+                  <!-- Linha de formulario ou lista. -->
                   <ion-item lines="none">
                     <ion-label position="stacked">Endereço</ion-label>
+                    <!-- Campo de entrada de texto ou valor. -->
                     <ion-input
                       name="poiEndereco{{ i }}{{ poiIndex }}"
                       type="text"
@@ -358,7 +439,9 @@
                   </ion-item>
                 </div>
 
+                <!-- Bloco estrutural do template. -->
                 <div class="poi-location-tools">
+                  <!-- Botao de acao disponivel ao utilizador. -->
                   <ion-button
                     fill="outline"
                     size="small"
@@ -383,12 +466,15 @@
             Sem pontos de interesse neste dia.
           </ion-note>
 
+          <!-- Bloco estrutural do template. -->
           <div class="dia-footer">
             <span>{{ formatarData(dia.data) }}</span>
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button fill="clear" size="small" (click)="irParaDia(dia.id)">
               Ver detalhe
               <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
             </ion-button>
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button fill="clear" size="small" color="secondary" (click)="irParaItinerarioDia(dia.id)">
               Itinerário
               <ion-icon slot="end" name="map-outline"></ion-icon>
@@ -399,12 +485,14 @@
       </div>
     </section>
 
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="guardar()" [disabled]="guardando">
       <ion-spinner *ngIf="guardando" name="crescent" slot="start"></ion-spinner>
       <ion-icon *ngIf="!guardando" slot="start" name="save-outline"></ion-icon>
       Guardar detalhes
     </ion-button>
 
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button *ngIf="podeGerirViagem" expand="block" color="danger" fill="outline" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
       <ion-spinner *ngIf="eliminando" name="crescent" slot="start"></ion-spinner>
       <ion-icon *ngIf="!eliminando" slot="start" name="trash-outline"></ion-icon>

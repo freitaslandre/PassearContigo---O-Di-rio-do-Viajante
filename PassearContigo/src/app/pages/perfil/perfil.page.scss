@@ -1,125 +1,213 @@
 /* app/pages/perfil/perfil.page.scss | Estilos da pagina perfil, com regras visuais especificas deste ecra. */
 .perfil-layout {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 720px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .account-card {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 
+  /* Define estilos para este seletor. */
   ion-card-header {
+    /* Define uma propriedade visual deste elemento. */
     display: grid;
+    /* Define uma propriedade visual deste elemento. */
     gap: 0.45rem;
   }
 
+  /* Define estilos para este seletor. */
   ion-card-title {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.35rem;
   }
 
+  /* Define estilos para este seletor. */
   ion-card-subtitle {
+    /* Define uma propriedade visual deste elemento. */
     text-transform: none;
   }
 
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     display: grid;
+    /* Define uma propriedade visual deste elemento. */
     gap: 0.85rem;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.45;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 48px;
   }
 }
 
+/* Define estilos para este seletor. */
 .account-avatar {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   place-items: center;
+  /* Define uma propriedade visual deste elemento. */
   width: 46px;
+  /* Define uma propriedade visual deste elemento. */
   height: 46px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: rgba(var(--ion-color-primary-rgb), 0.1);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 1.45rem;
 }
 
+/* Define estilos para este seletor. */
 form {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 14px;
 }
 
+/* Define estilos para este seletor. */
 .form-input {
+  /* Define uma propriedade visual deste elemento. */
   --background: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   --color: #1c1c1e;
+  /* Define uma propriedade visual deste elemento. */
   --highlight-color-focused: #e8823a;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 0;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 0;
+  /* Define uma propriedade visual deste elemento. */
   display: block;
+  /* Define uma propriedade visual deste elemento. */
   height: 58px;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid #d9c9b7;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: #ffffff;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 }
 
+/* Define estilos para este seletor. */
 .form-input::part(native) {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 56px;
+  /* Define uma propriedade visual deste elemento. */
   line-height: 56px;
 }
 
+/* Define estilos para este seletor. */
 .form-input.ion-focused {
+  /* Define uma propriedade visual deste elemento. */
   --background: #faf7f2;
+  /* Define uma propriedade visual deste elemento. */
   border-color: #e8823a;
+  /* Define uma propriedade visual deste elemento. */
   box-shadow: 0 0 0 3px rgba(232, 130, 58, 0.16);
 }
 
+/* Define estilos para este seletor. */
 .show-password-item {
+  /* Define uma propriedade visual deste elemento. */
   --background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-top: 0;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-bottom: 0;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 0;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 0;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 32px;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 6px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 12px;
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
 }
 
+/* Define estilos para este seletor. */
 .show-password-item span {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.88rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   cursor: default;
 }
 
+/* Define estilos para este seletor. */
 .show-password-item ion-checkbox {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
 }
 
+/* Define estilos para este seletor. */
 .link-button {
+  /* Define uma propriedade visual deste elemento. */
   border: 0;
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   color: #e8823a;
+  /* Define uma propriedade visual deste elemento. */
   font: inherit;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   text-decoration: underline;
 }
 
+/* Define estilos para este seletor. */
 .link-button:disabled {
+  /* Define uma propriedade visual deste elemento. */
   color: #7a6c5a;
+  /* Define uma propriedade visual deste elemento. */
   cursor: not-allowed;
+  /* Define uma propriedade visual deste elemento. */
   opacity: 0.65;
 }

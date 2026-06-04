@@ -1,29 +1,44 @@
 <!-- app/pages/adicionar-poi/adicionar-poi.page.html | Template da pagina adicionar poi, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="cancelar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Adicionar POI</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Formulario usado para recolher dados. -->
   <form #poiForm="ngForm" (ngSubmit)="adicionarPoi()">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Dados do POI</ion-card-title>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-subtitle *ngIf="diaTitulo">Dia: {{ diaTitulo }}</ion-card-subtitle>
       </ion-card-header>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Foto</ion-label>
+          <!-- Bloco estrutural do template. -->
           <div class="foto-upload-container">
+            <!-- Bloco estrutural do template. -->
             <div *ngIf="fotoPreview" class="foto-preview">
               <img [src]="fotoPreview" alt="Preview da foto" />
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button
                 size="small"
                 color="danger"
@@ -35,7 +50,9 @@
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
             </div>
+            <!-- Bloco estrutural do template. -->
             <div class="foto-acoes">
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button
                 color="primary"
                 type="button"
@@ -44,6 +61,7 @@
                 <ion-icon slot="start" name="camera-outline"></ion-icon>
                 Tirar foto
               </ion-button>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button
                 color="medium"
                 fill="outline"
@@ -53,6 +71,7 @@
                 <ion-icon slot="start" name="images-outline"></ion-icon>
                 Galeria
               </ion-button>
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button
                 color="medium"
                 fill="clear"
@@ -73,8 +92,10 @@
           </div>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Nome *</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="nome"
             [(ngModel)]="poi.nome"
@@ -89,8 +110,10 @@
           <small>Nome é obrigatório.</small>
         </ion-text>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Descrição</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="descricao"
             [(ngModel)]="poi.descricao"
@@ -99,8 +122,10 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Tipo</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="tipo"
             [(ngModel)]="poi.tipo"
@@ -109,8 +134,10 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Endereço</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="endereco"
             [(ngModel)]="poi.endereco"
@@ -121,6 +148,7 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Bloco estrutural do template. -->
         <div class="sugestoes-wrapper" *ngIf="carregandoSugestoes || erroSugestoes || sugestoesLocais.length > 0">
           <ion-note class="sugestoes-status" *ngIf="carregandoSugestoes">
             <ion-spinner name="crescent"></ion-spinner>
@@ -132,6 +160,7 @@
           </ion-text>
 
           <ion-list class="sugestoes-locais" lines="full" *ngIf="sugestoesLocais.length > 0">
+            <!-- Linha de formulario ou lista. -->
             <ion-item
               button
               detail="false"
@@ -148,17 +177,25 @@
           </ion-list>
         </div>
 
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card class="mapa-card">
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-header>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-title>Localização no Mapa</ion-card-title>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-subtitle *ngIf="poi.latitude && poi.longitude">
               Localização definida. Pode ajustar no mapa se necessário.
             </ion-card-subtitle>
           </ion-card-header>
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-content>
+            <!-- Bloco estrutural do template. -->
             <div id="map" class="map-container"></div>
 
+            <!-- Bloco estrutural do template. -->
             <div class="localizacao-atual-acoes">
+              <!-- Botao de acao disponivel ao utilizador. -->
               <ion-button
                 class="botao-localizacao-atual"
                 expand="block"
@@ -188,14 +225,17 @@
               </ion-text>
             </div>
 
+            <!-- Bloco estrutural do template. -->
             <div *ngIf="poi.latitude && poi.longitude" class="coordenadas-info">
               <small>Coordenadas: {{ poi.latitude | number:'1.4-4' }}, {{ poi.longitude | number:'1.4-4' }}</small>
             </div>
           </ion-card-content>
         </ion-card>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Telefone</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="telefone"
             [(ngModel)]="poi.telefone"
@@ -207,9 +247,12 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Bloco estrutural do template. -->
         <div class="horario-grid">
+          <!-- Linha de formulario ou lista. -->
           <ion-item>
             <ion-label position="stacked">Abre</ion-label>
+            <!-- Campo de entrada de texto ou valor. -->
             <ion-input
               name="horarioAbertura"
               [(ngModel)]="horarioAbertura"
@@ -218,8 +261,10 @@
             ></ion-input>
           </ion-item>
 
+          <!-- Linha de formulario ou lista. -->
           <ion-item>
             <ion-label position="stacked">Fecha</ion-label>
+            <!-- Campo de entrada de texto ou valor. -->
             <ion-input
               name="horarioFecho"
               [(ngModel)]="horarioFecho"
@@ -229,8 +274,10 @@
           </ion-item>
         </div>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">URL</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="url"
             [(ngModel)]="poi.url"
@@ -239,8 +286,10 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Nota</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="nota"
             [(ngModel)]="poi.nota"
@@ -249,8 +298,10 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Custo (€)</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             name="custo"
             [(ngModel)]="poi.custo"
@@ -262,26 +313,38 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Categoria</ion-label>
+          <!-- Campo de selecao de opcoes. -->
           <ion-select
             name="categoria"
             [(ngModel)]="poi.categoria"
             placeholder="Selecione uma categoria"
           >
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="gastronomia">Gastronomia</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="cultura">Cultura</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="natureza">Natureza</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="aventura">Aventura</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="compras">Compras</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="hospedagem">Alojamento</ion-select-option>
+            <!-- Campo de selecao de opcoes. -->
             <ion-select-option value="outro">Outro</ion-select-option>
           </ion-select>
         </ion-item>
 
+        <!-- Bloco estrutural do template. -->
         <div class="rating-field">
           <ion-label>Avaliação</ion-label>
+          <!-- Bloco estrutural do template. -->
           <div class="stars-container" aria-label="Avaliação por estrelas">
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button
               *ngFor="let star of [1, 2, 3, 4, 5]"
               fill="clear"
@@ -298,7 +361,9 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Bloco estrutural do template. -->
     <div class="button-group">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         type="submit"
@@ -307,6 +372,7 @@
         <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
         Adicionar POI
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         color="medium"

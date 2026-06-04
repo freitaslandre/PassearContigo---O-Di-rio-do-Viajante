@@ -1,32 +1,43 @@
 <!-- app/pages/detalhe-poi/detalhe-poi.page.html | Template da pagina detalhe poi, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>{{ poi?.nome || 'POI' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="ion-text-center" style="margin-top: 40px;">
     <ion-spinner></ion-spinner>
     <p>A carregar POI...</p>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="erro && !carregando" class="ion-text-center">
     <ion-text color="danger">
       <h3>{{ erro }}</h3>
     </ion-text>
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button expand="block" (click)="voltar()">
       Voltar
     </ion-button>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="poi && !carregando" class="poi-detail-layout">
+    <!-- Bloco estrutural do template. -->
     <section class="poi-summary">
+      <!-- Bloco estrutural do template. -->
       <div>
         <ion-badge color="medium" *ngIf="poi.categoria || poi.tipo">{{ poi.categoria || poi.tipo }}</ion-badge>
         <h1>{{ poi.nome }}</h1>
@@ -40,12 +51,17 @@
 
     <!-- FORMULÁRIO DE EDIÇÃO -->
     <ion-card #editSection *ngIf="modoEdicao && podeEditarViagem" class="simple-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Editar POI</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Nota</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             [(ngModel)]="poiEditavel.nota"
             placeholder="Nota sobre este POI"
@@ -53,8 +69,10 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Custo (€)</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             [(ngModel)]="poiEditavel.custo"
             placeholder="Custo em euros"
@@ -65,9 +83,12 @@
           ></ion-input>
         </ion-item>
 
+        <!-- Bloco estrutural do template. -->
         <div class="rating-field">
           <ion-label>Avaliação</ion-label>
+          <!-- Bloco estrutural do template. -->
           <div class="stars-container" aria-label="Avaliação por estrelas">
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button
               *ngFor="let star of [1, 2, 3, 4, 5]"
               fill="clear"
@@ -82,7 +103,9 @@
           </div>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="button-group" style="margin-top: 20px;">
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             expand="block"
             color="success"
@@ -91,6 +114,7 @@
             <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
             Guardar
           </ion-button>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             expand="block"
             color="medium"
@@ -106,12 +130,17 @@
 
     <!-- GALERIA DE FOTOS -->
     <ion-card class="simple-card photo-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Foto</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Bloco estrutural do template. -->
         <div *ngIf="fotoUrl" class="foto-container">
           <img [src]="fotoUrl" alt="Foto POI" class="poi-foto" />
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             expand="block"
             color="secondary"
@@ -122,6 +151,7 @@
             <ion-icon slot="start" name="share-social-outline"></ion-icon>
             Partilhar Foto
           </ion-button>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             expand="block"
             color="danger"
@@ -135,12 +165,14 @@
           </ion-button>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div *ngIf="!fotoUrl" class="sem-foto">
           <ion-text color="medium">
             <p>Sem foto adicionada</p>
           </ion-text>
         </div>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="podeEditarViagem"
           expand="block"
@@ -163,10 +195,14 @@
 
     <!-- INFORMAÇÕES DO POI -->
     <ion-card class="simple-card info-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Informações</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.nome">
           <ion-label>
             <strong>Nome:</strong>
@@ -174,6 +210,7 @@
           <ion-text slot="end">{{ poi.nome }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.tipo">
           <ion-label>
             <strong>Tipo:</strong>
@@ -181,6 +218,7 @@
           <ion-text slot="end">{{ poi.tipo }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.categoria">
           <ion-label>
             <strong>Categoria:</strong>
@@ -188,10 +226,12 @@
           <ion-badge slot="end" color="primary">{{ poi.categoria }}</ion-badge>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.avaliacao && poi.avaliacao > 0">
           <ion-label>
             <strong>Avaliação:</strong>
           </ion-label>
+          <!-- Bloco estrutural do template. -->
           <div slot="end" class="stars-display">
             <ion-icon
               *ngFor="let star of [1, 2, 3, 4, 5]"
@@ -201,6 +241,7 @@
           </div>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.descricao">
           <ion-label>
             <strong>Descrição:</strong>
@@ -208,6 +249,7 @@
           <ion-text slot="end">{{ poi.descricao }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.endereco">
           <ion-label>
             <strong>Endereço:</strong>
@@ -215,6 +257,7 @@
           <ion-text slot="end">{{ poi.endereco }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.custo !== undefined && poi.custo !== null">
           <ion-label>
             <strong>Custo:</strong>
@@ -222,6 +265,7 @@
           <ion-text slot="end">€ {{ poi.custo | number: '1.2-2' }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.horario">
           <ion-label>
             <strong>Horário:</strong>
@@ -229,6 +273,7 @@
           <ion-text slot="end">{{ poi.horario }}</ion-text>
         </ion-item>
 
+        <!-- Linha de formulario ou lista. -->
         <ion-item lines="inset" *ngIf="poi.nota">
           <ion-label>
             <strong>Nota Rápida:</strong>
@@ -240,24 +285,33 @@
 
     <!-- MAPA -->
     <ion-card *ngIf="temMapaDoDia" class="simple-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Mapa do Dia</ion-card-title>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-subtitle>
           {{ poisDoDiaOrdenadosComLocalizacao.length }} POI{{ poisDoDiaOrdenadosComLocalizacao.length === 1 ? '' : 's' }} com localização
           <span *ngIf="temPercursoDoDia"> · percurso traçado</span>
         </ion-card-subtitle>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Bloco estrutural do template. -->
         <div #mapaPoi class="mapa-poi"></div>
       </ion-card-content>
     </ion-card>
 
     <!-- AÇÕES RÁPIDAS -->
     <ion-card class="simple-card actions-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Ações Rápidas</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="!modoEdicao && podeEditarViagem"
           expand="block"
@@ -269,6 +323,7 @@
           Editar POI
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           color="secondary"
@@ -279,6 +334,7 @@
           Partilhar POI
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="temLocalizacao"
           expand="block"
@@ -290,6 +346,7 @@
           Ver no Mapa
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="poi.telefone"
           expand="block"
@@ -301,6 +358,7 @@
           Ligar
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="poi.url"
           expand="block"
@@ -312,6 +370,7 @@
           Visitar Site
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="podeEditarViagem"
           expand="block"
@@ -327,16 +386,21 @@
 
     <!-- NOTAS -->
     <ion-card class="simple-card notes-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Notas Pessoais</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <!-- Adicionar Nota -->
         <ion-item>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input
             placeholder="Adicionar uma nota..."
             [(ngModel)]="novaNotaTexto"
           ></ion-input>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             slot="end"
             color="success"
@@ -355,12 +419,15 @@
           </ion-text>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div *ngFor="let nota of notas" class="nota-card">
+          <!-- Linha de formulario ou lista. -->
           <ion-item lines="none">
             <ion-label>
               <p class="nota-texto">{{ nota.texto }}</p>
               <small class="nota-data">{{ nota.data | date: 'dd/MM/yyyy HH:mm' }}</small>
             </ion-label>
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button
               slot="end"
               color="danger"

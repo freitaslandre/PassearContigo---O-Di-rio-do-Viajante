@@ -1,518 +1,859 @@
 /* app/pages/viagem-detalhe/viagem-detalhe.page.scss | Estilos da pagina viagem detalhe, com regras visuais especificas deste ecra. */
 .loading-card {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 250px;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
 }
 
+/* Define estilos para este seletor. */
 .back-button {
+  /* Define uma propriedade visual deste elemento. */
   --color: var(--ion-color-primary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 8px;
 }
 
+/* Define estilos para este seletor. */
 .detalhe-toolbar {
+  /* Define uma propriedade visual deste elemento. */
   position: relative;
 }
 
+/* Define estilos para este seletor. */
 .toolbar-titulo {
+  /* Define uma propriedade visual deste elemento. */
   padding-inline: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   text-align: start;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   text-overflow: ellipsis;
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
 }
 
+/* Define estilos para este seletor. */
 .toolbar-acoes {
+  /* Define uma propriedade visual deste elemento. */
   justify-content: flex-end;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 6px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 6px;
+    /* Define uma propriedade visual deste elemento. */
     min-width: 44px;
   }
 }
 
+/* Define estilos para este seletor. */
 .detalhe-layout {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.9rem;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 920px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto 2rem;
 }
 
+/* Define estilos para este seletor. */
 .resumo-section {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.85rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.9rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-primary-rgb), 0.18);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
 }
 
 .resumo-heading,
 .section-header,
 .dia-card-title,
+/* Define estilos para este seletor. */
 .dia-footer {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
 }
 
+/* Define estilos para este seletor. */
 .resumo-heading {
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
 
+  /* Define estilos para este seletor. */
   h1 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0.4rem 0 0.15rem;
+    /* Define uma propriedade visual deste elemento. */
     font-size: clamp(1.75rem, 7vw, 2.35rem);
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.08;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     gap: 0.4rem;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .summary-grid {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.55rem;
 }
 
+/* Define estilos para este seletor. */
 .summary-item {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   align-content: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-items: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 58px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.55rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 
+  /* Define estilos para este seletor. */
   strong {
+    /* Define uma propriedade visual deste elemento. */
     display: block;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.15;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
   }
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.72rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 650;
+    /* Define uma propriedade visual deste elemento. */
     letter-spacing: 0;
+    /* Define uma propriedade visual deste elemento. */
     text-transform: uppercase;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     margin-bottom: 0.15rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
   }
 }
 
 .summary-item:nth-child(1),
+/* Define estilos para este seletor. */
 .summary-item:nth-child(2) {
+  /* Define estilos para este seletor. */
   strong {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.45rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .summary-actions {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.65rem;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     min-height: 44px;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .status-control {
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 
+  /* Define estilos para este seletor. */
   ion-item {
+    /* Define uma propriedade visual deste elemento. */
     --min-height: 52px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 12px;
+    /* Define uma propriedade visual deste elemento. */
     --inner-padding-end: 8px;
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
   }
 }
 
+/* Define estilos para este seletor. */
 .dias-section {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
 }
 
+/* Define estilos para este seletor. */
 .feed-share-panel {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.85rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.26);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: rgba(var(--ion-color-secondary-rgb), 0.055);
 }
 
+/* Define estilos para este seletor. */
 .feed-share-top {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.7rem;
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     flex: 0 0 auto;
+    /* Define uma propriedade visual deste elemento. */
     margin-left: auto;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-share-icon {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   place-items: center;
+  /* Define uma propriedade visual deste elemento. */
   width: 38px;
+  /* Define uma propriedade visual deste elemento. */
   height: 38px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-secondary);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-secondary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 1.25rem;
 }
 
+/* Define estilos para este seletor. */
 .feed-share-text {
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.05rem;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0.2rem 0 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.9rem;
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.3;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-share-note {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 74px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.65rem 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-background-color);
 }
 
+/* Define estilos para este seletor. */
 .feed-share-actions {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.55rem;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 44px;
   }
 }
 
+/* Define estilos para este seletor. */
 .section-header h2 {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 1.2rem;
 }
 
+/* Define estilos para este seletor. */
 .section-header p {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0.2rem 0 0;
 }
 
+/* Define estilos para este seletor. */
 .dias-compact-list {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
 }
 
+/* Define estilos para este seletor. */
 .dia-compact-item {
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-card-background, var(--ion-background-color));
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 }
 
+/* Define estilos para este seletor. */
 .dia-compact-summary {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: minmax(0, 1fr) auto;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 58px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.55rem 0.55rem 0.55rem 0.75rem;
 }
 
+/* Define estilos para este seletor. */
 .dia-summary-main {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 0;
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   color: inherit;
+  /* Define uma propriedade visual deste elemento. */
   text-align: left;
 }
 
+/* Define estilos para este seletor. */
 .dia-summary-text {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.12rem;
 
   strong,
+  /* Define estilos para este seletor. */
   small {
+    /* Define uma propriedade visual deste elemento. */
     min-width: 0;
+    /* Define uma propriedade visual deste elemento. */
     overflow: hidden;
+    /* Define uma propriedade visual deste elemento. */
     text-overflow: ellipsis;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 
+  /* Define estilos para este seletor. */
   strong {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.98rem;
   }
 
+  /* Define estilos para este seletor. */
   small {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.78rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .dia-summary-meta {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: flex-end;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.2rem;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     width: 34px;
+    /* Define uma propriedade visual deste elemento. */
     height: 34px;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .dia-pois-count {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.22rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 0.35rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.82rem;
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 15px;
   }
 }
 
+/* Define estilos para este seletor. */
 .dia-expanded-content {
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 0.75rem 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   border-top: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
 }
 
+/* Define estilos para este seletor. */
 .dia-custo {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.5rem 1rem;
+  /* Define uma propriedade visual deste elemento. */
   background: #fff3e0;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 6px;
+  /* Define uma propriedade visual deste elemento. */
   border-left: 3px solid #ff9800;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   color: #ff9800;
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
 
+  /* Define estilos para este seletor. */
   &.compact {
+    /* Define uma propriedade visual deste elemento. */
     padding: 0.35rem 0.55rem;
+    /* Define uma propriedade visual deste elemento. */
     border-left-width: 2px;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.78rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .dia-footer {
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
+  /* Define uma propriedade visual deste elemento. */
   padding-top: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.9rem;
 }
 
+/* Define estilos para este seletor. */
 .pois-section {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   padding-top: 0.75rem;
 
+  /* Define estilos para este seletor. */
   h3 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .poi-gallery-grid {
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
 
+  /* Define estilos para este seletor. */
   ion-row {
+    /* Define uma propriedade visual deste elemento. */
     margin: -0.25rem;
   }
 
+  /* Define estilos para este seletor. */
   ion-col {
+    /* Define uma propriedade visual deste elemento. */
     padding: 0.25rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .poi-gallery-item {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.35rem;
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 0;
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   text-align: left;
+  /* Define uma propriedade visual deste elemento. */
   cursor: pointer;
 
+  /* Define estilos para este seletor. */
   img {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
+    /* Define uma propriedade visual deste elemento. */
     aspect-ratio: 1;
+    /* Define uma propriedade visual deste elemento. */
     border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     object-fit: cover;
+    /* Define uma propriedade visual deste elemento. */
     border: 1px solid rgba(var(--ion-color-medium-rgb), 0.25);
   }
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     display: block;
+    /* Define uma propriedade visual deste elemento. */
     min-width: 0;
+    /* Define uma propriedade visual deste elemento. */
     overflow: hidden;
+    /* Define uma propriedade visual deste elemento. */
     text-overflow: ellipsis;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.78rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color);
   }
 }
 
+/* Define estilos para este seletor. */
 .poi-row {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 84px 1fr;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   align-items: start;
 }
 
+/* Define estilos para este seletor. */
 .poi-photo-tools {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.35rem;
+  /* Define uma propriedade visual deste elemento. */
   justify-items: center;
 }
 
+/* Define estilos para este seletor. */
 .poi-thumbnail {
+  /* Define uma propriedade visual deste elemento. */
   width: 76px;
+  /* Define uma propriedade visual deste elemento. */
   height: 76px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   object-fit: cover;
 }
 
+/* Define estilos para este seletor. */
 .poi-photo-actions {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.25rem;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     width: 32px;
+    /* Define uma propriedade visual deste elemento. */
     height: 32px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 0;
   }
 }
 
 .poi-fields,
+/* Define estilos para este seletor. */
 .poi-inline-fields {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
 }
 
+/* Define estilos para este seletor. */
 .poi-inline-fields {
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 1fr 2fr;
 }
 
+/* Define estilos para este seletor. */
 .poi-location-tools {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
 
+  /* Define estilos para este seletor. */
   ion-note {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.8rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .empty-pois-note {
+  /* Define uma propriedade visual deste elemento. */
   display: block;
+  /* Define uma propriedade visual deste elemento. */
   padding-top: 0.75rem;
 }
 
+/* Define estilos para este seletor. */
 .empty-days {
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 }
 
+/* Define estilos para este seletor. */
 ion-card {
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
 }
 
+/* Define estilos para este seletor. */
 ion-list {
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 620px) {
   .section-header,
+  /* Define estilos para este seletor. */
   .publicacao-header {
+    /* Define uma propriedade visual deste elemento. */
     flex-direction: column;
+    /* Define uma propriedade visual deste elemento. */
     align-items: stretch;
   }
 
+  /* Define estilos para este seletor. */
   .resumo-heading {
+    /* Define uma propriedade visual deste elemento. */
     gap: 0.35rem;
   }
 
+  /* Define estilos para este seletor. */
   .summary-grid {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
+  /* Define estilos para este seletor. */
   .summary-item {
+    /* Define uma propriedade visual deste elemento. */
     grid-column: span 3;
   }
 
+  /* Define estilos para este seletor. */
   .summary-item:nth-child(n + 3) {
+    /* Define uma propriedade visual deste elemento. */
     grid-column: span 2;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 62px;
   }
 
+  /* Define estilos para este seletor. */
   .summary-item:nth-child(n + 3) strong {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.9rem;
   }
 
   .poi-row,
+  /* Define estilos para este seletor. */
   .poi-inline-fields {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: 1fr;
   }
 
+  /* Define estilos para este seletor. */
   .dia-compact-summary {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: 1fr;
+    /* Define uma propriedade visual deste elemento. */
     align-items: stretch;
   }
 
+  /* Define estilos para este seletor. */
   .dia-summary-meta {
+    /* Define uma propriedade visual deste elemento. */
     justify-content: space-between;
   }
 
+  /* Define estilos para este seletor. */
   .dia-summary-main {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
   }
 }

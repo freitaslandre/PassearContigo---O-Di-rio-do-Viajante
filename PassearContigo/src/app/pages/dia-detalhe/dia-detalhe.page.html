@@ -1,30 +1,42 @@
 <!-- app/pages/dia-detalhe/dia-detalhe.page.html | Template da pagina dia detalhe, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button class="back-button" (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>{{ dia?.titulo || 'Detalhes do Dia' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar dia...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && dia">
+    <!-- Bloco estrutural do template. -->
     <div class="day-navigation">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         fill="outline"
         color="medium"
@@ -37,6 +49,7 @@
 
       <span>{{ textoPosicaoDia }}</span>
 
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         fill="outline"
         color="medium"
@@ -49,32 +62,42 @@
     </div>
     <!-- Informações do dia -->
     <ion-card>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Bloco estrutural do template. -->
         <div class="card-header-row">
+          <!-- Bloco estrutural do template. -->
           <div>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-title>{{ dia.titulo }}</ion-card-title>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-subtitle>{{ formatarDataDia(dia) }}</ion-card-subtitle>
           </div>
+          <!-- Bloco estrutural do template. -->
           <div class="custo-badge" *ngIf="obterCustoDia(dia) > 0">
             <span class="custo-label">Custo:</span>
             <span class="custo-valor">{{ obterCustoDia(dia) | number: '1.2-2' }}€</span>
           </div>
         </div>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content *ngIf="dia.descricao">
         <p>{{ dia.descricao }}</p>
       </ion-card-content>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content *ngIf="dia.local">
         <ion-icon name="location-outline"></ion-icon>
         <span>{{ dia.local }}</span>
       </ion-card-content>
     </ion-card>
 
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" routerLink="adicionar-poi" routerDirection="forward">
       <ion-icon slot="start" name="add-circle-outline"></ion-icon>
       Adicionar POI
     </ion-button>
 
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button expand="block" color="secondary" fill="outline" (click)="abrirItinerario()">
       <ion-icon slot="start" name="map-outline"></ion-icon>
       Ver itinerário do dia
@@ -82,11 +105,15 @@
 
     <!-- Custos do dia -->
     <ion-card *ngIf="dia.custos && dia.custos.length > 0">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Custos</ion-card-title>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <ion-list>
+          <!-- Linha de formulario ou lista. -->
           <ion-item *ngFor="let custo of dia.custos">
             <ion-label>
               <h3>{{ custo.descricao }}</h3>
@@ -103,12 +130,18 @@
 
     <!-- Pontos de Interesse (POIs) -->
     <ion-card *ngIf="pontosInteresseOrdenados.length > 0">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Pontos de Interesse</ion-card-title>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-subtitle>Ordenados por nome</ion-card-subtitle>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
+        <!-- Bloco estrutural do template. -->
         <div class="poi-list">
+          <!-- Bloco estrutural do template. -->
           <div
             class="poi-item"
             *ngFor="let poi of pontosInteresseOrdenados; let i = index; trackBy: trackByPoiId"
@@ -116,7 +149,9 @@
             routerDirection="forward"
             style="cursor: pointer;"
           >
+            <!-- Bloco estrutural do template. -->
             <div class="poi-order">{{ i + 1 }}</div>
+            <!-- Bloco estrutural do template. -->
             <div class="poi-image-container">
               <img
                 [src]="obterFotoPoi(poi)"
@@ -124,7 +159,9 @@
                 class="poi-thumbnail"
               >
             </div>
+            <!-- Bloco estrutural do template. -->
             <div class="poi-info">
+              <!-- Bloco estrutural do template. -->
               <div class="poi-title-row">
                 <h3>{{ poi.nome || 'Ponto de interesse sem nome' }}</h3>
                 <span
@@ -153,6 +190,7 @@
 
     <!-- Mensagem se não houver POIs -->
     <ion-card *ngIf="(!dia.pontosInteresse || dia.pontosInteresse.length === 0)" class="empty-pois">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <p>Nenhum ponto de interesse adicionado para este dia.</p>
       </ion-card-content>

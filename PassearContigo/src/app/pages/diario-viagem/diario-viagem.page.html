@@ -1,21 +1,29 @@
 <!-- app/pages/diario-viagem/diario-viagem.page.html | Template da pagina diario viagem, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Diário da Viagem</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end" *ngIf="!carregando && viagem && dias.length > 0">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="partilharPdfDiario()" [disabled]="partilhandoPdf || gerandoPdf || guardando" aria-label="Partilhar diário em PDF">
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="gerarPdfDiario()" [disabled]="gerandoPdf || partilhandoPdf || guardando" aria-label="Exportar diário em PDF">
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeEditarViagem" (click)="guardarDiario()" [disabled]="guardando" aria-label="Guardar diário">
         <ion-spinner *ngIf="guardando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!guardando" slot="icon-only" name="save-outline"></ion-icon>
@@ -24,21 +32,29 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content>
+  <!-- Bloco estrutural do template. -->
   <div #diarioSwipeArea class="diario-page">
+    <!-- Bloco estrutural do template. -->
     <div *ngIf="carregando" class="loading-card">
       <ion-spinner name="crescent"></ion-spinner>
       <p>A carregar diário...</p>
     </div>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngIf="!carregando && erro" class="state-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <p>{{ erro }}</p>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
       </ion-card-content>
     </ion-card>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngIf="!carregando && viagem && dias.length === 0" class="state-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <ion-icon name="book-outline"></ion-icon>
         <h2>Sem dias no diário</h2>
@@ -46,9 +62,13 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Bloco estrutural do template. -->
     <section *ngIf="!carregando && viagem && diaAtual" class="diario-content">
+      <!-- Bloco estrutural do template. -->
       <section class="diario-hero">
+        <!-- Bloco estrutural do template. -->
         <div>
+          <!-- Bloco estrutural do template. -->
           <div class="badge-row">
             <ion-badge color="primary">Dia {{ diaAtualIndex + 1 }}</ion-badge>
             <ion-badge [color]="obterCorStatus(viagem.status)">
@@ -65,17 +85,21 @@
             {{ diaAtual.local }}
           </p>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="diario-date">
           <span>{{ formatarData(diaAtual.data) }}</span>
           <strong>{{ textoPosicaoDia }}</strong>
         </div>
       </section>
 
+      <!-- Bloco estrutural do template. -->
       <div class="day-navigation">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button fill="outline" color="medium" (click)="irParaDiaAnterior()" [disabled]="!temDiaAnterior">
           <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
         </ion-button>
 
+        <!-- Bloco estrutural do template. -->
         <div class="day-strip" aria-label="Escolher dia">
           <button
             type="button"
@@ -91,45 +115,60 @@
           </button>
         </div>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button fill="outline" color="medium" (click)="irParaDiaProximo()" [disabled]="!temDiaProximo">
           <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
         </ion-button>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="stats-grid">
+        <!-- Bloco estrutural do template. -->
         <div class="stat-item">
           <ion-icon name="map-outline"></ion-icon>
           <strong>{{ (diaAtual.pontosInteresse || []).length }}</strong>
           <span>POIs</span>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="stat-item">
           <ion-icon name="cash-outline"></ion-icon>
           <strong>{{ formatarValor(obterCustoDia(diaAtual)) }} €</strong>
           <span>Custo</span>
         </div>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="secondary" fill="outline" (click)="abrirDetalheDia()">
           <ion-icon slot="start" name="calendar-outline"></ion-icon>
           Abrir dia
         </ion-button>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="diario-grid">
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card class="entry-card">
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-header>
+            <!-- Cartao visual que agrupa informacao. -->
             <ion-card-title>Entrada do dia</ion-card-title>
           </ion-card-header>
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-content>
             <ion-list lines="full">
+              <!-- Linha de formulario ou lista. -->
               <ion-item>
                 <ion-label position="stacked">Título</ion-label>
+                <!-- Campo de entrada de texto ou valor. -->
                 <ion-input [(ngModel)]="diaAtual.titulo" name="tituloDia" [readonly]="!podeEditarViagem"></ion-input>
               </ion-item>
 
+              <!-- Linha de formulario ou lista. -->
               <ion-item>
                 <ion-label position="stacked">Local</ion-label>
+                <!-- Campo de entrada de texto ou valor. -->
                 <ion-input [(ngModel)]="diaAtual.local" name="localDia" [readonly]="!podeEditarViagem"></ion-input>
               </ion-item>
 
+              <!-- Linha de formulario ou lista. -->
               <ion-item>
                 <ion-label position="stacked">Descrição</ion-label>
                 <ion-textarea
@@ -140,6 +179,7 @@
                 ></ion-textarea>
               </ion-item>
 
+              <!-- Linha de formulario ou lista. -->
               <ion-item>
                 <ion-label position="stacked">Observações</ion-label>
                 <ion-textarea
@@ -154,16 +194,21 @@
         </ion-card>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <section class="pois-section">
+        <!-- Bloco estrutural do template. -->
         <div class="section-header">
           <h2>Pontos de interesse</h2>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" [routerLink]="['/tabs', 'viagens', viagemId, 'dias', diaAtual.id, 'adicionar-poi']">
             <ion-icon slot="start" name="add-circle-outline"></ion-icon>
             Adicionar
           </ion-button>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div *ngIf="(diaAtual.pontosInteresse || []).length > 0" class="poi-strip">
+          <!-- Bloco estrutural do template. -->
           <article
             class="poi-card"
             *ngFor="let poi of diaAtual.pontosInteresse || []; trackBy: trackByPoiId"
@@ -171,7 +216,9 @@
             <button type="button" class="poi-open-area" (click)="abrirPoi(poi)">
               <img [src]="obterFotoPoi(poi)" [alt]="poi.nome || 'Ponto de interesse'">
             </button>
+            <!-- Bloco estrutural do template. -->
             <div class="poi-card-body">
+              <!-- Bloco estrutural do template. -->
               <div class="poi-title">
                 <span>{{ poi.nome || 'Ponto de interesse' }}</span>
                 <ion-icon *ngIf="poiTemRegistoIncompleto(poi)" name="warning-outline" color="warning"></ion-icon>
@@ -185,6 +232,7 @@
                 placeholder="Adicionar nota tardia"
                 [readonly]="!podeEditarViagem"
               ></ion-textarea>
+              <!-- Bloco estrutural do template. -->
               <div class="poi-card-footer">
                 <ion-badge color="success" *ngIf="obterTotalCustoPoi(poi) > 0">
                   {{ formatarValor(obterTotalCustoPoi(poi)) }} €
@@ -192,6 +240,7 @@
                 <ion-badge color="medium" *ngIf="obterTotalCustoPoi(poi) === 0">
                   Sem custo
                 </ion-badge>
+                <!-- Botao de acao disponivel ao utilizador. -->
                 <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" (click)="guardarNotaPoi(poi)" [disabled]="guardando">
                   <ion-icon slot="start" name="save-outline"></ion-icon>
                   Guardar nota
@@ -201,14 +250,18 @@
           </article>
         </div>
 
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card *ngIf="!diaAtual.pontosInteresse || diaAtual.pontosInteresse.length === 0" class="empty-pois">
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-content>
             <p>Sem pontos de interesse neste dia.</p>
           </ion-card-content>
         </ion-card>
       </section>
 
+      <!-- Bloco estrutural do template. -->
       <section class="custos-section">
+        <!-- Bloco estrutural do template. -->
         <div class="section-header">
           <h2>Custos do dia</h2>
           <ion-badge color="success" *ngIf="obterCustoDia(diaAtual) > 0">
@@ -216,9 +269,12 @@
           </ion-badge>
         </div>
 
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card *ngIf="obterLinhasCustosDia(diaAtual).length > 0" class="custos-card">
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-content>
             <ion-list lines="full">
+              <!-- Linha de formulario ou lista. -->
               <ion-item *ngFor="let custo of obterLinhasCustosDia(diaAtual)">
                 <ion-label>
                   <h3>{{ custo.descricao }}</h3>
@@ -230,7 +286,9 @@
           </ion-card-content>
         </ion-card>
 
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card *ngIf="obterLinhasCustosDia(diaAtual).length === 0" class="empty-pois">
+          <!-- Cartao visual que agrupa informacao. -->
           <ion-card-content>
             <p>Sem custos registados neste dia.</p>
           </ion-card-content>

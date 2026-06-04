@@ -1,21 +1,29 @@
 <!-- app/pages/nova-viagem/nova-viagem.page.html | Template da pagina nova viagem, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="cancelar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Nova viagem</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Formulario usado para recolher dados. -->
   <form [formGroup]="form" (ngSubmit)="criarViagem()">
     <!-- Foto de capa -->
     <div class="foto-capa-section">
+      <!-- Bloco estrutural do template. -->
       <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
         <img [src]="fotoCapaPreview" alt="Foto de capa" />
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           color="danger"
           size="small"
@@ -27,7 +35,9 @@
         </ion-button>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="foto-capa-upload" *ngIf="!fotoCapaPreview">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           color="primary"
@@ -37,6 +47,7 @@
           <ion-icon slot="start" name="camera"></ion-icon>
           Tirar foto de capa
         </ion-button>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           color="medium"
@@ -53,6 +64,7 @@
     <!-- Título -->
     <ion-item>
       <ion-label position="stacked">Título da viagem *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input
         formControlName="titulo"
         type="text"
@@ -69,6 +81,7 @@
     <!-- Destino -->
     <ion-item>
       <ion-label position="stacked">Destino *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input
         formControlName="destino"
         type="text"
@@ -82,6 +95,7 @@
     <!-- Data de Início -->
     <ion-item>
       <ion-label position="stacked">Data de Início *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input
         formControlName="dataInicio"
         type="date"
@@ -96,6 +110,7 @@
     <!-- Data de Fim -->
     <ion-item>
       <ion-label position="stacked">Data de Fim *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input
         formControlName="dataFim"
         type="date"
@@ -112,6 +127,7 @@
 
     <!-- Botões -->
     <div class="button-group">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         color="primary"
@@ -121,6 +137,7 @@
         <ion-icon slot="start" name="checkmark-circle"></ion-icon>
         Criar viagem
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         expand="block"
         color="medium"

@@ -1,40 +1,54 @@
 <!-- app/pages/album-viagem/album-viagem.page.html | Template da pagina album viagem, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="!modoSelecao" (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="modoSelecao" (click)="cancelarSelecao()" aria-label="Cancelar seleção">
         <ion-icon slot="icon-only" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>{{ modoSelecao ? totalSelecionadas + ' selecionadas' : 'Álbum' }}</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end" *ngIf="!carregando && fotos.length > 0">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="compartilharAlbumPdf()" [disabled]="partilhandoPdf || gerandoPdf" aria-label="Partilhar álbum em PDF">
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="!modoSelecao" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf" aria-label="Exportar álbum em PDF">
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="importarFotosDoRolo()" [disabled]="importando" aria-label="Importar fotos">
         <ion-spinner *ngIf="importando" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!importando" slot="icon-only" name="cloud-upload-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="!modoSelecao && podeEditarViagem" (click)="ativarSelecao()" aria-label="Selecionar fotos">
         <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="limparSelecao()" [disabled]="totalSelecionadas === 0" aria-label="Limpar seleção">
         <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="reatribuirFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0" aria-label="Reatribuir fotos selecionadas">
         <ion-icon slot="icon-only" name="swap-horizontal-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="modoSelecao && podeEditarViagem" color="danger" (click)="confirmarEliminarFotosSelecionadas()" [disabled]="totalFotosEditaveisSelecionadas === 0" aria-label="Eliminar fotos selecionadas">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="modoSelecao && podeEditarViagem" (click)="selecionarTodas()" [disabled]="totalSelecionadas === fotos.length" aria-label="Selecionar todas as fotos">
         <ion-icon slot="icon-only" name="checkbox-outline"></ion-icon>
       </ion-button>
@@ -42,21 +56,29 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar álbum...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro" class="state-card">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <section *ngIf="!carregando && viagem && !erro" class="album-layout">
+    <!-- Bloco estrutural do template. -->
     <div class="album-header">
+      <!-- Bloco estrutural do template. -->
       <div>
         <ion-badge color="primary">{{ fotos.length }} fotos</ion-badge>
         <h1>{{ viagem.titulo || 'Álbum da viagem' }}</h1>
@@ -65,12 +87,15 @@
           {{ viagem.local }}
         </p>
       </div>
+      <!-- Bloco estrutural do template. -->
       <div class="album-header-actions">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="fotos.length > 0" color="primary" fill="outline" (click)="exportarAlbumPdf()" [disabled]="gerandoPdf || partilhandoPdf">
           <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!gerandoPdf" slot="start" name="download-outline"></ion-icon>
           Descarregar álbum
         </ion-button>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="podeEditarViagem" color="primary" fill="outline" (click)="importarFotosDoRolo()" [disabled]="importando">
           <ion-spinner *ngIf="importando" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!importando" slot="start" name="cloud-upload-outline"></ion-icon>
@@ -83,7 +108,9 @@
       {{ fotosIgnoradasPorTamanho }} fotos muito pesadas foram ocultadas para evitar bloquear a aplicação.
     </ion-note>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngIf="fotos.length === 0" class="state-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <ion-icon name="images-outline"></ion-icon>
         <h2>Sem fotos no álbum</h2>
@@ -91,6 +118,7 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Bloco estrutural do template. -->
     <section *ngFor="let grupo of gruposFotos" class="photo-group">
       <h2>{{ grupo.titulo }}</h2>
 
@@ -103,6 +131,7 @@
             size-lg="2"
             *ngFor="let foto of grupo.fotos; trackBy: trackByFotoId"
           >
+            <!-- Bloco estrutural do template. -->
             <div class="photo-tile-shell">
               <button
                 type="button"
@@ -113,11 +142,14 @@
                 (click)="abrirFoto(foto)"
                 (press)="alternarSelecaoFoto(foto)"
               >
+                <!-- Bloco estrutural do template. -->
                 <div class="selection-indicator" *ngIf="modoSelecao || fotoEstaSelecionada(foto)">
                   <ion-icon [name]="fotoEstaSelecionada(foto) ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
                 </div>
                 <ion-img [src]="foto.url" [alt]="foto.titulo"></ion-img>
+                <!-- Bloco estrutural do template. -->
                 <div class="photo-info">
+                  <!-- Bloco estrutural do template. -->
                   <div class="photo-title-row">
                     <span>{{ foto.titulo }}</span>
                     <ion-badge color="light">{{ foto.origemLabel }}</ion-badge>
@@ -150,6 +182,7 @@
       </ion-grid>
     </section>
 
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button *ngIf="temMaisFotos" expand="block" fill="outline" color="medium" (click)="carregarMaisFotos()">
       <ion-icon slot="start" name="images-outline"></ion-icon>
       Carregar mais fotos
@@ -157,29 +190,41 @@
   </section>
 
   <ion-modal [isOpen]="!!fotoAberta" (didDismiss)="fecharFoto()" class="photo-detail-modal">
+    <!-- Template alternativo usado pelo Angular. -->
     <ng-template>
+      <!-- Inicio do cabecalho do ecra. -->
       <ion-header>
+        <!-- Barra superior com titulo e acoes. -->
         <ion-toolbar>
+          <!-- Grupo de botoes da barra superior. -->
           <ion-buttons slot="start">
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button (click)="fecharFoto()" aria-label="Fechar">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
+          <!-- Titulo apresentado no topo do ecra. -->
           <ion-title>{{ fotoAberta?.titulo || 'Foto' }}</ion-title>
         </ion-toolbar>
       </ion-header>
 
+      <!-- Conteudo principal do ecra. -->
       <ion-content *ngIf="fotoAberta as foto" class="photo-detail-content">
+        <!-- Bloco estrutural do template. -->
         <div class="photo-detail-viewer">
           <img [src]="foto.url" [alt]="foto.titulo" />
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <section class="photo-detail-info">
+          <!-- Bloco estrutural do template. -->
           <div class="photo-detail-title-row">
+            <!-- Bloco estrutural do template. -->
             <div>
               <ion-badge color="primary">{{ foto.origemLabel }}</ion-badge>
               <h2>{{ foto.titulo }}</h2>
             </div>
+            <!-- Botao de acao disponivel ao utilizador. -->
             <ion-button fill="clear" color="primary" (click)="partilharFoto(foto)" aria-label="Partilhar foto">
               <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
             </ion-button>
@@ -190,6 +235,7 @@
           </p>
 
           <ion-list lines="full">
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-icon slot="start" name="calendar-outline"></ion-icon>
               <ion-label>
@@ -198,6 +244,7 @@
               </ion-label>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item>
               <ion-icon slot="start" name="location-outline"></ion-icon>
               <ion-label>
@@ -206,6 +253,7 @@
               </ion-label>
             </ion-item>
 
+            <!-- Linha de formulario ou lista. -->
             <ion-item *ngIf="viagem?.titulo">
               <ion-icon slot="start" name="map-outline"></ion-icon>
               <ion-label>
@@ -215,6 +263,7 @@
             </ion-item>
           </ion-list>
 
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button
             *ngIf="foto.diaId"
             expand="block"

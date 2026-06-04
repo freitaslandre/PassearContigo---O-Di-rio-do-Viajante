@@ -1,210 +1,364 @@
 /* app/pages/dia-detalhe/dia-detalhe.page.scss | Estilos da pagina dia detalhe, com regras visuais especificas deste ecra. */
 .back-button {
+  /* Define uma propriedade visual deste elemento. */
   --color: var(--ion-color-primary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 8px;
 }
 
+/* Define estilos para este seletor. */
 .day-navigation {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 1fr auto 1fr;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 12px;
 
+  /* Define estilos para este seletor. */
   ion-button:last-child {
+    /* Define uma propriedade visual deste elemento. */
     justify-self: end;
   }
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 13px;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 700;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 }
 
+/* Define estilos para este seletor. */
 .poi-list {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 1fr;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
 }
 
+/* Define estilos para este seletor. */
 .poi-item {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 12px;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid #e0e0e0;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 }
 
+/* Define estilos para este seletor. */
 .poi-title-row {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 8px;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
 }
 
+/* Define estilos para este seletor. */
 .poi-collaborator-badge {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 32px;
+  /* Define uma propriedade visual deste elemento. */
   height: 32px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 999px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-secondary);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-secondary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   text-transform: uppercase;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 10px;
 }
 
+/* Define estilos para este seletor. */
 .poi-order {
+  /* Define uma propriedade visual deste elemento. */
   flex: 0 0 28px;
+  /* Define uma propriedade visual deste elemento. */
   width: 28px;
+  /* Define uma propriedade visual deste elemento. */
   height: 28px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 50%;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-primary);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 13px;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
 }
 
+/* Define estilos para este seletor. */
 .poi-image-container {
+  /* Define uma propriedade visual deste elemento. */
   flex-shrink: 0;
+  /* Define uma propriedade visual deste elemento. */
   width: 80px;
+  /* Define uma propriedade visual deste elemento. */
   height: 80px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   background-color: #f5f5f5;
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
 }
 
+/* Define estilos para este seletor. */
 .poi-thumbnail {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   height: 100%;
+  /* Define uma propriedade visual deste elemento. */
   object-fit: cover;
 }
 
+/* Define estilos para este seletor. */
 .poi-no-image {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   height: 100%;
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   color: #ccc;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 32px;
 }
 
+/* Define estilos para este seletor. */
 .poi-info {
+  /* Define uma propriedade visual deste elemento. */
   flex: 1;
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
 }
 
+/* Define estilos para este seletor. */
 .poi-info h3 {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 14px;
 }
 
+/* Define estilos para este seletor. */
 .poi-tipo {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 12px;
+  /* Define uma propriedade visual deste elemento. */
   color: #666;
+  /* Define uma propriedade visual deste elemento. */
   font-style: italic;
 }
 
+/* Define estilos para este seletor. */
 .poi-descricao {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 12px;
+  /* Define uma propriedade visual deste elemento. */
   color: #888;
+  /* Define uma propriedade visual deste elemento. */
   line-height: 1.3;
+  /* Define uma propriedade visual deste elemento. */
   display: -webkit-box;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-line-clamp: 2;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-box-orient: vertical;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
 }
 
+/* Define estilos para este seletor. */
 .poi-endereco {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 12px;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 4px;
 }
 
+/* Define estilos para este seletor. */
 .empty-pois {
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
+  /* Define uma propriedade visual deste elemento. */
   padding: 32px 16px;
 }
 
+/* Define estilos para este seletor. */
 .loading-card {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   padding: 48px 16px;
+  /* Define uma propriedade visual deste elemento. */
   gap: 16px;
 }
 
+/* Define estilos para este seletor. */
 .card-header-row {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   gap: 16px;
 }
 
+/* Define estilos para este seletor. */
 .custo-badge {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-end;
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 8px 12px;
+  /* Define uma propriedade visual deste elemento. */
   background: #fff3e0;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   border-left: 3px solid #ff9800;
 }
 
+/* Define estilos para este seletor. */
 .custo-label {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 12px;
+  /* Define uma propriedade visual deste elemento. */
   color: #666;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 500;
 }
 
+/* Define estilos para este seletor. */
 .custo-valor {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 16px;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   color: #ff9800;
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 420px) {
+  /* Define estilos para este seletor. */
   .day-navigation {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: 1fr 1fr;
 
+    /* Define estilos para este seletor. */
     span {
+      /* Define uma propriedade visual deste elemento. */
       grid-column: 1 / -1;
+      /* Define uma propriedade visual deste elemento. */
       grid-row: 1;
+      /* Define uma propriedade visual deste elemento. */
       justify-self: center;
     }
   }
 
+  /* Define estilos para este seletor. */
   .poi-item {
+    /* Define uma propriedade visual deste elemento. */
     gap: 10px;
+    /* Define uma propriedade visual deste elemento. */
     padding: 10px;
   }
 
+  /* Define estilos para este seletor. */
   .poi-image-container {
+    /* Define uma propriedade visual deste elemento. */
     width: 64px;
+    /* Define uma propriedade visual deste elemento. */
     height: 64px;
   }
 }

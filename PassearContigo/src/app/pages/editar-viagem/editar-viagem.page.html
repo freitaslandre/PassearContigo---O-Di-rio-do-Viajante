@@ -1,43 +1,59 @@
 <!-- app/pages/editar-viagem/editar-viagem.page.html | Template da pagina editar viagem, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="cancelar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Editar viagem</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar viagem...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="cancelar()">Voltar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Formulario usado para recolher dados. -->
   <form *ngIf="!carregando && !erro" class="editar-viagem-form" [formGroup]="form" (ngSubmit)="guardar()">
+    <!-- Bloco estrutural do template. -->
     <div class="foto-capa-section">
+      <!-- Bloco estrutural do template. -->
       <div class="foto-capa-preview" *ngIf="fotoCapaPreview">
         <img [src]="fotoCapaPreview" alt="Foto de capa">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="podeEditarViagem" color="danger" size="small" type="button" (click)="removerFotoCapa()" aria-label="Remover foto de capa">
           <ion-icon slot="start" name="trash-outline"></ion-icon>
           Remover
         </ion-button>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div class="foto-capa-upload" *ngIf="!fotoCapaPreview && podeEditarViagem">
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="primary" type="button" (click)="tirarFotoCapa()">
           <ion-icon slot="start" name="camera-outline"></ion-icon>
           Tirar foto de capa
         </ion-button>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button expand="block" color="medium" fill="outline" type="button" (click)="escolherFotoCapaDaGaleria()">
           <ion-icon slot="start" name="images-outline"></ion-icon>
           Escolher da galeria
@@ -45,8 +61,10 @@
       </div>
     </div>
 
+    <!-- Linha de formulario ou lista. -->
     <ion-item>
       <ion-label position="stacked">Título da viagem *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input formControlName="titulo" type="text"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="titulo?.invalid && titulo?.touched">
@@ -54,33 +72,46 @@
       <small *ngIf="titulo?.hasError('minlength')">Mínimo 3 caracteres</small>
     </ion-text>
 
+    <!-- Linha de formulario ou lista. -->
     <ion-item>
       <ion-label position="stacked">Destino *</ion-label>
+      <!-- Campo de entrada de texto ou valor. -->
       <ion-input formControlName="destino" type="text"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="destino?.invalid && destino?.touched">
       <small *ngIf="destino?.hasError('required')">Destino é obrigatório</small>
     </ion-text>
 
+    <!-- Linha de formulario ou lista. -->
     <ion-item>
       <ion-label position="stacked">Descrição</ion-label>
       <ion-textarea formControlName="descricao" rows="3" autoGrow="true"></ion-textarea>
     </ion-item>
 
+    <!-- Linha de formulario ou lista. -->
     <ion-item>
       <ion-label position="stacked">Estado</ion-label>
+      <!-- Campo de selecao de opcoes. -->
       <ion-select formControlName="status" interface="popover">
+        <!-- Campo de selecao de opcoes. -->
         <ion-select-option value="planejada">Planeada</ion-select-option>
+        <!-- Campo de selecao de opcoes. -->
         <ion-select-option value="em-andamento">Em curso</ion-select-option>
+        <!-- Campo de selecao de opcoes. -->
         <ion-select-option value="concluida">Concluída</ion-select-option>
+        <!-- Campo de selecao de opcoes. -->
         <ion-select-option value="cancelada">Cancelada</ion-select-option>
       </ion-select>
     </ion-item>
 
+    <!-- Bloco estrutural do template. -->
     <div class="date-grid">
+      <!-- Bloco estrutural do template. -->
       <div>
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Data de Início *</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input formControlName="dataInicio" type="date"></ion-input>
         </ion-item>
         <ion-text color="danger" *ngIf="dataInicio?.invalid && dataInicio?.touched">
@@ -88,9 +119,12 @@
         </ion-text>
       </div>
 
+      <!-- Bloco estrutural do template. -->
       <div>
+        <!-- Linha de formulario ou lista. -->
         <ion-item>
           <ion-label position="stacked">Data de Fim *</ion-label>
+          <!-- Campo de entrada de texto ou valor. -->
           <ion-input formControlName="dataFim" type="date"></ion-input>
         </ion-item>
         <ion-text color="danger" *ngIf="dataFim?.invalid && dataFim?.touched">
@@ -106,11 +140,14 @@
       Duração: {{ numeroDias }} dias
     </ion-note>
 
+    <!-- Bloco estrutural do template. -->
     <div class="button-group">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" type="submit" [disabled]="form.invalid">
         <ion-icon slot="start" name="save-outline"></ion-icon>
         Guardar alterações
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" type="button" (click)="cancelar()">
         <ion-icon slot="start" name="close-circle-outline"></ion-icon>
         Cancelar

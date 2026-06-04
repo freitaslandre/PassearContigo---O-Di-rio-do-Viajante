@@ -1,8 +1,12 @@
 <!-- app/pages/resumo-custos/resumo-custos.page.html | Template da pagina resumo custos, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Resumo de custos</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         (click)="partilharPdfCustosPorCategoria()"
         [disabled]="carregando || partilhandoPdf || gerandoPdf || custos.length === 0"
@@ -11,6 +15,7 @@
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         (click)="gerarPdfCustosPorCategoria()"
         [disabled]="carregando || gerandoPdf || partilhandoPdf || custos.length === 0"
@@ -19,6 +24,7 @@
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="recarregar()" [disabled]="carregando" aria-label="Recarregar custos">
         <ion-icon slot="icon-only" name="refresh"></ion-icon>
       </ion-button>
@@ -26,20 +32,25 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Linha de formulario ou lista. -->
   <ion-item
     *ngIf="!carregando && viagensDisponiveis.length > 0"
     class="filtro-viagem"
     lines="none"
   >
     <ion-icon slot="start" name="filter-outline"></ion-icon>
+    <!-- Campo de selecao de opcoes. -->
     <ion-select
       label="Viagem"
       interface="popover"
       [value]="viagemSelecionadaId"
       (ionChange)="selecionarViagem($event.detail.value)"
     >
+      <!-- Campo de selecao de opcoes. -->
       <ion-select-option value="todas">Todas as viagens</ion-select-option>
+      <!-- Campo de selecao de opcoes. -->
       <ion-select-option
         *ngFor="let viagem of viagensDisponiveis"
         [value]="viagem.id"
@@ -51,7 +62,9 @@
 
   <!-- A carregar -->
   <ion-card *ngIf="carregando" class="card-loading">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
+      <!-- Bloco estrutural do template. -->
       <div class="loading-container">
         <ion-spinner name="crescent"></ion-spinner>
         <p>A carregar custos...</p>
@@ -61,28 +74,37 @@
 
   <!-- Aviso de autenticação -->
   <ion-card *ngIf="usuarioNaoAutenticado && !carregando">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-title>Inicie sessão</ion-card-title>
     </ion-card-header>
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>Para ver os seus custos, precisa de iniciar sessão.</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" (click)="irParaPerfil()">Ir para perfil</ion-button>
     </ion-card-content>
   </ion-card>
 
   <!-- Erro -->
   <ion-card *ngIf="erroCarregamento && !carregando && !usuarioNaoAutenticado" color="danger">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-title>Erro</ion-card-title>
     </ion-card-header>
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erroCarregamento }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" (click)="recarregar()">Tentar novamente</ion-button>
     </ion-card-content>
   </ion-card>
 
   <!-- Sem custos -->
   <ion-card *ngIf="!carregando && custos.length === 0 && !erroCarregamento && !usuarioNaoAutenticado">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content class="empty-state">
       <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
       <h2>Sem custos</h2>
@@ -92,15 +114,20 @@
 
   <!-- Total geral -->
   <ion-card *ngIf="!carregando && custos.length > 0" class="card-total">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
+      <!-- Bloco estrutural do template. -->
       <div class="total-container">
+        <!-- Bloco estrutural do template. -->
         <div class="total-label">
           <ion-icon name="cash"></ion-icon>
           <span>Total gasto</span>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="total-valor">
           {{ formatarValor(totalGeral) }} €
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="total-info">
           <span>{{ custos.length }} transações</span>
         </div>
@@ -110,11 +137,16 @@
 
   <!-- Gráfico de distribuição de custos -->
   <ion-card *ngIf="!carregando && custosPorCategoria.length > 0" class="card-grafico">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-title>Distribuição de custos</ion-card-title>
     </ion-card-header>
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
+      <!-- Bloco estrutural do template. -->
       <div class="chart-container">
+        <!-- Bloco estrutural do template. -->
         <div class="pie-chart">
           <svg viewBox="0 0 200 200" class="pie-svg">
             <circle *ngFor="let seg of obterSegmentosGrafico(); let i = index" 
@@ -133,9 +165,13 @@
             </circle>
           </svg>
         </div>
+        <!-- Bloco estrutural do template. -->
         <div class="chart-legenda">
+          <!-- Bloco estrutural do template. -->
           <div *ngFor="let categoria of custosPorCategoria" class="legenda-item">
+            <!-- Bloco estrutural do template. -->
             <div class="legenda-cor" [style.backgroundColor]="categoria.corHex"></div>
+            <!-- Bloco estrutural do template. -->
             <div class="legenda-texto">
               <span class="legenda-categoria">{{ categoria.categoriaLabel }}</span>
               <span class="legenda-valor">{{ formatarValor(categoria.total) }} € ({{ categoria.percentual.toFixed(1) }}%)</span>

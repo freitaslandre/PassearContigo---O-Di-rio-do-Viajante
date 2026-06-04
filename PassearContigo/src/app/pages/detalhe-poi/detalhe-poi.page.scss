@@ -1,179 +1,293 @@
 /* app/pages/detalhe-poi/detalhe-poi.page.scss | Estilos da pagina detalhe poi, com regras visuais especificas deste ecra. */
 .poi-detail-layout {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.85rem;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 920px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto 1.5rem;
+  /* Define uma propriedade visual deste elemento. */
   padding-bottom: 1rem;
 }
 
+/* Define estilos para este seletor. */
 .poi-summary {
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.9rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.18);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-background-color);
 
+  /* Define estilos para este seletor. */
   h1 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0.45rem 0 0.25rem;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.65rem;
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.12;
   }
 
   p,
+  /* Define estilos para este seletor. */
   small {
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     gap: 0.35rem;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 
+  /* Define estilos para este seletor. */
   small {
+    /* Define uma propriedade visual deste elemento. */
     margin-top: 0.45rem;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.82rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .simple-card {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   box-shadow: none;
 
+  /* Define estilos para este seletor. */
   ion-card-title {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.05rem;
   }
 }
 
 .photo-card ion-card-content,
 .actions-card ion-card-content,
+/* Define estilos para este seletor. */
 .notes-card ion-card-content {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.65rem;
 }
 
+/* Define estilos para este seletor. */
 .foto-container {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.65rem;
 }
 
+/* Define estilos para este seletor. */
 .poi-foto {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   max-height: 320px;
+  /* Define uma propriedade visual deste elemento. */
   object-fit: cover;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.16);
 }
 
+/* Define estilos para este seletor. */
 .sem-foto {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   place-items: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 150px;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px dashed rgba(var(--ion-color-medium-rgb), 0.38);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: rgba(var(--ion-color-medium-rgb), 0.06);
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .info-card {
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     padding-top: 0;
   }
 
+  /* Define estilos para este seletor. */
   ion-item {
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 0;
+    /* Define uma propriedade visual deste elemento. */
     --inner-padding-end: 0;
+    /* Define uma propriedade visual deste elemento. */
     --min-height: 50px;
   }
 
+  /* Define estilos para este seletor. */
   ion-label {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 
+  /* Define estilos para este seletor. */
   ion-text[slot='end'] {
+    /* Define uma propriedade visual deste elemento. */
     max-width: 62%;
+    /* Define uma propriedade visual deste elemento. */
     text-align: right;
+    /* Define uma propriedade visual deste elemento. */
     white-space: normal;
   }
 }
 
+/* Define estilos para este seletor. */
 .mapa-poi {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   height: 260px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
 }
 
 .stars-display,
+/* Define estilos para este seletor. */
 .stars-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.35rem;
 }
 
+/* Define estilos para este seletor. */
 .stars-container ion-button {
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 0;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 0;
+  /* Define uma propriedade visual deste elemento. */
   height: 40px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   width: 40px;
 }
 
+/* Define estilos para este seletor. */
 .stars-container ion-icon {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 1.45rem;
 }
 
+/* Define estilos para este seletor. */
 .stars-display ion-icon {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 18px;
 }
 
+/* Define estilos para este seletor. */
 .rating-field {
+  /* Define uma propriedade visual deste elemento. */
   border-bottom: 1px solid var(--ion-color-light-shade);
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 1.5rem;
+  /* Define uma propriedade visual deste elemento. */
   padding-bottom: 0.75rem;
 
+  /* Define estilos para este seletor. */
   ion-label {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 500;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 }
 
+/* Define estilos para este seletor. */
 .button-group {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.6rem;
 }
 
+/* Define estilos para este seletor. */
 .nota-card {
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(var(--ion-color-medium-rgb), 0.14);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-background-color);
 
+  /* Define estilos para este seletor. */
   ion-item {
+    /* Define uma propriedade visual deste elemento. */
     --background: transparent;
   }
 }
 
+/* Define estilos para este seletor. */
 .nota-texto {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 0.2rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-text-color);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.95rem;
+  /* Define uma propriedade visual deste elemento. */
   line-height: 1.35;
 }
 
+/* Define estilos para este seletor. */
 .nota-data {
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.76rem;
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 620px) {
+  /* Define estilos para este seletor. */
   .info-card ion-text[slot='end'] {
+    /* Define uma propriedade visual deste elemento. */
     max-width: 56%;
   }
 }

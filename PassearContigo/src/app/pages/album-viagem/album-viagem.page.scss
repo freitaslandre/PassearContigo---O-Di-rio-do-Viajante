@@ -1,330 +1,558 @@
 /* app/pages/album-viagem/album-viagem.page.scss | Estilos da pagina album viagem, com regras visuais especificas deste ecra. */
 .loading-card,
+/* Define estilos para este seletor. */
 .state-card {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 360px;
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 58px;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }
 
+/* Define estilos para este seletor. */
 .album-layout {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 1120px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .album-header {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-end;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 14px;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 16px;
 
+  /* Define estilos para este seletor. */
   h1 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 10px 0 8px;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.8rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 700;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     display: inline-flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     gap: 6px;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-group {
+  /* Define uma propriedade visual deste elemento. */
   margin: 18px 0 24px;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0 0 10px;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 700;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
   }
 }
 
+/* Define estilos para este seletor. */
 .album-warning {
+  /* Define uma propriedade visual deste elemento. */
   display: block;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 0 12px;
 }
 
+/* Define estilos para este seletor. */
 .album-grid {
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
 }
 
+/* Define estilos para este seletor. */
 .photo-tile-shell {
+  /* Define uma propriedade visual deste elemento. */
   position: relative;
 }
 
+/* Define estilos para este seletor. */
 .photo-tile {
+  /* Define uma propriedade visual deste elemento. */
   position: relative;
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-rows: minmax(0, 1fr) auto;
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   aspect-ratio: 1 / 1.52;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid var(--ion-color-light-shade);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-card-background, var(--ion-background-color));
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   text-align: left;
 
+  /* Define estilos para este seletor. */
   &.selection-mode {
+    /* Define uma propriedade visual deste elemento. */
     cursor: default;
   }
 
+  /* Define estilos para este seletor. */
   &.selected {
+    /* Define uma propriedade visual deste elemento. */
     border-color: var(--ion-color-primary);
+    /* Define uma propriedade visual deste elemento. */
     box-shadow: 0 0 0 2px var(--ion-color-primary);
   }
 
+  /* Define estilos para este seletor. */
   &.locked-photo {
+    /* Define uma propriedade visual deste elemento. */
     opacity: 0.72;
   }
 
+  /* Define estilos para este seletor. */
   &.selected::after {
+    /* Define uma propriedade visual deste elemento. */
     content: '';
+    /* Define uma propriedade visual deste elemento. */
     position: absolute;
+    /* Define uma propriedade visual deste elemento. */
     inset: 0;
+    /* Define uma propriedade visual deste elemento. */
     background: rgba(56, 128, 255, 0.18);
+    /* Define uma propriedade visual deste elemento. */
     pointer-events: none;
   }
 
+  /* Define estilos para este seletor. */
   ion-img {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
+    /* Define uma propriedade visual deste elemento. */
     height: 100%;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 0;
+    /* Define uma propriedade visual deste elemento. */
     background: var(--ion-color-light);
 
+    /* Define estilos para este seletor. */
     &::part(image) {
+      /* Define uma propriedade visual deste elemento. */
       width: 100%;
+      /* Define uma propriedade visual deste elemento. */
       height: 100%;
+      /* Define uma propriedade visual deste elemento. */
       object-fit: cover;
     }
   }
 
 }
 
+/* Define estilos para este seletor. */
 .photo-share-button {
+  /* Define uma propriedade visual deste elemento. */
   position: absolute;
+  /* Define uma propriedade visual deste elemento. */
   top: 8px;
+  /* Define uma propriedade visual deste elemento. */
   right: 8px;
+  /* Define uma propriedade visual deste elemento. */
   z-index: 3;
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   width: 36px;
+  /* Define uma propriedade visual deste elemento. */
   height: 36px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(0, 0, 0, 0.12);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 50%;
+  /* Define uma propriedade visual deste elemento. */
   background: rgba(255, 255, 255, 0.96);
+  /* Define uma propriedade visual deste elemento. */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.24);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary);
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
+    /* Define uma propriedade visual deste elemento. */
     width: 20px;
+    /* Define uma propriedade visual deste elemento. */
     height: 20px;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 20px;
+    /* Define uma propriedade visual deste elemento. */
     stroke-width: 40px;
   }
 
+  /* Define estilos para este seletor. */
   &:active {
+    /* Define uma propriedade visual deste elemento. */
     transform: scale(0.96);
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-info {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 5px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 8px 10px 10px;
 }
 
+/* Define estilos para este seletor. */
 .photo-title-row {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 6px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     min-width: 0;
+    /* Define uma propriedade visual deste elemento. */
     overflow: hidden;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color);
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 650;
+    /* Define uma propriedade visual deste elemento. */
     text-overflow: ellipsis;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     flex: 0 0 auto;
+    /* Define uma propriedade visual deste elemento. */
     max-width: 58px;
+    /* Define uma propriedade visual deste elemento. */
     overflow: hidden;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.64rem;
+    /* Define uma propriedade visual deste elemento. */
     text-overflow: ellipsis;
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-caption {
+  /* Define uma propriedade visual deste elemento. */
   display: -webkit-box;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 34px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-text-color);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.82rem;
+  /* Define uma propriedade visual deste elemento. */
   line-height: 1.3;
+  /* Define uma propriedade visual deste elemento. */
   text-overflow: ellipsis;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-line-clamp: 2;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-box-orient: vertical;
 
+  /* Define estilos para este seletor. */
   &.empty-caption {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-style: italic;
   }
 }
 
 .photo-poi,
 .photo-date,
+/* Define estilos para este seletor. */
 .photo-locked {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.74rem;
+  /* Define uma propriedade visual deste elemento. */
   text-overflow: ellipsis;
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
 }
 
+/* Define estilos para este seletor. */
 .photo-poi {
+  /* Define uma propriedade visual deste elemento. */
   gap: 4px;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary);
 
+  /* Define estilos para este seletor. */
   &.no-poi {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     flex: 0 0 auto;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 14px;
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-locked {
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-warning);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
 }
 
+/* Define estilos para este seletor. */
 .selection-indicator {
+  /* Define uma propriedade visual deste elemento. */
   position: absolute;
+  /* Define uma propriedade visual deste elemento. */
   top: 8px;
+  /* Define uma propriedade visual deste elemento. */
   right: 8px;
+  /* Define uma propriedade visual deste elemento. */
   z-index: 2;
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   width: 28px;
+  /* Define uma propriedade visual deste elemento. */
   height: 28px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 50%;
+  /* Define uma propriedade visual deste elemento. */
   background: rgba(0, 0, 0, 0.55);
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     width: 22px;
+    /* Define uma propriedade visual deste elemento. */
     height: 22px;
+    /* Define uma propriedade visual deste elemento. */
     color: #fff;
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-modal {
+  /* Define uma propriedade visual deste elemento. */
   --height: 92%;
+  /* Define uma propriedade visual deste elemento. */
   --max-width: 920px;
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 8px;
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-content {
+  /* Define uma propriedade visual deste elemento. */
   --background: var(--ion-background-color);
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-viewer {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 48vh;
+  /* Define uma propriedade visual deste elemento. */
   background: #111;
 
+  /* Define estilos para este seletor. */
   img {
+    /* Define uma propriedade visual deste elemento. */
     display: block;
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
+    /* Define uma propriedade visual deste elemento. */
     max-height: 62vh;
+    /* Define uma propriedade visual deste elemento. */
     object-fit: contain;
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-info {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 14px;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 760px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
+  /* Define uma propriedade visual deste elemento. */
   padding: 18px;
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-title-row {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 8px 0 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.35rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 700;
   }
 }
 
+/* Define estilos para este seletor. */
 .photo-detail-caption {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-text-color);
+  /* Define uma propriedade visual deste elemento. */
   line-height: 1.45;
 
+  /* Define estilos para este seletor. */
   &.empty-caption {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-style: italic;
   }
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 420px) {
+  /* Define estilos para este seletor. */
   .album-header {
+    /* Define uma propriedade visual deste elemento. */
     align-items: stretch;
+    /* Define uma propriedade visual deste elemento. */
     flex-direction: column;
   }
 
+  /* Define estilos para este seletor. */
   .photo-tile {
+    /* Define uma propriedade visual deste elemento. */
     aspect-ratio: 1 / 1.62;
   }
 
+  /* Define estilos para este seletor. */
   .photo-detail-modal {
+    /* Define uma propriedade visual deste elemento. */
     --height: 100%;
+    /* Define uma propriedade visual deste elemento. */
     --border-radius: 0;
   }
 
+  /* Define estilos para este seletor. */
   .photo-detail-viewer {
+    /* Define uma propriedade visual deste elemento. */
     min-height: 42vh;
 
+    /* Define estilos para este seletor. */
     img {
+      /* Define uma propriedade visual deste elemento. */
       max-height: 54vh;
     }
   }

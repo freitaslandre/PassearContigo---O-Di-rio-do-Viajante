@@ -1,245 +1,415 @@
 /* app/pages/feed-amigos/feed-amigos.page.scss | Estilos da pagina feed amigos, com regras visuais especificas deste ecra. */
 .feed-header {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 920px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto 18px;
 
+  /* Define estilos para este seletor. */
   h1 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 10px 0 6px;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.7rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 750;
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }
 
+/* Define estilos para este seletor. */
 .state-card {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 720px;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 260px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 18px auto;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     display: grid;
+    /* Define uma propriedade visual deste elemento. */
     gap: 10px;
+    /* Define uma propriedade visual deste elemento. */
     place-items: center;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 260px;
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 54px;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-list {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 14px;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 920px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .feed-card {
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid var(--ion-color-light-shade);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-card-background, var(--ion-background-color));
 }
 
+/* Define estilos para este seletor. */
 .feed-card-main {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: 190px minmax(0, 1fr);
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
+  /* Define uma propriedade visual deste elemento. */
   border: 0;
+  /* Define uma propriedade visual deste elemento. */
   background: transparent;
+  /* Define uma propriedade visual deste elemento. */
   color: inherit;
+  /* Define uma propriedade visual deste elemento. */
   text-align: left;
 }
 
+/* Define estilos para este seletor. */
 .feed-cover {
+  /* Define uma propriedade visual deste elemento. */
   position: relative;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 180px;
+  /* Define uma propriedade visual deste elemento. */
   background: linear-gradient(135deg, #2c7a6e, #f2c94c);
+  /* Define uma propriedade visual deste elemento. */
   background-position: center;
+  /* Define uma propriedade visual deste elemento. */
   background-size: cover;
 
+  /* Define estilos para este seletor. */
   &.has-photo::after {
+    /* Define uma propriedade visual deste elemento. */
     content: '';
+    /* Define uma propriedade visual deste elemento. */
     position: absolute;
+    /* Define uma propriedade visual deste elemento. */
     inset: 0;
+    /* Define uma propriedade visual deste elemento. */
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.32));
   }
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     position: absolute;
+    /* Define uma propriedade visual deste elemento. */
     top: 12px;
+    /* Define uma propriedade visual deste elemento. */
     left: 12px;
+    /* Define uma propriedade visual deste elemento. */
     z-index: 1;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-body {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 16px;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.25rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 750;
   }
 }
 
 .feed-author,
+/* Define estilos para este seletor. */
 .feed-meta {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
+  /* Define uma propriedade visual deste elemento. */
   gap: 10px 14px;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.86rem;
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     display: inline-flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     gap: 5px;
+    /* Define uma propriedade visual deste elemento. */
     min-width: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-description {
+  /* Define uma propriedade visual deste elemento. */
   display: -webkit-box;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-text-color);
+  /* Define uma propriedade visual deste elemento. */
   line-height: 1.35;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-line-clamp: 2;
+  /* Define uma propriedade visual deste elemento. */
   -webkit-box-orient: vertical;
 }
 
+/* Define estilos para este seletor. */
 .feed-stats {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
+  /* Define uma propriedade visual deste elemento. */
   gap: 8px;
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     display: inline-flex;
+    /* Define uma propriedade visual deste elemento. */
     align-items: baseline;
+    /* Define uma propriedade visual deste elemento. */
     gap: 5px;
+    /* Define uma propriedade visual deste elemento. */
     padding: 6px 9px;
+    /* Define uma propriedade visual deste elemento. */
     border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     background: var(--ion-color-light);
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.8rem;
   }
 
+  /* Define estilos para este seletor. */
   strong {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color);
+    /* Define uma propriedade visual deste elemento. */
     font-size: 0.96rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .feed-social {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 6px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 16px 12px 206px;
 }
 
+/* Define estilos para este seletor. */
 .feed-actions {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 8px;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 36px;
+  /* Define uma propriedade visual deste elemento. */
   border-top: 1px solid var(--ion-color-light-shade);
+  /* Define uma propriedade visual deste elemento. */
   padding-top: 10px;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     min-width: 56px;
+    /* Define uma propriedade visual deste elemento. */
     height: 32px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 6px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 8px;
   }
 }
 
+/* Define estilos para este seletor. */
 .reaction-users {
+  /* Define uma propriedade visual deste elemento. */
   min-width: 0;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.82rem;
+  /* Define uma propriedade visual deste elemento. */
   text-overflow: ellipsis;
+  /* Define uma propriedade visual deste elemento. */
   white-space: nowrap;
 }
 
+/* Define estilos para este seletor. */
 .comments-list {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 5px;
+  /* Define uma propriedade visual deste elemento. */
   padding-top: 2px;
 }
 
+/* Define estilos para este seletor. */
 .comments-summary {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: flex-start;
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     height: 28px;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 0;
   }
 }
 
+/* Define estilos para este seletor. */
 .comment-item {
+  /* Define uma propriedade visual deste elemento. */
   display: block;
+  /* Define uma propriedade visual deste elemento. */
   padding: 6px 8px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-light);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.86rem;
 
+  /* Define estilos para este seletor. */
   strong {
+    /* Define uma propriedade visual deste elemento. */
     margin-right: 5px;
   }
 
+  /* Define estilos para este seletor. */
   span {
+    /* Define uma propriedade visual deste elemento. */
     overflow-wrap: anywhere;
   }
 }
 
+/* Define estilos para este seletor. */
 .comment-form {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: minmax(0, 1fr) 40px;
+  /* Define uma propriedade visual deste elemento. */
   gap: 6px;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
 
+  /* Define estilos para este seletor. */
   ion-item {
+    /* Define uma propriedade visual deste elemento. */
     min-height: 40px;
+    /* Define uma propriedade visual deste elemento. */
     border: 1px solid var(--ion-color-light-shade);
+    /* Define uma propriedade visual deste elemento. */
     border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 10px;
+    /* Define uma propriedade visual deste elemento. */
     --inner-padding-end: 10px;
   }
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     width: 40px;
+    /* Define uma propriedade visual deste elemento. */
     height: 40px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 0;
+    /* Define uma propriedade visual deste elemento. */
     --padding-end: 0;
   }
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 640px) {
+  /* Define estilos para este seletor. */
   .feed-card-main {
+    /* Define uma propriedade visual deste elemento. */
     grid-template-columns: 1fr;
   }
 
+  /* Define estilos para este seletor. */
   .feed-cover {
+    /* Define uma propriedade visual deste elemento. */
     min-height: 140px;
   }
 
+  /* Define estilos para este seletor. */
   .feed-social {
+    /* Define uma propriedade visual deste elemento. */
     padding: 0 14px 12px;
   }
 }

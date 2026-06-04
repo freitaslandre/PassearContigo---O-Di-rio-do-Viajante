@@ -1,20 +1,27 @@
 <!-- app/pages/viagens/viagens.page.html | Template da pagina viagens, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>As minhas viagens</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar viagens...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro" class="state-card">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <h2>Não foi possível carregar</h2>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="recarregarViagens()">
         <ion-icon slot="start" name="refresh-outline"></ion-icon>
         Tentar novamente
@@ -22,15 +29,19 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && !erro && viagens.length > 0" class="filtros-status">
+    <!-- Linha de formulario ou lista. -->
     <ion-item lines="none">
       <ion-icon slot="start" name="filter-outline"></ion-icon>
+      <!-- Campo de selecao de opcoes. -->
       <ion-select
         label="Estado"
         interface="popover"
         [value]="statusSelecionado"
         (ionChange)="selecionarStatus($event.detail.value)"
       >
+        <!-- Campo de selecao de opcoes. -->
         <ion-select-option *ngFor="let filtro of filtrosStatus" [value]="filtro.valor">
           {{ filtro.label }}
         </ion-select-option>
@@ -38,24 +49,29 @@
     </ion-item>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && !erro && viagens.length === 0" class="empty-state">
+    <!-- Bloco estrutural do template. -->
     <div class="empty-icon">📭</div>
     <ion-text class="empty-text" color="medium">
       <h2>Sem viagens registadas</h2>
       <p>Crie uma viagem para começar a ver os seus planos aqui.</p>
     </ion-text>
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
       Criar primeira viagem
     </ion-button>
   </div>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && !erro && viagens.length > 0 && viagensFiltradas.length === 0" class="empty-state filtered-empty">
     <ion-icon name="filter-outline" class="empty-icon"></ion-icon>
     <ion-text class="empty-text" color="medium">
       <h2>Sem viagens neste estado</h2>
       <p>Escolha outro filtro para ver mais viagens.</p>
     </ion-text>
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button color="medium" fill="outline" (click)="selecionarStatus('todos')">
       <ion-icon slot="start" name="close-circle-outline"></ion-icon>
       Limpar filtro
@@ -65,10 +81,14 @@
   <!-- Destaque: viagem em curso -->
   <div *ngIf="!carregando && !erro && viagemEmCurso" class="viagem-destaque-wrapper">
     <h2 class="section-title">Viagens</h2>
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card class="viagem-card destaque" (click)="irParaDetalhes(viagemEmCurso.id)">
+      <!-- Bloco estrutural do template. -->
       <div class="viagem-cover">
         <img *ngIf="obterFotoCapa(viagemEmCurso); else capaCursoPlaceholder" [src]="obterFotoCapa(viagemEmCurso)" [alt]="viagemEmCurso.titulo">
+        <!-- Template alternativo usado pelo Angular. -->
         <ng-template #capaCursoPlaceholder>
+          <!-- Bloco estrutural do template. -->
           <div class="cover-placeholder"><ion-icon name="image-outline"></ion-icon></div>
         </ng-template>
         <ion-badge *ngIf="viagemEmCurso.status" [color]="obterCorStatus(viagemEmCurso.status)">
@@ -76,33 +96,42 @@
         </ion-badge>
       </div>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content class="viagem-card-content">
+        <!-- Bloco estrutural do template. -->
         <div class="card-title-row">
           <h2>{{ viagemEmCurso.titulo }}</h2>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button *ngIf="podeGerirViagem(viagemEmCurso)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagemEmCurso)" aria-label="Eliminar viagem">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="compact-meta" *ngIf="viagemEmCurso.local">
           <ion-icon name="location-outline"></ion-icon>
           <span>{{ viagemEmCurso.local }}</span>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="compact-meta">
           <ion-icon name="calendar-outline"></ion-icon>
           <span>{{ formatarData(viagemEmCurso.dataInicio) }} - {{ formatarData(viagemEmCurso.dataFim) }}</span>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="extra-info compact">
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge">
             <ion-icon name="calendar-outline"></ion-icon>
             <span>{{ obterNumDias(viagemEmCurso.dataInicio, viagemEmCurso.dataFim) }} dias</span>
           </div>
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge" *ngIf="obterTotalPois(viagemEmCurso) > 0">
             <ion-icon name="map-outline"></ion-icon>
             <span>{{ obterTotalPois(viagemEmCurso) }} POIs</span>
           </div>
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge" *ngIf="viagemEmCurso.colaboradores && viagemEmCurso.colaboradores.length > 0">
             <ion-icon name="people-outline"></ion-icon>
             <span>{{ obterTotalPessoas(viagemEmCurso) }} pessoas</span>
@@ -114,10 +143,14 @@
 
   <!-- Viagens list -->
   <div *ngIf="!carregando && !erro && viagensRestantes.length > 0">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngFor="let viagem of viagensRestantes" class="viagem-card" (click)="irParaDetalhes(viagem.id)">
+      <!-- Bloco estrutural do template. -->
       <div class="viagem-cover">
         <img *ngIf="obterFotoCapa(viagem); else capaPlaceholder" [src]="obterFotoCapa(viagem)" [alt]="viagem.titulo">
+        <!-- Template alternativo usado pelo Angular. -->
         <ng-template #capaPlaceholder>
+          <!-- Bloco estrutural do template. -->
           <div class="cover-placeholder"><ion-icon name="image-outline"></ion-icon></div>
         </ng-template>
         <ion-badge *ngIf="viagem.status" [color]="obterCorStatus(viagem.status)">
@@ -125,33 +158,42 @@
         </ion-badge>
       </div>
 
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content class="viagem-card-content">
+        <!-- Bloco estrutural do template. -->
         <div class="card-title-row">
           <h2>{{ viagem.titulo }}</h2>
+          <!-- Botao de acao disponivel ao utilizador. -->
           <ion-button *ngIf="podeGerirViagem(viagem)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagem)" aria-label="Eliminar viagem">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="compact-meta" *ngIf="viagem.local">
           <ion-icon name="location-outline"></ion-icon>
           <span>{{ viagem.local }}</span>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="compact-meta">
           <ion-icon name="calendar-outline"></ion-icon>
           <span>{{ formatarData(viagem.dataInicio) }} - {{ formatarData(viagem.dataFim) }}</span>
         </div>
 
+        <!-- Bloco estrutural do template. -->
         <div class="extra-info compact">
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge">
             <ion-icon name="calendar-outline"></ion-icon>
             <span>{{ obterNumDias(viagem.dataInicio, viagem.dataFim) }} dias</span>
           </div>
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge" *ngIf="obterTotalPois(viagem) > 0">
             <ion-icon name="map-outline"></ion-icon>
             <span>{{ obterTotalPois(viagem) }} POIs</span>
           </div>
+          <!-- Bloco estrutural do template. -->
           <div class="info-badge" *ngIf="viagem.colaboradores && viagem.colaboradores.length > 0">
             <ion-icon name="people-outline"></ion-icon>
             <span>{{ obterTotalPessoas(viagem) }} pessoas</span>
@@ -163,6 +205,7 @@
 
   <!-- New trip button (floating action button style) -->
   <div class="fab-container" *ngIf="!carregando && !erro && viagens.length > 0">
+    <!-- Botao de acao disponivel ao utilizador. -->
     <ion-button expand="block" color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
       Nova viagem

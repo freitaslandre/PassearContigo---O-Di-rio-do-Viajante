@@ -15,15 +15,22 @@
 
 /* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/structure.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/typography.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/float-elements.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/text-alignment.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/text-transformation.css";
+/* Regra especial de CSS/SCSS. */
 @import "@ionic/angular/css/flex-utils.css";
 
 /* Leaflet styles */
@@ -33,69 +40,106 @@
 // TYPOGRAPHY — Google Fonts Configuration
 // ============================================
 
+/* Define estilos para este seletor. */
 :root {
   /* Font stacks */
   --font-primary: 'Poppins', sans-serif;
+  /* Define uma propriedade visual deste elemento. */
   --font-secondary: 'Inter', sans-serif;
+  /* Define uma propriedade visual deste elemento. */
   --font-mono: 'Courier New', monospace;
 
   /* Font sizes */
   --text-xs: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --text-sm: 14px;
+  /* Define uma propriedade visual deste elemento. */
   --text-base: 16px;
+  /* Define uma propriedade visual deste elemento. */
   --text-lg: 18px;
+  /* Define uma propriedade visual deste elemento. */
   --text-xl: 20px;
+  /* Define uma propriedade visual deste elemento. */
   --text-2xl: 24px;
+  /* Define uma propriedade visual deste elemento. */
   --text-3xl: 30px;
+  /* Define uma propriedade visual deste elemento. */
   --text-4xl: 36px;
 
   /* Line heights */
   --line-height-tight: 1.2;
+  /* Define uma propriedade visual deste elemento. */
   --line-height-normal: 1.5;
+  /* Define uma propriedade visual deste elemento. */
   --line-height-relaxed: 1.75;
+  /* Define uma propriedade visual deste elemento. */
   --line-height-loose: 2;
 
   /* Letter spacing */
   --letter-spacing-tight: -0.02em;
+  /* Define uma propriedade visual deste elemento. */
   --letter-spacing-normal: 0;
+  /* Define uma propriedade visual deste elemento. */
   --letter-spacing-wide: 0.02em;
+  /* Define uma propriedade visual deste elemento. */
   --letter-spacing-wider: 0.05em;
 
   /* Spacing — Padding & Margin */
   --spacing-xs: 4px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-sm: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-md: 16px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-lg: 24px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-xl: 32px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-2xl: 48px;
+  /* Define uma propriedade visual deste elemento. */
   --spacing-3xl: 64px;
 
   /* Border radius */
   --radius-sm: 4px;
+  /* Define uma propriedade visual deste elemento. */
   --radius-md: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --radius-lg: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --radius-xl: 16px;
+  /* Define uma propriedade visual deste elemento. */
   --radius-full: 9999px;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(28, 28, 30, 0.05);
+  /* Define uma propriedade visual deste elemento. */
   --shadow-md: 0 2px 8px rgba(28, 28, 30, 0.1);
+  /* Define uma propriedade visual deste elemento. */
   --shadow-lg: 0 8px 16px rgba(28, 28, 30, 0.15);
+  /* Define uma propriedade visual deste elemento. */
   --shadow-xl: 0 16px 32px rgba(28, 28, 30, 0.2);
 
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
+  /* Define uma propriedade visual deste elemento. */
   --transition-normal: 300ms ease-in-out;
+  /* Define uma propriedade visual deste elemento. */
   --transition-slow: 500ms ease-in-out;
 }
 
 /* Apply fonts globally */
 html,
+/* Define estilos para este seletor. */
 body {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-primary);
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-base);
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-normal);
+  /* Define uma propriedade visual deste elemento. */
   color: #1C1C1E;
+  /* Define uma propriedade visual deste elemento. */
   background-color: #FAF7F2;
 }
 
@@ -105,160 +149,249 @@ h2,
 h3,
 h4,
 h5,
+/* Define estilos para este seletor. */
 h6 {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-primary);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-tight);
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 0 var(--spacing-md) 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
 }
 
+/* Define estilos para este seletor. */
 h1 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-4xl);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-lg);
 }
 
+/* Define estilos para este seletor. */
 h2 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-3xl);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-lg);
 }
 
+/* Define estilos para este seletor. */
 h3 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-2xl);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-md);
 }
 
+/* Define estilos para este seletor. */
 h4 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-xl);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-md);
 }
 
+/* Define estilos para este seletor. */
 h5 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-lg);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-sm);
 }
 
+/* Define estilos para este seletor. */
 h6 {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-base);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: var(--spacing-sm);
 }
 
 /* Paragraph */
 p {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-secondary);
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-base);
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-normal);
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 0 var(--spacing-md) 0;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0;
 }
 
 /* Small text */
 small,
+/* Define estilos para este seletor. */
 .text-sm {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-sm);
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-normal);
 }
 
 /* Large text */
 large,
+/* Define estilos para este seletor. */
 .text-lg {
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-lg);
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-relaxed);
 }
 
 /* Strong / Bold */
 strong,
+/* Define estilos para este seletor. */
 b {
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
 }
 
 /* Emphasis */
 em,
+/* Define estilos para este seletor. */
 i {
+  /* Define uma propriedade visual deste elemento. */
   font-style: italic;
 }
 
 /* Links */
 a {
+  /* Define uma propriedade visual deste elemento. */
   color: #B95618;
+  /* Define uma propriedade visual deste elemento. */
   text-decoration: none;
+  /* Define uma propriedade visual deste elemento. */
   transition: color 0.2s ease-in-out;
 
+  /* Define estilos para este seletor. */
   &:hover {
+    /* Define uma propriedade visual deste elemento. */
     color: #9f4814;
+    /* Define uma propriedade visual deste elemento. */
     text-decoration: underline;
   }
 }
 
 /* Code / Pre-formatted */
 code,
+/* Define estilos para este seletor. */
 pre {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-mono);
+  /* Define uma propriedade visual deste elemento. */
   background-color: #F4E6D5;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 4px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 2px 6px;
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-sm);
 }
 
+/* Define estilos para este seletor. */
 pre {
+  /* Define uma propriedade visual deste elemento. */
   padding: 12px;
+  /* Define uma propriedade visual deste elemento. */
   overflow-x: auto;
+  /* Define uma propriedade visual deste elemento. */
   line-height: var(--line-height-relaxed);
 }
 
 /* Ionic typography overrides */
 ion-header h1,
 ion-header h2,
+/* Define estilos para este seletor. */
 ion-header h3 {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
 }
 
 /* Toolbars: evita que títulos longos passem por cima dos botões de ação. */
 ion-toolbar {
+  /* Define estilos para este seletor. */
   ion-title {
+    /* Define uma propriedade visual deste elemento. */
     min-width: 0;
+    /* Define uma propriedade visual deste elemento. */
     overflow: hidden;
+    /* Define uma propriedade visual deste elemento. */
     text-overflow: ellipsis;
+    /* Define uma propriedade visual deste elemento. */
     white-space: nowrap;
   }
 
+  /* Define estilos para este seletor. */
   ion-buttons[slot="end"] {
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     flex: 0 0 auto;
+    /* Define uma propriedade visual deste elemento. */
     gap: 0;
   }
 }
 
+/* Regra especial de CSS/SCSS. */
 @media (max-width: 480px) {
+  /* Define estilos para este seletor. */
   ion-toolbar {
+    /* Define estilos para este seletor. */
     ion-title {
+      /* Define uma propriedade visual deste elemento. */
       padding-inline: 4px;
+      /* Define uma propriedade visual deste elemento. */
       font-size: 1rem;
     }
 
+    /* Define estilos para este seletor. */
     ion-buttons[slot="end"] ion-button {
+      /* Define uma propriedade visual deste elemento. */
       --padding-start: 4px;
+      /* Define uma propriedade visual deste elemento. */
       --padding-end: 4px;
+      /* Define uma propriedade visual deste elemento. */
       min-width: 34px;
     }
   }
 }
 
+/* Define estilos para este seletor. */
 ion-card-title {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-primary);
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-lg);
 }
 
+/* Define estilos para este seletor. */
 ion-card-subtitle {
+  /* Define uma propriedade visual deste elemento. */
   font-family: var(--font-secondary);
+  /* Define uma propriedade visual deste elemento. */
   font-size: var(--text-sm);
+  /* Define uma propriedade visual deste elemento. */
   color: #7A6C5A;
 }
 
@@ -274,13 +407,19 @@ ion-fab-button,
 ion-chip,
 button,
 [role="button"],
+/* Define estilos para este seletor. */
 a[role="button"] {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 44px;
+  /* Define uma propriedade visual deste elemento. */
   min-width: 44px;
+  /* Define uma propriedade visual deste elemento. */
   touch-action: manipulation;
 }
 
+/* Define estilos para este seletor. */
 ion-item[button] {
+  /* Define uma propriedade visual deste elemento. */
   --min-height: 48px;
 }
 
@@ -295,18 +434,27 @@ ion-chip:focus-visible,
 ion-input:focus-within,
 ion-textarea:focus-within,
 ion-select:focus-within,
+/* Define estilos para este seletor. */
 ion-searchbar:focus-within {
+  /* Define uma propriedade visual deste elemento. */
   outline: 3px solid rgba(185, 86, 24, 0.45);
+  /* Define uma propriedade visual deste elemento. */
   outline-offset: 2px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 8px;
 }
 
+/* Define estilos para este seletor. */
 ion-card[color="danger"] {
+  /* Define uma propriedade visual deste elemento. */
   --background: var(--ion-color-danger);
+  /* Define uma propriedade visual deste elemento. */
   --color: var(--ion-color-danger-contrast);
 }
 
+/* Define estilos para este seletor. */
 ion-toast {
+  /* Define uma propriedade visual deste elemento. */
   --button-color: var(--ion-color-primary-contrast);
 }
 
@@ -316,18 +464,27 @@ ion-toast {
 
 /* Container & Layout */
 .container {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 1200px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0 var(--spacing-md);
 }
 
+/* Define estilos para este seletor. */
 .container-sm {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 640px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .container-lg {
+  /* Define uma propriedade visual deste elemento. */
   max-width: 1400px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
@@ -405,64 +562,93 @@ ion-toast {
 
 /* Flex utilities */
 .flex {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
 }
 
+/* Define estilos para este seletor. */
 .flex-row {
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: row;
 }
 
+/* Define estilos para este seletor. */
 .flex-col {
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
 }
 
+/* Define estilos para este seletor. */
 .flex-center {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
 }
 
+/* Define estilos para este seletor. */
 .flex-between {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
 }
 
+/* Define estilos para este seletor. */
 .flex-wrap {
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
 }
 
+/* Define estilos para este seletor. */
 .flex-1 {
+  /* Define uma propriedade visual deste elemento. */
   flex: 1;
 }
 
 /* Grid utilities */
 .grid {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
 }
 
+/* Define estilos para este seletor. */
 .grid-2 {
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* Define estilos para este seletor. */
 .grid-3 {
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Define estilos para este seletor. */
 .grid-4 {
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(4, 1fr);
 }
 
 /* Text alignment */
 .text-left {
+  /* Define uma propriedade visual deste elemento. */
   text-align: left;
 }
 
+/* Define estilos para este seletor. */
 .text-center {
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 }
 
+/* Define estilos para este seletor. */
 .text-right {
+  /* Define uma propriedade visual deste elemento. */
   text-align: right;
 }
 

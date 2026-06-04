@@ -1,23 +1,34 @@
 <!-- app/pages/perfil/perfil.page.html | Template da pagina perfil, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="authService.user$ | async as user; else anonimoTemplate" class="perfil-layout">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card class="account-card">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-header>
+        <!-- Bloco estrutural do template. -->
         <div class="account-avatar">
           <ion-icon name="person-outline"></ion-icon>
         </div>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-title>Bem-vindo</ion-card-title>
+        <!-- Cartao visual que agrupa informacao. -->
         <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
       </ion-card-header>
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <p>Gira a sua conta e escolha como quer receber novidades das suas viagens.</p>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="!notificacoesAtivas"
           expand="block"
@@ -32,6 +43,7 @@
           Ativar notificações
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           *ngIf="notificacoesAtivas"
           expand="block"
@@ -45,6 +57,7 @@
           Desativar notificações
         </ion-button>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           color="danger"
@@ -60,11 +73,15 @@
     </ion-card>
   </div>
 
+  <!-- Template alternativo usado pelo Angular. -->
   <ng-template #anonimoTemplate>
+    <!-- Bloco estrutural do template. -->
     <div *ngIf="!modoRegisto">
       <h2 class="ion-padding-start">Iniciar sessão</h2>
 
+      <!-- Formulario usado para recolher dados. -->
       <form (ngSubmit)="realizarLogin()">
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input
           class="form-input"
           label="E-mail"
@@ -77,6 +94,7 @@
           [disabled]="iniciandoSessao"
         ></ion-input>
 
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input
           class="form-input"
           label="Palavra-passe"
@@ -89,6 +107,7 @@
           [disabled]="iniciandoSessao"
         ></ion-input>
 
+        <!-- Bloco estrutural do template. -->
         <div class="show-password-item">
           <span>Mostrar palavra-passe</span>
           <ion-checkbox
@@ -97,6 +116,7 @@
           ></ion-checkbox>
         </div>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           type="submit"
@@ -117,10 +137,13 @@
       </p>
     </div>
 
+    <!-- Bloco estrutural do template. -->
     <div *ngIf="modoRegisto">
       <h2 class="ion-padding-start">Criar conta</h2>
 
+      <!-- Formulario usado para recolher dados. -->
       <form (ngSubmit)="realizarRegisto()">
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input
           class="form-input"
           label="Nome completo"
@@ -133,6 +156,7 @@
           [disabled]="registando"
         ></ion-input>
 
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input
           class="form-input"
           label="E-mail"
@@ -145,6 +169,7 @@
           [disabled]="registando"
         ></ion-input>
 
+        <!-- Campo de entrada de texto ou valor. -->
         <ion-input
           class="form-input"
           label="Palavra-passe (min. 6 caracteres)"
@@ -157,6 +182,7 @@
           [disabled]="registando"
         ></ion-input>
 
+        <!-- Bloco estrutural do template. -->
         <div class="show-password-item">
           <span>Mostrar palavra-passe</span>
           <ion-checkbox
@@ -165,6 +191,7 @@
           ></ion-checkbox>
         </div>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button
           expand="block"
           color="success"

@@ -1,19 +1,27 @@
 <!-- app/pages/itinerario-dia/itinerario-dia.page.html | Template da pagina itinerario dia, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
+  <!-- Barra superior com titulo e acoes. -->
   <ion-toolbar>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="start">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="voltar()" aria-label="Voltar">
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <!-- Titulo apresentado no topo do ecra. -->
     <ion-title>Itinerário do Dia</ion-title>
+    <!-- Grupo de botoes da barra superior. -->
     <ion-buttons slot="end" *ngIf="!carregando && dia">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="compartilharDiaEmPdf()" aria-label="Partilhar dia em PDF">
         <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button (click)="exportarDiaEmPdf()" aria-label="Exportar dia em PDF">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button *ngIf="podeEditarViagem" (click)="adicionarPoi()" aria-label="Adicionar ponto de interesse">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
@@ -21,20 +29,27 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Conteudo principal do ecra. -->
 <ion-content class="ion-padding">
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="carregando" class="loading-card">
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar itinerário...</p>
   </div>
 
+  <!-- Cartao visual que agrupa informacao. -->
   <ion-card *ngIf="!carregando && erro">
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card-content>
       <p>{{ erro }}</p>
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button expand="block" color="medium" (click)="voltar()">Voltar</ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Bloco estrutural do template. -->
   <div *ngIf="!carregando && dia" class="itinerario-layout">
+    <!-- Bloco estrutural do template. -->
     <section class="day-summary">
       <ion-badge color="primary">{{ pontosOrdenados.length }} POIs</ion-badge>
       <ion-badge *ngIf="guardandoOrdem" color="warning">A guardar ordem</ion-badge>
@@ -46,7 +61,9 @@
       </p>
     </section>
 
+    <!-- Bloco estrutural do template. -->
     <div class="day-navigation">
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         fill="outline"
         color="medium"
@@ -59,6 +76,7 @@
 
       <span>{{ textoPosicaoDia }}</span>
 
+      <!-- Botao de acao disponivel ao utilizador. -->
       <ion-button
         fill="outline"
         color="medium"
@@ -70,14 +88,18 @@
       </ion-button>
     </div>
 
+    <!-- Bloco estrutural do template. -->
     <section *ngIf="pontosOrdenadosComLocalizacao.length > 0" class="itinerary-map-section">
+      <!-- Bloco estrutural do template. -->
       <div class="itinerary-map-header">
+        <!-- Bloco estrutural do template. -->
         <div>
           <h2>Mapa do itinerário</h2>
           <p>{{ pontosOrdenadosComLocalizacao.length }} POIs com localização</p>
         </div>
         <ion-badge color="success" *ngIf="mapaOfflineDisponivel">Offline pronto</ion-badge>
       </div>
+      <!-- Bloco estrutural do template. -->
       <div #mapaItinerario class="itinerary-map"></div>
     </section>
 
@@ -87,10 +109,12 @@
       (ionItemReorder)="reordenarPois($event)"
       class="timeline-list"
     >
+      <!-- Linha de formulario ou lista. -->
       <ion-item
         *ngFor="let poi of pontosOrdenados; let i = index; trackBy: trackByPoiId"
         class="timeline-item"
       >
+        <!-- Bloco estrutural do template. -->
         <div class="timeline-marker" slot="start">
           <span>{{ i + 1 }}</span>
         </div>
@@ -100,8 +124,10 @@
         </ion-thumbnail>
 
         <ion-label>
+          <!-- Bloco estrutural do template. -->
           <div class="poi-heading">
             <h2>{{ poi.nome || 'Ponto de interesse sem nome' }}</h2>
+            <!-- Bloco estrutural do template. -->
             <div class="poi-badges">
               <ion-badge
                 *ngIf="obterColaboradorLabel(poi)"
@@ -127,6 +153,7 @@
           </ion-note>
         </ion-label>
 
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button fill="clear" size="small" slot="end" (click)="abrirPoi(poi)" aria-label="Abrir ponto de interesse">
           <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
         </ion-button>
@@ -134,11 +161,14 @@
       </ion-item>
     </ion-reorder-group>
 
+    <!-- Cartao visual que agrupa informacao. -->
     <ion-card *ngIf="pontosOrdenados.length === 0" class="empty-pois">
+      <!-- Cartao visual que agrupa informacao. -->
       <ion-card-content>
         <ion-icon name="map-outline"></ion-icon>
         <h2>Sem POIs neste dia</h2>
         <p>Adicione pontos de interesse para montar o itinerário.</p>
+        <!-- Botao de acao disponivel ao utilizador. -->
         <ion-button *ngIf="podeEditarViagem" expand="block" color="primary" (click)="adicionarPoi()">
           <ion-icon slot="start" name="add-circle-outline"></ion-icon>
           Adicionar POI

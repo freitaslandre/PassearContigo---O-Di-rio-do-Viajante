@@ -1,202 +1,335 @@
 /* app/pages/resumo-custos/resumo-custos.page.scss | Estilos da pagina resumo custos, com regras visuais especificas deste ecra. */
 .filtro-viagem {
+  /* Define uma propriedade visual deste elemento. */
   --background: var(--ion-color-light);
+  /* Define uma propriedade visual deste elemento. */
   --border-radius: 8px;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-end: 12px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 12px;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 1rem;
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
+    /* Define uma propriedade visual deste elemento. */
     margin-right: 0.5rem;
   }
 
+  /* Define estilos para este seletor. */
   ion-select {
+    /* Define uma propriedade visual deste elemento. */
     min-height: 44px;
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
   }
 }
 
+/* Define estilos para este seletor. */
 .card-grafico {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 2rem;
   
+  /* Define estilos para este seletor. */
   ion-card-header {
+    /* Define uma propriedade visual deste elemento. */
     padding-bottom: 1rem;
   }
   
+  /* Define estilos para este seletor. */
   ion-card-title {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.1rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 600;
   }
   
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     padding: 1.5rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .chart-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 2rem;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
 }
 
+/* Define estilos para este seletor. */
 .pie-chart {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 300px;
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 auto;
 }
 
+/* Define estilos para este seletor. */
 .pie-svg {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   max-width: 250px;
+  /* Define uma propriedade visual deste elemento. */
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
 }
 
+/* Define estilos para este seletor. */
 .pie-segment {
+  /* Define uma propriedade visual deste elemento. */
   cursor: pointer;
+  /* Define uma propriedade visual deste elemento. */
   transition: filter 0.2s ease-in-out;
   
+  /* Define estilos para este seletor. */
   &:hover {
+    /* Define uma propriedade visual deste elemento. */
     filter: brightness(1.1);
   }
 }
 
+/* Define estilos para este seletor. */
 .chart-legenda {
+  /* Define uma propriedade visual deste elemento. */
   width: 100%;
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
 }
 
+/* Define estilos para este seletor. */
 .legenda-item {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: flex-start;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   background-color: #f9f9f9;
+  /* Define uma propriedade visual deste elemento. */
   transition: background-color 0.2s ease;
   
+  /* Define estilos para este seletor. */
   &:hover {
+    /* Define uma propriedade visual deste elemento. */
     background-color: #f0f0f0;
   }
 }
 
+/* Define estilos para este seletor. */
 .legenda-cor {
+  /* Define uma propriedade visual deste elemento. */
   width: 16px;
+  /* Define uma propriedade visual deste elemento. */
   height: 16px;
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 50%;
+  /* Define uma propriedade visual deste elemento. */
   flex-shrink: 0;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 0.25rem;
+  /* Define uma propriedade visual deste elemento. */
   border: 1px solid rgba(0,0,0,0.1);
 }
 
+/* Define estilos para este seletor. */
 .legenda-texto {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.25rem;
+  /* Define uma propriedade visual deste elemento. */
   flex: 1;
 }
 
+/* Define estilos para este seletor. */
 .legenda-categoria {
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 600;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.9rem;
+  /* Define uma propriedade visual deste elemento. */
   color: #1c1c1e;
 }
 
+/* Define estilos para este seletor. */
 .legenda-valor {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.8rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-medium);
 }
 
+/* Define estilos para este seletor. */
 .card-total {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 2rem;
+  /* Define uma propriedade visual deste elemento. */
   --background: linear-gradient(135deg, #E8823A 0%, #cd7533 100%);
+  /* Define uma propriedade visual deste elemento. */
   color: white;
 
+  /* Define estilos para este seletor. */
   ion-card-content {
+    /* Define uma propriedade visual deste elemento. */
     padding: 2rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .total-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
 }
 
+/* Define estilos para este seletor. */
 .total-label {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.95rem;
+  /* Define uma propriedade visual deste elemento. */
   opacity: 0.95;
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.25rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .total-valor {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 2.5rem;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: -1px;
 }
 
+/* Define estilos para este seletor. */
 .total-info {
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.85rem;
+  /* Define uma propriedade visual deste elemento. */
   opacity: 0.85;
 }
 
+/* Define estilos para este seletor. */
 .empty-state {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 3rem 1rem;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
 
+  /* Define estilos para este seletor. */
   .empty-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 4rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     opacity: 0.5;
   }
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.5rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-dark);
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }
 
+/* Define estilos para este seletor. */
 .card-loading {
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 2rem;
 }
 
+/* Define estilos para este seletor. */
 .loading-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 2rem;
 
+  /* Define estilos para este seletor. */
   ion-spinner {
+    /* Define uma propriedade visual deste elemento. */
     --color: var(--ion-color-primary);
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
   }
 }

@@ -1,198 +1,329 @@
 /* TripsPage - Viagens */
 
+/* Define estilos para este seletor. */
 .filtros-status {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 0 1rem;
 
+  /* Define estilos para este seletor. */
   ion-item {
+    /* Define uma propriedade visual deste elemento. */
     --background: var(--ion-color-light);
+    /* Define uma propriedade visual deste elemento. */
     --border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     --padding-start: 12px;
+    /* Define uma propriedade visual deste elemento. */
     --inner-padding-end: 12px;
   }
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
+    /* Define uma propriedade visual deste elemento. */
     margin-right: 0.5rem;
   }
 
+  /* Define estilos para este seletor. */
   ion-select {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
+    /* Define uma propriedade visual deste elemento. */
     min-height: 44px;
   }
 }
 
+/* Define estilos para este seletor. */
 .loading-container {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 400px;
 }
 
+/* Define estilos para este seletor. */
 .empty-state {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: center;
+  /* Define uma propriedade visual deste elemento. */
   text-align: center;
+  /* Define uma propriedade visual deste elemento. */
   min-height: 500px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 2rem;
 
+  /* Define estilos para este seletor. */
   .empty-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 80px;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     margin-bottom: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     opacity: 0.5;
   }
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     margin: 1rem 0 0.5rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color);
   }
 
+  /* Define estilos para este seletor. */
   p {
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-text-color-secondary);
+    /* Define uma propriedade visual deste elemento. */
     margin-bottom: 2rem;
   }
 }
 
+/* Define estilos para este seletor. */
 .filtered-empty {
+  /* Define uma propriedade visual deste elemento. */
   min-height: 320px;
 
+  /* Define estilos para este seletor. */
   ion-icon.empty-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 72px;
   }
 }
 
+/* Define estilos para este seletor. */
 .viagem-card {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   cursor: pointer;
+  /* Define uma propriedade visual deste elemento. */
   overflow: hidden;
+  /* Define uma propriedade visual deste elemento. */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
   &:active,
+  /* Define estilos para este seletor. */
   &:hover {
+    /* Define uma propriedade visual deste elemento. */
     transform: translateY(-4px);
+    /* Define uma propriedade visual deste elemento. */
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
   }
 
+  /* Define estilos para este seletor. */
   &.destaque {
+    /* Define uma propriedade visual deste elemento. */
     border: 2px solid var(--ion-color-primary);
   }
 }
 
+/* Define estilos para este seletor. */
 .viagem-cover {
+  /* Define uma propriedade visual deste elemento. */
   height: 150px;
+  /* Define uma propriedade visual deste elemento. */
   position: relative;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-light);
 
   img,
+  /* Define estilos para este seletor. */
   .cover-placeholder {
+    /* Define uma propriedade visual deste elemento. */
     display: block;
+    /* Define uma propriedade visual deste elemento. */
     height: 100%;
+    /* Define uma propriedade visual deste elemento. */
     object-fit: cover;
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
   }
 
+  /* Define estilos para este seletor. */
   .cover-placeholder {
+    /* Define uma propriedade visual deste elemento. */
     align-items: center;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-medium);
+    /* Define uma propriedade visual deste elemento. */
     display: flex;
+    /* Define uma propriedade visual deste elemento. */
     justify-content: center;
 
+    /* Define estilos para este seletor. */
     ion-icon {
+      /* Define uma propriedade visual deste elemento. */
       font-size: 34px;
     }
   }
 
+  /* Define estilos para este seletor. */
   ion-badge {
+    /* Define uma propriedade visual deste elemento. */
     left: 12px;
+    /* Define uma propriedade visual deste elemento. */
     position: absolute;
+    /* Define uma propriedade visual deste elemento. */
     top: 12px;
   }
 }
 
+/* Define estilos para este seletor. */
 .viagem-card-content {
+  /* Define uma propriedade visual deste elemento. */
   display: grid;
+  /* Define uma propriedade visual deste elemento. */
   gap: 8px;
+  /* Define uma propriedade visual deste elemento. */
   padding: 14px;
 }
 
+/* Define estilos para este seletor. */
 .viagem-destaque-wrapper {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 1.5rem;
 }
 
+/* Define estilos para este seletor. */
 .section-title {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0 0 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 1rem;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 700;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary);
+  /* Define uma propriedade visual deste elemento. */
   text-transform: uppercase;
+  /* Define uma propriedade visual deste elemento. */
   letter-spacing: 0.08em;
 }
 
+/* Define estilos para este seletor. */
 .compact-meta {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.45rem;
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-text-color-secondary);
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.92rem;
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     flex-shrink: 0;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary);
   }
 }
 
+/* Define estilos para este seletor. */
 .extra-info {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   flex-wrap: wrap;
 
+  /* Define estilos para este seletor. */
   &.compact {
+    /* Define uma propriedade visual deste elemento. */
     margin-top: 4px;
   }
 }
 
+/* Define estilos para este seletor. */
 .info-badge {
+  /* Define uma propriedade visual deste elemento. */
   display: inline-flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.5rem;
+  /* Define uma propriedade visual deste elemento. */
   padding: 0.42rem 0.75rem;
+  /* Define uma propriedade visual deste elemento. */
   background: var(--ion-color-primary-tint);
+  /* Define uma propriedade visual deste elemento. */
   color: var(--ion-color-primary-contrast);
+  /* Define uma propriedade visual deste elemento. */
   border-radius: 20px;
+  /* Define uma propriedade visual deste elemento. */
   font-size: 0.82rem;
+  /* Define uma propriedade visual deste elemento. */
   font-weight: 500;
 
+  /* Define estilos para este seletor. */
   ion-icon {
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1rem;
+    /* Define uma propriedade visual deste elemento. */
     color: var(--ion-color-primary-contrast);
   }
 }
 
+/* Define estilos para este seletor. */
 .fab-container {
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 2rem;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 2rem;
 }
 
+/* Define estilos para este seletor. */
 .card-title-row {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   justify-content: space-between;
+  /* Define uma propriedade visual deste elemento. */
   gap: 0.75rem;
 
+  /* Define estilos para este seletor. */
   h2 {
+    /* Define uma propriedade visual deste elemento. */
     flex: 1;
+    /* Define uma propriedade visual deste elemento. */
     font-size: 1.2rem;
+    /* Define uma propriedade visual deste elemento. */
     font-weight: 800;
+    /* Define uma propriedade visual deste elemento. */
     line-height: 1.15;
+    /* Define uma propriedade visual deste elemento. */
     margin: 0;
   }
 
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     flex: 0 0 auto;
+    /* Define uma propriedade visual deste elemento. */
     margin: -0.35rem -0.35rem -0.35rem 0;
   }
 }

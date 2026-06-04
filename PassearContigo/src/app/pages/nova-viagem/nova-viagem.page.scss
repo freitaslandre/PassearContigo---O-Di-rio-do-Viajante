@@ -1,61 +1,100 @@
 /* app/pages/nova-viagem/nova-viagem.page.scss | Estilos da pagina nova viagem, com regras visuais especificas deste ecra. */
 ion-item {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 24px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 20px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 20px;
+  /* Define uma propriedade visual deste elemento. */
   --min-height: 60px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-start: 0;
+  /* Define uma propriedade visual deste elemento. */
   --padding-end: 0;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-end: 0;
+  /* Define uma propriedade visual deste elemento. */
   --inner-padding-start: 0;
 }
 
+/* Define estilos para este seletor. */
 ion-text {
+  /* Define uma propriedade visual deste elemento. */
   display: block;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 4px;
+  /* Define uma propriedade visual deste elemento. */
   margin-left: 16px;
 }
 
+/* Define estilos para este seletor. */
 .button-group {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
+  /* Define uma propriedade visual deste elemento. */
   margin-top: 24px;
 }
 
+/* Define estilos para este seletor. */
 ion-button {
+  /* Define uma propriedade visual deste elemento. */
   margin: 0;
 }
 
 ion-input,
 ion-textarea,
+/* Define estilos para este seletor. */
 ion-select {
+  /* Define uma propriedade visual deste elemento. */
   --padding-top: 16px;
+  /* Define uma propriedade visual deste elemento. */
   --padding-bottom: 16px;
 }
 
+/* Define estilos para este seletor. */
 .foto-capa-section {
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 32px;
 }
 
+/* Define estilos para este seletor. */
 .foto-capa-preview {
+  /* Define uma propriedade visual deste elemento. */
   display: flex;
+  /* Define uma propriedade visual deste elemento. */
   flex-direction: column;
+  /* Define uma propriedade visual deste elemento. */
   align-items: center;
+  /* Define uma propriedade visual deste elemento. */
   gap: 12px;
+  /* Define uma propriedade visual deste elemento. */
   margin-bottom: 16px;
 
+  /* Define estilos para este seletor. */
   img {
+    /* Define uma propriedade visual deste elemento. */
     width: 100%;
+    /* Define uma propriedade visual deste elemento. */
     height: 200px;
+    /* Define uma propriedade visual deste elemento. */
     object-fit: cover;
+    /* Define uma propriedade visual deste elemento. */
     border-radius: 8px;
+    /* Define uma propriedade visual deste elemento. */
     border: 2px solid var(--ion-color-primary);
   }
 }
 
+/* Define estilos para este seletor. */
 .foto-capa-upload {
+  /* Define estilos para este seletor. */
   ion-button {
+    /* Define uma propriedade visual deste elemento. */
     margin-bottom: 16px;
   }
 }
