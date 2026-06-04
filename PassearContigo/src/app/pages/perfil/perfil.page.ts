@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +10,7 @@ import { PushNotificationsService } from '../../services/push-notifications.serv
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss']
 })
-export class PerfilPage {
+export class PerfilPage implements OnInit {
   login = {
     email: '',
     password: ''
@@ -27,6 +27,7 @@ export class PerfilPage {
   registando = false;
   terminandoSessao = false;
   ativandoNotificacoes = false;
+  notificacoesAtivas = false;
 
   constructor(
     public authService: AuthService,
@@ -35,6 +36,14 @@ export class PerfilPage {
     private toastCtrl: ToastController,
     private router: Router
   ) {}
+
+  async ngOnInit(): Promise<void> {
+    try {
+      this.notificacoesAtivas = await this.pushNotificationsService.notificacoesAtivas();
+    } catch (error) {
+      console.warn('Erro ao verificar estado das notificações:', error);
+    }
+  }
 
   loginValido(): boolean {
     return this.emailValido(this.login.email) && this.login.password.length >= 6;
@@ -134,10 +143,30 @@ export class PerfilPage {
 
     try {
       await this.pushNotificationsService.ativarNotificacoes();
+      this.notificacoesAtivas = true;
       await this.mostrarToast('Notificações ativadas.', 'success');
     } catch (error: any) {
       console.error('Erro ao ativar notificações:', error);
       await this.mostrarToast(error?.message || 'Erro ao ativar notificações.', 'danger');
+    } finally {
+      this.ativandoNotificacoes = false;
+    }
+  }
+
+  async desativarNotificacoesPush(): Promise<void> {
+    if (this.ativandoNotificacoes) {
+      return;
+    }
+
+    this.ativandoNotificacoes = true;
+
+    try {
+      await this.pushNotificationsService.desativarNotificacoes();
+      this.notificacoesAtivas = false;
+      await this.mostrarToast('Notificações desativadas.', 'success');
+    } catch (error: any) {
+      console.error('Erro ao desativar notificações:', error);
+      await this.mostrarToast(error?.message || 'Erro ao desativar notificações.', 'danger');
     } finally {
       this.ativandoNotificacoes = false;
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { doc, getFirestore, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, getFirestore, serverTimestamp, setDoc, collection, getDocs } from 'firebase/firestore';
 import { getMessaging, getToken, isSupported, onMessage } from 'firebase/messaging';
 import { ToastController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
@@ -44,6 +44,52 @@ export class PushNotificationsService {
     }
 
     await this.registarTokenDoUtilizador(user.uid, true);
+  }
+
+  async desativarNotificacoes(): Promise<void> {
+    const user = await this.afAuth.currentUser;
+
+    if (!user) {
+      throw new Error('É necessário iniciar sessão para desativar notificações.');
+    }
+
+    const db = getFirestore();
+    const tokensCol = collection(db, 'users', user.uid, 'fcmTokens');
+    const snapshot = await getDocs(tokensCol);
+
+    const promises: Promise<void>[] = [];
+
+    snapshot.forEach(docSnap => {
+      const tokenRef = doc(db, 'users', user.uid, 'fcmTokens', docSnap.id);
+      promises.push(
+        setDoc(tokenRef, { ativo: false, atualizadoEm: serverTimestamp() }, { merge: true })
+      );
+    });
+
+    await Promise.all(promises);
+  }
+
+  async notificacoesAtivas(): Promise<boolean> {
+    const user = await this.afAuth.currentUser;
+
+    if (!user) {
+      return false;
+    }
+
+    const db = getFirestore();
+    const tokensCol = collection(db, 'users', user.uid, 'fcmTokens');
+    const snapshot = await getDocs(tokensCol);
+
+    let anyActive = false;
+
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data() as any;
+      if (data?.ativo) {
+        anyActive = true;
+      }
+    });
+
+    return anyActive;
   }
 
   private async registarTokenDoUtilizador(uid: string, forcarPedidoPermissao = false): Promise<void> {

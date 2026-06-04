@@ -18,6 +18,7 @@
         <p>Gira a sua conta e escolha como quer receber novidades das suas viagens.</p>
 
         <ion-button
+          *ngIf="!notificacoesAtivas"
           expand="block"
           color="secondary"
           fill="outline"
@@ -28,6 +29,19 @@
           <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
           <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-outline"></ion-icon>
           Ativar notificações
+        </ion-button>
+
+        <ion-button
+          *ngIf="notificacoesAtivas"
+          expand="block"
+          color="medium"
+          class="ion-margin-top"
+          (click)="desativarNotificacoesPush()"
+          [disabled]="ativandoNotificacoes"
+        >
+          <ion-spinner *ngIf="ativandoNotificacoes" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!ativandoNotificacoes" slot="start" name="notifications-off-outline"></ion-icon>
+          Desativar notificações
         </ion-button>
 
         <ion-button
