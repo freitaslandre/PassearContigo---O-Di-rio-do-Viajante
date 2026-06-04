@@ -282,3 +282,38 @@ Manter referência tanto ao `uid` quanto ao nome/email no POI para suportar reso
 Usar iniciais baseadas em nome completo quando disponível, calculadas a partir de primeiros caracteres de cada palavra para optimização de espaço visual;
 Aplicar badge em dois contextos principais (lista de dia e itinerário), com variações de estilo apropriadas a cada container (`span` vs `ion-badge`);
 Implementar tooltips (`[title]`) para revelar nome completo ao hover, preservando espaço e limpeza visual da interface.
+
+
+
+Sessão 10 — 3 de junho de 2026
+Objetivo:
+Estabilizar a arquitetura de persistência offline e reestruturar o ciclo de vida da autenticação reativa no ViagensService e AppModule, eliminando bloqueios críticos de concorrência no Android e corrigindo desvios de tipagem estática causados pela transição assíncrona do estado de autenticação.
+Atividades realizadas:
+
+Remoção da inicialização síncrona manual baseada em enableIndexedDbPersistence no APP_INITIALIZER do app.module.ts, delegando o comportamento de cache local para o método nativo enablePersistence({ synchronizeTabs: true }) do AngularFirestoreModule, mitigando falhas silenciosas na WebView do Android;
+Substituição do método estático getAuth().currentUser pela validação assíncrona reativa baseada em firstValueFrom(this.afAuth.authState) dentro do método privado obterUidUtilizadorAtual no ViagensService, garantindo o correto tratamento do atraso na resolução do token JWT em dispositivos móveis;
+Atualização dos métodos de guarda e permissões perante o Firestore (garantirPodeEditarViagem e garantirViagemDoUtilizadorAtual), injetando o UID resolvido de forma assíncrona e prevenindo exceções de concorrência em tempo de execução;
+Ajuste das funções de verificação visual (obterNivelAcessoAtual, podeEditarViagemAtual e podeGerirViagemAtual) para utilizarem getAuth().currentUser como cache síncrona instantânea, prevenindo a alteração em cascata de assinaturas para Promise<boolean>;
+Resolução do erro TS2322 em massa em 11 páginas da aplicação (adicionar-poi, album-viagem, detalhe-poi, dia-detalhe, diario-viagem, editar-viagem, gerir-colaboradores, itinerario-dia, viagem-detalhe e viagens), reajustando o tipo de retorno do serviço para boolean nativo;
+Modificação da flag do plugin CapacitorHttp para enabled: false no ficheiro capacitor.config.ts, permitindo que o SDK do Firebase utilize ligações persistentes sem interferência da camada nativa do sistema operativo;
+Inclusão das permissões android.permission.INTERNET e do atributo android:usesCleartextTraffic="true" no AndroidManifest.xml, libertando a comunicação da WebView com os servidores do Firestore.
+
+Problemas:
+
+Carregamento infinito no Android: promessas do Firebase bloqueadas indefinidamente devido ao congelamento síncrono do IndexedDB e ao retorno nulo imediato de getAuth().currentUser durante a inicialização a frio da app;
+Falha crítica na sincronização com o Firestore originada pelo plugin CapacitorHttp, que quebrava as ligações de streaming do Firebase em segundo plano no Android;
+Incompatibilidade de tipos provocada pela alteração temporária das funções de controlo de acesso para métodos assíncronos, impedindo a execução do ionic serve;
+Bloqueio nativo do Android a partir da API 28 a chamadas externas da WebView, impedindo a listagem de sugestões de viagens e a sincronização do feed.
+
+Solução:
+
+Utilização de promessas reativas apenas nas operações críticas de escrita no Firestore, mantendo a interface visual alimentada por leituras síncronas do estado de autenticação;
+Abandono da rotina manual do SDK modular em favor da configuração nativa do ecossistema @angular/fire/compat;
+Configuração do ficheiro capacitor.config.ts removendo proxies locais e forçando comunicação direta via HTTPS na WebView;
+Execução de uma sequência de compilação limpa: ionic build --prod, npx cap sync android e limpeza de artefactos no Gradle via Clean Project no Android Studio.
+
+Decisões:
+
+Manter o retorno de tipos primitivos (boolean) nas funções de verificação de permissões para evitar refatoração intrusiva de dezenas de ficheiros de controladores e templates HTML;
+Desativar o encapsulamento nativo de tráfego HTTP do Capacitor, uma vez que o SDK do Firebase possui mecanismos próprios para gerir a concorrência e resiliência de rede;
+Delegar a persistência offline estritamente à parametrização interna do AngularFire, para mitigar diferenças de suporte entre browsers de desktop e WebViews do Android.
