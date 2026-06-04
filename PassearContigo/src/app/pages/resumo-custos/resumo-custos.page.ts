@@ -67,7 +67,8 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   private viagens: Viagem[] = [];
   private custosCarregados = false;
   private viagensCarregadas = false;
-  private ultimoUsuario: any = null;
+  private ultimoUsuario: any = undefined;
+  private carregamentoInicializado = false;
 
   constructor(
     private custosService: CustosService,
@@ -83,8 +84,9 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     // Subscrever ao estado de autenticação e recarregar custos quando mudar
     this.unsubscribeAuth = this.afAuth.authState.subscribe(user => {
       // Se o utilizador mudou (fez login, logout, ou muda de conta)
-      if (user?.uid !== this.ultimoUsuario?.uid) {
+      if (!this.carregamentoInicializado || user?.uid !== this.ultimoUsuario?.uid) {
         this.ultimoUsuario = user;
+        this.carregamentoInicializado = true;
         this.carregarCustos();
       }
     });
