@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { CustosService } from '../../services/custos.service';
 import { CustosPdfService } from '../../services/custos-pdf.service';
 import { PdfShareService } from '../../services/pdf-share.service';
@@ -56,6 +57,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
   partilhandoPdf = false;
   viagemSelecionadaId = 'todas';
   viagensDisponiveis: Viagem[] = [];
+  usuarioNaoAutenticado = false;
   
   private unsubscribeCustos: Unsubscribe | null = null;
   private unsubscribeViagens: Unsubscribe | null = null;
@@ -69,7 +71,8 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     private custosPdfService: CustosPdfService,
     private pdfShareService: PdfShareService,
     private viagensService: ViagensService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +88,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
     this.carregando = true;
     this.erroCarregamento = '';
+    this.usuarioNaoAutenticado = false;
     this.custosBase = [];
     this.viagens = [];
     this.custosCarregados = false;
@@ -98,7 +102,12 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       },
       (error: any) => {
         console.error('Erro ao carregar custos:', error);
-        this.erroCarregamento = 'Erro ao carregar custos. Tente novamente.';
+        if (error?.message?.includes('iniciar sessão')) {
+          this.usuarioNaoAutenticado = true;
+          this.erroCarregamento = '';
+        } else {
+          this.erroCarregamento = 'Erro ao carregar custos. Tente novamente.';
+        }
         this.carregando = false;
       }
     );
@@ -120,7 +129,12 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
       },
       (error: any) => {
         console.error('Erro ao carregar viagens para custos dos POIs:', error);
-        this.erroCarregamento = 'Erro ao carregar custos dos POIs. Tente novamente.';
+        if (error?.message?.includes('iniciar sessão')) {
+          this.usuarioNaoAutenticado = true;
+          this.erroCarregamento = '';
+        } else {
+          this.erroCarregamento = 'Erro ao carregar custos dos POIs. Tente novamente.';
+        }
         this.carregando = false;
       }
     );
@@ -194,6 +208,10 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     this.unsubscribeViagens?.();
     this.unsubscribeCustos = null;
     this.unsubscribeViagens = null;
+  }
+
+  irParaPerfil(): void {
+    this.router.navigate(['/tabs/perfil']);
   }
 
   private processarCustos(): void {

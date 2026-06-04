@@ -56,8 +56,19 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Aviso de autenticação -->
+  <ion-card *ngIf="usuarioNaoAutenticado && !carregando">
+    <ion-card-header>
+      <ion-card-title>Inicie sessão</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Para ver os seus custos, precisa de iniciar sessão.</p>
+      <ion-button expand="block" (click)="irParaPerfil()">Ir para Perfil</ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Erro -->
-  <ion-card *ngIf="erroCarregamento && !carregando" color="danger">
+  <ion-card *ngIf="erroCarregamento && !carregando && !usuarioNaoAutenticado" color="danger">
     <ion-card-header>
       <ion-card-title>Erro</ion-card-title>
     </ion-card-header>
@@ -68,7 +79,7 @@
   </ion-card>
 
   <!-- Sem Custos -->
-  <ion-card *ngIf="!carregando && custos.length === 0 && !erroCarregamento">
+  <ion-card *ngIf="!carregando && custos.length === 0 && !erroCarregamento && !usuarioNaoAutenticado">
     <ion-card-content class="empty-state">
       <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
       <h2>Sem Custos</h2>
