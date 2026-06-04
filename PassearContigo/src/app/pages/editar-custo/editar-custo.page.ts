@@ -1,3 +1,4 @@
+// app/pages/editar-custo/editar-custo.page.ts | Controlador da pagina editar custo, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustosService } from '../../services/custos.service';

@@ -1,3 +1,4 @@
+// app/pages/viagem-detalhe/viagem-detalhe.page.ts | Controlador da pagina viagem detalhe, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
@@ -13,6 +14,7 @@ import { NominatimService } from '../../services/nominatim.service';
 import { ItinerarioPdfService } from '../../services/itinerario-pdf.service';
 import { PdfShareService } from '../../services/pdf-share.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface DiaViewModel {
   id: string;
   titulo: string;
@@ -30,6 +32,7 @@ interface DiaViewModel {
   templateUrl: 'viagem-detalhe.page.html',
   styleUrls: ['viagem-detalhe.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ViagemDetalhePage implements OnInit, OnDestroy {
   viagemId = '';
   viagem: Viagem | null = null;

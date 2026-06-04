@@ -1,12 +1,15 @@
+// app/services/pdf-share.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface PdfGerado {
   fileName: string;
   base64: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface PdfShareOptions {
   title: string;
   text?: string;
@@ -16,6 +19,7 @@ export interface PdfShareOptions {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class PdfShareService {
   async canShare(): Promise<boolean> {
     const result = await Share.canShare();

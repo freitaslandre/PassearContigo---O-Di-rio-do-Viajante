@@ -1,8 +1,10 @@
+// app/services/custos-pdf.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Custo } from '../models/viagem.model';
 import { PdfDocumentBase } from './pdf-document.base';
 import { PdfGerado } from './pdf-share.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface CategoriaRelatorioCusto {
   categoria: string;
   total: number;
@@ -10,6 +12,7 @@ export interface CategoriaRelatorioCusto {
   cor?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface CustosPdfData {
   custos: Custo[];
   categorias: CategoriaRelatorioCusto[];
@@ -19,6 +22,7 @@ interface CustosPdfData {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class CustosPdfService extends PdfDocumentBase {
   gerarRelatorioPorCategoria({ custos, categorias, totalGeral }: CustosPdfData): void {
     const pdf = this.criarRelatorioPorCategoria({ custos, categorias, totalGeral });

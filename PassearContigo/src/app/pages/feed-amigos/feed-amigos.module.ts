@@ -1,3 +1,4 @@
+// app/pages/feed-amigos/feed-amigos.module.ts | Modulo Angular da pagina feed amigos, onde se declaram dependencias do ecra.
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -14,4 +15,5 @@ import { FeedAmigosPage } from './feed-amigos.page';
   ],
   declarations: [FeedAmigosPage]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class FeedAmigosPageModule {}

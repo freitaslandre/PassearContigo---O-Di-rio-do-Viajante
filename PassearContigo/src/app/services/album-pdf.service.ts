@@ -1,8 +1,10 @@
+// app/services/album-pdf.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { PdfDocumentBase } from './pdf-document.base';
 import { PdfGerado } from './pdf-share.service';
 import { Viagem } from '../models/viagem.model';
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface FotoAlbumPdf {
   url: string;
   titulo?: string;
@@ -13,6 +15,7 @@ export interface FotoAlbumPdf {
   origemLabel?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface AlbumPdfData {
   viagem: Viagem;
   fotos: FotoAlbumPdf[];
@@ -21,6 +24,7 @@ export interface AlbumPdfData {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AlbumPdfService extends PdfDocumentBase {
   async gerarAlbumDownload({ viagem, fotos }: AlbumPdfData): Promise<void> {
     const pdf = await this.criarAlbumPdf({ viagem, fotos });

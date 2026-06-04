@@ -1,3 +1,4 @@
+// app/services/screen-orientation.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 
@@ -9,6 +10,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ScreenOrientationService {
 
   constructor() {}

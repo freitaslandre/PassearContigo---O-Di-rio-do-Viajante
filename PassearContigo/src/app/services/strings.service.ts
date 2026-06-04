@@ -1,3 +1,4 @@
+// app/services/strings.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -9,6 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class StringsService {
   /** Mapa completo de strings carregado a partir de assets/strings.json. */
   private strings: any = {};

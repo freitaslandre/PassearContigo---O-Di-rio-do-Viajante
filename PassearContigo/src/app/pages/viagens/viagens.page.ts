@@ -1,3 +1,4 @@
+// app/pages/viagens/viagens.page.ts | Controlador da pagina viagens, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViagensService } from '../../services/viagens.service';
 import { Viagem } from '../../models/viagem.model';
@@ -15,6 +16,7 @@ import { AlertController, ToastController } from '@ionic/angular';
   templateUrl: 'viagens.page.html',
   styleUrls: ['viagens.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ViagensPage implements OnInit, OnDestroy {
   viagens: Viagem[] = [];
   viagemEmCurso: Viagem | null = null;
@@ -27,6 +29,7 @@ export class ViagensPage implements OnInit, OnDestroy {
     { valor: 'cancelada', label: 'Canceladas' }
   ];
   carregando = true;
+  erro = '';
   private unsubscribe: Unsubscribe | null = null;
   constructor(
     private viagensService: ViagensService,
@@ -44,17 +47,25 @@ export class ViagensPage implements OnInit, OnDestroy {
 
   private subscribeToViagens() {
     this.carregando = true;
+    this.erro = '';
     this.unsubscribe = this.viagensService.subscribeToViagens(
       (viagens) => {
         this.viagens = viagens;
         this.atualizarViagemEmCurso();
         this.carregando = false;
+        this.erro = '';
       },
       (error) => {
         console.error('Erro ao carregar viagens:', error);
+        this.erro = error?.message || 'Não foi possível carregar as viagens.';
         this.carregando = false;
       }
     );
+  }
+
+  recarregarViagens() {
+    this.unsubscribe?.();
+    this.subscribeToViagens();
   }
 
   irParaDetalhes(id: string) {

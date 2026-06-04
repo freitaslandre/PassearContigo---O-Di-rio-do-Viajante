@@ -1,3 +1,4 @@
+// app/services/custos.service.spec.ts | Testes unitarios do servico custos.service.
 import { TestBed } from '@angular/core/testing';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';

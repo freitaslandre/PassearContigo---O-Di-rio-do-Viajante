@@ -1,7 +1,10 @@
+// app/models/trip.model.ts | Modelos e tipos TypeScript usados para representar dados da aplicacao.
 export type TipoCusto = 'alojamento' | 'alimentacao' | 'transporte' | 'atividade' | 'outro';
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type PapelColaborador = 'dono' | 'editor' | 'visualizador';
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface POI {
   id: string;
   nome: string;
@@ -14,6 +17,7 @@ export interface POI {
   concluido?: boolean;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface Custo {
   id: string;
   descricao: string;
@@ -24,6 +28,7 @@ export interface Custo {
   data?: Date;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface Colaborador {
   uid: string;
   nome: string;
@@ -31,6 +36,7 @@ export interface Colaborador {
   papel: PapelColaborador;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface Dia {
   id: string;
   data: Date;
@@ -40,6 +46,7 @@ export interface Dia {
   custos?: Custo[];
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface Viagem {
   id: string;
   titulo: string;
@@ -56,6 +63,8 @@ export interface Viagem {
   atualizadoEm?: Date;
 }
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type Trip = Viagem;
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type Activity = POI;
 

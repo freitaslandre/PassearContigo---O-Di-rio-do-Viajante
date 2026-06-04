@@ -1,3 +1,4 @@
+// app/services/geolocation.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Geolocation, GeolocationPosition } from '@capacitor/geolocation';
 
@@ -9,6 +10,7 @@ import { Geolocation, GeolocationPosition } from '@capacitor/geolocation';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class GeolocationService {
 
   constructor() {}

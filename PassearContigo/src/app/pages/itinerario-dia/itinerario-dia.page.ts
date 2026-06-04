@@ -1,3 +1,4 @@
+// app/pages/itinerario-dia/itinerario-dia.page.ts | Controlador da pagina itinerario dia, onde ficam os dados, eventos e chamadas aos servicos.
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemReorderEventDetail, ToastController } from '@ionic/angular';
@@ -17,6 +18,7 @@ import * as L from 'leaflet';
   templateUrl: './itinerario-dia.page.html',
   styleUrls: ['./itinerario-dia.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ItinerarioDiaPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapaItinerario') mapaItinerario?: ElementRef<HTMLDivElement>;
 

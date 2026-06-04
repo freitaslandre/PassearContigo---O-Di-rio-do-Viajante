@@ -1,3 +1,4 @@
+// app/pages/editar-custo/editar-custo.page.spec.ts | Ficheiro fonte da aplicacao PassearContigo.
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditarCustoPage } from './editar-custo.page';
 

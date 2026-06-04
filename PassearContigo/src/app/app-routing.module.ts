@@ -1,3 +1,4 @@
+// app/app-routing.module.ts | Mapa principal de rotas da aplicacao.
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
@@ -31,4 +32,5 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AppRoutingModule { }

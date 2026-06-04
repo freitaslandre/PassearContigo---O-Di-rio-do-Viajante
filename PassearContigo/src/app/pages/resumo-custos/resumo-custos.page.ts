@@ -1,3 +1,4 @@
+// app/pages/resumo-custos/resumo-custos.page.ts | Controlador da pagina resumo custos, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -9,8 +10,10 @@ import { Custo, Viagem } from '../../models/viagem.model';
 import { Unsubscribe } from 'firebase/firestore';
 import { ToastController } from '@ionic/angular';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface CustosPorCategoria {
   categoria: string;
+  categoriaLabel: string;
   total: number;
   percentual: number;
   icone: string;
@@ -18,6 +21,7 @@ interface CustosPorCategoria {
   corHex: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface SegmentoGrafico {
   categoria: string;
   valor: number;
@@ -48,6 +52,7 @@ const CORES_CATEGORIA: Record<string, string> = {
   templateUrl: './resumo-custos.page.html',
   styleUrls: ['./resumo-custos.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ResumoCustosPage implements OnInit, OnDestroy {
   custos: Custo[] = [];
   custosPorCategoria: CustosPorCategoria[] = [];
@@ -236,6 +241,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     // Converter para array e adicionar percentuais
     this.custosPorCategoria = Object.entries(categorias).map(([categoria, total]) => ({
       categoria,
+      categoriaLabel: this.obterLabelCategoria(categoria),
       total,
       percentual: this.totalGeral > 0 ? (total / this.totalGeral) * 100 : 0,
       icone: this.obterIconeCategoria(categoria),
@@ -245,6 +251,10 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
 
     // Ordenar por total descendente
     this.custosPorCategoria.sort((a, b) => b.total - a.total);
+  }
+
+  private obterLabelCategoria(categoria: string): string {
+    return categoria.toLowerCase() === 'hospedagem' ? 'Alojamento' : categoria;
   }
 
   private obterIconeCategoria(categoria: string): string {
@@ -352,7 +362,7 @@ export class ResumoCustosPage implements OnInit, OnDestroy {
     for (const categoria of this.custosPorCategoria) {
       const dasharray = (categoria.percentual / 100) * perimetro;
       segmentos.push({
-        categoria: categoria.categoria,
+        categoria: categoria.categoriaLabel,
         valor: categoria.total,
         percentual: categoria.percentual,
         cor: categoria.corHex,

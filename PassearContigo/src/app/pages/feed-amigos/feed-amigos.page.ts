@@ -1,3 +1,4 @@
+// app/pages/feed-amigos/feed-amigos.page.ts | Controlador da pagina feed amigos, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -12,6 +13,7 @@ import { PublicacoesService } from '../../services/publicacoes.service';
   templateUrl: './feed-amigos.page.html',
   styleUrls: ['./feed-amigos.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class FeedAmigosPage implements OnInit, OnDestroy {
   publicacoes: Publicacao[] = [];
   comentariosPorPublicacao: Record<string, ComentarioPublicacao[]> = {};

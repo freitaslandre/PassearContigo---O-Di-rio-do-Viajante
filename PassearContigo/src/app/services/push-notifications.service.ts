@@ -1,3 +1,4 @@
+// app/services/push-notifications.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { doc, getFirestore, serverTimestamp, setDoc, collection, getDocs } from 'firebase/firestore';
@@ -8,6 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class PushNotificationsService {
   private inicializado = false;
 

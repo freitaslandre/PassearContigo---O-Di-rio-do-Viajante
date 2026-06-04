@@ -1,3 +1,4 @@
+// app/tabs/tabs-routing.module.ts | Configuracao e apresentacao da navegacao por separadores da aplicacao.
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
@@ -45,4 +46,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class TabsPageRoutingModule {}

@@ -1,8 +1,10 @@
+// app/services/diario-pdf.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Custo, Dia, POI, Viagem } from '../models/viagem.model';
 import { PdfDocumentBase } from './pdf-document.base';
 import { PdfGerado } from './pdf-share.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface DiarioPdfData {
   viagem: Viagem;
   dias: Dia[];
@@ -12,6 +14,7 @@ interface DiarioPdfData {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class DiarioPdfService extends PdfDocumentBase {
   gerarDiarioCompleto({ viagem, dias, custos }: DiarioPdfData): void {
     const pdf = this.criarDiarioCompleto({ viagem, dias, custos });

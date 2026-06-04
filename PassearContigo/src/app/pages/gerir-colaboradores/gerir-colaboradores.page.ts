@@ -1,3 +1,4 @@
+// app/pages/gerir-colaboradores/gerir-colaboradores.page.ts | Controlador da pagina gerir colaboradores, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
@@ -11,6 +12,7 @@ import { ViagensService } from '../../services/viagens.service';
   templateUrl: './gerir-colaboradores.page.html',
   styleUrls: ['./gerir-colaboradores.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class GerirColaboradoresPage implements OnInit {
   viagemId = '';
   viagem: Viagem | null = null;

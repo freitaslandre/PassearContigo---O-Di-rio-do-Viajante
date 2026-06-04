@@ -1,10 +1,12 @@
+<!-- app/pages/resumo-custos/resumo-custos.page.html | Template da pagina resumo custos, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Resumo de Custos</ion-title>
+    <ion-title>Resumo de custos</ion-title>
     <ion-buttons slot="end">
       <ion-button
         (click)="partilharPdfCustosPorCategoria()"
         [disabled]="carregando || partilhandoPdf || gerandoPdf || custos.length === 0"
+        aria-label="Partilhar resumo de custos em PDF"
       >
         <ion-spinner *ngIf="partilhandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!partilhandoPdf" slot="icon-only" name="share-social-outline"></ion-icon>
@@ -12,11 +14,12 @@
       <ion-button
         (click)="gerarPdfCustosPorCategoria()"
         [disabled]="carregando || gerandoPdf || partilhandoPdf || custos.length === 0"
+        aria-label="Exportar resumo de custos em PDF"
       >
         <ion-spinner *ngIf="gerandoPdf" name="crescent" slot="icon-only"></ion-spinner>
         <ion-icon *ngIf="!gerandoPdf" slot="icon-only" name="document-text-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="recarregar()" [disabled]="carregando">
+      <ion-button (click)="recarregar()" [disabled]="carregando" aria-label="Recarregar custos">
         <ion-icon slot="icon-only" name="refresh"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -63,7 +66,7 @@
     </ion-card-header>
     <ion-card-content>
       <p>Para ver os seus custos, precisa de iniciar sessão.</p>
-      <ion-button expand="block" (click)="irParaPerfil()">Ir para Perfil</ion-button>
+      <ion-button expand="block" (click)="irParaPerfil()">Ir para perfil</ion-button>
     </ion-card-content>
   </ion-card>
 
@@ -74,26 +77,26 @@
     </ion-card-header>
     <ion-card-content>
       <p>{{ erroCarregamento }}</p>
-      <ion-button expand="block" (click)="recarregar()">Tentar Novamente</ion-button>
+      <ion-button expand="block" (click)="recarregar()">Tentar novamente</ion-button>
     </ion-card-content>
   </ion-card>
 
-  <!-- Sem Custos -->
+  <!-- Sem custos -->
   <ion-card *ngIf="!carregando && custos.length === 0 && !erroCarregamento && !usuarioNaoAutenticado">
     <ion-card-content class="empty-state">
       <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
-      <h2>Sem Custos</h2>
+      <h2>Sem custos</h2>
       <p>{{ viagemSelecionadaId === 'todas' ? 'Nenhum custo registado ainda.' : 'Esta viagem ainda não tem custos registados.' }}</p>
     </ion-card-content>
   </ion-card>
 
-  <!-- Total Geral -->
+  <!-- Total geral -->
   <ion-card *ngIf="!carregando && custos.length > 0" class="card-total">
     <ion-card-content>
       <div class="total-container">
         <div class="total-label">
           <ion-icon name="cash"></ion-icon>
-          <span>Total de Gastos</span>
+          <span>Total gasto</span>
         </div>
         <div class="total-valor">
           {{ formatarValor(totalGeral) }} €
@@ -105,10 +108,10 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Gráfico de Distribuição de Custos -->
+  <!-- Gráfico de distribuição de custos -->
   <ion-card *ngIf="!carregando && custosPorCategoria.length > 0" class="card-grafico">
     <ion-card-header>
-      <ion-card-title>Distribuição de Custos</ion-card-title>
+      <ion-card-title>Distribuição de custos</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <div class="chart-container">
@@ -134,7 +137,7 @@
           <div *ngFor="let categoria of custosPorCategoria" class="legenda-item">
             <div class="legenda-cor" [style.backgroundColor]="categoria.corHex"></div>
             <div class="legenda-texto">
-              <span class="legenda-categoria">{{ categoria.categoria }}</span>
+              <span class="legenda-categoria">{{ categoria.categoriaLabel }}</span>
               <span class="legenda-valor">{{ formatarValor(categoria.total) }} € ({{ categoria.percentual.toFixed(1) }}%)</span>
             </div>
           </div>

@@ -1,3 +1,4 @@
+<!-- app/pages/editar-viagem/editar-viagem.page.html | Template da pagina editar viagem, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -5,7 +6,7 @@
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Editar Viagem</ion-title>
+    <ion-title>Editar viagem</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -45,7 +46,7 @@
     </div>
 
     <ion-item>
-      <ion-label position="stacked">Título da Viagem *</ion-label>
+      <ion-label position="stacked">Título da viagem *</ion-label>
       <ion-input formControlName="titulo" type="text"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="titulo?.invalid && titulo?.touched">

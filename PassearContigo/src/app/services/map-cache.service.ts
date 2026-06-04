@@ -1,5 +1,7 @@
+// app/services/map-cache.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface TileCacheEntry {
   url: string;
   data: Blob;
@@ -10,6 +12,7 @@ interface TileCacheEntry {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class MapCacheService {
   private readonly DB_NAME = 'PassearContigo_MapCache';
   private readonly STORE_NAME = 'tiles';

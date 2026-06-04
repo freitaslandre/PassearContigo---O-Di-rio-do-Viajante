@@ -1,12 +1,15 @@
+// app/services/photo-share.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface PreparedPhoto {
   base64: string;
   extension: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface PhotoShareOptions {
   title: string;
   text?: string;
@@ -17,6 +20,7 @@ export interface PhotoShareOptions {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class PhotoShareService {
   async canShare(): Promise<boolean> {
     const result = await Share.canShare();

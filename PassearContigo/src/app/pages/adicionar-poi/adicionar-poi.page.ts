@@ -1,3 +1,4 @@
+// app/pages/adicionar-poi/adicionar-poi.page.ts | Controlador da pagina adicionar poi, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
@@ -17,6 +18,7 @@ import * as L from 'leaflet';
   templateUrl: './adicionar-poi.page.html',
   styleUrls: ['./adicionar-poi.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AdicionarPoiPage implements OnInit, AfterViewInit, OnDestroy {
   poi: Omit<Partial<POI>, 'custo'> & { latitude?: string | number; longitude?: string | number; custo?: string | number } = {
     nome: '',

@@ -1,3 +1,4 @@
+// app/services/user.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 
@@ -8,6 +9,7 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class UserService {
 
   constructor() { }

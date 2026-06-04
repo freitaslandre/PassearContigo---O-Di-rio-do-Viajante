@@ -1,3 +1,4 @@
+// app/services/auth.spec.ts | Testes unitarios do servico auth.
 import { TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';

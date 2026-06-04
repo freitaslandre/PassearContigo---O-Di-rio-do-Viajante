@@ -1,3 +1,4 @@
+<!-- app/pages/adicionar-poi/adicionar-poi.page.html | Template da pagina adicionar poi, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -29,6 +30,7 @@
                 fill="outline"
                 (click)="removerFoto()"
                 type="button"
+                aria-label="Remover foto"
               >
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
@@ -272,7 +274,7 @@
             <ion-select-option value="natureza">Natureza</ion-select-option>
             <ion-select-option value="aventura">Aventura</ion-select-option>
             <ion-select-option value="compras">Compras</ion-select-option>
-            <ion-select-option value="hospedagem">Hospedagem</ion-select-option>
+            <ion-select-option value="hospedagem">Alojamento</ion-select-option>
             <ion-select-option value="outro">Outro</ion-select-option>
           </ion-select>
         </ion-item>

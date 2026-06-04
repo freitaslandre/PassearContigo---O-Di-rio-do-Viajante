@@ -1,12 +1,28 @@
+<!-- app/pages/viagens/viagens.page.html | Template da pagina viagens, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Minhas Viagens</ion-title>
+    <ion-title>As minhas viagens</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div *ngIf="carregando" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>A carregar viagens...</p>
+  </div>
 
-  <div *ngIf="!carregando && viagens.length > 0" class="filtros-status">
+  <ion-card *ngIf="!carregando && erro" class="state-card">
+    <ion-card-content>
+      <h2>Não foi possível carregar</h2>
+      <p>{{ erro }}</p>
+      <ion-button expand="block" color="medium" (click)="recarregarViagens()">
+        <ion-icon slot="start" name="refresh-outline"></ion-icon>
+        Tentar novamente
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="!carregando && !erro && viagens.length > 0" class="filtros-status">
     <ion-item lines="none">
       <ion-icon slot="start" name="filter-outline"></ion-icon>
       <ion-select
@@ -22,7 +38,7 @@
     </ion-item>
   </div>
 
-  <div *ngIf="!carregando && viagens.length === 0" class="empty-state">
+  <div *ngIf="!carregando && !erro && viagens.length === 0" class="empty-state">
     <div class="empty-icon">📭</div>
     <ion-text class="empty-text" color="medium">
       <h2>Sem viagens registadas</h2>
@@ -30,11 +46,11 @@
     </ion-text>
     <ion-button color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
-      Criar Primeira Viagem
+      Criar primeira viagem
     </ion-button>
   </div>
 
-  <div *ngIf="!carregando && viagens.length > 0 && viagensFiltradas.length === 0" class="empty-state filtered-empty">
+  <div *ngIf="!carregando && !erro && viagens.length > 0 && viagensFiltradas.length === 0" class="empty-state filtered-empty">
     <ion-icon name="filter-outline" class="empty-icon"></ion-icon>
     <ion-text class="empty-text" color="medium">
       <h2>Sem viagens neste estado</h2>
@@ -47,7 +63,7 @@
   </div>
 
   <!-- Destaque: viagem em curso -->
-  <div *ngIf="!carregando && viagemEmCurso" class="viagem-destaque-wrapper">
+  <div *ngIf="!carregando && !erro && viagemEmCurso" class="viagem-destaque-wrapper">
     <h2 class="section-title">Viagens</h2>
     <ion-card class="viagem-card destaque" (click)="irParaDetalhes(viagemEmCurso.id)">
       <div class="viagem-cover">
@@ -63,7 +79,7 @@
       <ion-card-content class="viagem-card-content">
         <div class="card-title-row">
           <h2>{{ viagemEmCurso.titulo }}</h2>
-          <ion-button *ngIf="podeGerirViagem(viagemEmCurso)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagemEmCurso)">
+          <ion-button *ngIf="podeGerirViagem(viagemEmCurso)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagemEmCurso)" aria-label="Eliminar viagem">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </div>
@@ -97,7 +113,7 @@
   </div>
 
   <!-- Viagens list -->
-  <div *ngIf="!carregando && viagensRestantes.length > 0">
+  <div *ngIf="!carregando && !erro && viagensRestantes.length > 0">
     <ion-card *ngFor="let viagem of viagensRestantes" class="viagem-card" (click)="irParaDetalhes(viagem.id)">
       <div class="viagem-cover">
         <img *ngIf="obterFotoCapa(viagem); else capaPlaceholder" [src]="obterFotoCapa(viagem)" [alt]="viagem.titulo">
@@ -112,7 +128,7 @@
       <ion-card-content class="viagem-card-content">
         <div class="card-title-row">
           <h2>{{ viagem.titulo }}</h2>
-          <ion-button *ngIf="podeGerirViagem(viagem)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagem)">
+          <ion-button *ngIf="podeGerirViagem(viagem)" fill="clear" color="danger" (click)="confirmarEliminarViagem($event, viagem)" aria-label="Eliminar viagem">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </div>
@@ -146,10 +162,10 @@
   </div>
 
   <!-- New trip button (floating action button style) -->
-  <div class="fab-container" *ngIf="!carregando && viagens.length > 0">
+  <div class="fab-container" *ngIf="!carregando && !erro && viagens.length > 0">
     <ion-button expand="block" color="primary" routerLink="/tabs/viagens/nova">
       <ion-icon slot="start" name="add-circle"></ion-icon>
-      Nova Viagem
+      Nova viagem
     </ion-button>
   </div>
 </ion-content>

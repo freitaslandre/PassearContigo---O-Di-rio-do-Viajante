@@ -1,3 +1,4 @@
+// app/pages/resumo-custos/resumo-custos.page.spec.ts | Ficheiro fonte da aplicacao PassearContigo.
 import { TestBed } from '@angular/core/testing';
 import { ResumoCustosPage } from './resumo-custos.page';
 import { CustosService } from '../../services/custos.service';

@@ -1,3 +1,4 @@
+// app/pages/diario-viagem/diario-viagem.page.ts | Controlador da pagina diario viagem, onde ficam os dados, eventos e chamadas aos servicos.
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Gesture, GestureController, ToastController } from '@ionic/angular';
@@ -8,6 +9,7 @@ import { DiarioPdfService } from '../../services/diario-pdf.service';
 import { PdfShareService } from '../../services/pdf-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface LinhaCustoDiario {
   id: string;
   descricao: string;
@@ -22,6 +24,7 @@ interface LinhaCustoDiario {
   templateUrl: './diario-viagem.page.html',
   styleUrls: ['./diario-viagem.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class DiarioViagemPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('diarioSwipeArea') diarioSwipeArea?: ElementRef<HTMLElement>;
 

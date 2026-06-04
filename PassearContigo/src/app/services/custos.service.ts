@@ -1,3 +1,4 @@
+// app/services/custos.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
@@ -11,7 +12,9 @@ import { getFirestore, collection, query, where, onSnapshot, Unsubscribe, doc, u
 import { getAuth } from 'firebase/auth';
 import { Custo } from '../models/viagem.model';
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type CustoPayload = Omit<Custo, 'id'>;
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type NovoCusto = CustoPayload & Partial<Pick<Custo, 'id'>>;
 
 /**
@@ -22,6 +25,7 @@ type NovoCusto = CustoPayload & Partial<Pick<Custo, 'id'>>;
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class CustosService {
   private readonly collectionName = 'custos';
   private readonly custosCollection: AngularFirestoreCollection<CustoPayload>;

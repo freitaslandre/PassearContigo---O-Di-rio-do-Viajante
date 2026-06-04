@@ -1,3 +1,4 @@
+// app/services/firebase-storage.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -5,6 +6,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class FirebaseStorageService {
   private readonly photoUploadTimeoutMs = 8000;
   private readonly fallbackMaxLength = 700_000;

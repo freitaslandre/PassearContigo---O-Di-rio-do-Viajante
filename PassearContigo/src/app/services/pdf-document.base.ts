@@ -1,3 +1,4 @@
+// app/services/pdf-document.base.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { jsPDF } from 'jspdf';
 
 /** Estilo de letra usado nas linhas geradas pelos relatórios PDF. */

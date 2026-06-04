@@ -1,13 +1,16 @@
+// app/services/itinerario-pdf.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { Dia, POI, Viagem } from '../models/viagem.model';
 import { PdfDocumentBase } from './pdf-document.base';
 import { PdfGerado } from './pdf-share.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface ItinerarioPdfData {
   viagem: Viagem;
   dias: Dia[];
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface DiaPdfData {
   viagem: Viagem;
   dia: Dia;
@@ -18,6 +21,7 @@ interface DiaPdfData {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ItinerarioPdfService extends PdfDocumentBase {
   /**
    * Gera um PDF do itinerário completo e faz download automático

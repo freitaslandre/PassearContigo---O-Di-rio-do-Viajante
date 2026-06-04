@@ -1,9 +1,11 @@
+// app/services/poi.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ViagensService } from './viagens.service';
 import { POI, Viagem } from '../models/viagem.model';
 import { StorageService } from './storage.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface PoiLocalPendente {
   viagemId: string;
   diaId: string;
@@ -11,6 +13,7 @@ interface PoiLocalPendente {
   criadoEm: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface EstadoSincronizacaoPoi {
   online: boolean;
   sincronizando: boolean;
@@ -25,6 +28,7 @@ export interface EstadoSincronizacaoPoi {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class POIService {
   private readonly poisPendentesKey = 'pois_pendentes_offline';
   private sincronizacaoEmCurso = false;

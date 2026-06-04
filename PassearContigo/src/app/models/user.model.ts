@@ -1,3 +1,4 @@
+// app/models/user.model.ts | Modelos e tipos TypeScript usados para representar dados da aplicacao.
 /**
  * User Model
  * Define a estrutura de um objeto de Utilizador

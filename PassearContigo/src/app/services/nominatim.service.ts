@@ -1,5 +1,7 @@
+// app/services/nominatim.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface NominatimReverseResponse {
   display_name?: string;
   name?: string;
@@ -8,6 +10,7 @@ interface NominatimReverseResponse {
   address?: Record<string, string>;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface NominatimSearchResponse {
   display_name?: string;
   name?: string;
@@ -18,12 +21,14 @@ interface NominatimSearchResponse {
   address?: Record<string, string>;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface NominatimReverseResult {
   endereco: string;
   nomeSugerido: string;
   categoria: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface NominatimSearchResult {
   nome: string;
   endereco: string;
@@ -35,6 +40,7 @@ export interface NominatimSearchResult {
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class NominatimService {
   private readonly searchUrl = 'https://nominatim.openstreetmap.org/search';
   private readonly reverseUrl = 'https://nominatim.openstreetmap.org/reverse';

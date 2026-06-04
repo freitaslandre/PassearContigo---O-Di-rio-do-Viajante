@@ -1,3 +1,4 @@
+// app/pages/viagem-detalhe/viagem-detalhe-routing.module.ts | Rotas da pagina viagem detalhe, usadas pelo Angular/Ionic para carregar este ecra.
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ViagemDetalhePage } from './viagem-detalhe.page';
@@ -41,4 +42,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ViagemDetalhePageRoutingModule {}

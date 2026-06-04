@@ -1,3 +1,4 @@
+// app/tabs/tabs.page.ts | Configuracao e apresentacao da navegacao por separadores da aplicacao.
 import { Component } from '@angular/core';
 
 /**
@@ -11,4 +12,5 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss'],
   standalone: false,
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class TabsPage {}

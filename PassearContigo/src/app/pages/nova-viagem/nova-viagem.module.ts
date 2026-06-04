@@ -1,3 +1,4 @@
+// app/pages/nova-viagem/nova-viagem.module.ts | Modulo Angular da pagina nova viagem, onde se declaram dependencias do ecra.
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,4 +15,5 @@ import { NovaViagemPage } from './nova-viagem.page';
   ],
   declarations: [NovaViagemPage]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class NovaViagemPageModule {}

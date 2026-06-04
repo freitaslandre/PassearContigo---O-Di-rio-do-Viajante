@@ -1,3 +1,4 @@
+// app/pages/resumo-custos/resumo-custos-routing.module.ts | Rotas da pagina resumo custos, usadas pelo Angular/Ionic para carregar este ecra.
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -14,4 +15,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ResumoCustosPageRoutingModule { }

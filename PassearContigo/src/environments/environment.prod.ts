@@ -1,3 +1,4 @@
+// environments/environment.prod.ts | Configuracao de ambiente usada pelo Angular durante o build.
 export const environment = {
   production: true,
   firebaseConfig: {

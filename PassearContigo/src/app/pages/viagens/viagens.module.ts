@@ -1,3 +1,4 @@
+// app/pages/viagens/viagens.module.ts | Modulo Angular da pagina viagens, onde se declaram dependencias do ecra.
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,4 +15,5 @@ import { ViagensPage } from './viagens.page';
   ],
   declarations: [ViagensPage]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class ViagensPageModule {}

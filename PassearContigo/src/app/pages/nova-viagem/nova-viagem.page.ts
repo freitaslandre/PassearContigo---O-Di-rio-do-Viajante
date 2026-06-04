@@ -1,3 +1,4 @@
+// app/pages/nova-viagem/nova-viagem.page.ts | Controlador da pagina nova viagem, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { FirebaseStorageService } from '../../services/firebase-storage.service'
   templateUrl: 'nova-viagem.page.html',
   styleUrls: ['nova-viagem.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class NovaViagemPage implements OnInit {
   form!: FormGroup;
   carregando = false;
@@ -136,7 +138,7 @@ export class NovaViagemPage implements OnInit {
       }
 
       const alert = await this.alertCtrl.create({
-        header: 'Formulário Inválido',
+        header: 'Formulário inválido',
         message: mensagem,
         buttons: ['OK']
       });
@@ -172,7 +174,8 @@ export class NovaViagemPage implements OnInit {
         color: 'success'
       });
       await toast.present();
-      this.router.navigate(['/tabs', 'viagens', id]);
+      this.form.markAsPristine();
+      await this.router.navigate(['/tabs', 'viagens', id]);
 
       if (fotoCapaParaEnviar) {
         this.enviarCapaEmSegundoPlano(id, fotoCapaParaEnviar);
@@ -189,8 +192,10 @@ export class NovaViagemPage implements OnInit {
     }
   }
 
-  cancelar() {
-    this.router.navigate(['/tabs/viagens']);
+  async cancelar() {
+    if (await this.confirmarSaidaSeNecessario()) {
+      await this.router.navigate(['/tabs/viagens']);
+    }
   }
 
   get titulo() {
@@ -230,5 +235,34 @@ export class NovaViagemPage implements OnInit {
       console.warn('Não foi possível enviar a capa da viagem:', error);
       await this.mostrarToast('A viagem foi criada, mas a capa não foi enviada.', 'warning');
     }
+  }
+
+  private temAlteracoesPorGuardar(): boolean {
+    return this.form?.dirty || !!this.fotoCapaPreview;
+  }
+
+  private async confirmarSaidaSeNecessario(): Promise<boolean> {
+    if (!this.temAlteracoesPorGuardar()) {
+      return true;
+    }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Sair sem guardar?',
+      message: 'Tem alterações por guardar. Se sair agora, perde os dados introduzidos.',
+      buttons: [
+        {
+          text: 'Continuar a editar',
+          role: 'cancel'
+        },
+        {
+          text: 'Sair sem guardar',
+          role: 'destructive'
+        }
+      ]
+    });
+
+    await alert.present();
+    const resultado = await alert.onDidDismiss();
+    return resultado.role === 'destructive';
   }
 }

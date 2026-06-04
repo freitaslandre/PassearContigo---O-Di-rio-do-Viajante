@@ -1,3 +1,4 @@
+// app/pages/detalhe-poi/detalhe-poi.page.ts | Controlador da pagina detalhe poi, onde ficam os dados, eventos e chamadas aos servicos.
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Share } from '@capacitor/share';
@@ -16,6 +17,7 @@ import { POI, Dia, Viagem } from '../../models/viagem.model';
   templateUrl: './detalhe-poi.page.html',
   styleUrls: ['./detalhe-poi.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class DetalhePoiPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(IonContent) content?: IonContent;
   @ViewChild('mapaPoi') mapaPoi?: ElementRef<HTMLDivElement>;

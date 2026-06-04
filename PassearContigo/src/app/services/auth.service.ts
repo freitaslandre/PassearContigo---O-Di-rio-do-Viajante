@@ -1,3 +1,4 @@
+// app/services/auth.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
@@ -7,6 +8,7 @@ import 'firebase/compat/firestore';
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AuthService {
   /** Estado do utilizador autenticado, actualizado em tempo real pelo Firebase. */
   user$: Observable<firebase.User | null>;

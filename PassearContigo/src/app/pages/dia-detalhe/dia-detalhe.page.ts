@@ -1,3 +1,4 @@
+// app/pages/dia-detalhe/dia-detalhe.page.ts | Controlador da pagina dia detalhe, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,6 +12,7 @@ import { Dia, POI, Colaborador, Viagem } from '../../models/viagem.model';
   templateUrl: './dia-detalhe.page.html',
   styleUrls: ['./dia-detalhe.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class DiaDetalhePage implements OnInit, OnDestroy {
   dia: Dia | null = null;
   dias: Dia[] = [];

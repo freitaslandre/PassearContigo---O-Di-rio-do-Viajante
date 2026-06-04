@@ -1,3 +1,4 @@
+<!-- app/pages/viagem-detalhe/viagem-detalhe.page.html | Template da pagina viagem detalhe, responsavel pela estrutura visual apresentada ao utilizador. -->
 <ion-header>
   <ion-toolbar class="detalhe-toolbar">
     <ion-buttons slot="start">
@@ -5,7 +6,7 @@
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="toolbar-titulo">Detalhe Viagem</ion-title>
+    <ion-title class="toolbar-titulo">Detalhe da viagem</ion-title>
     <ion-buttons class="toolbar-acoes" slot="end" *ngIf="!carregando && viagem">
       <ion-button (click)="compartilharItinerarioPdf()" aria-label="Partilhar itinerário em PDF">
         <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
@@ -13,13 +14,13 @@
       <ion-button (click)="exportarItinerarioPdf()" aria-label="Exportar itinerário em PDF">
         <ion-icon slot="icon-only" name="download-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="podeEditarViagem" (click)="editarViagem()">
+      <ion-button *ngIf="podeEditarViagem" (click)="editarViagem()" aria-label="Editar viagem">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="podeEditarViagem" (click)="guardar()" [disabled]="guardando">
+      <ion-button *ngIf="podeEditarViagem" (click)="guardar()" [disabled]="guardando" aria-label="Guardar viagem">
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="podeGerirViagem" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando">
+      <ion-button *ngIf="podeGerirViagem" (click)="confirmarEliminarViagem()" [disabled]="guardando || eliminando" aria-label="Eliminar viagem">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -205,7 +206,7 @@
               <ion-button *ngIf="podeEditarViagem" fill="clear" size="small" color="danger" (click)="confirmarRemoverDia(i)" [disabled]="guardando" aria-label="Remover dia">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
-              <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" aria-label="Editar dia">
+              <ion-button fill="clear" size="small" (click)="alternarDiaExpandido(dia.id)" [attr.aria-label]="diaEstaExpandido(dia) ? 'Recolher dia' : 'Expandir dia'">
                 <ion-icon slot="icon-only" [name]="diaEstaExpandido(dia) ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
               </ion-button>
             </div>
@@ -306,6 +307,7 @@
                     color="primary"
                     (click)="tirarFotoPoi(dia, poi)"
                     [disabled]="fotoPoiAEnviar(dia.id, poi) || !podeEditarViagem"
+                    aria-label="Tirar foto do ponto de interesse"
                   >
                     <ion-spinner *ngIf="fotoPoiAEnviar(dia.id, poi)" name="crescent" slot="icon-only"></ion-spinner>
                     <ion-icon *ngIf="!fotoPoiAEnviar(dia.id, poi)" slot="icon-only" name="camera-outline"></ion-icon>
@@ -316,6 +318,7 @@
                     color="medium"
                     (click)="escolherFotoPoiDaGaleria(dia, poi)"
                     [disabled]="fotoPoiAEnviar(dia.id, poi) || !podeEditarViagem"
+                    aria-label="Escolher foto do ponto de interesse"
                   >
                     <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                   </ion-button>

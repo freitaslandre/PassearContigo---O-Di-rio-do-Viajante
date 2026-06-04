@@ -1,3 +1,4 @@
+// app/app.module.ts | Modulo raiz da aplicacao, onde sao ligados providers e modulos globais.
 import { APP_INITIALIZER, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -61,4 +62,5 @@ export function ativarPersistenciaOfflineFirestore(_app: FirebaseApp): () => Pro
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AppModule {}

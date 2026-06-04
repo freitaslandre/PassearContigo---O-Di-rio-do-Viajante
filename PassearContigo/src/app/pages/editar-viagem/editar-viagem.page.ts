@@ -1,7 +1,8 @@
+// app/pages/editar-viagem/editar-viagem.page.ts | Controlador da pagina editar viagem, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Viagem } from '../../models/viagem.model';
 import { ViagensService } from '../../services/viagens.service';
@@ -14,6 +15,7 @@ import { FirebaseStorageService } from '../../services/firebase-storage.service'
   templateUrl: './editar-viagem.page.html',
   styleUrls: ['./editar-viagem.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class EditarViagemPage implements OnInit, OnDestroy {
   form!: FormGroup;
   viagem: Viagem | null = null;
@@ -24,6 +26,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
   numeroDias = 0;
 
   private viagemSub: Subscription | null = null;
+  private fotoCapaInicial: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +35,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
     private viagensService: ViagensService,
     private cameraService: CameraService,
     private firebaseStorageService: FirebaseStorageService,
+    private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) {}
@@ -107,7 +111,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
 
     if (!this.viagem || this.form.invalid) {
       this.form.markAllAsTouched();
-      await this.mostrarToast('Preencha corretamente os campos obrigatorios.', 'warning');
+      await this.mostrarToast('Preencha corretamente os campos obrigatórios.', 'warning');
       return;
     }
 
@@ -139,21 +143,27 @@ export class EditarViagemPage implements OnInit, OnDestroy {
       });
 
       await loader.dismiss();
+      this.form.markAsPristine();
+      this.fotoCapaInicial = fotoCapaUrl || null;
       await this.mostrarToast('Viagem atualizada com sucesso.', 'success');
-      this.router.navigate(['/tabs', 'viagens', this.viagem.id]);
+      await this.router.navigate(['/tabs', 'viagens', this.viagem.id]);
     } catch (error: any) {
       await loader.dismiss();
       await this.mostrarToast(error?.message || 'Erro ao atualizar viagem.', 'danger');
     }
   }
 
-  cancelar() {
-    if (this.viagemId) {
-      this.router.navigate(['/tabs', 'viagens', this.viagemId]);
+  async cancelar() {
+    if (!(await this.confirmarSaidaSeNecessario())) {
       return;
     }
 
-    this.router.navigate(['/tabs', 'viagens']);
+    if (this.viagemId) {
+      await this.router.navigate(['/tabs', 'viagens', this.viagemId]);
+      return;
+    }
+
+    await this.router.navigate(['/tabs', 'viagens']);
   }
 
   get titulo() {
@@ -223,6 +233,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
 
   private preencherFormulario(viagem: Viagem) {
     this.fotoCapaPreview = viagem.fotoCapaUrl || null;
+    this.fotoCapaInicial = this.fotoCapaPreview;
 
     this.form.patchValue({
       titulo: viagem.titulo || '',
@@ -233,6 +244,7 @@ export class EditarViagemPage implements OnInit, OnDestroy {
       status: viagem.status || 'planejada'
     });
 
+    this.form.markAsPristine();
     this.calcularDias();
   }
 
@@ -297,6 +309,35 @@ export class EditarViagemPage implements OnInit, OnDestroy {
       color
     });
     await toast.present();
+  }
+
+  private temAlteracoesPorGuardar(): boolean {
+    return this.form?.dirty || this.fotoCapaPreview !== this.fotoCapaInicial;
+  }
+
+  private async confirmarSaidaSeNecessario(): Promise<boolean> {
+    if (!this.temAlteracoesPorGuardar()) {
+      return true;
+    }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Sair sem guardar?',
+      message: 'Tem alterações por guardar. Se sair agora, perde as alterações feitas à viagem.',
+      buttons: [
+        {
+          text: 'Continuar a editar',
+          role: 'cancel'
+        },
+        {
+          text: 'Sair sem guardar',
+          role: 'destructive'
+        }
+      ]
+    });
+
+    await alert.present();
+    const resultado = await alert.onDidDismiss();
+    return resultado.role === 'destructive';
   }
 
   private obterParametroDaRota(nome: string): string | null {

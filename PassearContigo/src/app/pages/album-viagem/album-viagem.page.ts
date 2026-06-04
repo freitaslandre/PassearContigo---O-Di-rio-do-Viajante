@@ -1,3 +1,4 @@
+// app/pages/album-viagem/album-viagem.page.ts | Controlador da pagina album viagem, onde ficam os dados, eventos e chamadas aos servicos.
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Camera, MediaResult, MediaType, MediaTypeSelection } from '@capacitor/camera';
@@ -10,6 +11,7 @@ import { PdfShareService } from '../../services/pdf-share.service';
 import { PhotoShareService } from '../../services/photo-share.service';
 import { ViagensService } from '../../services/viagens.service';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface FotoAlbum {
   id: string;
   url: string;
@@ -24,6 +26,7 @@ interface FotoAlbum {
   poiId?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface PoiAssociado {
   diaId?: string;
   diaTitulo?: string;
@@ -31,6 +34,7 @@ interface PoiAssociado {
   poiNome?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface PoiOpcao {
   label: string;
   value: string;
@@ -39,6 +43,7 @@ interface PoiOpcao {
   diaId?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface GrupoFotos {
   chave: string;
   titulo: string;
@@ -52,6 +57,7 @@ interface GrupoFotos {
   styleUrls: ['./album-viagem.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AlbumViagemPage implements OnInit, OnDestroy {
   viagemId = '';
   viagem: Viagem | null = null;

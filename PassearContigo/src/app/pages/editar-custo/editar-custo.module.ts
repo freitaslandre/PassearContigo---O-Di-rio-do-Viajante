@@ -1,3 +1,4 @@
+// app/pages/editar-custo/editar-custo.module.ts | Modulo Angular da pagina editar custo, onde se declaram dependencias do ecra.
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,4 +17,5 @@ import { EditarCustoPage } from './editar-custo.page';
     EditarCustoPageRoutingModule
   ]
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class EditarCustoPageModule { }

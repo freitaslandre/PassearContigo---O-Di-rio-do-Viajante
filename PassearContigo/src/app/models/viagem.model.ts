@@ -1,3 +1,4 @@
+// app/models/viagem.model.ts | Modelos e tipos TypeScript usados para representar dados da aplicacao.
 /**
  * Viagem Model
  * Define a estrutura de uma viagem no app
@@ -25,6 +26,7 @@ export interface Viagem {
   atualizadoEm?: Date;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface FotoAlbumViagem {
   id: string;
   url: string;
@@ -38,6 +40,7 @@ export interface FotoAlbumViagem {
   metadados?: Record<string, any>;
 }
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type VisibilidadePublicacao = 'publica' | 'amigos' | 'privada';
 
 /**
@@ -65,8 +68,10 @@ export interface Publicacao {
   atualizadoEm?: Date;
 }
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type TipoReacaoPublicacao = 'gosto';
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface ReacaoPublicacao {
   id: string;
   uidUtilizador?: string;
@@ -76,6 +81,7 @@ export interface ReacaoPublicacao {
   criadoEm?: Date;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 export interface ComentarioPublicacao {
   id: string;
   uidUtilizador?: string;
@@ -147,6 +153,7 @@ export interface Custo {
   atualizadoEm?: Date;
 }
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 export type NivelAcessoColaborador = 'dono' | 'editor' | 'visualizador';
 
 /**

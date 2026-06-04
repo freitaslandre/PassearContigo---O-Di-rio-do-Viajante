@@ -1,3 +1,4 @@
+// app/app.component.ts | Componente raiz da aplicacao, responsavel por inicializacao global.
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ScreenOrientationService } from './services/screen-orientation.service';
@@ -15,6 +16,7 @@ import { PushNotificationsService } from './services/push-notifications.service'
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class AppComponent {
   estadoSincronizacao$: Observable<EstadoSincronizacaoPoi>;
 

@@ -1,3 +1,4 @@
+// app/pages/perfil/perfil.page.ts | Controlador da pagina perfil, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -10,6 +11,7 @@ import { PushNotificationsService } from '../../services/push-notifications.serv
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss']
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class PerfilPage implements OnInit {
   login = {
     email: '',

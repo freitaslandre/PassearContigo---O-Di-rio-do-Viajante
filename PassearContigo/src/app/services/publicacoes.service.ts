@@ -1,3 +1,4 @@
+// app/services/publicacoes.service.ts | Servico da aplicacao responsavel por uma area de negocio ou integracao externa.
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
@@ -32,9 +33,13 @@ import {
   Viagem
 } from '../models/viagem.model';
 
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type PublicacaoPayload = Omit<Publicacao, 'id'>;
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type NovaPublicacao = PublicacaoPayload & Partial<Pick<Publicacao, 'id'>>;
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type ComentarioPublicacaoPayload = Omit<ComentarioPublicacao, 'id'>;
+// Tipo auxiliar usado para tornar as estruturas de dados mais explicitas.
 type ReacaoPublicacaoPayload = Omit<ReacaoPublicacao, 'id'>;
 
 /**
@@ -45,6 +50,7 @@ type ReacaoPublicacaoPayload = Omit<ReacaoPublicacao, 'id'>;
 @Injectable({
   providedIn: 'root'
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class PublicacoesService {
   private readonly collectionName = 'publicacoes';
   private readonly publicacoesCollection: AngularFirestoreCollection<PublicacaoPayload>;

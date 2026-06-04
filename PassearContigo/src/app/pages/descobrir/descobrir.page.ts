@@ -1,3 +1,4 @@
+// app/pages/descobrir/descobrir.page.ts | Controlador da pagina descobrir, onde ficam os dados, eventos e chamadas aos servicos.
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -9,11 +10,13 @@ import { POIService } from '../../services/poi.service';
 import { ViagensService } from '../../services/viagens.service';
 import { getAuth } from 'firebase/auth';
 
+// Contrato de dados usado para tipar objetos desta area.
 interface ResultadoDescobrir extends NominatimSearchResult {
   distanciaKm?: number;
   distanciaTexto: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface DestinoItinerario {
   valor: string;
   viagemId: string;
@@ -21,6 +24,7 @@ interface DestinoItinerario {
   rotulo: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface SugestaoPoi {
   nome: string;
   tipo: string;
@@ -33,12 +37,14 @@ interface SugestaoPoi {
   imagemPesquisa?: string;
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface SugestaoDia {
   titulo: string;
   local: string;
   pontosInteresse: SugestaoPoi[];
 }
 
+// Contrato de dados usado para tipar objetos desta area.
 interface SugestaoViagem {
   id: string;
   titulo: string;
@@ -61,6 +67,7 @@ interface SugestaoViagem {
   styleUrls: ['descobrir.page.scss'],
   standalone: false,
 })
+// Classe que agrupa o estado e o comportamento deste ficheiro.
 export class DescobrirPage implements OnInit, OnDestroy {
   termoPesquisa = '';
   resultados: ResultadoDescobrir[] = [];
