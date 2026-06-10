@@ -2,6 +2,8 @@
 
 Aplicação Ionic/Angular para planear, organizar e registar viagens. A app permite criar viagens, dividir itinerários por dias, adicionar pontos de interesse, associar fotografias, gerir custos, escrever diário de viagem, criar álbuns e partilhar conteúdos com outros utilizadores.
 
+URL: https://passearcontigo.web.app
+
 ## Índice
 
 - [Descrição](#descrição)
